@@ -18,6 +18,7 @@ import com.product.sampling.net.response.ResponseTransformer;
 import com.product.sampling.net.schedulers.SchedulerProvider;
 import com.product.sampling.utils.KeyboardUtils;
 import com.product.sampling.utils.ToastUtil;
+import com.product.sampling.utils.ToastUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -74,7 +75,7 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
                     myCountDownTimer.start();
                     getSmsCode();
                 } else {
-                    ToastUtil.showToast(getActivity(), "请输入正确手机号");
+                    ToastUtils.showToast("请输入正确手机号");
                 }
                 break;
             case R.id.sign_in_button:
@@ -90,10 +91,10 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
                 .compose(ResponseTransformer.handleResult())
                 .compose(SchedulerProvider.getInstance().applySchedulers())
                 .subscribe(smsBean -> {
-                    ToastUtil.showToast(getContext(), "验证码已发送");
+                    ToastUtils.showToast("验证码已发送");
                 }, throwable -> {
                     String displayMessage = ((ApiException) throwable).getDisplayMessage();
-                    ToastUtil.showToast(getContext(), displayMessage);
+                    ToastUtils.showToast(displayMessage);
                     if (myCountDownTimer != null) {
                         myCountDownTimer.cancel();
                     }
@@ -129,7 +130,7 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
         boolean result;
         String phoneNum = mEditTextPhone.getText().toString().trim();
         if (TextUtils.isEmpty(phoneNum) || phoneNum.length() != 11) {
-            ToastUtil.showToast(getActivity(), "请输入正确手机号");
+            ToastUtils.showToast("请输入正确手机号");
             result = false;
         } else {
             result = true;
