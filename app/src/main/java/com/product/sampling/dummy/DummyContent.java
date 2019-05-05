@@ -17,19 +17,24 @@ public class DummyContent {
      * An array of sample (dummy) items.
      */
     public static final List<DummyItem> ITEMS = new ArrayList<DummyItem>();
+    public static final List<DummyItem> TASK_ITEMS = new ArrayList<DummyItem>();
 
     /**
      * A map of sample (dummy) items, by ID.
      */
     public static final Map<String, DummyItem> ITEM_MAP = new HashMap<String, DummyItem>();
 
-    private static final int COUNT = 25;
+    private static final int COUNT = 3;
 
     static {
         // Add some sample items.
-        for (int i = 1; i <= COUNT; i++) {
+        for (int i = 0; i <= COUNT; i++) {
             addItem(createDummyItem(i));
         }
+        for (int i = 0; i <= 2; i++) {
+            addTaskItem(createTaskItem(i));
+        }
+
     }
 
     private static void addItem(DummyItem item) {
@@ -37,9 +42,46 @@ public class DummyContent {
         ITEM_MAP.put(item.id, item);
     }
 
-    private static DummyItem createDummyItem(int position) {
-        return new DummyItem(String.valueOf(position), "Item " + position, makeDetails(position));
+    private static void addTaskItem(DummyItem item) {
+        TASK_ITEMS.add(item);
+        ITEM_MAP.put(item.id, item);
     }
+
+    private static DummyItem createDummyItem(int position) {
+        String text = "";
+        switch (position) {
+            case 0:
+                text = "待办任务";
+                break;
+            case 1:
+                text = "未上传";
+                break;
+            case 2:
+                text = "已上传";
+                break;
+            case 3:
+                text = "我的信息";
+                break;
+        }
+        return new DummyItem(String.valueOf(position), text, makeDetails(position));
+    }
+
+    private static DummyItem createTaskItem(int position) {
+        String text = "";
+        switch (position) {
+            case 0:
+                text = "任务信息";
+                break;
+            case 1:
+                text = "现场信息";
+                break;
+            case 2:
+                text = "样品信息";
+                break;
+        }
+        return new DummyItem(String.valueOf(position), text, makeDetails(position));
+    }
+
 
     private static String makeDetails(int position) {
         StringBuilder builder = new StringBuilder();

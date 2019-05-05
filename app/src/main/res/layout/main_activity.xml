@@ -3,29 +3,93 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/rl_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:id="@+id/rl_task"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:background="#6F8AB9"
+        android:clickable="true"
+        android:gravity="center">
 
-        <Button
-            style="?android:textAppearanceSmall"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="任务列表"
-            android:textStyle="bold" />
+            android:src="@mipmap/ic_launcher" />
 
-        <Button
-            style="?android:textAppearanceSmall"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:text="任务列表"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="TASK LiST"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rl_plan"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:layout_toRightOf="@+id/rl_task"
+        android:background="#68BEC9"
+
+        android:clickable="true"
+        android:gravity="center"
+        android:padding="20dp">
+
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="任务安排"
-            android:textStyle="bold" />
+            android:layout_marginRight="20dp"
+            android:src="@mipmap/ic_launcher_round" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:text="任务安排"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="TASK ARRANGEMENT"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
 
     </LinearLayout>
 
@@ -33,28 +97,30 @@
         android:id="@+id/calendarView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rl_btn" />
+        android:layout_below="@+id/rl_task" />
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/rl_btn"
+        android:layout_height="400dp"
+
+        android:layout_below="@+id/rl_task"
         android:layout_marginLeft="10dp"
 
         android:layout_toRightOf="@+id/calendarView">
 
         <com.product.sampling.view.MyViewPager
             android:id="@+id/viewPager"
-            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginRight="10dp"
+            android:layout_weight="1"
             android:clipChildren="false" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
         </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>

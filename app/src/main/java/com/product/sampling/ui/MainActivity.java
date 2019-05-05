@@ -1,18 +1,14 @@
 package com.product.sampling.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.product.sampling.R;
 import com.product.sampling.adapter.BannerViewPagerAdapter;
 import com.product.sampling.adapter.NewsListAdapter;
-import com.product.sampling.bean.News;
+import com.product.sampling.bean.New;
 import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.net.response.ResponseTransformer;
@@ -20,21 +16,16 @@ import com.product.sampling.net.schedulers.SchedulerProvider;
 import com.product.sampling.utils.ToastUtil;
 import com.product.sampling.view.CardTransformer;
 import com.product.sampling.view.MyViewPager;
-import com.umeng.commonsdk.debug.D;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.disposables.Disposable;
-
-import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
     MyViewPager viewPager;
@@ -50,12 +41,18 @@ public class MainActivity extends AppCompatActivity {
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 //        toolbar.setTitle(getTitle());
+        findViewById(R.id.rl_task).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ItemListActivity.class));
 
+            }
+        });
 //        initView();
         getData();
     }
 
-    private void initView(List<News> news) {
+    private void initView(List<New> aNews) {
         viewPager = findViewById(R.id.viewPager);
         ArrayList list = new ArrayList();
         list.add("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1911150647,1930869014&fm=27&gp=0.jpg");
@@ -76,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.color.blue_color_30));
         mRecyclerView.addItemDecoration(dividerItemDecoration);
-        mRecyclerView.setAdapter(new NewsListAdapter(R.layout.item_news,news));
+        mRecyclerView.setAdapter(new NewsListAdapter(R.layout.item_news, aNews));
 
     }
 

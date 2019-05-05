@@ -56,13 +56,21 @@
         android:supportsRtl="true"
         android:screenOrientation="landscape"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.ItemDetailActivity"></activity>
+
         <activity
             android:name=".ui.ItemListActivity"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".ui.ItemDetailActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ui.MainActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.TaskDetailActivity"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
 

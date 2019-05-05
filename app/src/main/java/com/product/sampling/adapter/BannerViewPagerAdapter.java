@@ -9,8 +9,6 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.product.sampling.R;
-import com.product.sampling.bean.BannerItemBean;
-import com.product.sampling.bean.News;
 import com.product.sampling.utils.DensityUtil;
 
 import java.util.List;
