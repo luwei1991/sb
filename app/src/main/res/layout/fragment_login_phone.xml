@@ -90,6 +90,7 @@
                 </LinearLayout>
 
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -107,6 +108,7 @@
                     android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -124,13 +126,16 @@
                     android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
             <Button
                 android:id="@+id/sign_in_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:background="@color/colorPrimary"
                 android:text="@string/action_sign_in"
+                android:textColor="@color/white"
                 android:textStyle="bold" />
 
         </LinearLayout>

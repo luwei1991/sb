@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.product.sampling.R;
+import com.product.sampling.bean.Task;
 import com.product.sampling.dummy.DummyContent;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class TaskDetailActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
+    Task task = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,14 +65,14 @@ public class TaskDetailActivity extends AppCompatActivity {
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
-
+        task = getIntent().getParcelableExtra("task");
         View recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        setupRecyclerView((RecyclerView) recyclerView, task);
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.TASK_ITEMS, mTwoPane));
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView, Task task) {
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.TASK_ITEMS, task));
     }
 
     public static class SimpleItemRecyclerViewAdapter
@@ -78,22 +80,22 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         private final TaskDetailActivity mParentActivity;
         private final List<DummyContent.DummyItem> mValues;
-        private final boolean mTwoPane;
+        private Task task;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
-                if (mTwoPane) {
+                if (null != task) {
 
                     Bundle arguments = new Bundle();
                     arguments.putString(TaskListFragment.ARG_ITEM_ID, item.id);
-                    Fragment fragment;
-                    if (item.content.equalsIgnoreCase("待办任务")) {
-                        fragment = TaskListFragment.newInstance();
-                    } else if (item.content.equalsIgnoreCase("我的信息")) {
-                        fragment = MyInfoFragment.newInstance();
-                    } else {
-                        fragment = new ItemDetailFragment();
+                    Fragment fragment = new ItemDetailFragment();
+                    if (item.content.equalsIgnoreCase("任务信息")) {
+                        fragment = TaskDetailFragment.newInstance(task);
+                    } else if (item.content.equalsIgnoreCase("现场信息")) {
+                        fragment = TaskSceneFragment.newInstance(task);
+                    } else if (item.content.equalsIgnoreCase("样品信息")) {
+
                     }
                     fragment.setArguments(arguments);
 
@@ -112,10 +114,10 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         SimpleItemRecyclerViewAdapter(TaskDetailActivity parent,
                                       List<DummyContent.DummyItem> items,
-                                      boolean twoPane) {
+                                      Task task) {
             mValues = items;
             mParentActivity = parent;
-            mTwoPane = twoPane;
+            this.task = task;
         }
 
         @Override

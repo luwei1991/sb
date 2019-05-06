@@ -170,7 +170,6 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final AppCompatActivity mParentActivity;
         private final List<Task> mValues;
         private final boolean mTwoPane;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -178,7 +177,7 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
             public void onClick(View view) {
                 if (mTwoPane) {
                 }
-                view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class));
+                view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task", (Task) view.getTag()));
             }
         };
 
@@ -186,7 +185,6 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
                                       List<Task> items,
                                       boolean twoPane) {
             mValues = items;
-            mParentActivity = parent;
             mTwoPane = twoPane;
         }
 

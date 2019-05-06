@@ -25,7 +25,7 @@
             android:text="导航" />
 
         <LinearLayout
-            android:layout_width="400dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
@@ -76,8 +76,8 @@
                 android:id="@+id/tv_start_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/text_margin"
                 android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/text_margin"
                 android:text="开始时间:"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
@@ -85,21 +85,21 @@
                 android:id="@+id/tv_end_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_margin="@dimen/text_margin"
                 android:text="结束时间:"
-                android:layout_gravity="center_horizontal"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
             <TextView
                 android:id="@+id/tv_countdown"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_margin="@dimen/text_margin"
                 android:background="#E8F2DE"
                 android:paddingLeft="20dp"
                 android:paddingTop="10dp"
                 android:paddingRight="20dp"
-                android:layout_gravity="center_horizontal"
                 android:paddingBottom="10dp"
                 android:text="还有10天结束"
                 android:textAppearance="?attr/textAppearanceListItem" />
