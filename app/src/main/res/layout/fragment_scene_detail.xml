@@ -1,179 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:background="?selectableItemBackground"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <include layout="@layout/layout_task_step" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="20dp"
-        android:divider="@color/colorPrimary"
-        android:showDividers="end">
-
-        <View
-            android:layout_width="5dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center_vertical"
-            android:background="@color/colorPrimary" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
-            android:gravity="center"
-            android:text="企业信息" />
-
-    </LinearLayout>
-
-
-    <TableLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:divider="@color/color_9EA7B4"
-        android:showDividers="end|middle|beginning"
-        android:stretchColumns="1">
+        android:layout_margin="10dp"
+        android:background="?selectableItemBackground"
+        android:orientation="vertical">
 
-        <TableRow
+        <include layout="@layout/layout_task_step" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:divider="@color/color_9EA7B4"
-            android:showDividers="middle|beginning|end">
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
 
-            <LinearLayout
-                android:layout_width="100dp"
-                android:layout_height="50dp">
-
-                <TextView
-                    android:layout_width="10dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="*"
-                    android:textColor="@color/main_text_red" />
-
-                <TextView
-                    android:layout_width="200dp"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:text="企业名称" />
-
-            </LinearLayout>
-
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:text="计划XXX" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_height="50dp"
-            android:divider="@color/color_9EA7B4"
-            android:showDividers="middle|beginning|end">
-
-            <LinearLayout
-                android:layout_width="100dp"
-                android:layout_height="50dp">
-
-                <TextView
-                    android:layout_width="10dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="*"
-                    android:textColor="@color/main_text_red" />
-
-                <TextView
-                    android:layout_width="200dp"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:text="企业地址" />
-            </LinearLayout>
-
-            <TableRow
-                android:layout_height="50dp"
-                android:divider="@color/color_9EA7B4"
-                android:showDividers="middle|beginning|end">
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:layout_width="100dp"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:hint="省" />
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:layout_width="100dp"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:hint="市" />
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:layout_width="100dp"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:hint="区" />
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:layout_width="100dp"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:hint="地址" />
-
-                <TableRow
-                    android:layout_height="50dp"
-                    android:divider="@color/color_9EA7B4"
-                    android:showDividers="middle|beginning|end" />
-            </TableRow>
-
-        </TableRow>
-
-        <TableRow
-            android:layout_height="50dp"
-            android:divider="@color/color_9EA7B4"
-            android:showDividers="middle|beginning|end">
-
-            <LinearLayout
-                android:layout_width="100dp"
-                android:layout_height="50dp">
-
-                <TextView
-                    android:layout_width="10dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="*"
-                    android:textColor="@color/main_text_red" />
-
-                <TextView
-                    android:layout_width="200dp"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:text="联系人/电话" />
-            </LinearLayout>
-
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:text="计划XXX" />
-
-
-        </TableRow>
-
-        <TableRow
-            android:layout_height="50dp"
-            android:divider="@color/color_9EA7B4"
-            android:showDividers="middle|beginning|end">
+            <View
+                android:layout_width="5dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/colorPrimary" />
 
             <TextView
-                android:layout_width="200dp"
+                android:layout_width="wrap_content"
                 android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="企业信息" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="center_vertical"
+            android:background="#f1f2f3" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="*"
+                android:textColor="@color/main_text_red" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:text="企业名称" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:text="计划XXX" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="*"
+                android:textColor="@color/main_text_red" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:text="企业地址" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:hint="省" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:hint="市" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:hint="区" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:hint="地址" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="*"
+                android:textColor="@color/main_text_red" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:text="联系人/电话" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:text="计划XXX" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
                 android:gravity="center"
                 android:text="备注" />
 
@@ -182,64 +149,66 @@
                 android:layout_height="50dp"
                 android:gravity="center"
                 android:text="计划XXX" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
 
-        </TableRow>
+            <View
+                android:layout_width="5dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/colorPrimary" />
 
-    </TableLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="现场图片" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="20dp"
-        android:divider="@color/colorPrimary"
-        android:showDividers="end">
+        </LinearLayout>
 
         <View
-            android:layout_width="5dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center_vertical"
-            android:background="@color/colorPrimary" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
-            android:gravity="center"
-            android:text="现场图片" />
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:orientation="horizontal">
-
-        <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/item_list"
-            android:name="com.product.sampling.TaskListFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="100dp"
-            app:layoutManager="LinearLayoutManager"
-            tools:context="com.product.sampling.ui.ItemListActivity"
-            tools:listitem="@layout/item_scene_list_content" />
+            android:layout_height="1dp"
+            android:layout_gravity="center_vertical"
+            android:background="#f1f2f3" />
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_arrow" />
-    </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:orientation="horizontal">
 
-    <Button
-        android:layout_width="400dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:background="@color/colorPrimary"
-        android:text="下一步"
-        android:textColor="@color/white" />
-</LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/item_list"
+                android:name="com.product.sampling.TaskListFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="100dp"
+                app:layoutManager="LinearLayoutManager"
+                tools:context="com.product.sampling.ui.ItemListActivity"
+                tools:listitem="@layout/item_scene_list_content" />
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_arrow" />
+        </RelativeLayout>
+
+        <Button
+            android:layout_width="400dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:background="@color/colorPrimary"
+            android:text="下一步"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</ScrollView>

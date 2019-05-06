@@ -1,17 +1,28 @@
 package com.product.sampling.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.product.sampling.R;
+import com.product.sampling.adapter.ImageAndTextRecyclerViewAdapter;
+import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
 import com.product.sampling.bean.Task;
 import com.product.sampling.dummy.DummyContent;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -63,18 +74,32 @@ public class TaskSampleFragment extends Fragment {
                 appBarLayout.setTitle(mItem.content);
             }
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_scene_detail, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_sample_detail, container, false);
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
 //            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.details);
         }
+        List<String> list = new ArrayList<>();
+        list.add("北京");
+        list.add("商户");
+        list.add("南京");
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        RecyclerView mRecyclerView = rootView.findViewById(R.id.item_list);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        setupRecyclerView(mRecyclerView, list);
         return rootView;
+    }
+
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List task) {
+        recyclerView.setAdapter(new TaskSampleRecyclerViewAdapter((AppCompatActivity) getActivity(), task, false));
     }
 }

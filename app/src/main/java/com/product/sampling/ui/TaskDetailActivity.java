@@ -95,7 +95,7 @@ public class TaskDetailActivity extends AppCompatActivity {
                     } else if (item.content.equalsIgnoreCase("现场信息")) {
                         fragment = TaskSceneFragment.newInstance(task);
                     } else if (item.content.equalsIgnoreCase("样品信息")) {
-
+                        fragment = TaskSampleFragment.newInstance(task);
                     }
                     fragment.setArguments(arguments);
 

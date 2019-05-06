@@ -10,13 +10,13 @@
     <ImageView
         android:id="@+id/iv_task"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="140dp"
         android:src="@mipmap/ic_launcher_round" />
 
     <TextView
-        android:id="@+id/tv_map"
+        android:id="@+id/tv_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_below="@+id/iv_task"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
