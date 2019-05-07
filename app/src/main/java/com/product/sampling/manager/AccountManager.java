@@ -16,21 +16,21 @@ public class AccountManager {
 
     public String getUserPhone() {
         if (userInfoBean != null) {
-            return userInfoBean.getUser_phone();
+            return userInfoBean.getPersontel();
         }
         return "";
     }
 
     public void setUserPhone(String userPhone) {
         if (!TextUtils.isEmpty(userPhone) && userInfoBean != null) {
-            userInfoBean.setUser_phone(userPhone);
+            userInfoBean.setPersontel(userPhone);
         }
         this.userPhone = userPhone;
     }
 
     public String getUserId() {
         if (userInfoBean != null) {
-            return String.valueOf(userInfoBean.getUser_id());
+            return String.valueOf(userInfoBean.getUserid());
         }
         return userId;
     }

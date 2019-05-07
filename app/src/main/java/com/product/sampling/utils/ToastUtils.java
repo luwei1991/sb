@@ -28,14 +28,13 @@ public class ToastUtils {
 
     public static void showToast(String message) {
 
-        if (TextUtils.isEmpty(message))return;
+        if (TextUtils.isEmpty(message)) return;
 
 
         //非Ui线程不能toast
-        if (Thread.currentThread() != Looper.getMainLooper().getThread())return;
-
-        if (toast == null) {
-            toast = Toast.makeText(sContext, message, Toast.LENGTH_SHORT);
+        if (Thread.currentThread() != Looper.getMainLooper().getThread()) return;
+        toast = Toast.makeText(sContext, message, Toast.LENGTH_SHORT);
+        if (toast != null) {
             // toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
             oneTime = System.currentTimeMillis();
@@ -55,12 +54,10 @@ public class ToastUtils {
     }
 
     public static void showToast(@StringRes int resId) {
-        if (sContext == null)return;
+        if (sContext == null) return;
         String str = sContext.getResources().getString(resId);
         showToast(str);
     }
-
-
 
 
 }

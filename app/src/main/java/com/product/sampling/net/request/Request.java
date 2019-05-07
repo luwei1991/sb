@@ -3,6 +3,7 @@ package com.product.sampling.net.request;
 import com.product.sampling.bean.New;
 import com.product.sampling.bean.SmsBean;
 import com.product.sampling.bean.Task;
+import com.product.sampling.bean.UserInfoBean;
 import com.product.sampling.net.response.Response;
 
 import java.util.List;
@@ -19,7 +20,9 @@ public interface Request {
     /**
      * 服务器url
      */
-    String BASE_URL = "http://185.38.15.46/";
+    String BASE_URL_DEBUG = "http://185.38.15.46/";
+    String BASE_URL = "http://lw123.longwi.com:9080/exa/";
+
 
     /**
      * 获取验证码
@@ -35,4 +38,11 @@ public interface Request {
 
     @GET("tasklist")
     Observable<Response<List<Task>>> getTaskList();
+
+    @GET("app/user/sendcode")
+    Observable<Response<String>> sendCode(@Query("persontel") String persontel);
+
+    @GET("app/user/logintel")
+    Observable<Response<UserInfoBean>> loginByPhone(@Query("persontel") String persontel,@Query("appcode") String appcode);
+
 }

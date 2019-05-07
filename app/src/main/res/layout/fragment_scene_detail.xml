@@ -195,11 +195,12 @@
                 tools:listitem="@layout/item_scene_list_content" />
 
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_arrow" />
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/form_add" />
         </RelativeLayout>
 
         <Button

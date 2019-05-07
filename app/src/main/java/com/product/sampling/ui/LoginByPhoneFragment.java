@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.product.sampling.R;
+import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.net.response.ResponseTransformer;
@@ -28,6 +29,8 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
     private View mRootView;
     TextView mTextViewSendCode;
     private EditText mEditTextPhone;
+    private EditText mEditTextCode;
+
     private MyCountDownTimer myCountDownTimer;
 
     public static LoginByPhoneFragment newInstance() {
@@ -47,6 +50,9 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
         mTextViewSendCode = mRootView.findViewById(R.id.tv_code);
         mTextViewSendCode.setOnClickListener(this);
         mEditTextPhone = mRootView.findViewById(R.id.et_phone_num);
+        mEditTextCode = mRootView.findViewById(R.id.et_ver_code);
+
+
         mRootView.findViewById(R.id.sign_in_button).setOnClickListener(this);
     }
 
@@ -69,29 +75,43 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
             case R.id.tv_code:
                 KeyboardUtils.closeKeyboard(getActivity());
                 if (validatePhoneNum()) {
-                    if (myCountDownTimer == null) {
-                        myCountDownTimer = new MyCountDownTimer(90000, 1000);
-                    }
-                    myCountDownTimer.start();
                     getSmsCode();
                 } else {
                     ToastUtils.showToast("请输入正确手机号");
                 }
                 break;
             case R.id.sign_in_button:
-                startActivity(new Intent(getActivity(), MainActivity.class));
+                loginRequest();
+
                 break;
 
         }
     }
 
+    private void loginRequest() {
+        NetWorkManager.getRequest().loginByPhone(mEditTextPhone.getText().toString().trim(), mEditTextCode.getText().toString().trim())
+                .compose(ResponseTransformer.handleResult())
+                .compose(SchedulerProvider.getInstance().applySchedulers())
+                .subscribe(userbean -> {
+                    saveUserData(userbean);
+                    startActivity(new Intent(getActivity(), MainActivity.class));
+                }, throwable -> {
+                    String displayMessage = ((ApiException) throwable).getDisplayMessage();
+                    ToastUtils.showToast(displayMessage);
+                });
+    }
+
     private void getSmsCode() {
 
-        NetWorkManager.getRequest().getSmsCode(mEditTextPhone.getText().toString().trim())
+        NetWorkManager.getRequest().sendCode(mEditTextPhone.getText().toString().trim())
                 .compose(ResponseTransformer.handleResult())
                 .compose(SchedulerProvider.getInstance().applySchedulers())
                 .subscribe(smsBean -> {
-                    ToastUtils.showToast("验证码已发送");
+                    ToastUtils.showToast("验证码已发送" + smsBean);
+                    if (myCountDownTimer == null) {
+                        myCountDownTimer = new MyCountDownTimer(90000, 1000);
+                    }
+                    myCountDownTimer.start();
                 }, throwable -> {
                     String displayMessage = ((ApiException) throwable).getDisplayMessage();
                     ToastUtils.showToast(displayMessage);
@@ -101,6 +121,9 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
                     mTextViewSendCode.setText("重新获取");
                     mTextViewSendCode.setClickable(true);
                 });
+    }
+    private void saveUserData(UserInfoBean userInfoBean) {
+        AccountManager.getInstance().setUserInfoBean(userInfoBean);
     }
 
     //倒计时函数

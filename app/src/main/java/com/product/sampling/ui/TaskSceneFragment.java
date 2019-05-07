@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.product.sampling.R;
+import com.product.sampling.adapter.ImageAndTextRecyclerViewAdapter;
 import com.product.sampling.bean.Task;
 import com.product.sampling.dummy.DummyContent;
 
@@ -93,6 +94,6 @@ public class TaskSceneFragment extends Fragment {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List task) {
-//        recyclerView.setAdapter(new ImageAndTextRecyclerViewAdapter((AppCompatActivity) getActivity(), task, false));
+        recyclerView.setAdapter(new ImageAndTextRecyclerViewAdapter(getActivity(), task, false));
     }
 }
