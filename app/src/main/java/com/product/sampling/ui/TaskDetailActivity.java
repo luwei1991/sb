@@ -12,9 +12,11 @@ import android.widget.TextView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.product.sampling.R;
+import com.product.sampling.bean.ImageItem;
 import com.product.sampling.bean.Task;
 import com.product.sampling.dummy.DummyContent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -68,33 +70,37 @@ public class TaskDetailActivity extends AppCompatActivity {
         task = getIntent().getParcelableExtra("task");
         View recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView, task);
+        List list = new ArrayList();
+        for (int i = 0; i < 3; i++) {
+            list.add(createItem(i));
+        }
+        setupRecyclerView((RecyclerView) recyclerView, list);
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView, Task task) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.TASK_ITEMS, task));
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List list) {
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, list, task));
     }
 
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final TaskDetailActivity mParentActivity;
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<ImageItem> mValues;
         private Task task;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
+                ImageItem imageItem = (ImageItem) view.getTag();
                 if (null != task) {
 
                     Bundle arguments = new Bundle();
-                    arguments.putString(TaskListFragment.ARG_ITEM_ID, item.id);
+                    arguments.putString(TaskListFragment.ARG_ITEM_ID, imageItem.getTitle());
                     Fragment fragment = new ItemDetailFragment();
-                    if (item.content.equalsIgnoreCase("任务信息")) {
+                    if (imageItem.getTitle().equalsIgnoreCase("任务信息")) {
                         fragment = TaskDetailFragment.newInstance(task);
-                    } else if (item.content.equalsIgnoreCase("现场信息")) {
+                    } else if (imageItem.getTitle().equalsIgnoreCase("现场信息")) {
                         fragment = TaskSceneFragment.newInstance(task);
-                    } else if (item.content.equalsIgnoreCase("样品信息")) {
+                    } else if (imageItem.getTitle().equalsIgnoreCase("样品信息")) {
                         fragment = TaskSampleFragment.newInstance(task);
                     }
                     fragment.setArguments(arguments);
@@ -105,7 +111,7 @@ public class TaskDetailActivity extends AppCompatActivity {
                 } else {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, ItemDetailActivity.class);
-                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, item.id);
+                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, imageItem.getTitle());
 
                     context.startActivity(intent);
                 }
@@ -113,7 +119,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         };
 
         SimpleItemRecyclerViewAdapter(TaskDetailActivity parent,
-                                      List<DummyContent.DummyItem> items,
+                                      List<ImageItem> items,
                                       Task task) {
             mValues = items;
             mParentActivity = parent;
@@ -129,10 +135,11 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mImageView.setImageResource(R.mipmap.ic_launcher);
-            holder.mContentView.setText(mValues.get(position).content);
+            ImageItem imageItem = mValues.get(position);
+            holder.mImageView.setImageResource(imageItem.getRes());
+            holder.mContentView.setText(imageItem.getTitle());
 
-            holder.itemView.setTag(mValues.get(position));
+            holder.itemView.setTag(imageItem);
             holder.itemView.setOnClickListener(mOnClickListener);
         }
 
@@ -151,5 +158,25 @@ public class TaskDetailActivity extends AppCompatActivity {
                 mContentView = (TextView) view.findViewById(R.id.content);
             }
         }
+    }
+
+    private static ImageItem createItem(int position) {
+        String text = "";
+        int res = 0;
+        switch (position) {
+            case 0:
+                text = "任务信息";
+                res = R.mipmap.menu_icon5;
+                break;
+            case 1:
+                text = "现场信息";
+                res = R.mipmap.menu_icon6;
+                break;
+            case 2:
+                text = "样品信息";
+                res = R.mipmap.menu_icon7;
+                break;
+        }
+        return new ImageItem(text, res);
     }
 }

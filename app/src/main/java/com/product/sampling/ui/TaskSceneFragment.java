@@ -6,17 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.product.sampling.R;
-import com.product.sampling.adapter.ImageAndTextRecyclerViewAdapter;
-import com.product.sampling.bean.Task;
-import com.product.sampling.dummy.DummyContent;
-
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.product.sampling.R;
+import com.product.sampling.bean.Task;
+import com.product.sampling.dummy.DummyContent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +93,6 @@ public class TaskSceneFragment extends Fragment {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List task) {
-        recyclerView.setAdapter(new ImageAndTextRecyclerViewAdapter((AppCompatActivity) getActivity(), task, false));
+//        recyclerView.setAdapter(new ImageAndTextRecyclerViewAdapter((AppCompatActivity) getActivity(), task, false));
     }
 }

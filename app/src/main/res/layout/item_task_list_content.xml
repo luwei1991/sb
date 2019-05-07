@@ -19,7 +19,7 @@
             android:layout_gravity="center_vertical"
             android:background="?selectableItemBackground"
             android:clickable="true"
-            android:drawableTop="@mipmap/ic_launcher_round"
+            android:drawableTop="@mipmap/task_navigation"
             android:drawablePadding="10dp"
             android:gravity="center"
             android:text="导航" />
@@ -121,7 +121,7 @@
         android:layout_weight="1"
         android:background="?selectableItemBackground"
         android:clickable="true"
-        android:drawableTop="@mipmap/ic_launcher_round"
+        android:drawableTop="@mipmap/task_abnormal"
         android:drawablePadding="10dp"
         android:gravity="center"
         android:text="异常情况" />
@@ -136,7 +136,7 @@
         android:layout_weight="1"
         android:background="?selectableItemBackground"
         android:clickable="true"
-        android:drawableTop="@mipmap/ic_launcher_round"
+        android:drawableTop="@mipmap/task_write"
         android:drawablePadding="10dp"
         android:gravity="center"
         android:text="填写信息" />

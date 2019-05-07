@@ -20,8 +20,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.product.sampling.R;
+import com.product.sampling.bean.ImageItem;
 import com.product.sampling.dummy.DummyContent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,31 +70,35 @@ public class ItemListActivity extends AppCompatActivity {
 
         View recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        List list = new ArrayList();
+        for (int i = 0; i < 4; i++) {
+            list.add(createItem(i));
+        }
+        setupRecyclerView((RecyclerView) recyclerView, list);
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, mTwoPane));
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List list) {
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, list, mTwoPane));
     }
 
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final ItemListActivity mParentActivity;
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<ImageItem> mValues;
         private final boolean mTwoPane;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
+                ImageItem item = (ImageItem) view.getTag();
                 if (mTwoPane) {
 
                     Bundle arguments = new Bundle();
-                    arguments.putString(TaskListFragment.ARG_ITEM_ID, item.id);
+                    arguments.putString(TaskListFragment.ARG_ITEM_ID, item.getTitle());
                     Fragment fragment;
-                    if (item.content.equalsIgnoreCase("待办任务")) {
+                    if (item.getTitle().equalsIgnoreCase("待办任务")) {
                         fragment = TaskListFragment.newInstance();
-                    } else if (item.content.equalsIgnoreCase("我的信息")) {
+                    } else if (item.getTitle().equalsIgnoreCase("我的信息")) {
                         fragment = MyInfoFragment.newInstance();
                     } else {
                         fragment = new ItemDetailFragment();
@@ -105,7 +111,7 @@ public class ItemListActivity extends AppCompatActivity {
                 } else {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, ItemDetailActivity.class);
-                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, item.id);
+                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, item.getTitle());
 
                     context.startActivity(intent);
                 }
@@ -113,7 +119,7 @@ public class ItemListActivity extends AppCompatActivity {
         };
 
         SimpleItemRecyclerViewAdapter(ItemListActivity parent,
-                                      List<DummyContent.DummyItem> items,
+                                      List<ImageItem> items,
                                       boolean twoPane) {
             mValues = items;
             mParentActivity = parent;
@@ -129,10 +135,11 @@ public class ItemListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mImageView.setImageResource(R.mipmap.ic_launcher);
-            holder.mContentView.setText(mValues.get(position).content);
+            ImageItem imageItem = mValues.get(position);
+            holder.mImageView.setImageResource(imageItem.getRes());
+            holder.mContentView.setText(imageItem.getTitle());
 
-            holder.itemView.setTag(mValues.get(position));
+            holder.itemView.setTag(imageItem);
             holder.itemView.setOnClickListener(mOnClickListener);
         }
 
@@ -151,5 +158,29 @@ public class ItemListActivity extends AppCompatActivity {
                 mContentView = (TextView) view.findViewById(R.id.content);
             }
         }
+    }
+
+    private static ImageItem createItem(int position) {
+        String text = "";
+        int res = 0;
+        switch (position) {
+            case 0:
+                text = "待办任务";
+                res = R.mipmap.menu_icon1;
+                break;
+            case 1:
+                text = "未上传";
+                res = R.mipmap.menu_icon2;
+                break;
+            case 2:
+                text = "已上传";
+                res = R.mipmap.menu_icon3;
+                break;
+            case 3:
+                text = "我的信息";
+                res = R.mipmap.menu_icon4;
+                break;
+        }
+        return new ImageItem(text, res);
     }
 }
