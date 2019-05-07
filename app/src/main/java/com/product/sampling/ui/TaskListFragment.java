@@ -31,6 +31,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -177,7 +178,11 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
             public void onClick(View view) {
                 if (mTwoPane) {
                 }
-                view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task", (Task) view.getTag()));
+                if (view.getId() == R.id.tv_map) {
+                    view.getContext().startActivity(new Intent(view.getContext(), BasicMapActivity.class));
+                } else {
+                    view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task", (Task) view.getTag()));
+                }
             }
         };
 
@@ -209,6 +214,7 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
 
             holder.itemView.setTag(task);
             holder.itemView.setOnClickListener(mOnClickListener);
+            holder.mTextViewMap.setOnClickListener(mOnClickListener);
         }
 
         @Override
