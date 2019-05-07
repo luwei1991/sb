@@ -44,5 +44,7 @@ public interface Request {
 
     @GET("app/user/logintel")
     Observable<Response<UserInfoBean>> loginByPhone(@Query("persontel") String persontel,@Query("appcode") String appcode);
+    @GET("app/user/login")
+    Observable<Response<UserInfoBean>> loginByPwd(@Query("loginName") String loginName,@Query("password") String password);
 
 }

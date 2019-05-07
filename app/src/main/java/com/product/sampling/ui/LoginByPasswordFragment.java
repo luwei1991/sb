@@ -26,6 +26,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.product.sampling.R;
+import com.product.sampling.manager.AccountManager;
+import com.product.sampling.net.Exception.ApiException;
+import com.product.sampling.net.NetWorkManager;
+import com.product.sampling.net.response.ResponseTransformer;
+import com.product.sampling.net.schedulers.SchedulerProvider;
+import com.product.sampling.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +52,7 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+
     public static LoginByPasswordFragment newInstance() {
         return new LoginByPasswordFragment();
     }
@@ -60,7 +67,7 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
 
     protected void initView() {
         if (mRootView == null) return;
-        mAccountView = (AutoCompleteTextView) mRootView.findViewById(R.id.email);
+        mAccountView = (AutoCompleteTextView) mRootView.findViewById(R.id.account);
         populateAutoComplete();
 
         mPasswordView = (EditText) mRootView.findViewById(R.id.password);
@@ -105,10 +112,8 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
         switch (id) {
         }
     }
+
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
 
         // Reset errors.
         mAccountView.setError(null);
@@ -122,7 +127,7 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (TextUtils.isEmpty(password) || !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -131,10 +136,6 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             mAccountView.setError(getString(R.string.error_field_required));
-            focusView = mAccountView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mAccountView.setError(getString(R.string.error_invalid_email));
             focusView = mAccountView;
             cancel = true;
         }
@@ -147,8 +148,7 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            loginRequest(email, password);
         }
     }
 
@@ -159,7 +159,7 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 1;
     }
 
     /**
@@ -237,6 +237,7 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
     }
+
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
@@ -298,6 +299,7 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
             showProgress(false);
         }
     }
+
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -307,4 +309,18 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
     }
+
+    private void loginRequest(String account, String pwd) {
+        NetWorkManager.getRequest().loginByPwd(account, pwd)
+                .compose(ResponseTransformer.handleResult())
+                .compose(SchedulerProvider.getInstance().applySchedulers())
+                .subscribe(userbean -> {
+                    AccountManager.getInstance().setUserInfoBean(userbean);
+                    startActivity(new Intent(getActivity(), MainActivity.class));
+                }, throwable -> {
+                    String displayMessage = ((ApiException) throwable).getDisplayMessage();
+                    ToastUtils.showToast(displayMessage);
+                });
+    }
+
 }

@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.product.sampling.R;
+import com.product.sampling.bean.UserInfoBean;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
@@ -81,8 +82,8 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
                 }
                 break;
             case R.id.sign_in_button:
-                loginRequest();
-
+//                loginRequest();
+                startActivity(new Intent(getActivity(), MainActivity.class));
                 break;
 
         }

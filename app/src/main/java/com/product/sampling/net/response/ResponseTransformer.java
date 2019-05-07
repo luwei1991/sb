@@ -45,7 +45,7 @@ public class ResponseTransformer {
         public ObservableSource<T> apply(Response<T> tResponse) throws Exception {
             int code = tResponse.getCode();
             String message = tResponse.getMessage();
-            if (code == 0) {
+            if (code == 200) {
                 return Observable.just(tResponse.getData());
             } else {
                 return Observable.error(new ApiException(code, message));

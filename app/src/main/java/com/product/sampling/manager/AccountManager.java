@@ -60,7 +60,7 @@ public class AccountManager {
      */
     public boolean isFiristRun() {
         boolean isFisrtRun;
-        if (userInfoBean != null && userInfoBean.getLogin_last() == 0) {
+        if (userInfoBean != null && !TextUtils.isEmpty(userInfoBean.getPersontel())) {
             isFisrtRun = true;
         } else {
             isFisrtRun = false;
