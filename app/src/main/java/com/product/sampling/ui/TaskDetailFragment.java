@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.product.sampling.R;
 import com.product.sampling.bean.Task;
+import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.dummy.DummyContent;
 
 import androidx.fragment.app.Fragment;
@@ -39,7 +40,7 @@ public class TaskDetailFragment extends Fragment {
     public TaskDetailFragment() {
     }
 
-    public static TaskDetailFragment newInstance(Task task) {
+    public static TaskDetailFragment newInstance(TaskEntity task) {
 
         Bundle args = new Bundle();
         args.putParcelable("task", task);

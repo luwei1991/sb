@@ -17,7 +17,10 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.product.sampling.R;
 import com.product.sampling.adapter.SpinnerSimpleAdapter;
 import com.product.sampling.bean.Task;
+import com.product.sampling.bean.TaskEntity;
+import com.product.sampling.bean.TaskResultBean;
 import com.product.sampling.dummy.DummyContent;
+import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.net.response.ResponseTransformer;
@@ -35,10 +38,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.disposables.Disposable;
 
 /**
- * A fragment representing a single Item detail screen.
- * This fragment is either contained in a {@link ItemListActivity}
- * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
- * on handsets.
+ * 任务列表
  */
 public class TaskListFragment extends Fragment implements View.OnClickListener {
     /**
@@ -138,7 +138,8 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getData() {
-        disposable = NetWorkManager.getRequest().getTaskList()
+
+        disposable = NetWorkManager.getRequest().taskList(AccountManager.getInstance().getUserId(), 0 + "")
                 .compose(ResponseTransformer.handleResult())
                 .compose(SchedulerProvider.getInstance().applySchedulers())
                 .subscribe(tasks -> {
@@ -151,8 +152,8 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
                 });
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List task) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter((AppCompatActivity) getActivity(), task, false));
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView, TaskResultBean task) {
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter((AppCompatActivity) getActivity(), task.list, false));
     }
 
     @Override
@@ -171,7 +172,7 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<Task> mValues;
+        private final List<TaskEntity> mValues;
         private final boolean mTwoPane;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
@@ -180,14 +181,14 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
                 }
                 if (view.getId() == R.id.tv_map) {
                     view.getContext().startActivity(new Intent(view.getContext(), BasicMapActivity.class));
-                } else {
-                    view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task", (Task) view.getTag()));
+                } else if (view.getId() == R.id.tv_fill_info) {
+                    view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task", (TaskEntity) view.getTag()));
                 }
             }
         };
 
         SimpleItemRecyclerViewAdapter(AppCompatActivity parent,
-                                      List<Task> items,
+                                      List<TaskEntity> items,
                                       boolean twoPane) {
             mValues = items;
             mTwoPane = twoPane;
@@ -202,19 +203,20 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            Task task = mValues.get(position);
-            holder.mTextViewNum.setText(task.task_id);
-            holder.mTextViewName.setText(task.comp_name);
-            holder.mTextViewAddress.setText(task.comp_addr);
-            holder.mTextViewType.setText("产品类型:" + task.pro_type);
-//            holder.mTextViewType.setText(task.task_type);
-            holder.mTextViewStartTime.setText("开始时间：" + task.start_date);
-            holder.mTextViewEndTime.setText("结束时间：" + task.end_date);
-            holder.mTextViewCountDown.setText("还有" + task.free_date + "天结束");
+            TaskEntity task = mValues.get(position);
+            holder.mTextViewNum.setText(task.id);
+            holder.mTextViewName.setText(task.companyname);
+            holder.mTextViewAddress.setText(task.companyaddress);
+            holder.mTextViewType.setText("产品类型:" + task.tasktypecount);
+            holder.mTextViewStartTime.setText("开始时间：" + task.starttime);
+            holder.mTextViewEndTime.setText("结束时间：" + task.endtime);
+            holder.mTextViewCountDown.setText(task.remark);
 
             holder.itemView.setTag(task);
             holder.itemView.setOnClickListener(mOnClickListener);
             holder.mTextViewMap.setOnClickListener(mOnClickListener);
+            holder.mTextViewFill.setOnClickListener(mOnClickListener);
+
         }
 
         @Override
@@ -231,6 +233,8 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
             final TextView mTextViewStartTime;
             final TextView mTextViewEndTime;
             final TextView mTextViewCountDown;
+            final TextView mTextViewException;
+            final TextView mTextViewFill;
 
             ViewHolder(View view) {
                 super(view);
@@ -243,6 +247,9 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
                 mTextViewStartTime = (TextView) view.findViewById(R.id.tv_start_time);
                 mTextViewEndTime = (TextView) view.findViewById(R.id.tv_end_time);
                 mTextViewCountDown = (TextView) view.findViewById(R.id.tv_countdown);
+                mTextViewException = view.findViewById(R.id.tv_exception);
+                mTextViewFill = view.findViewById(R.id.tv_fill_info);
+
             }
         }
     }

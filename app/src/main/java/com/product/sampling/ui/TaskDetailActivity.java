@@ -14,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.product.sampling.R;
 import com.product.sampling.bean.ImageItem;
 import com.product.sampling.bean.Task;
+import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.dummy.DummyContent;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class TaskDetailActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
-    Task task = null;
+    TaskEntity task = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +87,12 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         private final TaskDetailActivity mParentActivity;
         private final List<ImageItem> mValues;
-        private Task task;
+        private TaskEntity task;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ImageItem imageItem = (ImageItem) view.getTag();
-                if (null != task) {
+//                if (null != task) {
 
                     Bundle arguments = new Bundle();
                     arguments.putString(TaskListFragment.ARG_ITEM_ID, imageItem.getTitle());
@@ -108,19 +109,19 @@ public class TaskDetailActivity extends AppCompatActivity {
                     mParentActivity.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.item_detail_container, fragment)
                             .commit();
-                } else {
-                    Context context = view.getContext();
-                    Intent intent = new Intent(context, ItemDetailActivity.class);
-                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, imageItem.getTitle());
-
-                    context.startActivity(intent);
-                }
+//                } else {
+//                    Context context = view.getContext();
+//                    Intent intent = new Intent(context, ItemDetailActivity.class);
+//                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, imageItem.getTitle());
+//
+//                    context.startActivity(intent);
+//                }
             }
         };
 
         SimpleItemRecyclerViewAdapter(TaskDetailActivity parent,
                                       List<ImageItem> items,
-                                      Task task) {
+                                      TaskEntity task) {
             mValues = items;
             mParentActivity = parent;
             this.task = task;

@@ -3,6 +3,7 @@ package com.product.sampling.net.request;
 import com.product.sampling.bean.New;
 import com.product.sampling.bean.SmsBean;
 import com.product.sampling.bean.Task;
+import com.product.sampling.bean.TaskResultBean;
 import com.product.sampling.bean.UserInfoBean;
 import com.product.sampling.net.response.Response;
 
@@ -46,5 +47,6 @@ public interface Request {
     Observable<Response<UserInfoBean>> loginByPhone(@Query("persontel") String persontel,@Query("appcode") String appcode);
     @GET("app/user/login")
     Observable<Response<UserInfoBean>> loginByPwd(@Query("loginName") String loginName,@Query("password") String password);
-
+    @GET("app/task/tasklist")
+    Observable<Response<TaskResultBean>> taskList(@Query("userid") String userid, @Query("taskstatus") String taskstatus);
 }

@@ -15,6 +15,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.product.sampling.R;
 import com.product.sampling.adapter.ImageAndTextRecyclerViewAdapter;
 import com.product.sampling.bean.Task;
+import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.dummy.DummyContent;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class TaskSceneFragment extends Fragment {
     public TaskSceneFragment() {
     }
 
-    public static TaskSceneFragment newInstance(Task task) {
+    public static TaskSceneFragment newInstance(TaskEntity task) {
 
         Bundle args = new Bundle();
         args.putParcelable("task", task);
