@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import io.reactivex.disposables.Disposable;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,7 +49,20 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-//        initView();
+        List list = new ArrayList();
+        New n1 = new New();
+        n1.conent = "“我以前开车回老家时，也经常堵在收费站，一堵就是20分钟。”谈到取消高速公路省界收费站这一新政的意义时，交通运输部副部长戴东昌在国新办5月10日举行的国务院政策例行吹风会上讲起了自己的经历，并称其为“比较痛苦的体验”。\n" +
+                "\n";
+        list.add(n1);
+        n1 = new New();
+        n1.conent = "临阵磨枪，不快也光？动画片《骄傲的将军》将这个成语巧妙诠释了一番，同时提醒我们，老本不能吃太久。这部1956年“中国动画学派”的开山之作，借鉴了中国传统戏曲尤其京剧的众多元素，人物造型也采用了京剧脸谱，可谓国漫的良心。片中，得胜后的将军沉湎花天酒地，有人说是“西楚霸王”项羽的映射，也有人认为是“闯王”李自成的写照，不管隐喻了什么，这部建国之初的动画可以看出一些忧患意识的反映。\n" +
+                "\n";
+        list.add(n1);
+        n1 = new New();
+        n1.conent = "贝索斯在向媒体和航天行业高管发表的演讲中表示:“这艘航天器将前往月球。我们收到了一份礼物，这颗地球附近的天体叫做月球。”他补充说，由于月球的重力比地球低，它是个在太空中开始制造业的好地方。从月球上获取资源所需能源要“比从地球上获取节省24倍”，“这是一个巨大的杠杆”。\n" +
+                "\n";
+        list.add(n1);
+        initView(list);
         getData();
     }
 

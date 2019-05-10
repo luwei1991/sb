@@ -8,178 +8,183 @@
 
     <include layout="@layout/layout_task_step" />
 
-
-    <TableLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:divider="@color/color_9EA7B4"
-        android:showDividers="end|middle|beginning"
-        android:stretchColumns="1">
+        android:layout_height="300dp">
 
-        <TableRow
-            android:layout_height="50dp"
-            android:background="@color/cut_off_line"
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:divider="@color/color_9EA7B4"
-            android:showDividers="middle|beginning|end">
+            android:showDividers="end|middle|beginning"
+            android:stretchColumns="1">
 
-            <TextView
-                android:layout_width="200dp"
+            <TableRow
                 android:layout_height="50dp"
-                android:gravity="center"
-                android:text="计划名称" />
+                android:background="@color/cut_off_line"
+                android:divider="@color/color_9EA7B4"
+                android:showDividers="middle|beginning|end">
 
-            <TextView
-                android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="计划名称" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="计划XXX" />
+
+            </TableRow>
+
+            <TableRow
                 android:layout_height="50dp"
-                android:gravity="center"
-                android:text="计划XXX" />
+                android:divider="@color/color_9EA7B4"
+                android:showDividers="middle|beginning|end">
 
-        </TableRow>
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="项目备案号" />
 
-        <TableRow
-            android:layout_height="50dp"
-            android:divider="@color/color_9EA7B4"
-            android:showDividers="middle|beginning|end">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="计划XXX" />
 
-            <TextView
-                android:layout_width="200dp"
+            </TableRow>
+
+            <TableRow
                 android:layout_height="50dp"
-                android:gravity="center"
-                android:text="项目备案号" />
+                android:background="@color/cut_off_line"
+                android:divider="@color/color_9EA7B4"
+                android:showDividers="middle|beginning|end">
 
-            <TextView
-                android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="抽样类型" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="计划XXX" />
+
+            </TableRow>
+
+            <TableRow
                 android:layout_height="50dp"
-                android:gravity="center"
-                android:text="计划XXX" />
+                android:divider="@color/color_9EA7B4"
+                android:showDividers="middle|beginning|end">
 
-        </TableRow>
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="计划来源" />
 
-        <TableRow
-            android:layout_height="50dp"
-            android:background="@color/cut_off_line"
-            android:divider="@color/color_9EA7B4"
-            android:showDividers="middle|beginning|end">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="计划XXX" />
 
-            <TextView
-                android:layout_width="200dp"
+            </TableRow>
+
+            <TableRow
                 android:layout_height="50dp"
-                android:gravity="center"
-                android:text="抽样类型" />
+                android:background="@color/cut_off_line"
+                android:divider="@color/color_9EA7B4"
+                android:showDividers="middle|beginning|end">
 
-            <TextView
-                android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="开始时间" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="计划XXX" />
+
+            </TableRow>
+
+            <TableRow
                 android:layout_height="50dp"
-                android:gravity="center"
-                android:text="计划XXX" />
+                android:divider="@color/color_9EA7B4"
+                android:showDividers="middle|beginning|end">
 
-        </TableRow>
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="结束时间" />
 
-        <TableRow
-            android:layout_height="50dp"
-            android:divider="@color/color_9EA7B4"
-            android:showDividers="middle|beginning|end">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="计划XXX" />
 
-            <TextView
-                android:layout_width="200dp"
+            </TableRow>
+
+            <TableRow
                 android:layout_height="50dp"
-                android:gravity="center"
-                android:text="计划来源" />
+                android:background="@color/cut_off_line"
+                android:divider="@color/color_9EA7B4"
+                android:showDividers="middle|beginning|end">
 
-            <TextView
-                android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="产品种类" />
+
+                <TextView
+                    android:id="@+id/tv_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="计划XXX" />
+
+            </TableRow>
+
+            <TableRow
                 android:layout_height="50dp"
-                android:gravity="center"
-                android:text="计划XXX" />
+                android:divider="@color/color_9EA7B4"
+                android:showDividers="middle|beginning|end">
 
-        </TableRow>
+                <TextView
 
-        <TableRow
-            android:layout_height="50dp"
-            android:background="@color/cut_off_line"
-            android:divider="@color/color_9EA7B4"
-            android:showDividers="middle|beginning|end">
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="所需抽样批次" />
 
-            <TextView
-                android:layout_width="200dp"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:text="开始时间" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="计划XXX" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:text="计划XXX" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_height="50dp"
-            android:divider="@color/color_9EA7B4"
-            android:showDividers="middle|beginning|end">
-
-            <TextView
-                android:layout_width="200dp"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:text="结束时间" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:text="计划XXX" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_height="50dp"
-            android:background="@color/cut_off_line"
-            android:divider="@color/color_9EA7B4"
-            android:showDividers="middle|beginning|end">
-
-            <TextView
-                android:layout_width="200dp"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:text="产品种类" />
-
-            <TextView
-                android:id="@+id/tv_type"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:text="计划XXX" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_height="50dp"
-            android:divider="@color/color_9EA7B4"
-            android:showDividers="middle|beginning|end">
-
-            <TextView
-
-                android:layout_width="200dp"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:text="所需抽样批次" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:text="计划XXX" />
-
-        </TableRow>
-    </TableLayout>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
 
     <Button
         android:layout_width="400dp"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
         android:background="@color/colorPrimary"
         android:text="下一步"
         android:textColor="@color/white" />
