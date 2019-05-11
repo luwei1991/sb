@@ -1,7 +1,5 @@
 package com.product.sampling.ui;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,17 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.material.appbar.CollapsingToolbarLayout;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.product.sampling.R;
 import com.product.sampling.adapter.SpinnerSimpleAdapter;
-import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskResultBean;
-import com.product.sampling.dummy.DummyContent;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
@@ -29,12 +29,6 @@ import com.product.sampling.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import io.reactivex.disposables.Disposable;
 
@@ -50,10 +44,8 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
 
     public static final String ARG_TITLE = "title";
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+    int ordertype = 1;//    0时间倒叙1时间升序
+
     Disposable disposable;
     View recyclerView;
 
@@ -76,7 +68,9 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
             // to load content from a content provider.
         }
         getData();
+        getMenuData();
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -134,12 +128,26 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
     private void getData() {
         Bundle b = getArguments();
         String status = b.getString(ARG_TASK_STATUS);
-        disposable = NetWorkManager.getRequest().taskList(AccountManager.getInstance().getUserId(), status)
+
+        disposable = NetWorkManager.getRequest().taskList(AccountManager.getInstance().getUserId(), status, null)
                 .compose(ResponseTransformer.handleResult())
                 .compose(SchedulerProvider.getInstance().applySchedulers())
                 .subscribe(tasks -> {
                     assert recyclerView != null;
                     setupRecyclerView((RecyclerView) recyclerView, tasks);
+                }, throwable -> {
+                    ToastUtil.showToast(getActivity(), ((ApiException) throwable).getDisplayMessage());
+
+                    Log.e("throwable", "" + ((ApiException) throwable).getDisplayMessage());
+                });
+    }
+
+    private void getMenuData() {
+        disposable = NetWorkManager.getRequest().taskMenu(null, null)
+                .compose(ResponseTransformer.handleResult())
+                .compose(SchedulerProvider.getInstance().applySchedulers())
+                .subscribe(tasks -> {
+                    Log.e("tasks", tasks.toString());
                 }, throwable -> {
                     ToastUtil.showToast(getActivity(), ((ApiException) throwable).getDisplayMessage());
 
@@ -234,14 +242,14 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
             ViewHolder(View view) {
                 super(view);
                 mTextViewMap = view.findViewById(R.id.tv_map);
-                mTextViewNum = (TextView) view.findViewById(R.id.tv_num);
+                mTextViewNum = view.findViewById(R.id.tv_num);
 
-                mTextViewName = (TextView) view.findViewById(R.id.tv_name);
-                mTextViewAddress = (TextView) view.findViewById(R.id.tv_address);
-                mTextViewType = (TextView) view.findViewById(R.id.tv_type);
-                mTextViewStartTime = (TextView) view.findViewById(R.id.tv_start_time);
-                mTextViewEndTime = (TextView) view.findViewById(R.id.tv_end_time);
-                mTextViewCountDown = (TextView) view.findViewById(R.id.tv_countdown);
+                mTextViewName = view.findViewById(R.id.tv_name);
+                mTextViewAddress = view.findViewById(R.id.tv_address);
+                mTextViewType = view.findViewById(R.id.tv_type);
+                mTextViewStartTime = view.findViewById(R.id.tv_start_time);
+                mTextViewEndTime = view.findViewById(R.id.tv_end_time);
+                mTextViewCountDown = view.findViewById(R.id.tv_countdown);
                 mTextViewException = view.findViewById(R.id.tv_exception);
                 mTextViewFill = view.findViewById(R.id.tv_fill_info);
 

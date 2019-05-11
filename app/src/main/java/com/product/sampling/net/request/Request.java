@@ -3,6 +3,7 @@ package com.product.sampling.net.request;
 import com.product.sampling.bean.New;
 import com.product.sampling.bean.SmsBean;
 import com.product.sampling.bean.Task;
+import com.product.sampling.bean.TaskMenu;
 import com.product.sampling.bean.TaskResultBean;
 import com.product.sampling.bean.UserInfoBean;
 import com.product.sampling.net.response.Response;
@@ -44,9 +45,15 @@ public interface Request {
     Observable<Response<String>> sendCode(@Query("persontel") String persontel);
 
     @GET("app/user/logintel")
-    Observable<Response<UserInfoBean>> loginByPhone(@Query("persontel") String persontel,@Query("appcode") String appcode);
+    Observable<Response<UserInfoBean>> loginByPhone(@Query("persontel") String persontel, @Query("appcode") String appcode);
+
     @GET("app/user/login")
-    Observable<Response<UserInfoBean>> loginByPwd(@Query("loginName") String loginName,@Query("password") String password);
+    Observable<Response<UserInfoBean>> loginByPwd(@Query("loginName") String loginName, @Query("password") String password);
+
     @GET("app/task/tasklist")
-    Observable<Response<TaskResultBean>> taskList(@Query("userid") String userid, @Query("taskstatus") String taskstatus);
+    Observable<Response<TaskResultBean>> taskList(@Query("userid") String userid, @Query("taskstatus") String taskstatus, @Query("ordertype") String ordertype);
+
+    @GET("app/task/getdict")
+    Observable<Response<TaskMenu>> taskMenu(@Query("type") String type, @Query("value") String value);
+
 }
