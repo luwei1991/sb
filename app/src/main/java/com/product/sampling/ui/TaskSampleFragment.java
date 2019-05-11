@@ -17,7 +17,12 @@ import com.product.sampling.R;
 import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
 import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskEntity;
+import com.product.sampling.bean.TaskImageEntity;
+import com.product.sampling.bean.TaskSample;
 import com.product.sampling.dummy.DummyContent;
+import com.product.sampling.photo.BasePhotoFragment;
+
+import org.devio.takephoto.model.TImage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +33,7 @@ import java.util.List;
  * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
  * on handsets.
  */
-public class TaskSampleFragment extends Fragment {
+public class TaskSampleFragment extends BasePhotoFragment {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -40,10 +45,8 @@ public class TaskSampleFragment extends Fragment {
      */
     private DummyContent.DummyItem mItem;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+    RecyclerView mRecyclerView;
+
     public TaskSampleFragment() {
     }
 
@@ -84,20 +87,40 @@ public class TaskSampleFragment extends Fragment {
         if (mItem != null) {
 //            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.details);
         }
-        List<String> list = new ArrayList<>();
-        list.add("北京");
-        list.add("商户");
-        list.add("南京");
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-        RecyclerView mRecyclerView = rootView.findViewById(R.id.item_list);
+        mRecyclerView = rootView.findViewById(R.id.item_list);
         mRecyclerView.setLayoutManager(linearLayoutManager);
+        List list = new ArrayList();
+        TaskSample sample = new TaskSample();
+        sample.title = "北京";
+        sample.list = new ArrayList<>();
+        list.add(sample);
         setupRecyclerView(mRecyclerView, list);
         return rootView;
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List task) {
-        recyclerView.setAdapter(new TaskSampleRecyclerViewAdapter((AppCompatActivity) getActivity(), task, false));
+        recyclerView.setAdapter(new TaskSampleRecyclerViewAdapter((AppCompatActivity) getActivity(), this, task, false));
+    }
+
+    @Override
+    public void showResultImages(ArrayList<TImage> images) {
+        ArrayList<TaskImageEntity> imageList = new ArrayList<>();
+        for (TImage image :
+                images) {
+            TaskImageEntity taskImageEntity = new TaskImageEntity();
+            taskImageEntity.setCompressPath(image.getCompressPath());
+            taskImageEntity.setOriginalPath(image.getOriginalPath());
+            taskImageEntity.setFromType(image.getFromType());
+            imageList.add(taskImageEntity);
+        }
+        List<TaskSample> list = new ArrayList<>();
+        TaskSample taskSample = new TaskSample();
+        taskSample.title = "北京";
+        taskSample.list = imageList;
+        list.add(taskSample);
+        setupRecyclerView(mRecyclerView, list);
     }
 }

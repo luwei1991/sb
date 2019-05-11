@@ -5,15 +5,19 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.product.sampling.R;
 import com.product.sampling.bean.Task;
+import com.product.sampling.bean.TaskSample;
+import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.ui.TaskDetailActivity;
 
 import java.util.ArrayList;
@@ -21,22 +25,24 @@ import java.util.List;
 
 public class TaskSampleRecyclerViewAdapter extends RecyclerView.Adapter<TaskSampleRecyclerViewAdapter.ViewHolder> {
 
-    private final List<String> mValues;
+    private final List<TaskSample> mValues;
     private final boolean mTwoPane;
+    private BasePhotoFragment fragment;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             if (mTwoPane) {
             }
-            view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task", (Task) view.getTag()));
+            fragment.selectPhoto(10, false, false, false);
         }
     };
 
-    public TaskSampleRecyclerViewAdapter(Context parent,
-                                         List<String> items,
+    public TaskSampleRecyclerViewAdapter(Context parent, BasePhotoFragment fragment,
+                                         List<TaskSample> items,
                                          boolean twoPane) {
         mValues = items;
         mTwoPane = twoPane;
+        this.fragment = fragment;
     }
 
     @Override
@@ -48,20 +54,16 @@ public class TaskSampleRecyclerViewAdapter extends RecyclerView.Adapter<TaskSamp
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String task = mValues.get(position);
-        holder.mTextViewTitle.setText(task + "");
-        holder.itemView.setTag(task);
+        TaskSample task = mValues.get(position);
+        holder.mTextViewTitle.setText(task.title + "");
+        holder.imageView.setTag(task);
+        holder.imageView.findViewById(R.id.iv_choose).setOnClickListener(mOnClickListener);
 //        holder.itemView.setOnClickListener(mOnClickListener);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(holder.itemView.getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         holder.mRecyclerView.setLayoutManager(linearLayoutManager);
-        List list = new ArrayList();
-        list.add("北京");
-        list.add("商户");
-        list.add("南京");
 
-        holder.mRecyclerView.setAdapter(new ImageAndTextRecyclerViewAdapter(holder.itemView.getContext(), list, false));
-
+        holder.mRecyclerView.setAdapter(new ImageAndTextRecyclerViewAdapter(holder.itemView.getContext(), task.list, false));
     }
 
     @Override
@@ -72,11 +74,14 @@ public class TaskSampleRecyclerViewAdapter extends RecyclerView.Adapter<TaskSamp
     class ViewHolder extends RecyclerView.ViewHolder {
         final TextView mTextViewTitle;
         final RecyclerView mRecyclerView;
+        final ImageView imageView;
+
 
         ViewHolder(View view) {
             super(view);
             mTextViewTitle = view.findViewById(R.id.tv_title);
             mRecyclerView = view.findViewById(R.id.item_list);
+            imageView = view.findViewById(R.id.iv_choose);
         }
     }
 }

@@ -39,6 +39,9 @@ android {
             storePassword '123456'
         }
     }
+    packagingOptions {
+        pickFirst 'META-INF/*'
+    }
 
 }
 
@@ -102,7 +105,7 @@ dependencies {
     implementation 'com.amap.api:location:latest.integration'
     //搜索功能
     implementation 'com.amap.api:search:latest.integration'
-    //图片
-//    implementation 'com.jph.takephoto:takephoto_library:4.1.0'
+
+    implementation project(path: ':takephoto_library')
 
 }

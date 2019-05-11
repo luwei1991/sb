@@ -5,22 +5,29 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.product.sampling.R;
 import com.product.sampling.bean.Task;
+import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.ui.TaskDetailActivity;
 import com.product.sampling.ui.TaskListFragment;
+
+import org.devio.takephoto.model.TImage;
 
 import java.util.List;
 
 public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageAndTextRecyclerViewAdapter.ViewHolder> {
 
-    private final List<String> mValues;
+    private final List<TaskImageEntity> mValues;
     private final boolean mTwoPane;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -32,7 +39,7 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
     };
 
     public ImageAndTextRecyclerViewAdapter(Context parent,
-                                           List<String> items,
+                                           List<TaskImageEntity> items,
                                            boolean twoPane) {
         mValues = items;
         mTwoPane = twoPane;
@@ -47,10 +54,11 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String task = mValues.get(position);
-        holder.mTextViewTitle.setText(task + "");
+        TaskImageEntity task = mValues.get(position);
+        holder.mTextViewTitle.setText(task.title + "");
         holder.itemView.setTag(task);
         holder.itemView.setOnClickListener(mOnClickListener);
+        Glide.with(holder.itemView.getContext()).load(task.getOriginalPath()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);
     }
 
     @Override
@@ -60,9 +68,12 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
 
     class ViewHolder extends RecyclerView.ViewHolder {
         final TextView mTextViewTitle;
+        final ImageView mImageView;
+
         ViewHolder(View view) {
             super(view);
             mTextViewTitle = view.findViewById(R.id.tv_title);
+            mImageView = view.findViewById(R.id.iv_task);
         }
     }
 }

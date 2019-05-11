@@ -70,6 +70,7 @@
             android:src="@mipmap/form_reduce" />
 
         <ImageView
+            android:id="@+id/iv_choose"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_alignParentRight="true"

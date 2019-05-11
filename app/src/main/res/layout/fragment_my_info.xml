@@ -18,16 +18,41 @@
         android:layout_height="50dp"
         app:title="我的信息" />
 
-    <TextView
+    <RelativeLayout
+        android:id="@+id/rl_photo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:background="?selectableItemBackground"
-        android:clickable="true"
-        android:drawableLeft="@mipmap/personal_information"
-        android:drawablePadding="50dp"
-        android:gravity="center_vertical"
-        android:padding="10dp"
-        android:text="修改头像" />
+        android:clickable="true">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:src="@mipmap/personal_information" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/image"
+            android:background="?selectableItemBackground"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="修改头像" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/ic_arrow" />
+    </RelativeLayout>
+
 
     <View
         android:layout_width="match_parent"
@@ -36,8 +61,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="match_parent"
@@ -54,9 +78,9 @@
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginRight="20dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
             android:src="@drawable/ic_arrow" />
     </RelativeLayout>
 
@@ -67,8 +91,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="match_parent"
@@ -85,9 +108,9 @@
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginRight="20dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
             android:src="@drawable/ic_arrow" />
     </RelativeLayout>
 

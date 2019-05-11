@@ -16,7 +16,11 @@ import com.product.sampling.R;
 import com.product.sampling.adapter.ImageAndTextRecyclerViewAdapter;
 import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskEntity;
+import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.dummy.DummyContent;
+import com.product.sampling.photo.BasePhotoFragment;
+
+import org.devio.takephoto.model.TImage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +31,7 @@ import java.util.List;
  * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
  * on handsets.
  */
-public class TaskSceneFragment extends Fragment {
+public class TaskSceneFragment extends BasePhotoFragment {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -39,10 +43,8 @@ public class TaskSceneFragment extends Fragment {
      */
     private DummyContent.DummyItem mItem;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+    RecyclerView mRecyclerView;
+
     public TaskSceneFragment() {
     }
 
@@ -82,19 +84,35 @@ public class TaskSceneFragment extends Fragment {
         if (mItem != null) {
 //            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.details);
         }
-        List<String> list = new ArrayList<>();
-        list.add("北京");
-        list.add("商户");
-        list.add("南京");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        RecyclerView mRecyclerView = rootView.findViewById(R.id.item_list);
+        mRecyclerView = rootView.findViewById(R.id.item_list);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        setupRecyclerView(mRecyclerView, list);
+        setupRecyclerView(mRecyclerView, new ArrayList());
+        rootView.findViewById(R.id.iv_choose).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectPhoto(10, false, true, false);
+            }
+        });
         return rootView;
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List task) {
         recyclerView.setAdapter(new ImageAndTextRecyclerViewAdapter(getActivity(), task, false));
+    }
+
+    @Override
+    public void showResultImages(ArrayList<TImage> images) {
+        ArrayList<TaskImageEntity> imageList = new ArrayList<>();
+        for (TImage image :
+                images) {
+            TaskImageEntity taskImageEntity = new TaskImageEntity();
+            taskImageEntity.setCompressPath(image.getCompressPath());
+            taskImageEntity.setOriginalPath(image.getOriginalPath());
+            taskImageEntity.setFromType(image.getFromType());
+            imageList.add(taskImageEntity);
+        }
+        setupRecyclerView(mRecyclerView, imageList);
     }
 }
