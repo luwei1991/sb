@@ -94,16 +94,20 @@ public class ItemListActivity extends AppCompatActivity {
                 if (mTwoPane) {
 
                     Bundle arguments = new Bundle();
-                    arguments.putString(TaskListFragment.ARG_ITEM_ID, item.getTitle());
+                    arguments.putString(TaskListFragment.ARG_TASK_STATUS, "0");
                     Fragment fragment;
                     if (item.getTitle().equalsIgnoreCase("待办任务")) {
-                        fragment = TaskListFragment.newInstance();
+                        fragment = TaskListFragment.newInstance(item.getTitle(),"0");
+                    } else if (item.getTitle().equalsIgnoreCase("未上传")) {
+                        fragment = TaskListFragment.newInstance(item.getTitle(),"1");
+                    } else if (item.getTitle().equalsIgnoreCase("已上传")) {
+                        fragment = TaskListFragment.newInstance(item.getTitle(),"2");
                     } else if (item.getTitle().equalsIgnoreCase("我的信息")) {
                         fragment = MyInfoFragment.newInstance();
                     } else {
                         fragment = new ItemDetailFragment();
                     }
-                    fragment.setArguments(arguments);
+//                    fragment.setArguments(arguments);
 
                     mParentActivity.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.item_detail_container, fragment)

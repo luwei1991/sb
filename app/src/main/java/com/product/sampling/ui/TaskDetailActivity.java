@@ -95,7 +95,7 @@ public class TaskDetailActivity extends AppCompatActivity {
 //                if (null != task) {
 
                     Bundle arguments = new Bundle();
-                    arguments.putString(TaskListFragment.ARG_ITEM_ID, imageItem.getTitle());
+                    arguments.putString(TaskListFragment.ARG_TASK_STATUS, imageItem.getTitle());
                     Fragment fragment = new ItemDetailFragment();
                     if (imageItem.getTitle().equalsIgnoreCase("任务信息")) {
                         fragment = TaskDetailFragment.newInstance(task);

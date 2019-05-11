@@ -14,8 +14,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/color_0E6FD6"
-        app:titleTextColor="@color/color_214361"
+        android:background="#8BD4F5"
+        app:titleTextColor="#1D77AE"
         app:title="待办任务" />
 
     <RelativeLayout
