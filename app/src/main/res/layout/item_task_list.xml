@@ -15,43 +15,56 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#8BD4F5"
-        app:titleTextColor="#1D77AE"
-        app:title="待办任务" />
+        app:title="待办任务"
+        app:titleTextColor="#1D77AE" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        >
+        android:layout_height="50dp">
 
         <TextView
             android:id="@+id/tv_range"
-            android:layout_width="100dp"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
             android:background="?selectableItemBackground"
             android:clickable="true"
-            android:drawableRight="@mipmap/task_triangle"
-            android:drawablePadding="-20dp"
             android:gravity="center"
             android:text="距离"
             android:textColor="#333333"
             android:textSize="15sp" />
 
+        <ImageView
+            android:id="@+id/iv_sort_distance"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_range"
+            android:src="@mipmap/task_triangle" />
+
         <TextView
             android:id="@+id/tv_date"
-            android:layout_width="100dp"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
-            android:layout_toRightOf="@+id/tv_range"
+            android:layout_marginLeft="50dp"
+            android:layout_toRightOf="@+id/iv_sort_distance"
             android:background="?selectableItemBackground"
             android:clickable="true"
-            android:drawableRight="@mipmap/task_triangle"
-            android:drawablePadding="-20dp"
             android:gravity="center"
             android:text="日期"
             android:textColor="#333333"
             android:textSize="15sp" />
 
+        <ImageView
+            android:id="@+id/iv_sort_time"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_date"
+            android:src="@mipmap/task_triangle" />
+
         <Spinner
+            android:layout_marginLeft="50dp"
             android:id="@+id/spinner_type"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
@@ -62,8 +75,8 @@
             android:id="@+id/spinner_area"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:spinnerMode="dialog"
-            android:layout_toRightOf="@+id/spinner_type" />
+            android:layout_toRightOf="@+id/spinner_type"
+            android:spinnerMode="dialog" />
     </RelativeLayout>
     <!--
     This layout is a two-pane layout for the Items
@@ -84,8 +97,8 @@
     <FrameLayout
         android:id="@+id/item_detail_container"
         android:layout_width="0dp"
-        android:visibility="gone"
         android:layout_height="match_parent"
-        android:layout_weight="3" />
+        android:layout_weight="3"
+        android:visibility="gone" />
 
 </LinearLayout>

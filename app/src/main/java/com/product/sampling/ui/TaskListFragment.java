@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -48,6 +49,10 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
 
     Disposable disposable;
     View recyclerView;
+    ImageView mIVdistance;
+    ImageView mIVTime;
+    boolean isTimeFromLowToHigh = true;
+    boolean isDistanceFromLowToHigh = true;
 
     public static TaskListFragment newInstance(String title, String taskstatus) {
         Bundle args = new Bundle();
@@ -80,11 +85,9 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
         if (toolbar != null) {
             toolbar.setTitle(getArguments().getString(ARG_TITLE));
         }
-        // Show the dummy content as text in a TextView.
-//        if (mItem != null) {
-//            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.details);
-//        }
         recyclerView = rootView.findViewById(R.id.item_list);
+        mIVdistance = rootView.findViewById(R.id.iv_sort_distance);
+        mIVTime = rootView.findViewById(R.id.iv_sort_time);
         rootView.findViewById(R.id.tv_range).setOnClickListener(this);
         rootView.findViewById(R.id.tv_date).setOnClickListener(this);
         ArrayList type = new ArrayList();
@@ -163,9 +166,21 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_range:
+                isDistanceFromLowToHigh = !isDistanceFromLowToHigh;
+                if (isDistanceFromLowToHigh) {
+                    mIVdistance.setImageResource(R.mipmap.task_triangle2);
+                } else {
+                    mIVdistance.setImageResource(R.mipmap.task_triangle);
+                }
                 getData();
                 break;
             case R.id.tv_date:
+                isTimeFromLowToHigh = !isTimeFromLowToHigh;
+                if (isTimeFromLowToHigh) {
+                    mIVTime.setImageResource(R.mipmap.task_triangle2);
+                } else {
+                    mIVTime.setImageResource(R.mipmap.task_triangle);
+                }
                 getData();
                 break;
 
