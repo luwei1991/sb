@@ -1,6 +1,7 @@
 package com.product.sampling.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,9 +33,21 @@ public class TaskSampleRecyclerViewAdapter extends RecyclerView.Adapter<TaskSamp
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (mTwoPane) {
+            if (view.getId() == R.id.iv_add) {
+                fragment.selectPhoto(10, false, false, false, (int) view.getTag());
+            } else if (R.id.iv_reduce == view.getId()) {
+                int index = (int) view.getTag();
+                new AlertDialog.Builder(fragment.getContext()).setTitle("确认删除" + mValues.get(index).title + "的样品信息吗?")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //按下确定键后的事件
+                                mValues.remove(index);
+                                notifyDataSetChanged();
+                            }
+                        }).setNegativeButton("取消", null).show();
+
             }
-            fragment.selectPhoto(10, false, false, false);
         }
     };
 
@@ -56,9 +70,10 @@ public class TaskSampleRecyclerViewAdapter extends RecyclerView.Adapter<TaskSamp
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TaskSample task = mValues.get(position);
         holder.mTextViewTitle.setText(task.title + "");
-        holder.imageView.setTag(task);
-        holder.imageView.findViewById(R.id.iv_choose).setOnClickListener(mOnClickListener);
-//        holder.itemView.setOnClickListener(mOnClickListener);
+        holder.mImageViewAdd.setTag(position);
+        holder.mImageViewAdd.setOnClickListener(mOnClickListener);
+        holder.mImageViewReduce.setTag(position);
+        holder.mImageViewReduce.setOnClickListener(mOnClickListener);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(holder.itemView.getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         holder.mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -74,14 +89,16 @@ public class TaskSampleRecyclerViewAdapter extends RecyclerView.Adapter<TaskSamp
     class ViewHolder extends RecyclerView.ViewHolder {
         final TextView mTextViewTitle;
         final RecyclerView mRecyclerView;
-        final ImageView imageView;
+        final ImageView mImageViewAdd;
+        final ImageView mImageViewReduce;
 
 
         ViewHolder(View view) {
             super(view);
             mTextViewTitle = view.findViewById(R.id.tv_title);
             mRecyclerView = view.findViewById(R.id.item_list);
-            imageView = view.findViewById(R.id.iv_choose);
+            mImageViewAdd = view.findViewById(R.id.iv_add);
+            mImageViewReduce = view.findViewById(R.id.iv_reduce);
         }
     }
 }

@@ -28,13 +28,14 @@ import java.util.List;
 public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageAndTextRecyclerViewAdapter.ViewHolder> {
 
     private final List<TaskImageEntity> mValues;
-    private final boolean mTwoPane;
+    private boolean mTwoPane;
+    private int taskPostion = -1;//当前图片列表所属样品id
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (mTwoPane) {
+            if (view.getId()==R.id.iv_task) {
+                view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task", (Task) view.getTag()));
             }
-            view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task", (Task) view.getTag()));
         }
     };
 
@@ -43,6 +44,13 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
                                            boolean twoPane) {
         mValues = items;
         mTwoPane = twoPane;
+    }
+
+    public ImageAndTextRecyclerViewAdapter(Context parent,
+                                           List<TaskImageEntity> items,
+                                           int pos) {
+        mValues = items;
+        taskPostion = pos;
     }
 
     @Override
@@ -56,7 +64,9 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TaskImageEntity task = mValues.get(position);
         holder.mTextViewTitle.setText(task.title + "");
-        holder.itemView.setTag(task);
+        if (taskPostion != -1) {
+            holder.mImageView.setTag(taskPostion);
+        }
         holder.itemView.setOnClickListener(mOnClickListener);
         Glide.with(holder.itemView.getContext()).load(task.getOriginalPath()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);
     }

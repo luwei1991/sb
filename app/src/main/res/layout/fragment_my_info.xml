@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
     android:baselineAligned="false"
     android:divider="#f1f2f3"
 
@@ -16,7 +15,9 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:title="我的信息" />
+        android:background="#8BD4F5"
+        app:title="我的信息"
+        app:titleTextColor="#1D77AE" />
 
     <RelativeLayout
         android:id="@+id/rl_photo"

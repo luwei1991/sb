@@ -41,6 +41,10 @@ public class ItemListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
+    static Fragment taskToDoFragment = TaskListFragment.newInstance("待办任务", "0");
+    static Fragment taskWaitUpLoadedFragment = TaskListFragment.newInstance("未上传", "1");
+    static Fragment taskHasUpLoadedFragment = TaskListFragment.newInstance("已上传", "2");
+    static Fragment myinfoFragment = MyInfoFragment.newInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,23 +99,29 @@ public class ItemListActivity extends AppCompatActivity {
 
                     Bundle arguments = new Bundle();
                     arguments.putString(TaskListFragment.ARG_TASK_STATUS, "0");
-                    Fragment fragment;
                     if (item.getTitle().equalsIgnoreCase("待办任务")) {
-                        fragment = TaskListFragment.newInstance(item.getTitle(),"0");
+                        mParentActivity.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.item_detail_container, taskToDoFragment)
+                                .commit();
                     } else if (item.getTitle().equalsIgnoreCase("未上传")) {
-                        fragment = TaskListFragment.newInstance(item.getTitle(),"1");
+                        mParentActivity.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.item_detail_container, taskWaitUpLoadedFragment)
+                                .commit();
                     } else if (item.getTitle().equalsIgnoreCase("已上传")) {
-                        fragment = TaskListFragment.newInstance(item.getTitle(),"2");
+                        mParentActivity.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.item_detail_container, taskHasUpLoadedFragment)
+                                .commit();
                     } else if (item.getTitle().equalsIgnoreCase("我的信息")) {
-                        fragment = MyInfoFragment.newInstance();
+                        mParentActivity.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.item_detail_container, myinfoFragment)
+                                .commit();
                     } else {
-                        fragment = new ItemDetailFragment();
+                        ItemDetailFragment taskFragment = new ItemDetailFragment();
+                        mParentActivity.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.item_detail_container, taskFragment)
+                                .commit();
                     }
-//                    fragment.setArguments(arguments);
 
-                    mParentActivity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.item_detail_container, fragment)
-                            .commit();
                 } else {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, ItemDetailActivity.class);

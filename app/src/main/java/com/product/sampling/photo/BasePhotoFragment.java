@@ -45,6 +45,12 @@ import io.reactivex.disposables.Disposable;
  */
 public abstract class BasePhotoFragment extends TakePhotoFragment {
     TakePhoto takePhoto;
+    int imageListPostionInTask = -1;
+
+    public void selectPhoto(int limit, boolean isCrop, boolean isFromFile, boolean isCompress, int pos) {
+        imageListPostionInTask = pos;
+        selectPhoto(limit, isCrop, isFromFile, isCompress);
+    }
 
     public void selectPhoto(int limit, boolean isCrop, boolean isFromFile, boolean isCompress) {
 
@@ -168,11 +174,20 @@ public abstract class BasePhotoFragment extends TakePhotoFragment {
         super.takeSuccess(result);
         ArrayList<TImage> resultImages = result.getImages();
         if (null != resultImages && !resultImages.isEmpty()) {
-            showResultImages(resultImages);
+            if (imageListPostionInTask == -1) {
+                showResultImages(resultImages);
+            } else {
+                showResultImages(resultImages, imageListPostionInTask);
+            }
         } else {
             ToastUtil.showToast(getContext(), "还未选中图片");
         }
     }
 
-    public abstract void showResultImages(ArrayList<TImage> images);
+    public void showResultImages(ArrayList<TImage> images) {
+    }
+
+    public void showResultImages(ArrayList<TImage> images, int imageListPostionInTask) {
+    }
+
 }

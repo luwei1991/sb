@@ -12,6 +12,14 @@
         android:background="?selectableItemBackground"
         android:orientation="vertical">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#8BD4F5"
+            app:title="现场信息"
+            app:titleTextColor="#1D77AE" />
+
         <include layout="@layout/layout_task_step" />
 
         <LinearLayout
@@ -195,12 +203,12 @@
                 tools:listitem="@layout/item_scene_list_content" />
 
             <ImageView
+                android:id="@+id/iv_choose"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
-                android:id="@+id/iv_choose"
                 android:src="@mipmap/form_add" />
         </RelativeLayout>
 
