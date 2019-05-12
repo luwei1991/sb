@@ -1,6 +1,7 @@
 package com.product.sampling.ui;
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -49,6 +51,7 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
     public AMapLocationClient mlocationClient;
     //声明mLocationOption对象
     public AMapLocationClientOption mLocationOption = null;
+    public final int LOCATION_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +59,17 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
         setContentView(R.layout.basicmap_activity);
         mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);// 此方法必须重写
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-        }
         init();
-        initLocation();
+        //获取权限（如果没有开启权限，会弹出对话框，询问是否开启权限）
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            //请求权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_CODE);
+        } else {
+            initLocation();
+        }
+
     }
 
     private void initLocation() {
@@ -200,29 +209,20 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
         }
     }
 
-    public static String sHA1(Context context) {
-        try {
-            PackageInfo info = context.getPackageManager().getPackageInfo(
-                    context.getPackageName(), PackageManager.GET_SIGNATURES);
-            byte[] cert = info.signatures[0].toByteArray();
-            MessageDigest md = MessageDigest.getInstance("SHA1");
-            byte[] publicKey = md.digest(cert);
-            StringBuffer hexString = new StringBuffer();
-            for (int i = 0; i < publicKey.length; i++) {
-                String appendString = Integer.toHexString(0xFF & publicKey[i])
-                        .toUpperCase(Locale.US);
-                if (appendString.length() == 1)
-                    hexString.append("0");
-                hexString.append(appendString);
-                hexString.append(":");
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case LOCATION_CODE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    // 权限被用户同意。
+                    // 执形我们想要的操作
+                    initLocation();
+                } else {
+                    Toast.makeText(BasicMapActivity.this, "拒绝了定位权限,无法定位", Toast.LENGTH_LONG).show();
+                }
             }
-            String result = hexString.toString();
-            return result.substring(0, result.length() - 1);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
         }
-        return null;
     }
+
 }
