@@ -219,15 +219,10 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date date = new Date(amapLocation.getTime());
                 df.format(date);//定位时间
-//                final RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(
-//                        mStartPoint, mEndPoint);
-//                // fromAndTo包含路径规划的起点和终点，drivingMode表示驾车模式
-//// 第三个参数表示途经点（最多支持16个），第四个参数表示避让区域（最多支持32个），第五个参数表示避让道路
-//                RouteSearch.DriveRouteQuery query = new RouteSearch.DriveRouteQuery(fromAndTo, drivingMode, null, null, "");
-//                routeSearch.calculateDriveRouteAsyn(query);
+
+                mNaviStart = new LatLonPoint(amapLocation.getLatitude(), amapLocation.getLatitude());
 
 
-                Log.e("amapLocation", "location" + amapLocation.toString());
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                 Log.e("AmapError", "location Error, ErrCode:"
