@@ -34,7 +34,7 @@ import java.util.List;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class ItemListActivity extends AppCompatActivity {
+public class ItemListActivity extends BaseActivity {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet

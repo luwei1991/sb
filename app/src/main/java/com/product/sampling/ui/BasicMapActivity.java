@@ -41,6 +41,7 @@ import com.product.sampling.maputil.AMapUtil;
 import com.product.sampling.maputil.ToastUtil;
 import com.product.sampling.overlay.DrivingRouteOverlay;
 import com.product.sampling.overlay.RideRouteOverlay;
+import com.product.sampling.utils.GdLocationUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -63,17 +64,11 @@ public class BasicMapActivity extends BaseActivity implements OnClickListener, A
     TextView tvCostTime;
 
     private RadioGroup mRadioGroup;
-    //声明mlocationClient对象
-    public AMapLocationClient mlocationClient;
-    //声明mLocationOption对象
-    public AMapLocationClientOption mLocationOption = null;
     // 起点终点坐标
     private LatLonPoint startPoint = new LatLonPoint(39.989614, 116.481763);
     private LatLonPoint endPoint = new LatLonPoint(39.983456, 116.3154950);
 
     private RouteSearch mRouteSearch;
-    ;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +84,7 @@ public class BasicMapActivity extends BaseActivity implements OnClickListener, A
     }
 
     private void setCurrentLocationDetails() {
-// 地址逆解析
+        // 地址逆解析
         GeocodeSearch geocoderSearch = new GeocodeSearch(getApplicationContext());
         geocoderSearch.setOnGeocodeSearchListener(this);
         // 第一个参数表示一个Latlng(经纬度)，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
@@ -396,5 +391,10 @@ public class BasicMapActivity extends BaseActivity implements OnClickListener, A
     @Override
     public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
 
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        GdLocationUtil.getInstance().stopLoaction();
     }
 }

@@ -37,6 +37,7 @@ import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.net.response.ResponseTransformer;
 import com.product.sampling.net.schedulers.SchedulerProvider;
+import com.product.sampling.utils.GdLocationUtil;
 import com.product.sampling.utils.ToastUtil;
 import com.product.sampling.utils.ToastUtils;
 import com.product.sampling.view.CardTransformer;
@@ -49,7 +50,7 @@ import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 
-public class MainActivity extends BaseActivity implements AMapLocationListener, WeatherSearch.OnWeatherSearchListener, View.OnClickListener {
+public class MainActivity extends BaseActivity implements AMapLocationListener, WeatherSearch.OnWeatherSearchListener {
 
     MyViewPager viewPager;
     Disposable disposable;
@@ -120,10 +121,10 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
 
         tvTemperature = findViewById(R.id.tv_temperature);
         ivWeather = findViewById(R.id.iv_weather);
-        tvLoginOut = findViewById(R.id.tv_login_out);
-        tvUserName = findViewById(R.id.tv_user_name);
-        tvUserName.setText(AccountManager.getInstance().getUserInfoBean().getName());
-        tvLoginOut.setOnClickListener(this);
+//        tvLoginOut = findViewById(R.id.tv_login_out);
+//        tvUserName = findViewById(R.id.tv_user_name);
+//        tvUserName.setText(AccountManager.getInstance().getUserInfoBean().getName());
+//        tvLoginOut.setOnClickListener(this);
     }
 
     private void getData() {
@@ -131,12 +132,11 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
                 .compose(ResponseTransformer.handleResult())
                 .compose(SchedulerProvider.getInstance().applySchedulers())
                 .subscribe(news -> {
-                    Log.e("myPageBeans", "" + news.toString());
+                    Log.e("news", "" + news.toString());
                     initView(news);
 
                 }, throwable -> {
                     ToastUtil.showToast(this, ((ApiException) throwable).getDisplayMessage());
-
                     Log.e("throwable", "" + ((ApiException) throwable).getDisplayMessage());
                 });
     }
@@ -164,7 +164,6 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
                 df.format(date);//定位时间
                 tvTemperature.setText(amapLocation.getCity() + amapLocation.getDistrict());
                 Log.e("amapLocation", amapLocation.toString());
-                showShortToast(amapLocation.toString());
                 getWeather(amapLocation.getDistrict(), 0);
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
@@ -236,19 +235,19 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
 
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.tv_login_out) {
-            showSimpleDialog("确定退出登录吗", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    finish();
-                }
-            });
-
-        }
-    }
+//    @Override
+//    public void onClick(View v) {
+//        if (v.getId() == R.id.tv_login_out) {
+//            showSimpleDialog("确定退出登录吗", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+//                    finish();
+//                }
+//            });
+//
+//        }
+//    }
 
     private void exitApp() {
         if (System.currentTimeMillis() - mExitTime > 2000) {
@@ -265,4 +264,9 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
         exitApp();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        GdLocationUtil.getInstance().stopLoaction();
+    }
 }

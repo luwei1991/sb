@@ -1,12 +1,13 @@
 package com.product.sampling.utils;
 
+import android.content.Context;
+
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.product.sampling.ui.MainApplication;
 
 /**
-
  * 创建时间：2018/6/7
  * 描述：
  */
@@ -27,9 +28,8 @@ public class GdLocationUtil {
     }
 
     private void init() {
-        mLocationClient = new AMapLocationClient(MainApplication.INSTANCE);
+        mLocationClient = new AMapLocationClient(MainApplication.INSTANCE.getApplicationContext());
     }
-
 
     /**
      * 单次定位
@@ -42,8 +42,9 @@ public class GdLocationUtil {
         mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         mLocationOption.setHttpTimeOut(20000);
-        mLocationClient.setLocationOption(mLocationOption);
         mLocationOption.setOnceLocationLatest(true);
+        mLocationOption.setOnceLocation(true);
+        mLocationClient.setLocationOption(mLocationOption);
     }
 
     /**

@@ -3,26 +3,28 @@ package com.product.sampling.ui;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-
-import com.amap.api.location.AMapLocationListener;
-import com.jaeger.library.StatusBarUtil;
-import com.product.sampling.R;
-import com.product.sampling.utils.GdLocationUtil;
-import com.product.sampling.utils.ToastUtil;
-import com.umeng.analytics.MobclickAgent;
-
-
-import java.util.List;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.amap.api.location.AMapLocationListener;
+import com.jaeger.library.StatusBarUtil;
+import com.product.sampling.R;
+import com.product.sampling.manager.AccountManager;
+import com.product.sampling.utils.GdLocationUtil;
+import com.umeng.analytics.MobclickAgent;
+
+import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -34,11 +36,11 @@ public class BaseActivity extends AppCompatActivity implements EasyPermissions.P
     AMapLocationListener aMapLocationListener;
     private int LOACTION_REQUEST_CODE = 1001;
 
-
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         setStatusBar();
+        findToolBar();
     }
 
     protected void setStatusBar() {
@@ -85,7 +87,6 @@ public class BaseActivity extends AppCompatActivity implements EasyPermissions.P
     @Override
     protected void onStop() {
         super.onStop();
-        GdLocationUtil.getInstance().stopLoaction();
     }
 
     /**
@@ -181,4 +182,28 @@ public class BaseActivity extends AppCompatActivity implements EasyPermissions.P
         com.product.sampling.maputil.ToastUtil.showShortToast(this, toast);
     }
 
+    Toolbar toolbar;
+    TextView tvUserName;
+    TextView tvLoginOut;
+
+    public void findToolBar() {
+        toolbar = findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            tvLoginOut = findViewById(R.id.tv_login_out);
+            tvUserName = findViewById(R.id.tv_user_name);
+            tvUserName.setText(AccountManager.getInstance().getUserInfoBean().getName());
+            tvLoginOut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showSimpleDialog("确定退出登录吗", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(BaseActivity.this, LoginActivity.class));
+                            popAllActivity();
+                        }
+                    });
+                }
+            });
+        }
+    }
 }
