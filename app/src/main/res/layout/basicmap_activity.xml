@@ -8,68 +8,134 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <RadioGroup
-        android:id="@+id/check_language"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingRight="4dp">
-
-        <RadioButton
-            android:id="@+id/radio_walk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="步行"
-            android:textSize="12sp" />
-
-        <RadioButton
-            android:id="@+id/radio_diver"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="驾车"
-            android:textSize="12sp" />
-
-        <RadioButton
-            android:id="@+id/radio_bus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="公交"
-            android:visibility="gone"
-            android:textSize="12sp" />
-
-        <RadioButton
-            android:id="@+id/radio_ride"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="骑行"
-            android:textSize="12sp" />
-
-    </RadioGroup>
-
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/map"
-        android:layout_margin="10dp"
-        android:layout_toRightOf="@id/check_language"
-        android:orientation="horizontal">
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:alpha="0.8"
+        android:background="@color/white"
+        android:divider="@color/accent"
+        android:orientation="vertical"
+        android:showDividers="middle">
 
-        <Button
-            android:id="@+id/basicmap"
-            android:layout_width="80dp"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:text="标准地图"
-            android:textColor="@color/black" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/map"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@id/check_trip"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/rsmap"
-            android:layout_width="80dp"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:text="卫星地图"
-            android:textColor="@color/black" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:drawableLeft="@mipmap/map_coordinate"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="我的位置"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="目的地"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/map"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@id/check_trip"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:drawableLeft="@mipmap/map_destination"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="目的地"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_destination"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="目的地"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/map"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@id/check_trip"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:drawableLeft="@mipmap/map_time"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="预计时间"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_cost_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="花费时长"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+        <RadioGroup
+            android:id="@+id/check_trip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingRight="4dp">
+
+            <RadioButton
+                android:id="@+id/radio_walk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="步行"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/radio_diver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="驾车"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/radio_bus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="公交"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <RadioButton
+                android:id="@+id/radio_ride"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="骑行"
+                android:textSize="12sp" />
+
+        </RadioGroup>
+
 
     </LinearLayout>
+
+
 </RelativeLayout> 

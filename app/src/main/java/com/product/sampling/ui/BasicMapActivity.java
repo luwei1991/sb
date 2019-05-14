@@ -9,8 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,6 +31,10 @@ import com.amap.api.maps2d.overlay.BusRouteOverlay;
 import com.amap.api.maps2d.overlay.WalkRouteOverlay;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeQuery;
+import com.amap.api.services.geocoder.RegeocodeResult;
 import com.amap.api.services.route.BusPath;
 import com.amap.api.services.route.BusRouteResult;
 import com.amap.api.services.route.DrivePath;
@@ -53,7 +57,7 @@ import java.util.Date;
 /**
  * AMapV1地图中介绍如何显示世界图
  */
-public class BasicMapActivity extends Activity implements OnClickListener, AMapLocationListener, RouteSearch.OnRouteSearchListener {
+public class BasicMapActivity extends Activity implements OnClickListener, AMapLocationListener, RouteSearch.OnRouteSearchListener, GeocodeSearch.OnGeocodeSearchListener {
 
     private static final int ROUTE_TYPE_WALK = 3;
     private final int ROUTE_TYPE_RIDE = 4;
@@ -61,8 +65,10 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
 
     private MapView mapView;
     private AMap aMap;
-    private Button basicmap;
-    private Button rsmap;
+
+    TextView tvLocation;
+    TextView tvDestination;
+    TextView tvCostTime;
 
     private RadioGroup mRadioGroup;
     //声明mlocationClient对象
@@ -72,10 +78,11 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
     public final int LOCATION_CODE = 1;
 
     // 起点终点坐标
-    private LatLonPoint mNaviStart = new LatLonPoint(39.989614, 116.481763);
-    private LatLonPoint mNaviEnd = new LatLonPoint(39.983456, 116.3154950);
+    private LatLonPoint startPoint = new LatLonPoint(39.989614, 116.481763);
+    private LatLonPoint endPoint = new LatLonPoint(39.983456, 116.3154950);
 
     private RouteSearch mRouteSearch;
+    ;
 
 
     @Override
@@ -95,7 +102,16 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
         } else {
             initLocation();
         }
+        setCurrentLocationDetails();
+    }
 
+    private void setCurrentLocationDetails() {
+// 地址逆解析
+        GeocodeSearch geocoderSearch = new GeocodeSearch(getApplicationContext());
+        geocoderSearch.setOnGeocodeSearchListener(this);
+        // 第一个参数表示一个Latlng(经纬度)，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+        RegeocodeQuery query = new RegeocodeQuery(endPoint, 500, GeocodeSearch.AMAP);
+        geocoderSearch.getFromLocationAsyn(query);
     }
 
     private void initLocation() {
@@ -125,11 +141,6 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
 // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
 //启动定位
         mlocationClient.startLocation();
-        MyLocationStyle myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
-        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
-        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
-//aMap.getUiSettings().setMyLocationButtonEnabled(true);设置默认定位按钮是否显示，非必需设置。
-        aMap.setMyLocationEnabled(true);//
 
     }
 
@@ -141,12 +152,11 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
             aMap = mapView.getMap();
 
         }
-        basicmap = (Button) findViewById(R.id.basicmap);
-        basicmap.setOnClickListener(this);
-        rsmap = (Button) findViewById(R.id.rsmap);
-        rsmap.setOnClickListener(this);
+        tvLocation = findViewById(R.id.tv_location);
+        tvDestination = findViewById(R.id.tv_destination);
+        tvCostTime = findViewById(R.id.tv_cost_time);
 
-        mRadioGroup = (RadioGroup) findViewById(R.id.check_language);
+        mRadioGroup = findViewById(R.id.check_trip);
 
         mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -180,30 +190,25 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
 
     private void setfromandtoMarker() {
         aMap.addMarker(new MarkerOptions()
-                .position(AMapUtil.convertToLatLng(mNaviStart))
+                .position(AMapUtil.convertToLatLng(startPoint))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.amap_start)));
         aMap.addMarker(new MarkerOptions()
-                .position(AMapUtil.convertToLatLng(mNaviEnd))
+                .position(AMapUtil.convertToLatLng(endPoint))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.amap_end)));
     }
 
     private void calculateBusRoute() {
         BusPath busPath = new BusPath();
         BusRouteOverlay mBusrouteOverlay = new BusRouteOverlay(this, aMap,
-                busPath, mNaviStart,
-                mNaviEnd);
+                busPath, startPoint,
+                endPoint);
         mBusrouteOverlay.removeFromMap();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.basicmap:
-                aMap.setMapType(AMap.MAP_TYPE_NORMAL);// 矢量地图模式
-                break;
-            case R.id.rsmap:
-                aMap.setMapType(AMap.MAP_TYPE_SATELLITE);// 卫星地图模式
-                break;
+
         }
 
     }
@@ -220,8 +225,15 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date date = new Date(amapLocation.getTime());
                 df.format(date);//定位时间
-                mNaviStart = AMapUtil.convertToLatLonPoint(new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude()));
+                startPoint = AMapUtil.convertToLatLonPoint(new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude()));
+                tvLocation.setText(amapLocation.getAddress());
+                Log.e("amapLocation", amapLocation.toString());
 
+                MyLocationStyle myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
+                myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
+                aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
+                aMap.getUiSettings().setMyLocationButtonEnabled(true);//设置默认定位按钮是否显示，非必需设置。
+                aMap.setMyLocationEnabled(true);//
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                 Log.e("AmapError", "location Error, ErrCode:"
@@ -255,7 +267,7 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
     private void calculateDriveRoute(int routeType) {
         showProgressDialog();
         final RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(
-                mNaviStart, mNaviEnd);
+                startPoint, endPoint);
         if (routeType == ROUTE_TYPE_DRIVE) {// 驾车路径规划
             RouteSearch.DriveRouteQuery query = new RouteSearch.DriveRouteQuery(fromAndTo, RouteSearch.DrivingDefault, null,
                     null, "");// 第一个参数表示路径规划的起点和终点，第二个参数表示驾车模式，第三个参数表示途经点，第四个参数表示避让区域，第五个参数表示避让道路
@@ -267,7 +279,7 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
     private void calculateFootRoute(int routeType) {
         showProgressDialog();
         final RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(
-                mNaviStart, mNaviEnd);
+                startPoint, endPoint);
         if (routeType == ROUTE_TYPE_WALK) {// 步行路径规划
             RouteSearch.WalkRouteQuery query = new RouteSearch.WalkRouteQuery(fromAndTo, RouteSearch.WalkDefault);
             mRouteSearch.calculateWalkRouteAsyn(query);// 异步路径规划步行模式查询
@@ -278,7 +290,7 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
     private void calculateRadeRoute(int routeType) {
         showProgressDialog();
         final RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(
-                mNaviStart, mNaviEnd);
+                startPoint, endPoint);
         if (routeType == ROUTE_TYPE_RIDE) {// 骑行路径规划
             RouteSearch.RideRouteQuery query = new RouteSearch.RideRouteQuery(fromAndTo, RouteSearch.RidingDefault);
             mRouteSearch.calculateRideRouteAsyn(query);// 异步路径规划骑行模式查询
@@ -382,7 +394,7 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
                     int dur = (int) drivePath.getDuration();
                     String des = AMapUtil.getFriendlyTime(dur) + "(" + AMapUtil.getFriendlyLength(dis) + ")";
                     int taxiCost = (int) mDriveRouteResult.getTaxiCost();
-                    ToastUtil.show(BasicMapActivity.this, des + ",打车约" + taxiCost + "元");
+                    tvCostTime.setText(des + ",打车约" + taxiCost + "元");
                 } else if (result != null && result.getPaths() == null) {
                     ToastUtil.show(BasicMapActivity.this, "无数据");
                 }
@@ -420,8 +432,7 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
                     int dis = (int) walkPath.getDistance();
                     int dur = (int) walkPath.getDuration();
                     String des = AMapUtil.getFriendlyTime(dur) + "(" + AMapUtil.getFriendlyLength(dis) + ")";
-                    ToastUtil.show(BasicMapActivity.this, des);
-
+                    tvCostTime.setText(des);
                 } else if (result != null && result.getPaths() == null) {
                     ToastUtil.show(BasicMapActivity.this, "无数据");
                 }
@@ -455,8 +466,7 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
                     int dis = (int) ridePath.getDistance();
                     int dur = (int) ridePath.getDuration();
                     String des = AMapUtil.getFriendlyTime(dur) + "(" + AMapUtil.getFriendlyLength(dis) + ")";
-                    ToastUtil.show(BasicMapActivity.this, des);
-
+                    tvCostTime.setText(des);
                 } else if (result != null && result.getPaths() == null) {
                     ToastUtil.show(BasicMapActivity.this, "无数据");
                 }
@@ -466,5 +476,16 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
         } else {
             ToastUtil.showerror(this.getApplicationContext(), errorCode);
         }
+    }
+
+    @Override
+    public void onRegeocodeSearched(RegeocodeResult result, int i) {
+        String formatAddress = result.getRegeocodeAddress().getFormatAddress();
+        tvDestination.setText(formatAddress);
+    }
+
+    @Override
+    public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
+
     }
 }
