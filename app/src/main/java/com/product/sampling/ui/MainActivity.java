@@ -1,6 +1,7 @@
 package com.product.sampling.ui;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -31,11 +32,13 @@ import com.product.sampling.R;
 import com.product.sampling.adapter.BannerViewPagerAdapter;
 import com.product.sampling.adapter.NewsListAdapter;
 import com.product.sampling.bean.New;
+import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.net.response.ResponseTransformer;
 import com.product.sampling.net.schedulers.SchedulerProvider;
 import com.product.sampling.utils.ToastUtil;
+import com.product.sampling.utils.ToastUtils;
 import com.product.sampling.view.CardTransformer;
 import com.product.sampling.view.MyViewPager;
 
@@ -46,14 +49,17 @@ import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 
-public class MainActivity extends AppCompatActivity implements AMapLocationListener, WeatherSearch.OnWeatherSearchListener {
-    private static final int LOCATION_CODE = 1;
+public class MainActivity extends BaseActivity implements AMapLocationListener, WeatherSearch.OnWeatherSearchListener, View.OnClickListener {
+
     MyViewPager viewPager;
     Disposable disposable;
     BannerViewPagerAdapter adapter;
     RecyclerView mRecyclerView;
     private TextView tvTemperature;
     private ImageView ivWeather;
+    private TextView tvLoginOut;
+    private TextView tvUserName;
+    private long mExitTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,14 +92,7 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
         initView(list);
         getData();
         //获取权限（如果没有开启权限，会弹出对话框，询问是否开启权限）
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            //请求权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_CODE);
-        } else {
-            initLocation();
-        }
+        requestLocation(this);
     }
 
     private void initView(List<New> aNews) {
@@ -121,36 +120,10 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
 
         tvTemperature = findViewById(R.id.tv_temperature);
         ivWeather = findViewById(R.id.iv_weather);
-    }
-
-    private void initLocation() {
-
-        AMapLocationClient mlocationClient = new AMapLocationClient(this);
-//初始化定位参数
-        AMapLocationClientOption mLocationOption = new AMapLocationClientOption();
-//设置定位监听
-        mlocationClient.setLocationListener(this);
-//设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
-        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-//设置定位间隔,单位毫秒,默认为2000ms
-//        mLocationOption.setInterval(2000);
-        //获取一次定位结果：
-//该方法默认为false。
-        mLocationOption.setOnceLocation(true);
-
-//获取最近3s内精度最高的一次定位结果：
-//设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)接口也会被设置为true，反之不会，默认为false。
-        mLocationOption.setOnceLocationLatest(true);
-
-//设置定位参数
-        mlocationClient.setLocationOption(mLocationOption);
-// 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
-// 注意设置合适的定位时间的间隔（最小间隔支持为1000ms），并且在合适时间调用stopLocation()方法来取消定位请求
-// 在定位结束后，在合适的生命周期调用onDestroy()方法
-// 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
-//启动定位
-        mlocationClient.startLocation();
-
+        tvLoginOut = findViewById(R.id.tv_login_out);
+        tvUserName = findViewById(R.id.tv_user_name);
+        tvUserName.setText(AccountManager.getInstance().getUserInfoBean().getName());
+        tvLoginOut.setOnClickListener(this);
     }
 
     private void getData() {
@@ -191,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
                 df.format(date);//定位时间
                 tvTemperature.setText(amapLocation.getCity() + amapLocation.getDistrict());
                 Log.e("amapLocation", amapLocation.toString());
-                Toast.makeText(MainActivity.this, amapLocation.toString(), Toast.LENGTH_LONG).show();
+                showShortToast(amapLocation.toString());
                 getWeather(amapLocation.getDistrict(), 0);
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
@@ -200,22 +173,6 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
                         + amapLocation.getErrorInfo());
                 if (amapLocation.getErrorCode() == 12) {
                     Toast.makeText(MainActivity.this, "缺少定位权限,请到设置->安全和隐私->定位服务,打开允许访问我的位置信息", Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-    }
-
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case LOCATION_CODE: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    // 权限被用户同意。
-                    // 执形我们想要的操作
-                    initLocation();
-                } else {
-                    Toast.makeText(MainActivity.this, "拒绝了定位权限,无法定位", Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -241,11 +198,6 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
         if (rCode == 1000) {
             if (weatherLiveResult != null && weatherLiveResult.getLiveResult() != null) {
                 LocalWeatherLive weatherlive = weatherLiveResult.getLiveResult();
-//                reporttime1.setText(weatherlive.getReportTime()+"发布");
-//                weather.setText(weatherlive.getWeather());
-//                Temperature.setText(weatherlive.getTemperature()+"°");
-//                wind.setText(weatherlive.getWindDirection()+"风     "+weatherlive.getWindPower()+"级");
-//                humidity.setText("湿度         "+weatherlive.getHumidity()+"%");
                 StringBuilder builder = new StringBuilder(tvTemperature.getText());
                 builder.append(" " + weatherlive.getWeather() + " ");
                 builder.append(" " + weatherlive.getTemperature() + "° ");
@@ -253,10 +205,8 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
                 builder.append(" 湿度" + weatherlive.getHumidity() + "%");
                 tvTemperature.setText(builder);
                 setWeatherIcon(weatherlive.getWeather());
-
-
             } else {
-                com.product.sampling.maputil.ToastUtil.showShortToast(MainActivity.this, "无天气数据");
+                showShortToast("无天气数据");
             }
         } else {
             com.product.sampling.maputil.ToastUtil.showerror(this.getApplicationContext(), rCode);
@@ -285,4 +235,34 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
     public void onWeatherForecastSearched(LocalWeatherForecastResult localWeatherForecastResult, int i) {
 
     }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.tv_login_out) {
+            showSimpleDialog("确定退出登录吗", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
+                }
+            });
+
+        }
+    }
+
+    private void exitApp() {
+        if (System.currentTimeMillis() - mExitTime > 2000) {
+            showToast("再按一次退出程序");
+            mExitTime = System.currentTimeMillis();
+        } else {
+            System.exit(0);
+            finish();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        exitApp();
+    }
+
 }

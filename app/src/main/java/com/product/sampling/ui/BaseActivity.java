@@ -1,6 +1,8 @@
 package com.product.sampling.ui;
 
 import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -19,11 +21,12 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import pub.devrel.easypermissions.EasyPermissions;
 
 /**
- *
  * 创建时间：2018/5/26
  * 描述：
  */
@@ -39,14 +42,15 @@ public class BaseActivity extends AppCompatActivity implements EasyPermissions.P
     }
 
     protected void setStatusBar() {
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorWhite),0);
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimaryDark), 0);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(android.R.color.white));
+            window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
     }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,11 +136,49 @@ public class BaseActivity extends AppCompatActivity implements EasyPermissions.P
 
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-        ToastUtil.showToast(getApplicationContext(), "权限被拒");
+        showToast("权限被拒");
         if (requestCode == LOACTION_REQUEST_CODE) {
             aMapLocationListener.onLocationChanged(null);
             aMapLocationListener = null;
         }
 
     }
+
+    /**
+     * 显示进度框
+     */
+    ProgressDialog progDialog;
+
+    public void showProgressDialog(String title) {
+        if (progDialog == null)
+            progDialog = new ProgressDialog(this);
+        progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progDialog.setIndeterminate(false);
+        progDialog.setCancelable(true);
+        progDialog.setMessage(title);
+        progDialog.show();
+    }
+
+    /**
+     * 隐藏进度框
+     */
+    public void dissmissProgressDialog() {
+        if (progDialog != null) {
+            progDialog.dismiss();
+        }
+    }
+
+    public void showSimpleDialog(String title, DialogInterface.OnClickListener listener) {
+        new AlertDialog.Builder(this).setTitle(title)
+                .setPositiveButton("确定", listener).setNegativeButton("取消", null).show();
+    }
+
+    public void showToast(String toast) {
+        com.product.sampling.maputil.ToastUtil.show(this, toast);
+    }
+
+    public void showShortToast(String toast) {
+        com.product.sampling.maputil.ToastUtil.showShortToast(this, toast);
+    }
+
 }

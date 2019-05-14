@@ -62,10 +62,10 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
 
     protected void initView() {
         if (mRootView == null) return;
-        mAccountView = (AutoCompleteTextView) mRootView.findViewById(R.id.account);
+        mAccountView = mRootView.findViewById(R.id.account);
         populateAutoComplete();
 
-        mPasswordView = (EditText) mRootView.findViewById(R.id.password);
+        mPasswordView = mRootView.findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -77,7 +77,7 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
             }
         });
 
-        Button mEmailSignInButton = (Button) mRootView.findViewById(R.id.email_sign_in_button);
+        Button mEmailSignInButton = mRootView.findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -199,6 +199,7 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
                 .subscribe(userbean -> {
                     AccountManager.getInstance().setUserInfoBean(userbean);
                     startActivity(new Intent(getActivity(), MainActivity.class));
+                    getActivity().finish();
                 }, throwable -> {
                     String displayMessage = ((ApiException) throwable).getDisplayMessage();
                     ToastUtils.showToast(displayMessage);
