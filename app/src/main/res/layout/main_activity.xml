@@ -109,45 +109,33 @@
         android:layout_width="450dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rl_task"
-        android:background="@color/white" />
+        android:background="@color/white"
+        android:visibility="visible" />
 
     <LinearLayout
-
         android:layout_width="450dp"
         android:layout_height="45dp"
         android:layout_below="@+id/calendarView"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="20dp"
         android:background="@color/white"
-        android:paddingLeft="50dp">
+        android:gravity="center">
 
         <TextView
+            android:id="@+id/tv_temperature"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
             android:gravity="center"
-            android:text="18~20摄氏度" />
+            android:paddingRight="20dp"
+            android:text="18~20摄氏度  晴" />
 
         <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:id="@+id/iv_weather"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
             android:src="@mipmap/index_weather1" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="晴" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="50dp"
-            android:gravity="center"
-            android:text="空气质量:优" />
 
     </LinearLayout>
 
@@ -159,7 +147,8 @@
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/calendarView"
         android:background="@color/white"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <TextView
             android:layout_width="match_parent"

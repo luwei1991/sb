@@ -92,7 +92,6 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
         setContentView(R.layout.basicmap_activity);
         mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);// 此方法必须重写
-        init();
         //获取权限（如果没有开启权限，会弹出对话框，询问是否开启权限）
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -102,6 +101,7 @@ public class BasicMapActivity extends Activity implements OnClickListener, AMapL
         } else {
             initLocation();
         }
+        init();
         setCurrentLocationDetails();
     }
 
