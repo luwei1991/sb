@@ -6,23 +6,20 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.product.sampling.R;
-import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskSample;
 import com.product.sampling.photo.BasePhotoFragment;
-import com.product.sampling.ui.TaskDetailActivity;
+import com.product.sampling.ui.PdfDocumentActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TaskSampleRecyclerViewAdapter extends RecyclerView.Adapter<TaskSampleRecyclerViewAdapter.ViewHolder> {
@@ -47,6 +44,9 @@ public class TaskSampleRecyclerViewAdapter extends RecyclerView.Adapter<TaskSamp
                             }
                         }).setNegativeButton("取消", null).show();
 
+            } else if (R.id.btn_upload == view.getId()) {
+            } else if (R.id.btn_edit == view.getId()) {
+                view.getContext().startActivity(new Intent(view.getContext(), PdfDocumentActivity.class));
             }
         }
     };
@@ -74,6 +74,13 @@ public class TaskSampleRecyclerViewAdapter extends RecyclerView.Adapter<TaskSamp
         holder.mImageViewAdd.setOnClickListener(mOnClickListener);
         holder.mImageViewReduce.setTag(position);
         holder.mImageViewReduce.setOnClickListener(mOnClickListener);
+
+        holder.mBtnEdit.setTag(position);
+        holder.mBtnEdit.setOnClickListener(mOnClickListener);
+
+        holder.mBtnUpload.setTag(position);
+        holder.mBtnUpload.setOnClickListener(mOnClickListener);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(holder.itemView.getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         holder.mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -91,6 +98,8 @@ public class TaskSampleRecyclerViewAdapter extends RecyclerView.Adapter<TaskSamp
         final RecyclerView mRecyclerView;
         final ImageView mImageViewAdd;
         final ImageView mImageViewReduce;
+        final Button mBtnEdit;
+        final Button mBtnUpload;
 
 
         ViewHolder(View view) {
@@ -99,6 +108,8 @@ public class TaskSampleRecyclerViewAdapter extends RecyclerView.Adapter<TaskSamp
             mRecyclerView = view.findViewById(R.id.item_list);
             mImageViewAdd = view.findViewById(R.id.iv_add);
             mImageViewReduce = view.findViewById(R.id.iv_reduce);
+            mBtnUpload = view.findViewById(R.id.btn_upload);
+            mBtnEdit = view.findViewById(R.id.btn_edit);
         }
     }
 }

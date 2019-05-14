@@ -108,6 +108,7 @@
             android:gravity="right">
 
             <Button
+                android:id="@+id/btn_edit"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="10dp"
@@ -117,6 +118,7 @@
                 android:textColor="@color/white" />
 
             <Button
+                android:id="@+id/btn_upload"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="10dp"

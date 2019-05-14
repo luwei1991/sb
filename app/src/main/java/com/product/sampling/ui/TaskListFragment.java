@@ -72,8 +72,8 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
         }
-        getData();
         getMenuData();
+        getData();
     }
 
 
@@ -99,7 +99,7 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                getData();
+//                getData();
             }
 
             @Override
@@ -117,7 +117,7 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
         spinnerArea.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                getData();
+//                getData();
             }
 
             @Override
