@@ -56,4 +56,13 @@ public interface Request {
     @GET("app/task/getdict")
     Observable<Response<TaskMenu>> taskMenu(@Query("type") String type, @Query("value") String value);
 
+    /**
+     * 获取省市接口
+     *
+     * @param areaid 省市唯一id 非必须
+     * @param type   获取类型2获取省3获取市4获取区和县 非必须 默认获取省获取市区县要带areaid
+     * @return
+     */
+    @GET("app/task/getarea")
+    Observable<Response<TaskMenu>> getArea(@Query("areaid") String areaid, @Query("type") String type);
 }

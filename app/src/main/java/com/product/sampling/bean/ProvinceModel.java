@@ -2,6 +2,9 @@ package com.product.sampling.bean;
 
 import java.util.List;
 
+/**
+ * 地区选择
+ */
 public class ProvinceModel {
 	private String name;
 	private List<CityModel> cityList;
@@ -36,5 +39,6 @@ public class ProvinceModel {
 	public String toString() {
 		return "ProvinceModel [name=" + name + ", cityList=" + cityList + "]";
 	}
-	
+
+
 }

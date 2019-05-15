@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * TODO<json数据源>
  *
- * @date: 2017/3/16 15:36
+ *地区选择返回数据
  */
 
 public class JsonBean implements IPickerViewData {

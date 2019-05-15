@@ -3,6 +3,9 @@ package com.product.sampling.bean;
 
 import com.contrarywind.interfaces.IPickerViewData;
 
+/**
+ * 地区选中对象
+ */
 public class ProvinceBean implements IPickerViewData {
     private long id;
     private String name;
