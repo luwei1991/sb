@@ -190,4 +190,6 @@ public abstract class BasePhotoFragment extends TakePhotoFragment {
     public void showResultImages(ArrayList<TImage> images, int imageListPostionInTask) {
     }
 
+
+
 }

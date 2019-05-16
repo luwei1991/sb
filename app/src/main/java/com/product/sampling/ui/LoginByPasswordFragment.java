@@ -31,6 +31,7 @@ import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.net.response.ResponseTransformer;
 import com.product.sampling.net.schedulers.SchedulerProvider;
+import com.product.sampling.utils.KeyboardUtils;
 import com.product.sampling.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_login_password, container, false);
         initView();
+        KeyboardUtils.closeKeyboard(getActivity());
         return mRootView;
     }
 
@@ -87,6 +89,7 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
 
         mLoginFormView = mRootView.findViewById(R.id.login_form);
         mProgressView = mRootView.findViewById(R.id.login_progress);
+        KeyboardUtils.closeKeyboard(getActivity());
     }
 
     @Override
@@ -206,4 +209,9 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
                 });
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        KeyboardUtils.closeKeyboard(getActivity());
+    }
 }

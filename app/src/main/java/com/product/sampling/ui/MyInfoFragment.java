@@ -1,10 +1,13 @@
 package com.product.sampling.ui;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,22 +21,27 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.product.sampling.R;
 import com.product.sampling.adapter.SpinnerSimpleAdapter;
 import com.product.sampling.bean.Task;
 import com.product.sampling.dummy.DummyContent;
+import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.net.response.ResponseTransformer;
 import com.product.sampling.net.schedulers.SchedulerProvider;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.utils.ToastUtil;
+import com.product.sampling.utils.ToastUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,12 +59,12 @@ import org.devio.takephoto.permission.TakePhotoInvocationHandler;
 
 import io.reactivex.disposables.Disposable;
 import jp.wasabeef.glide.transformations.BlurTransformation;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 /**
- * A fragment representing a single Item detail screen.
- * This fragment is either contained in a {@link ItemListActivity}
- * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
- * on handsets.
+ * 我的信息
  */
 public class MyInfoFragment extends BasePhotoFragment implements View.OnClickListener {
     /**
@@ -111,7 +119,13 @@ public class MyInfoFragment extends BasePhotoFragment implements View.OnClickLis
         View rootView = inflater.inflate(R.layout.fragment_my_info, container, false);
         ivPhoto = rootView.findViewById(R.id.image);
         rootView.findViewById(R.id.rl_photo).setOnClickListener(this);
+        rootView.findViewById(R.id.rl_logout).setOnClickListener(this);
 
+        String image = AccountManager.getInstance().getUserInfoBean().getPhoto();
+
+        if (null != image && !TextUtils.isEmpty(image)) {
+            Glide.with(this).load(image).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivPhoto);
+        }
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
 //            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.details);
@@ -126,7 +140,16 @@ public class MyInfoFragment extends BasePhotoFragment implements View.OnClickLis
             case R.id.rl_photo:
                 selectPhoto(1, false, true, false);
                 break;
-            case R.id.tv_date:
+            case R.id.rl_logout:
+                showDialog("确定退出登录吗", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(getActivity(), LoginActivity.class));
+                        getActivity().finish();
+                        ActivityManager am = ActivityManager.getInstance();
+                        am.popAllActivity();
+                    }
+                });
                 break;
 
         }
@@ -136,8 +159,40 @@ public class MyInfoFragment extends BasePhotoFragment implements View.OnClickLis
     @Override
     public void showResultImages(ArrayList<TImage> images) {
         String string = images.get(0).getOriginalPath();
-        Glide.with(this).load(string).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivPhoto);
+        File file = new File(string);
+
+//        MultipartBody.Part body =
+//                MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
+
+        RequestBody requestB = RequestBody.create(MediaType.parse("application/octet-stream"), file);
+
+
+        // 创建 RequestBody，用于封装 请求RequestBody
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse("multipart/form-data"), file);
+
+// MultipartBody.Part is used to send also the actual file name
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+
+// 添加描述
+        RequestBody userid =
+                RequestBody.create(
+                        MediaType.parse("multipart/form-data"), AccountManager.getInstance().getUserId());
+
+        NetWorkManager.getRequest().setPhoto(userid, body)
+                .compose(ResponseTransformer.handleResult())
+                .compose(SchedulerProvider.getInstance().applySchedulers())
+                .subscribe(userbean -> {
+                    Log.e("photo:", userbean);
+                }, throwable -> {
+                    String displayMessage = ((ApiException) throwable).getDisplayMessage();
+                    ToastUtils.showToast(displayMessage);
+                });
     }
 
-
+    public void showDialog(String title, DialogInterface.OnClickListener listener) {
+        new AlertDialog.Builder(getActivity()).setTitle(title)
+                .setPositiveButton("确定", listener).setNegativeButton("取消", null).show();
+    }
 }

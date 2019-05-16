@@ -91,6 +91,9 @@
         android:background="#F1F2F3" />
 
     <RelativeLayout
+        android:id="@+id/rl_logout"
+        android:background="?selectableItemBackground"
+        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -98,8 +101,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:background="?selectableItemBackground"
-            android:clickable="true"
+
             android:drawableLeft="@mipmap/personal_quit"
             android:drawablePadding="50dp"
             android:gravity="center_vertical"

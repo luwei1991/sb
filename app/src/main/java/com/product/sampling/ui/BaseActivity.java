@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -191,7 +192,10 @@ public class BaseActivity extends AppCompatActivity implements EasyPermissions.P
         if (toolbar != null) {
             tvLoginOut = findViewById(R.id.tv_login_out);
             tvUserName = findViewById(R.id.tv_user_name);
-            tvUserName.setText(AccountManager.getInstance().getUserInfoBean().getName());
+            String name = AccountManager.getInstance().getUserInfoBean().getName();
+            if (null != name && !TextUtils.isEmpty(name)) {
+                tvUserName.setText(name);
+            }
             tvLoginOut.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

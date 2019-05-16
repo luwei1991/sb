@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.product.sampling.bean.UserInfoBean;
 
 /**
-
  * 创建时间：2018/7/3
  * 描述：用户账号管理类
  */
@@ -46,7 +45,7 @@ public class AccountManager {
     }
 
     public UserInfoBean getUserInfoBean() {
-        return userInfoBean;
+        return userInfoBean == null ? new UserInfoBean() : userInfoBean;
     }
 
     public void setUserInfoBean(UserInfoBean userInfoBean) {

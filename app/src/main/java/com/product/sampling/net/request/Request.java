@@ -11,7 +11,14 @@ import com.product.sampling.net.response.Response;
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 /**
@@ -65,4 +72,19 @@ public interface Request {
      */
     @GET("app/task/getarea")
     Observable<Response<TaskMenu>> getArea(@Query("areaid") String areaid, @Query("type") String type);
+
+    /**
+     * 修改图像接口
+     *
+     * @param userid 用户唯一id 必传
+     * @param photo  头像图片流 必传
+     * @return
+     */
+    @Multipart
+    @POST("app/task/changephoto")
+    Observable<Response<String>> setPhoto(@Part("userid") RequestBody description,
+                                          @Part MultipartBody.Part file);
+//    Observable<Response<String>> setPhoto(@Part("userid") String userid,@Part("photo; filename=image.png") RequestBody imgs);
+
+
 }
