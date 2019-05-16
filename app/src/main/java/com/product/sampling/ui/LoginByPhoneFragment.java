@@ -82,8 +82,8 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
                 }
                 break;
             case R.id.sign_in_button:
-//                loginRequest();
-                startActivity(new Intent(getActivity(), MainActivity.class));
+                loginRequest();
+//                startActivity(new Intent(getActivity(), MainActivity.class));
                 break;
 
         }

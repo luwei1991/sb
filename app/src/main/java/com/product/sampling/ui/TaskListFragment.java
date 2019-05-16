@@ -146,7 +146,7 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getMenuData() {
-        disposable = NetWorkManager.getRequest().taskMenu(null, null)
+        disposable = NetWorkManager.getRequest().getArea(null, null)
                 .compose(ResponseTransformer.handleResult())
                 .compose(SchedulerProvider.getInstance().applySchedulers())
                 .subscribe(tasks -> {
