@@ -120,6 +120,7 @@ public class MyInfoFragment extends BasePhotoFragment implements View.OnClickLis
         ivPhoto = rootView.findViewById(R.id.image);
         rootView.findViewById(R.id.rl_photo).setOnClickListener(this);
         rootView.findViewById(R.id.rl_logout).setOnClickListener(this);
+        rootView.findViewById(R.id.rl_changepwd).setOnClickListener(this);
 
         String image = AccountManager.getInstance().getUserInfoBean().getPhoto();
 
@@ -151,6 +152,9 @@ public class MyInfoFragment extends BasePhotoFragment implements View.OnClickLis
                     }
                 });
                 break;
+            case R.id.rl_changepwd:
+                startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
+                break;
 
         }
     }
@@ -158,38 +162,25 @@ public class MyInfoFragment extends BasePhotoFragment implements View.OnClickLis
 
     @Override
     public void showResultImages(ArrayList<TImage> images) {
+
         String string = images.get(0).getOriginalPath();
         File file = new File(string);
 
-//        MultipartBody.Part body =
-//                MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData("photo", file.getName(),
+                RequestBody.create(MediaType.parse("multipart/form-data"), file));
+        RequestBody userid = RequestBody.create(null, "d444d03c23ca4a75aae89c81dbcbcdf6");
 
-        RequestBody requestB = RequestBody.create(MediaType.parse("application/octet-stream"), file);
-
-
-        // 创建 RequestBody，用于封装 请求RequestBody
-        RequestBody requestFile =
-                RequestBody.create(MediaType.parse("multipart/form-data"), file);
-
-// MultipartBody.Part is used to send also the actual file name
-        MultipartBody.Part body =
-                MultipartBody.Part.createFormData("image", file.getName(), requestFile);
-
-// 添加描述
-        RequestBody userid =
-                RequestBody.create(
-                        MediaType.parse("multipart/form-data"), AccountManager.getInstance().getUserId());
-
-        NetWorkManager.getRequest().setPhoto(userid, body)
-                .compose(ResponseTransformer.handleResult())
+        NetWorkManager.getRequest().setPhoto(userid, filePart)
+//                .compose(ResponseTransformer.handleResult())
                 .compose(SchedulerProvider.getInstance().applySchedulers())
                 .subscribe(userbean -> {
-                    Log.e("photo:", userbean);
+                    Log.e("photo:", userbean + "");
                 }, throwable -> {
                     String displayMessage = ((ApiException) throwable).getDisplayMessage();
                     ToastUtils.showToast(displayMessage);
                 });
     }
+
 
     public void showDialog(String title, DialogInterface.OnClickListener listener) {
         new AlertDialog.Builder(getActivity()).setTitle(title)

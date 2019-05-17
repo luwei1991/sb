@@ -2,6 +2,7 @@ package org.devio.takephoto.app;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -29,6 +30,7 @@ public class TakePhotoActivity extends Activity implements TakePhoto.TakeResultL
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         getTakePhoto().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
     }

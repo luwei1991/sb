@@ -99,6 +99,7 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
                 }, throwable -> {
                     String displayMessage = ((ApiException) throwable).getDisplayMessage();
                     ToastUtils.showToast(displayMessage);
+
                 });
     }
 

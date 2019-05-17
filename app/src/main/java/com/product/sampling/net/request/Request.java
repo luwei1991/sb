@@ -8,17 +8,21 @@ import com.product.sampling.bean.TaskResultBean;
 import com.product.sampling.bean.UserInfoBean;
 import com.product.sampling.net.response.Response;
 
+import java.io.File;
 import java.util.List;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -30,8 +34,8 @@ public interface Request {
      * 服务器url
      */
     String BASE_URL_DEBUG = "http://185.38.15.46/";
-    String BASE_URL = "http://lw123.longwi.com:9080/exa/";
-
+        String BASE_URL = "http://lw123.longwi.com:9080/exa/";
+//    String BASE_URL = "http://m9rbai.natappfree.cc/";
 
     /**
      * 获取验证码
@@ -57,6 +61,9 @@ public interface Request {
     @GET("app/user/login")
     Observable<Response<UserInfoBean>> loginByPwd(@Query("loginName") String loginName, @Query("password") String password);
 
+    @GET("app/user/changepassword")
+    Observable<Response<String>> changepassword(@Query("userid") String userid, @Query("password") String password, @Query("newPassword") String newPassword);
+
     @GET("app/task/tasklist")
     Observable<Response<TaskResultBean>> taskList(@Query("userid") String userid, @Query("taskstatus") String taskstatus, @Query("ordertype") String ordertype);
 
@@ -81,10 +88,8 @@ public interface Request {
      * @return
      */
     @Multipart
-    @POST("app/task/changephoto")
-    Observable<Response<String>> setPhoto(@Part("userid") RequestBody description,
-                                          @Part MultipartBody.Part file);
-//    Observable<Response<String>> setPhoto(@Part("userid") String userid,@Part("photo; filename=image.png") RequestBody imgs);
+    @POST("app/user/changephoto")
+    Observable<Response<String>> setPhoto( @Part("userid") RequestBody description,@Part MultipartBody.Part filePart);
 
 
 }

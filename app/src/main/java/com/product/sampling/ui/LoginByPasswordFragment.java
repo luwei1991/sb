@@ -206,6 +206,7 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
                 }, throwable -> {
                     String displayMessage = ((ApiException) throwable).getDisplayMessage();
                     ToastUtils.showToast(displayMessage);
+                    showProgress(false);
                 });
     }
 
