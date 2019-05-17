@@ -36,11 +36,8 @@ import io.reactivex.disposables.Disposable;
 /**
  * 任务列表
  */
-public class TaskListFragment extends Fragment implements View.OnClickListener {
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
+public class TaskListFragment extends BaseFragment implements View.OnClickListener {
+
     public static final String ARG_TASK_STATUS = "taskstatus";
 
     public static final String ARG_TITLE = "title";
@@ -53,6 +50,7 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
     ImageView mIVTime;
     boolean isTimeFromLowToHigh = true;
     boolean isDistanceFromLowToHigh = true;
+
 
     public static TaskListFragment newInstance(String title, String taskstatus) {
         Bundle args = new Bundle();
@@ -139,8 +137,9 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
                     assert recyclerView != null;
                     setupRecyclerView((RecyclerView) recyclerView, tasks);
                 }, throwable -> {
-                    ToastUtil.showToast(getActivity(), ((ApiException) throwable).getDisplayMessage());
-
+                    if (isVisible()){
+                        showToast(((ApiException) throwable).getDisplayMessage());
+                    }
                     Log.e("throwable", "" + ((ApiException) throwable).getDisplayMessage());
                 });
     }
@@ -152,7 +151,9 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
                 .subscribe(tasks -> {
                     Log.e("tasks", tasks.toString());
                 }, throwable -> {
-                    ToastUtil.showToast(getActivity(), ((ApiException) throwable).getDisplayMessage());
+                    if (isVisible()){
+                        showToast(((ApiException) throwable).getDisplayMessage());
+                    }
 
                     Log.e("throwable", "" + ((ApiException) throwable).getDisplayMessage());
                 });
@@ -234,6 +235,7 @@ public class TaskListFragment extends Fragment implements View.OnClickListener {
             holder.itemView.setOnClickListener(mOnClickListener);
             holder.mTextViewMap.setOnClickListener(mOnClickListener);
             holder.mTextViewFill.setOnClickListener(mOnClickListener);
+            holder.mTextViewFill.setTag(task);
 
         }
 

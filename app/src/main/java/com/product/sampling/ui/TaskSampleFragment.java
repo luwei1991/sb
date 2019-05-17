@@ -9,10 +9,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,7 +49,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     private DummyContent.DummyItem mItem;
 
     RecyclerView mRecyclerView;
-    List<TaskSample> taskList = new ArrayList<>();
+    TaskDetailViewModel taskDetailViewModel;
+    private static TaskSampleFragment fragment;
 
     public TaskSampleFragment() {
     }
@@ -56,7 +59,10 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
         Bundle args = new Bundle();
         args.putParcelable("task", task);
-        TaskSampleFragment fragment = new TaskSampleFragment();
+
+        if (fragment == null) {
+            fragment = new TaskSampleFragment();
+        }
         fragment.setArguments(args);
         return fragment;
     }
@@ -95,11 +101,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         mRecyclerView = rootView.findViewById(R.id.item_list);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        TaskSample sample = new TaskSample();
-        sample.title = "北京";
-        sample.list = new ArrayList<>();
-        taskList.add(sample);
-        setupRecyclerView(mRecyclerView, taskList);
+
         return rootView;
     }
 
@@ -118,8 +120,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             taskImageEntity.setFromType(image.getFromType());
             imageList.add(taskImageEntity);
         }
-        if (pos > -1 && taskList.size() > pos) {
-            taskList.get(pos).list = imageList;
+        if (pos > -1 && taskDetailViewModel.taskList.size() > pos) {
+            taskDetailViewModel.taskList.get(pos).list = imageList;
         }
         mRecyclerView.getAdapter().notifyDataSetChanged();
     }
@@ -148,8 +150,21 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             TaskSample sample = new TaskSample();
             sample.title = text;
             sample.list = new ArrayList<>();
-            taskList.add(sample);
+            taskDetailViewModel.taskList.add(sample);
             mRecyclerView.getAdapter().notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        taskDetailViewModel = ViewModelProviders.of(getActivity()).get(TaskDetailViewModel.class);
+        if (taskDetailViewModel.taskList.isEmpty()) {
+            TaskSample sample = new TaskSample();
+            sample.title = "北京";
+            sample.list = new ArrayList<>();
+            taskDetailViewModel.taskList.add(sample);
+            setupRecyclerView(mRecyclerView, taskDetailViewModel.taskList);
         }
     }
 }

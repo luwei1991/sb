@@ -24,15 +24,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * An activity representing a list of Items. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link ItemDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
+ * 待办任务详情
  */
 public class TaskDetailActivity extends BaseActivity {
 
@@ -42,6 +38,7 @@ public class TaskDetailActivity extends BaseActivity {
      */
     private boolean mTwoPane;
     TaskEntity task = null;
+    TaskDetailViewModel taskDetailViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +48,7 @@ public class TaskDetailActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
+        taskDetailViewModel = ViewModelProviders.of(this).get(TaskDetailViewModel.class);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -94,21 +92,23 @@ public class TaskDetailActivity extends BaseActivity {
                 ImageItem imageItem = (ImageItem) view.getTag();
 //                if (null != task) {
 
-                    Bundle arguments = new Bundle();
-                    arguments.putString(TaskListFragment.ARG_TASK_STATUS, imageItem.getTitle());
-                    Fragment fragment = new ItemDetailFragment();
-                    if (imageItem.getTitle().equalsIgnoreCase("任务信息")) {
-                        fragment = TaskDetailFragment.newInstance(task);
-                    } else if (imageItem.getTitle().equalsIgnoreCase("现场信息")) {
-                        fragment = TaskSceneFragment.newInstance(task);
-                    } else if (imageItem.getTitle().equalsIgnoreCase("样品信息")) {
-                        fragment = TaskSampleFragment.newInstance(task);
-                    }
-                    fragment.setArguments(arguments);
-
-                    mParentActivity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.item_detail_container, fragment)
-                            .commit();
+                Bundle arguments = new Bundle();
+                arguments.putString(TaskListFragment.ARG_TASK_STATUS, imageItem.getTitle());
+                Fragment fragment = new ItemDetailFragment();
+                if (imageItem.getTitle().equalsIgnoreCase("任务信息")) {
+                    mParentActivity.taskDetailViewModel.taskEntity = task;
+                    fragment = TaskDetailFragment.newInstance(task);
+                } else if (imageItem.getTitle().equalsIgnoreCase("现场信息")) {
+                    mParentActivity.taskDetailViewModel.taskEntity = task;
+                    fragment = TaskSceneFragment.newInstance(task);
+                } else if (imageItem.getTitle().equalsIgnoreCase("样品信息")) {
+                    mParentActivity.taskDetailViewModel.taskEntity = task;
+                    fragment = TaskSampleFragment.newInstance(task);
+                }
+                fragment.setArguments(arguments);
+                mParentActivity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.item_detail_container, fragment)
+                        .commit();
 //                } else {
 //                    Context context = view.getContext();
 //                    Intent intent = new Intent(context, ItemDetailActivity.class);
@@ -180,4 +180,5 @@ public class TaskDetailActivity extends BaseActivity {
         }
         return new ImageItem(text, res);
     }
+
 }

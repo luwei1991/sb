@@ -16,7 +16,7 @@ import com.product.sampling.R;
 
 public class MainFragment extends Fragment {
 
-    private MainViewModel mViewModel;
+    private TaskDetailViewModel mViewModel;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -32,7 +32,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(TaskDetailViewModel.class);
         // TODO: Use the ViewModel
     }
 

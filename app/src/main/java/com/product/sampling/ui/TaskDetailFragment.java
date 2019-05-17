@@ -5,21 +5,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.product.sampling.R;
-import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskEntity;
-import com.product.sampling.dummy.DummyContent;
-
-import androidx.fragment.app.Fragment;
 
 /**
- * A fragment representing a single Item detail screen.
- * This fragment is either contained in a {@link ItemListActivity}
- * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
- * on handsets.
+ * 任务信息
  */
 public class TaskDetailFragment extends Fragment {
     /**
@@ -31,12 +30,19 @@ public class TaskDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
+    private static TaskDetailFragment fragment;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+    TaskDetailViewModel taskDetailViewModel;
+    private Toolbar toolbar;
+    private TextView tvPlanname;
+    private TextView tvPlanno;
+    private TextView tvTasktypecount;
+    private TextView tvPlanfrom;
+    private TextView tvStarttime;
+    private TextView tvEndtime;
+    private TextView tvCompanyname;
+    private Button btnSubmit;
+
     public TaskDetailFragment() {
     }
 
@@ -44,7 +50,9 @@ public class TaskDetailFragment extends Fragment {
 
         Bundle args = new Bundle();
         args.putParcelable("task", task);
-        TaskDetailFragment fragment = new TaskDetailFragment();
+        if (fragment == null) {
+            fragment = new TaskDetailFragment();
+        }
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,9 +62,6 @@ public class TaskDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
@@ -70,11 +75,38 @@ public class TaskDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_task_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
-        if (mItem != null) {
+//        if (mItem != null) {
 //            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.details);
-        }
-
+//        }
+        initView(rootView);
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        taskDetailViewModel = ViewModelProviders.of(getActivity()).get(TaskDetailViewModel.class);
+        TaskEntity taskEntity = taskDetailViewModel.taskEntity;
+        tvPlanname.setText(taskEntity.planname);
+        tvPlanno.setText(taskEntity.planno);
+        tvTasktypecount.setText(taskEntity.tasktypecount);
+        tvPlanfrom.setText(taskEntity.planfrom);
+        tvStarttime.setText(taskEntity.starttime);
+        tvEndtime.setText(taskEntity.endtime);
+        tvCompanyname.setText(taskEntity.companyname);
+
+    }
+
+    private void initView(View view) {
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        tvPlanname = (TextView) view.findViewById(R.id.tv_planname);
+        tvPlanno = (TextView) view.findViewById(R.id.tv_planno);
+        tvTasktypecount = (TextView) view.findViewById(R.id.tv_tasktypecount);
+        tvPlanfrom = (TextView) view.findViewById(R.id.tv_planfrom);
+        tvStarttime = (TextView) view.findViewById(R.id.tv_starttime);
+        tvEndtime = (TextView) view.findViewById(R.id.tv_endtime);
+        tvCompanyname = (TextView) view.findViewById(R.id.tv_companyname);
+        btnSubmit = (Button) view.findViewById(R.id.btn_submit);
     }
 }

@@ -1,9 +1,9 @@
 package com.product.sampling.ui;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 
 import org.devio.takephoto.app.TakePhotoFragment;
 
@@ -25,6 +25,43 @@ public class BaseFragment extends TakePhotoFragment {
     public void inVisiable() {
     }
 
+
+    /**
+     * 显示进度框
+     */
+    ProgressDialog progDialog;
+
+    public void showProgressDialog(String title) {
+        if (progDialog == null)
+            progDialog = new ProgressDialog(getActivity());
+        progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progDialog.setIndeterminate(false);
+        progDialog.setCancelable(true);
+        progDialog.setMessage(title);
+        progDialog.show();
+    }
+
+    /**
+     * 隐藏进度框
+     */
+    public void dissmissProgressDialog() {
+        if (progDialog != null) {
+            progDialog.dismiss();
+        }
+    }
+
+    public void showSimpleDialog(String title, DialogInterface.OnClickListener listener) {
+        new AlertDialog.Builder(getActivity()).setTitle(title)
+                .setPositiveButton("确定", listener).setNegativeButton("取消", null).show();
+    }
+
+    public void showToast(String toast) {
+        com.product.sampling.maputil.ToastUtil.show(getActivity(), toast);
+    }
+
+    public void showShortToast(String toast) {
+        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), toast);
+    }
 
 
 }

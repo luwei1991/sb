@@ -43,7 +43,11 @@ public class TaskEntity implements Parcelable {
 
     public boolean isNewRecord;
 
-    protected TaskEntity(Parcel in) {
+    public TaskEntity() {
+
+    }
+
+    public TaskEntity(Parcel in) {
         id = in.readString();
         planid = in.readString();
         companyid = in.readString();

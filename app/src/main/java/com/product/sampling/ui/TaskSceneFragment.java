@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,6 +46,8 @@ public class TaskSceneFragment extends BasePhotoFragment {
     private DummyContent.DummyItem mItem;
 
     RecyclerView mRecyclerView;
+    static TaskSceneFragment fragment;
+    TaskDetailViewModel taskDetailViewModel;
 
     public TaskSceneFragment() {
     }
@@ -52,7 +56,9 @@ public class TaskSceneFragment extends BasePhotoFragment {
 
         Bundle args = new Bundle();
         args.putParcelable("task", task);
-        TaskSceneFragment fragment = new TaskSceneFragment();
+        if (fragment == null) {
+            fragment = new TaskSceneFragment();
+        }
         fragment.setArguments(args);
         return fragment;
     }
@@ -88,7 +94,6 @@ public class TaskSceneFragment extends BasePhotoFragment {
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         mRecyclerView = rootView.findViewById(R.id.item_list);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        setupRecyclerView(mRecyclerView, new ArrayList());
         rootView.findViewById(R.id.iv_choose).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,15 +109,22 @@ public class TaskSceneFragment extends BasePhotoFragment {
 
     @Override
     public void showResultImages(ArrayList<TImage> images) {
-        ArrayList<TaskImageEntity> imageList = new ArrayList<>();
+
         for (TImage image :
                 images) {
             TaskImageEntity taskImageEntity = new TaskImageEntity();
             taskImageEntity.setCompressPath(image.getCompressPath());
             taskImageEntity.setOriginalPath(image.getOriginalPath());
             taskImageEntity.setFromType(image.getFromType());
-            imageList.add(taskImageEntity);
+            taskDetailViewModel.imageList.add(taskImageEntity);
         }
-        setupRecyclerView(mRecyclerView, imageList);
+        setupRecyclerView(mRecyclerView, taskDetailViewModel.imageList);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        taskDetailViewModel = ViewModelProviders.of(getActivity()).get(TaskDetailViewModel.class);
+        setupRecyclerView(mRecyclerView, taskDetailViewModel.imageList);
     }
 }
