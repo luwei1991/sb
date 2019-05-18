@@ -1,7 +1,5 @@
 package com.product.sampling.ui;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +11,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.product.sampling.R;
 import com.product.sampling.bean.ImageItem;
-import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskEntity;
-import com.product.sampling.dummy.DummyContent;
+import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;

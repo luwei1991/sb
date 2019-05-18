@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.product.sampling.R;
 import com.product.sampling.bean.TaskEntity;
+import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 
 /**
  * 任务信息

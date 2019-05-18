@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.product.sampling.R;
+import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 
 public class MainFragment extends Fragment {
 
