@@ -14,6 +14,8 @@ import java.util.List;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -34,8 +36,9 @@ public interface Request {
      * 服务器url
      */
     String BASE_URL_DEBUG = "http://185.38.15.46/";
-        String BASE_URL = "http://lw123.longwi.com:9080/exa/";
-//    String BASE_URL = "http://m9rbai.natappfree.cc/";
+    //    String BASE_URL = "http://nfxypf.natappfree.cc/";
+    String BASE_URL = "http://lw123.longwi.com:9080/exa/";
+    public static String IMAGE_BASE_URL = BASE_URL + "base/tBaFile/showImage?id=";
 
     /**
      * 获取验证码
@@ -82,14 +85,13 @@ public interface Request {
 
     /**
      * 修改图像接口
+     * MultipartBody.Part
      *
-     * @param userid 用户唯一id 必传
+     * @param userid 用户唯一id 必传 @Part("userid") RequestBody userid,
      * @param photo  头像图片流 必传
      * @return
      */
     @Multipart
     @POST("app/user/changephoto")
-    Observable<Response<String>> setPhoto( @Part("userid") RequestBody description,@Part MultipartBody.Part filePart);
-
-
+    Call<ResponseBody> setPhotoRequestBody(@Part MultipartBody.Part file);
 }

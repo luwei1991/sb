@@ -30,6 +30,7 @@ import com.product.sampling.dummy.DummyContent;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
+import com.product.sampling.net.request.Request;
 import com.product.sampling.net.response.ResponseTransformer;
 import com.product.sampling.net.schedulers.SchedulerProvider;
 import com.product.sampling.photo.BasePhotoFragment;
@@ -56,12 +57,24 @@ import org.devio.takephoto.model.TImage;
 import org.devio.takephoto.model.TResult;
 import org.devio.takephoto.model.TakePhotoOptions;
 import org.devio.takephoto.permission.TakePhotoInvocationHandler;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import io.reactivex.disposables.Disposable;
 import jp.wasabeef.glide.transformations.BlurTransformation;
+import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.product.sampling.net.request.Request.BASE_URL;
+import static com.product.sampling.net.request.Request.IMAGE_BASE_URL;
 
 /**
  * 我的信息
@@ -125,7 +138,8 @@ public class MyInfoFragment extends BasePhotoFragment implements View.OnClickLis
         String image = AccountManager.getInstance().getUserInfoBean().getPhoto();
 
         if (null != image && !TextUtils.isEmpty(image)) {
-            Glide.with(this).load(image).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivPhoto);
+
+            Glide.with(this).load(IMAGE_BASE_URL + image).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivPhoto);
         }
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
@@ -166,19 +180,34 @@ public class MyInfoFragment extends BasePhotoFragment implements View.OnClickLis
         String string = images.get(0).getOriginalPath();
         File file = new File(string);
 
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData("photo", file.getName(),
-                RequestBody.create(MediaType.parse("multipart/form-data"), file));
-        RequestBody userid = RequestBody.create(null, "d444d03c23ca4a75aae89c81dbcbcdf6");
+        RequestBody requestBody = RequestBody.create(MultipartBody.FORM, file);//把文件与类型放入请求体
+        MultipartBody.Part body =
+                MultipartBody.Part
+                        .createFormData("userid", AccountManager.getInstance().getUserId())
+                        .createFormData("photo", file.getName(), requestBody);
 
-        NetWorkManager.getRequest().setPhoto(userid, filePart)
-//                .compose(ResponseTransformer.handleResult())
-                .compose(SchedulerProvider.getInstance().applySchedulers())
-                .subscribe(userbean -> {
-                    Log.e("photo:", userbean + "");
-                }, throwable -> {
-                    String displayMessage = ((ApiException) throwable).getDisplayMessage();
-                    ToastUtils.showToast(displayMessage);
-                });
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Request service = retrofit.create(Request.class);
+
+        Call<ResponseBody> call = service.setPhotoRequestBody(body);
+//        Call<ResponseBody> call = NetWorkManager.getRequest().setPhotoRequestBody(body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.i("setPhotoRequestBody", "onResponse:成功 " + response.toString());
+                Glide.with(getActivity()).load(file).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivPhoto);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.i("setPhotoRequestBody", "onResponse:失败 " + t.toString());
+            }
+
+        });
     }
 
 
