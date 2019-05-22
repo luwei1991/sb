@@ -149,15 +149,14 @@ public class MyInfoFragment extends BasePhotoFragment implements View.OnClickLis
         String string = images.get(0).getOriginalPath();
         File file = new File(string);
 
-        RequestBody requestBody = RequestBody.create(MultipartBody.FORM, file);//把文件与类型放入请求体
-        MultipartBody.Part body =
-                MultipartBody.Part
-                        .createFormData("userid", AccountManager.getInstance().getUserId())
-                        .createFormData("photo", file.getName(), requestBody);
-        RequestBody userid = RequestBody.create(null, AccountManager.getInstance().getUserId());
+        RequestBody requestFile = RequestBody.create(MultipartBody.FORM, file);//把文件与类型放入请求体
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("userid", AccountManager.getInstance().getUserId())
+                .addFormDataPart("photo", file.getName(), requestFile).build();
 
         RetrofitService.createApiService(Request.class)
-                .setPhotoRequestBody(userid, body)
+                .setPhotoRequestBody(requestBody)
                 .compose(RxSchedulersHelper.io_main())
                 .compose(RxSchedulersHelper.ObsHandHttpResult())
                 .subscribe(new ZBaseObserver<String>() {

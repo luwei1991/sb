@@ -142,7 +142,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 .addFormDataPart("id", taskDetailViewModel.taskEntity.id)
                 .addFormDataPart("taskisok", "0")
                 .addFormDataPart("samplecount", "1").build();
-        
+
         RetrofitService.createApiService(Request.class)
                 .uploadtaskinfo(requestBody)
                 .compose(RxSchedulersHelper.io_main())
@@ -165,36 +165,6 @@ public class TaskSceneFragment extends BasePhotoFragment {
                     }
                 });
 
-//        Request service = NetWorkManager.getRequest().create(Request.class);
-//
-//        Call<com.product.sampling.net.response.Response> call = service.uploadtaskinfo(body);
-//        call.enqueue(new Callback<com.product.sampling.net.response.Response>() {
-//            @Override
-//            public void onResponse(Call<com.product.sampling.net.response.Response> call, Response<com.product.sampling.net.response.Response> response) {
-//                Log.i("setPhotoRequestBody", "onResponse:成功 " + response.body().getData());
-//                if (response.body().getCode() == 200) {
-//                    ToastUtil.showToast(getActivity(), response.body().getData().toString());
-//                } else {
-//                    ToastUtil.showToast(getActivity(), response.body().getMessage());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<com.product.sampling.net.response.Response> call, Throwable t) {
-//                Log.i("setPhotoRequestBody", "onResponse:失败 " + t.toString());
-//            }
-//
-//        });
-
-//        NetWorkManager.getRequest().uploadtaskinfo(body)
-//                .compose(ResponseTransformer.handleResult())
-//                .compose(SchedulerProvider.getInstance().applySchedulers())
-//                .subscribe(userbean -> {
-//                    ToastUtils.showToast(userbean.toString());
-//                }, throwable -> {
-//                    String displayMessage = ((ApiException) throwable).getDisplayMessage();
-//                    ToastUtils.showToast(displayMessage);
-//                });
 
     }
 

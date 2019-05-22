@@ -90,9 +90,8 @@ public interface Request {
      * @param photo  头像图片流 必传
      * @return
      */
-    @Multipart
     @POST("app/user/changephoto")
-    Observable<BaseHttpResult<String>> setPhotoRequestBody(@Part("userid") RequestBody userid,@Part MultipartBody.Part file);
+    Observable<BaseHttpResult<String>> setPhotoRequestBody(@Body RequestBody file);
 
     /**
      * 上传和更新现场信息和异常信息
