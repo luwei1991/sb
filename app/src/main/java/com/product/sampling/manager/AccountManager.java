@@ -11,6 +11,7 @@ import com.product.sampling.bean.UserInfoBean;
 public class AccountManager {
     private UserInfoBean userInfoBean;
     private String userPhone;
+    private String userPhoto;
     private String userId;
 
     public String getUserPhone() {
@@ -25,6 +26,12 @@ public class AccountManager {
             userInfoBean.setPersontel(userPhone);
         }
         this.userPhone = userPhone;
+    }
+    public void setUserPhoto(String photo) {
+        if (!TextUtils.isEmpty(userPhoto) && userInfoBean != null) {
+            userInfoBean.setPhoto(userPhone);
+        }
+        this.userPhoto = photo;
     }
 
     public String getUserId() {

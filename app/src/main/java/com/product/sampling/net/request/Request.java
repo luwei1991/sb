@@ -6,6 +6,7 @@ import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskMenu;
 import com.product.sampling.bean.TaskResultBean;
 import com.product.sampling.bean.UserInfoBean;
+import com.product.sampling.httpmoudle.BaseHttpResult;
 import com.product.sampling.net.response.Response;
 
 import java.io.File;
@@ -37,8 +38,6 @@ public interface Request {
      */
     String BASE_URL_DEBUG = "http://185.38.15.46/";
     //    String BASE_URL = "http://nfxypf.natappfree.cc/";
-    String BASE_URL = "http://lw123.longwi.com:9080/exa/";
-    public static String IMAGE_BASE_URL = BASE_URL + "base/tBaFile/showImage?id=";
 
     /**
      * 获取验证码
@@ -93,16 +92,16 @@ public interface Request {
      */
     @Multipart
     @POST("app/user/changephoto")
-    Call<ResponseBody> setPhotoRequestBody(@Part MultipartBody.Part file);
+    Observable<BaseHttpResult<String>> setPhotoRequestBody(@Part("userid") RequestBody userid,@Part MultipartBody.Part file);
 
     /**
      * 上传和更新现场信息和异常信息
      * @param file
      * @return
      */
-    @Multipart
+//    @Multipart
     @POST("app/task/uploadtaskinfo")
-    Call<Response> uploadtaskinfo(@Part MultipartBody.Part file);
+    Observable<BaseHttpResult<String>> uploadtaskinfo(@Body RequestBody file);
 
     @Multipart
     @POST("app/task/uploadaddress")

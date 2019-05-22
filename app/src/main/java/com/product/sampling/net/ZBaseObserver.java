@@ -2,6 +2,7 @@ package com.product.sampling.net;
 
 
 import com.product.sampling.net.Exception.ApiException;
+import com.product.sampling.net.Exception.ServerException;
 import com.product.sampling.utils.ToastUtils;
 
 import io.reactivex.Observer;
@@ -21,7 +22,7 @@ public abstract class ZBaseObserver<T> implements Observer<T> {
     private Disposable disposable;
 
 
-    private boolean isNeedShowtoast=true;
+    private boolean isNeedShowtoast = true;
 
     public ZBaseObserver(boolean isNeedShowtoast) {
         this.isNeedShowtoast = isNeedShowtoast;
@@ -37,11 +38,10 @@ public abstract class ZBaseObserver<T> implements Observer<T> {
     }
 
 
-
     @Override
     public void onError(Throwable t) {
-        ApiException exception = (ApiException) t;
-        onFailure(exception.getCode(),exception.getDisplayMessage());
+        ServerException exception = (ServerException) t;
+        onFailure(exception.getCode(), exception.getMsg());
     }
 
 
@@ -57,15 +57,16 @@ public abstract class ZBaseObserver<T> implements Observer<T> {
 
     /**
      * 网络请求失败
+     *
      * @param code
      * @param message
      */
     public void onFailure(int code, String message) {
 
 
-        if (code == RESPONSE_CODE_FAILED){
+        if (code == RESPONSE_CODE_FAILED) {
             //业务没有正常返回数据
-        }else {
+        } else {
             //网络异常 其他 错误信息
             switch (code) {
 
@@ -79,7 +80,7 @@ public abstract class ZBaseObserver<T> implements Observer<T> {
                     break;
 
             }
-            if (isNeedShowtoast){
+            if (isNeedShowtoast) {
                 ToastUtils.showToast(message);
             }
         }

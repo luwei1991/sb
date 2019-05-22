@@ -3,6 +3,7 @@ package com.product.sampling.ui;
 import android.app.Application;
 import android.util.Log;
 
+import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.utils.GdLocationUtil;
 import com.product.sampling.utils.ToastUtils;
@@ -27,7 +28,7 @@ public class MainApplication extends Application {
         //初始化极光推送
 //        JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
 //        JPushInterface.init(this);
-
+        RetrofitService.init();
         ToastUtils.init(MainApplication.INSTANCE);
     }
 

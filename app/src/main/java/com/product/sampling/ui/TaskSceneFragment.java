@@ -3,6 +3,7 @@ package com.product.sampling.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,14 +21,18 @@ import com.product.sampling.adapter.ImageAndTextRecyclerViewAdapter;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.dummy.DummyContent;
+import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.Exception.ApiException;
+import com.product.sampling.net.LoadDataModel;
 import com.product.sampling.net.NetWorkManager;
+import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
 import com.product.sampling.net.response.ResponseTransformer;
 import com.product.sampling.net.schedulers.SchedulerProvider;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
+import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.ToastUtil;
 import com.product.sampling.utils.ToastUtils;
 
@@ -36,6 +41,10 @@ import org.devio.takephoto.model.TImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -127,34 +136,66 @@ public class TaskSceneFragment extends BasePhotoFragment {
     }
 
     private void postData() {
-        MultipartBody.Part body =
-                MultipartBody.Part
-                        .createFormData("userid", AccountManager.getInstance().getUserId())
-                        .createFormData("id", taskDetailViewModel.taskEntity.id)
-                        .createFormData("taskisok", "0")
-                        .createFormData("samplecount", "1");
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("userid", AccountManager.getInstance().getUserId())
+                .addFormDataPart("id", taskDetailViewModel.taskEntity.id)
+                .addFormDataPart("taskisok", "0")
+                .addFormDataPart("samplecount", "1").build();
+        
+        RetrofitService.createApiService(Request.class)
+                .uploadtaskinfo(requestBody)
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), s);
+                    }
 
+                    @Override
+                    public void onFailure(int code, String message) {
+                        super.onFailure(code, message);
+                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), message);
+                    }
 
-        Request service = NetWorkManager.getSimpleRequset().create(Request.class);
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        super.onSubscribe(d);
+                    }
+                });
 
-        Call<com.product.sampling.net.response.Response> call = service.uploadtaskinfo(body);
-        call.enqueue(new Callback<com.product.sampling.net.response.Response>() {
-            @Override
-            public void onResponse(Call<com.product.sampling.net.response.Response> call, Response<com.product.sampling.net.response.Response> response) {
-                Log.i("setPhotoRequestBody", "onResponse:成功 " + response.body().getData());
-                if (response.body().getCode() == 200) {
-                    ToastUtil.showToast(getActivity(), response.body().getData().toString());
-                } else {
-                    ToastUtil.showToast(getActivity(), response.body().getMessage());
-                }
-            }
+//        Request service = NetWorkManager.getRequest().create(Request.class);
+//
+//        Call<com.product.sampling.net.response.Response> call = service.uploadtaskinfo(body);
+//        call.enqueue(new Callback<com.product.sampling.net.response.Response>() {
+//            @Override
+//            public void onResponse(Call<com.product.sampling.net.response.Response> call, Response<com.product.sampling.net.response.Response> response) {
+//                Log.i("setPhotoRequestBody", "onResponse:成功 " + response.body().getData());
+//                if (response.body().getCode() == 200) {
+//                    ToastUtil.showToast(getActivity(), response.body().getData().toString());
+//                } else {
+//                    ToastUtil.showToast(getActivity(), response.body().getMessage());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<com.product.sampling.net.response.Response> call, Throwable t) {
+//                Log.i("setPhotoRequestBody", "onResponse:失败 " + t.toString());
+//            }
+//
+//        });
 
-            @Override
-            public void onFailure(Call<com.product.sampling.net.response.Response> call, Throwable t) {
-                Log.i("setPhotoRequestBody", "onResponse:失败 " + t.toString());
-            }
+//        NetWorkManager.getRequest().uploadtaskinfo(body)
+//                .compose(ResponseTransformer.handleResult())
+//                .compose(SchedulerProvider.getInstance().applySchedulers())
+//                .subscribe(userbean -> {
+//                    ToastUtils.showToast(userbean.toString());
+//                }, throwable -> {
+//                    String displayMessage = ((ApiException) throwable).getDisplayMessage();
+//                    ToastUtils.showToast(displayMessage);
+//                });
 
-        });
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List task) {

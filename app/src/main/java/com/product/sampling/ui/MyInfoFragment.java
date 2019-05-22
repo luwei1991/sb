@@ -3,78 +3,47 @@ package com.product.sampling.ui;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.product.sampling.R;
-import com.product.sampling.adapter.SpinnerSimpleAdapter;
-import com.product.sampling.bean.Task;
 import com.product.sampling.dummy.DummyContent;
+import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
-import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
+import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
-import com.product.sampling.net.response.ResponseTransformer;
-import com.product.sampling.net.schedulers.SchedulerProvider;
 import com.product.sampling.photo.BasePhotoFragment;
+import com.product.sampling.utils.LogUtils;
+import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.ToastUtil;
-import com.product.sampling.utils.ToastUtils;
+
+import org.devio.takephoto.app.TakePhoto;
+import org.devio.takephoto.model.TImage;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
-import org.devio.takephoto.app.TakePhoto;
-import org.devio.takephoto.app.TakePhotoFragment;
-import org.devio.takephoto.app.TakePhotoImpl;
-import org.devio.takephoto.compress.CompressConfig;
-import org.devio.takephoto.model.CropOptions;
-import org.devio.takephoto.model.LubanOptions;
-import org.devio.takephoto.model.TImage;
-import org.devio.takephoto.model.TResult;
-import org.devio.takephoto.model.TakePhotoOptions;
-import org.devio.takephoto.permission.TakePhotoInvocationHandler;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import io.reactivex.disposables.Disposable;
-import jp.wasabeef.glide.transformations.BlurTransformation;
-import okhttp3.Headers;
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.product.sampling.net.request.Request.BASE_URL;
-import static com.product.sampling.net.request.Request.IMAGE_BASE_URL;
+import static com.product.sampling.httpmoudle.Constants.IMAGE_BASE_URL;
 
 /**
  * 我的信息
@@ -137,7 +106,7 @@ public class MyInfoFragment extends BasePhotoFragment implements View.OnClickLis
 
         String image = AccountManager.getInstance().getUserInfoBean().getPhoto();
 
-        if (null != image && !TextUtils.isEmpty(image)) {
+        if (!TextUtils.isEmpty(image)) {
 
             Glide.with(this).load(IMAGE_BASE_URL + image).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivPhoto);
         }
@@ -185,27 +154,34 @@ public class MyInfoFragment extends BasePhotoFragment implements View.OnClickLis
                 MultipartBody.Part
                         .createFormData("userid", AccountManager.getInstance().getUserId())
                         .createFormData("photo", file.getName(), requestBody);
+        RequestBody userid = RequestBody.create(null, AccountManager.getInstance().getUserId());
 
-        Request service = NetWorkManager.getSimpleRequset().create(Request.class);
-        Call<ResponseBody> call = service.setPhotoRequestBody(body);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.i("setPhotoRequestBody", "onResponse:成功 " + response.toString());
-                if (response.isSuccessful()) {
+        RetrofitService.createApiService(Request.class)
+                .setPhotoRequestBody(userid, body)
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        if (!TextUtils.isEmpty(s)) {
+                            Glide.with(getActivity()).load(IMAGE_BASE_URL + s).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivPhoto);
+                            AccountManager.getInstance().setUserPhoto(s);
+                            com.product.sampling.maputil.ToastUtil.show(getActivity(), "修改头像成功");
+                        }
+                    }
 
-                } else {
-                    ToastUtil.showToast(getActivity(), response.message());
-                }
-                Glide.with(getActivity()).load(file).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivPhoto);
-            }
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        super.onSubscribe(d);
+                    }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.i("setPhotoRequestBody", "onResponse:失败 " + t.toString());
-            }
+                    @Override
+                    public void onFailure(int code, String message) {
+                        super.onFailure(code, message);
+                        com.product.sampling.maputil.ToastUtil.show(getActivity(), message + "");
+                    }
+                });
 
-        });
     }
 
 

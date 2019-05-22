@@ -2,6 +2,7 @@ package com.product.sampling.net;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.product.sampling.httpmoudle.Constants;
 import com.product.sampling.net.interceptor.LogInterceptor;
 import com.product.sampling.net.request.Request;
 
@@ -9,8 +10,6 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static com.product.sampling.net.request.Request.BASE_URL;
 
 /**
  * 创建时间：2018/7/2
@@ -50,12 +49,12 @@ public class NetWorkManager {
         // 初始化Retrofit
         retrofit = new Retrofit.Builder()
                 .client(client)
-                .baseUrl(Request.BASE_URL)
+                .baseUrl(Constants.BASE_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         retrofitSample = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
