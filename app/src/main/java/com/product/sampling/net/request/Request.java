@@ -94,4 +94,17 @@ public interface Request {
     @Multipart
     @POST("app/user/changephoto")
     Call<ResponseBody> setPhotoRequestBody(@Part MultipartBody.Part file);
+
+    /**
+     * 上传和更新现场信息和异常信息
+     * @param file
+     * @return
+     */
+    @Multipart
+    @POST("app/task/uploadtaskinfo")
+    Call<Response> uploadtaskinfo(@Part MultipartBody.Part file);
+
+    @Multipart
+    @POST("app/task/uploadaddress")
+    Call<ResponseBody> uploadaddress(@Part MultipartBody.Part file);
 }

@@ -21,7 +21,7 @@ import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 /**
  * 任务信息
  */
-public class TaskDetailFragment extends Fragment {
+public class TaskDetailFragment extends Fragment implements View.OnClickListener {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -64,7 +64,7 @@ public class TaskDetailFragment extends Fragment {
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+            CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 appBarLayout.setTitle("hhh");
             }
@@ -109,5 +109,16 @@ public class TaskDetailFragment extends Fragment {
         tvEndtime = (TextView) view.findViewById(R.id.tv_endtime);
         tvCompanyname = (TextView) view.findViewById(R.id.tv_companyname);
         btnSubmit = (Button) view.findViewById(R.id.btn_submit);
+
+        btnSubmit.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (btnSubmit.getId() == v.getId()) {
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.item_detail_container, TaskSceneFragment.newInstance(taskDetailViewModel.taskEntity))
+                    .commit();
+        }
     }
 }

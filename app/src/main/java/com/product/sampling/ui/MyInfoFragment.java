@@ -186,19 +186,17 @@ public class MyInfoFragment extends BasePhotoFragment implements View.OnClickLis
                         .createFormData("userid", AccountManager.getInstance().getUserId())
                         .createFormData("photo", file.getName(), requestBody);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Request service = retrofit.create(Request.class);
-
+        Request service = NetWorkManager.getSimpleRequset().create(Request.class);
         Call<ResponseBody> call = service.setPhotoRequestBody(body);
-//        Call<ResponseBody> call = NetWorkManager.getRequest().setPhotoRequestBody(body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Log.i("setPhotoRequestBody", "onResponse:成功 " + response.toString());
+                if (response.isSuccessful()) {
+
+                } else {
+                    ToastUtil.showToast(getActivity(), response.message());
+                }
                 Glide.with(getActivity()).load(file).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(ivPhoto);
             }
 

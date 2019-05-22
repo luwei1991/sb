@@ -1,7 +1,9 @@
 package com.product.sampling.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +20,28 @@ import com.product.sampling.adapter.ImageAndTextRecyclerViewAdapter;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.dummy.DummyContent;
+import com.product.sampling.manager.AccountManager;
+import com.product.sampling.net.Exception.ApiException;
+import com.product.sampling.net.NetWorkManager;
+import com.product.sampling.net.request.Request;
+import com.product.sampling.net.response.ResponseTransformer;
+import com.product.sampling.net.schedulers.SchedulerProvider;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
+import com.product.sampling.utils.ToastUtil;
+import com.product.sampling.utils.ToastUtils;
 
 import org.devio.takephoto.model.TImage;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -99,7 +116,45 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 selectPhoto(10, false, true, false);
             }
         });
+        rootView.findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postData();
+            }
+        });
+
         return rootView;
+    }
+
+    private void postData() {
+        MultipartBody.Part body =
+                MultipartBody.Part
+                        .createFormData("userid", AccountManager.getInstance().getUserId())
+                        .createFormData("id", taskDetailViewModel.taskEntity.id)
+                        .createFormData("taskisok", "0")
+                        .createFormData("samplecount", "1");
+
+
+        Request service = NetWorkManager.getSimpleRequset().create(Request.class);
+
+        Call<com.product.sampling.net.response.Response> call = service.uploadtaskinfo(body);
+        call.enqueue(new Callback<com.product.sampling.net.response.Response>() {
+            @Override
+            public void onResponse(Call<com.product.sampling.net.response.Response> call, Response<com.product.sampling.net.response.Response> response) {
+                Log.i("setPhotoRequestBody", "onResponse:成功 " + response.body().getData());
+                if (response.body().getCode() == 200) {
+                    ToastUtil.showToast(getActivity(), response.body().getData().toString());
+                } else {
+                    ToastUtil.showToast(getActivity(), response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<com.product.sampling.net.response.Response> call, Throwable t) {
+                Log.i("setPhotoRequestBody", "onResponse:失败 " + t.toString());
+            }
+
+        });
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List task) {

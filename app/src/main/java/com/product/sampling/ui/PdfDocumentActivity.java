@@ -94,7 +94,7 @@ public class PdfDocumentActivity extends AppCompatActivity {
                 ToastUtil.showShortToast(this, "无法创建pdf文件");
                 return;
             }
-            generate(path, true, 1);
+//            generate(path, true, 1);
 
 //            FileOutputStream fos = new FileOutputStream(e, true);
 ////            fos.write(sb.toString().getBytes());

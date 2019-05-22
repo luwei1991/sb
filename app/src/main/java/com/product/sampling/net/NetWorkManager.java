@@ -10,8 +10,9 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
+import static com.product.sampling.net.request.Request.BASE_URL;
 
+/**
  * 创建时间：2018/7/2
  * 描述：
  */
@@ -20,6 +21,7 @@ public class NetWorkManager {
     private static NetWorkManager mInstance;
     private static Retrofit retrofit;
     private static volatile Request request = null;
+    private static Retrofit retrofitSample;
 
     public static NetWorkManager getInstance() {
         if (mInstance == null) {
@@ -52,6 +54,10 @@ public class NetWorkManager {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
+        retrofitSample = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
     }
 
     public static Request getRequest() {
@@ -61,6 +67,10 @@ public class NetWorkManager {
             }
         }
         return request;
+    }
+
+    public static Retrofit getSimpleRequset() {
+        return retrofitSample;
     }
 
 }
