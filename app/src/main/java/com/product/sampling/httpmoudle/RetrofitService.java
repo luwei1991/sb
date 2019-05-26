@@ -1,5 +1,6 @@
 package com.product.sampling.httpmoudle;
 
+import com.product.sampling.Constants;
 import com.product.sampling.httpmoudle.interceptor.AuthInterceptor;
 import com.product.sampling.httpmoudle.interceptor.CookieInterceptor;
 import com.product.sampling.net.request.Request;

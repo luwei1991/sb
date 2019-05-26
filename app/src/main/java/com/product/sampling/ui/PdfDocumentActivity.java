@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -94,7 +95,7 @@ public class PdfDocumentActivity extends AppCompatActivity {
                 ToastUtil.showShortToast(this, "无法创建pdf文件");
                 return;
             }
-//            generate(path, true, 1);
+            generate(path, true, 1);
 
 //            FileOutputStream fos = new FileOutputStream(e, true);
 ////            fos.write(sb.toString().getBytes());
@@ -243,6 +244,7 @@ public class PdfDocumentActivity extends AppCompatActivity {
                     public void onComplete() {
                         Toast.makeText(PdfDocumentActivity.this, "生成table.pdf成功,请到手机存储文件目录下查看", Toast.LENGTH_LONG).show();
 
+                        Log.e("pdfpath",new File(path).getAbsolutePath());
 //                        hideLoading();
 //                        finish();
                     }

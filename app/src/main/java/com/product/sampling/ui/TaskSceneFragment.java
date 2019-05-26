@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.gson.JsonArray;
 import com.product.sampling.R;
 import com.product.sampling.adapter.ImageAndTextRecyclerViewAdapter;
 import com.product.sampling.bean.TaskEntity;
@@ -38,12 +39,17 @@ import com.product.sampling.utils.ToastUtils;
 
 import org.devio.takephoto.model.TImage;
 
+import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -128,6 +134,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
         rootView.findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 postData();
             }
         });
@@ -136,21 +143,65 @@ public class TaskSceneFragment extends BasePhotoFragment {
     }
 
     private void postData() {
-        RequestBody requestBody = new MultipartBody.Builder()
+
+        File file = new File("/storage/emulated/0/table.pdf");
+        if (!file.exists()) {
+            Log.e("file", file.getAbsolutePath());
+            return;
+        }
+        RequestBody requestFile = RequestBody.create(MultipartBody.FORM, file);//把文件与类型放入请求体
+        MultipartBody.Builder requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("userid", AccountManager.getInstance().getUserId())
                 .addFormDataPart("id", taskDetailViewModel.taskEntity.id)
                 .addFormDataPart("taskisok", "0")
-                .addFormDataPart("samplecount", "1").build();
+                .addFormDataPart("samplecount", "1")
+                .addFormDataPart("feed.companyname", "1");
 
+
+        MultipartBody.Part part = MultipartBody.Part
+                .createFormData("userid", AccountManager.getInstance().getUserId())
+                .createFormData("id", taskDetailViewModel.taskEntity.id)
+                .createFormData("taskisok", "0")
+                .createFormData("samplecount", "1")
+                .createFormData("feed.companyname", "1")
+                .createFormData("feedfile", file.getName(), requestFile);
+
+        Map<String, MultipartBody> array = new HashMap<>();
+        Map<String, MultipartBody> arrayStr = new HashMap<>();
+
+        for (int i = 0; i < taskDetailViewModel.imageList.size(); i++) {
+            TaskImageEntity taskImageEntity = taskDetailViewModel.imageList.get(i);
+            File f = new File(taskImageEntity.getOriginalPath());
+            if (!f.exists()) {
+                continue;
+            }
+
+            RequestBody imageBody = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
+//            requestBody.addFormDataPart("uploadpics", f.getName(), imageBody);//把文件与类型放入请求体)
+//            requestBody.addFormDataPart("picstrs", "鞍山");//把文件与类型放入请求体)
+            MultipartBody.Builder imgRequestBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("uploadpics", f.getName(), imageBody);
+
+            array.put("uploadpics", imgRequestBody.build());
+
+            MultipartBody.Builder strRequestBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("picstrs", f.getName(), RequestBody.create(MultipartBody.FORM, "sss"));
+            arrayStr.put("picstrs", strRequestBody.build());
+
+        }
+
+        RequestBody userid = RequestBody.create(null, AccountManager.getInstance().getUserId());
         RetrofitService.createApiService(Request.class)
-                .uploadtaskinfo(requestBody)
+                .uploadtaskinfo(userid, part)
                 .compose(RxSchedulersHelper.io_main())
                 .compose(RxSchedulersHelper.ObsHandHttpResult())
                 .subscribe(new ZBaseObserver<String>() {
                     @Override
                     public void onSuccess(String s) {
-                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), s);
+                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加成功" + s);
                     }
 
                     @Override

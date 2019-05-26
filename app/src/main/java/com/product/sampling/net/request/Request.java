@@ -11,6 +11,7 @@ import com.product.sampling.net.response.Response;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
@@ -25,6 +26,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -95,14 +97,28 @@ public interface Request {
 
     /**
      * 上传和更新现场信息和异常信息
+     *
      * @param file
      * @return
      */
-//    @Multipart
+    @Multipart
     @POST("app/task/uploadtaskinfo")
-    Observable<BaseHttpResult<String>> uploadtaskinfo(@Body RequestBody file);
+    Observable<BaseHttpResult<String>> uploadtaskinfo(@Part("userid") RequestBody userid, @Part MultipartBody.Part file);
+
+    @Multipart
+    @POST("app/task/savesample")
+    Observable<BaseHttpResult<String>> savesample(@Part("id") RequestBody id, @Part("taskid") RequestBody taskid, @Part("userid") RequestBody userid, @Part MultipartBody.Part file);
+
+    @POST("app/task/savesample")
+    Observable<BaseHttpResult<String>> savesampleByBody(@Body MultipartBody file);
+
 
     @Multipart
     @POST("app/task/uploadaddress")
     Call<ResponseBody> uploadaddress(@Part MultipartBody.Part file);
+
+    @GET("app/task/taskdetail")
+    Observable<BaseHttpResult<String>> taskdetail(@Query("userid") String userid, @Query("id") String id);
+
+
 }

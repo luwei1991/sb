@@ -1,6 +1,6 @@
 package com.product.sampling.httpmoudle.interceptor;
 
-import com.product.sampling.httpmoudle.Constants;
+import com.product.sampling.Constants;
 import com.product.sampling.httpmoudle.LocalManageUtil;
 import com.product.sampling.ui.MainApplication;
 

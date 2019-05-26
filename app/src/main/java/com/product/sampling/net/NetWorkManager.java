@@ -2,7 +2,7 @@ package com.product.sampling.net;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.product.sampling.httpmoudle.Constants;
+import com.product.sampling.Constants;
 import com.product.sampling.net.interceptor.LogInterceptor;
 import com.product.sampling.net.request.Request;
 

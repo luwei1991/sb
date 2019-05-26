@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +20,10 @@ import com.product.sampling.R;
 import com.product.sampling.dummy.DummyContent;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
-import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
 import com.product.sampling.photo.BasePhotoFragment;
-import com.product.sampling.utils.LogUtils;
 import com.product.sampling.utils.RxSchedulersHelper;
-import com.product.sampling.utils.ToastUtil;
 
 import org.devio.takephoto.app.TakePhoto;
 import org.devio.takephoto.model.TImage;
@@ -38,12 +34,8 @@ import java.util.ArrayList;
 import io.reactivex.disposables.Disposable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-import static com.product.sampling.httpmoudle.Constants.IMAGE_BASE_URL;
+import static com.product.sampling.Constants.IMAGE_BASE_URL;
 
 /**
  * 我的信息

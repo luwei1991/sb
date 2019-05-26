@@ -1,4 +1,4 @@
-package com.product.sampling.httpmoudle;
+package com.product.sampling;
 
 import com.product.sampling.BuildConfig;
 
