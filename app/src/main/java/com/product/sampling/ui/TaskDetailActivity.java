@@ -20,6 +20,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,6 +36,7 @@ public class TaskDetailActivity extends BaseActivity {
     private boolean mTwoPane;
     TaskEntity task = null;
     TaskDetailViewModel taskDetailViewModel;
+    public FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +65,14 @@ public class TaskDetailActivity extends BaseActivity {
             mTwoPane = true;
         }
         task = getIntent().getParcelableExtra("task");
-        View recyclerView = findViewById(R.id.item_list);
+        View recyclerView = findViewById(R.id.item_image_list);
         assert recyclerView != null;
         List list = new ArrayList();
         for (int i = 0; i < 3; i++) {
             list.add(createItem(i));
         }
         setupRecyclerView((RecyclerView) recyclerView, list);
+        fragmentManager = getSupportFragmentManager();
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List list) {
@@ -176,5 +179,6 @@ public class TaskDetailActivity extends BaseActivity {
         }
         return new ImageItem(text, res);
     }
+
 
 }

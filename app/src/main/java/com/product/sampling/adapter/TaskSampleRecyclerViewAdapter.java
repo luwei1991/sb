@@ -1,6 +1,6 @@
 package com.product.sampling.adapter;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -25,7 +25,7 @@ import java.util.List;
 public class TaskSampleRecyclerViewAdapter extends RecyclerView.Adapter<TaskSampleRecyclerViewAdapter.ViewHolder> {
 
     private final List<TaskSample> mValues;
-    private final boolean mTwoPane;
+    private final Activity activity;
     private BasePhotoFragment fragment;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -44,19 +44,23 @@ public class TaskSampleRecyclerViewAdapter extends RecyclerView.Adapter<TaskSamp
                             }
                         }).setNegativeButton("取消", null).show();
 
-            } else if (R.id.btn_upload == view.getId()) {
-                
-            } else if (R.id.btn_edit == view.getId()) {
+            } else if (R.id.btn_edit_check_sheet == view.getId()) {//检查单编辑
+                fragment.startActivityForResult(new Intent(view.getContext(), PdfDocumentActivity.class).putExtra("task", (int) view.getTag()), 1);
+            } else if (R.id.btn_edit_handling_sheet == view.getId()) {//处置单编辑
                 view.getContext().startActivity(new Intent(view.getContext(), PdfDocumentActivity.class));
+            } else if (R.id.btn_upload_check_sheet == view.getId()) {//检查单上传
+
+            } else if (R.id.btn_upload_handling_sheet == view.getId()) {//检查单上传
+
             }
         }
     };
 
-    public TaskSampleRecyclerViewAdapter(Context parent, BasePhotoFragment fragment,
+    public TaskSampleRecyclerViewAdapter(Activity parent, BasePhotoFragment fragment,
                                          List<TaskSample> items,
                                          boolean twoPane) {
         mValues = items;
-        mTwoPane = twoPane;
+        activity = parent;
         this.fragment = fragment;
     }
 
@@ -71,16 +75,26 @@ public class TaskSampleRecyclerViewAdapter extends RecyclerView.Adapter<TaskSamp
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TaskSample task = mValues.get(position);
         holder.mTextViewTitle.setText(task.title + "");
+
+        holder.mTextViewHandleSheet.setText(task.handleSheet + "");
+        holder.mTextViewCheckSheet.setText(task.checkSheet + "");
+
         holder.mImageViewAdd.setTag(position);
         holder.mImageViewAdd.setOnClickListener(mOnClickListener);
         holder.mImageViewReduce.setTag(position);
         holder.mImageViewReduce.setOnClickListener(mOnClickListener);
 
-        holder.mBtnEdit.setTag(position);
-        holder.mBtnEdit.setOnClickListener(mOnClickListener);
+        holder.mBtnEditCheck.setTag(position);
+        holder.mBtnEditCheck.setOnClickListener(mOnClickListener);
 
-        holder.mBtnUpload.setTag(position);
-        holder.mBtnUpload.setOnClickListener(mOnClickListener);
+        holder.mBtnUploadCheck.setTag(position);
+        holder.mBtnUploadCheck.setOnClickListener(mOnClickListener);
+
+        holder.mBtnEditHandle.setTag(position);
+        holder.mBtnEditHandle.setOnClickListener(mOnClickListener);
+
+        holder.mBtnUploadHandle.setTag(position);
+        holder.mBtnUploadHandle.setOnClickListener(mOnClickListener);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(holder.itemView.getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -99,18 +113,25 @@ public class TaskSampleRecyclerViewAdapter extends RecyclerView.Adapter<TaskSamp
         final RecyclerView mRecyclerView;
         final ImageView mImageViewAdd;
         final ImageView mImageViewReduce;
-        final Button mBtnEdit;
-        final Button mBtnUpload;
-
+        final Button mBtnEditCheck;//检查单编辑
+        final Button mBtnUploadCheck;//检查单上传
+        final Button mBtnEditHandle;//处置单编辑
+        final Button mBtnUploadHandle;//处置单上传
+        final TextView mTextViewHandleSheet;
+        final TextView mTextViewCheckSheet;
 
         ViewHolder(View view) {
             super(view);
             mTextViewTitle = view.findViewById(R.id.tv_title);
-            mRecyclerView = view.findViewById(R.id.item_list);
+            mRecyclerView = view.findViewById(R.id.item_image_list);
             mImageViewAdd = view.findViewById(R.id.iv_add);
             mImageViewReduce = view.findViewById(R.id.iv_reduce);
-            mBtnUpload = view.findViewById(R.id.btn_upload);
-            mBtnEdit = view.findViewById(R.id.btn_edit);
+            mBtnUploadCheck = view.findViewById(R.id.btn_upload_check_sheet);
+            mBtnEditCheck = view.findViewById(R.id.btn_edit_check_sheet);
+            mBtnEditHandle = view.findViewById(R.id.btn_edit_handling_sheet);
+            mBtnUploadHandle = view.findViewById(R.id.btn_upload_handling_sheet);
+            mTextViewHandleSheet = view.findViewById(R.id.tv_handle_sheet);
+            mTextViewCheckSheet = view.findViewById(R.id.tv_check_sheet);
         }
     }
 }

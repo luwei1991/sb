@@ -93,7 +93,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.PdfDocumentActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.ChangePasswordActivity"

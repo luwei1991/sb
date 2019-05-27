@@ -14,7 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.product.sampling.R;
@@ -26,7 +25,6 @@ import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.net.response.ResponseTransformer;
 import com.product.sampling.net.schedulers.SchedulerProvider;
-import com.product.sampling.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +81,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         if (toolbar != null) {
             toolbar.setTitle(getArguments().getString(ARG_TITLE));
         }
-        recyclerView = rootView.findViewById(R.id.item_list);
+        recyclerView = rootView.findViewById(R.id.item_image_list);
         mIVdistance = rootView.findViewById(R.id.iv_sort_distance);
         mIVTime = rootView.findViewById(R.id.iv_sort_time);
         rootView.findViewById(R.id.tv_range).setOnClickListener(this);

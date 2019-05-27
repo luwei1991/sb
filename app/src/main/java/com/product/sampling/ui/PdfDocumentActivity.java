@@ -19,9 +19,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.gridlayout.widget.GridLayout;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.product.sampling.R;
 import com.product.sampling.bean.New;
+import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 import com.product.sampling.utils.ScreenUtils;
 import com.product.sampling.utils.ToastUtil;
 
@@ -68,13 +71,12 @@ public class PdfDocumentActivity extends AppCompatActivity {
      */
     private void initView() {
 
-//        View pdfview = getLayoutInflater().inflate(R.layout.activity_pdf, null); //1
-//
-//        TextView textView = pdfview.findViewById(R.id.tv_test);
-//        textView.setText("打印pdf");
-//        pdfview.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), //2, 测量大小
-//                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-//        pdfview.layout(0, 0, pdfview.getMeasuredWidth(), pdfview.getMeasuredHeight()); //3, 测量位置
+        View pdfview = getLayoutInflater().inflate(R.layout.report_pdf, findViewById(R.id.container)); //1
+        TextView textView = pdfview.findViewById(R.id.tv_test);
+        textView.setText("打印pdf");
+        pdfview.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), //2, 测量大小
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        pdfview.layout(0, 0, pdfview.getMeasuredWidth(), pdfview.getMeasuredHeight()); //3, 测量位置
 //
 //
 //        PdfDocument document = new PdfDocument();//1, 建立PdfDocument
@@ -95,7 +97,7 @@ public class PdfDocumentActivity extends AppCompatActivity {
                 ToastUtil.showShortToast(this, "无法创建pdf文件");
                 return;
             }
-            generate(path, true, 1);
+            generate(path, true, 1, pdfview);
 
 //            FileOutputStream fos = new FileOutputStream(e, true);
 ////            fos.write(sb.toString().getBytes());
@@ -141,19 +143,20 @@ public class PdfDocumentActivity extends AppCompatActivity {
     /**
      * PDF转换
      */
-    private void generate(String path, boolean isRotating, int quality) {
+    private void generate(String path, boolean isRotating, int quality, View pdfview) {
         Observable.just(path)
                 .observeOn(Schedulers.computation())
                 .map(new Function<String, PdfDocument>() {
                     @Override
                     public PdfDocument apply(String s) throws Exception {
-                        View pdfview = getLayoutInflater().inflate(R.layout.activity_pdf, null); //1
+//                        View pdfview = getLayoutInflater().inflate(R.layout.report_pdf, findViewById(R.id.container)); //1
+//
+//                        TextView textView = pdfview.findViewById(R.id.tv_test);
+//                        textView.setText("生成pdf");
+//                        pdfview.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), //2, 测量大小
+//                                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+//                        pdfview.layout(0, 0, pdfview.getMeasuredWidth(), pdfview.getMeasuredHeight()); //3, 测量位置
 
-                        TextView textView = pdfview.findViewById(R.id.tv_test);
-                        textView.setText("生成pdf");
-                        pdfview.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), //2, 测量大小
-                                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                        pdfview.layout(0, 0, pdfview.getMeasuredWidth(), pdfview.getMeasuredHeight()); //3, 测量位置
                         PdfDocument document = new PdfDocument();//1, 建立PdfDocument
                         BitmapFactory.Options options = new BitmapFactory.Options();
                         options.inPreferredConfig = Bitmap.Config.RGB_565;
@@ -242,9 +245,11 @@ public class PdfDocumentActivity extends AppCompatActivity {
 
                     @Override
                     public void onComplete() {
-                        Toast.makeText(PdfDocumentActivity.this, "生成table.pdf成功,请到手机存储文件目录下查看", Toast.LENGTH_LONG).show();
-
-                        Log.e("pdfpath",new File(path).getAbsolutePath());
+                        Toast.makeText(PdfDocumentActivity.this, "生成table.pdf成功,请查看目录" + path, Toast.LENGTH_LONG).show();
+                        if (null != getIntent()) {
+                            setResult(RESULT_OK, getIntent().putExtra("pdf", path));
+                            finish();
+                        }
 //                        hideLoading();
 //                        finish();
                     }

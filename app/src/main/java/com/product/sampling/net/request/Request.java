@@ -101,13 +101,8 @@ public interface Request {
      * @param file
      * @return
      */
-    @Multipart
     @POST("app/task/uploadtaskinfo")
-    Observable<BaseHttpResult<String>> uploadtaskinfo(@Part("userid") RequestBody userid, @Part MultipartBody.Part file);
-
-    @Multipart
-    @POST("app/task/savesample")
-    Observable<BaseHttpResult<String>> savesample(@Part("id") RequestBody id, @Part("taskid") RequestBody taskid, @Part("userid") RequestBody userid, @Part MultipartBody.Part file);
+    Observable<BaseHttpResult<String>> uploadtaskinfo(@Body MultipartBody file);
 
     @POST("app/task/savesample")
     Observable<BaseHttpResult<String>> savesampleByBody(@Body MultipartBody file);

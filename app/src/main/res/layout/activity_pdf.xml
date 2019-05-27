@@ -1,68 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
-    android:layout_width="595dp"
-    android:layout_height="842dp"
-    android:background="@mipmap/index_backgroundpic">
-
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar_layout" />
-
-    <LinearLayout
-        android:layout_width="595dp"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"
-        android:layout_margin="20dp"
-        android:divider="@color/color_9EA7B4"
-        android:orientation="vertical"
-        android:showDividers="end|middle|beginning"
-        android:stretchColumns="1">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/cut_off_line"
-            android:divider="@color/color_9EA7B4"
-            android:orientation="horizontal"
-            android:showDividers="middle|beginning|end">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:text="计划名称" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:text="计划XXX" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/cut_off_line"
-            android:divider="@color/color_9EA7B4"
-            android:orientation="horizontal"
-            android:showDividers="middle|beginning|end">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:text="项目备案号" />
-
-            <TextView
-                android:id="@+id/tv_test"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:text="计划XXX" />
-
-        </LinearLayout>
-    </LinearLayout>
-</RelativeLayout>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    >
+</androidx.constraintlayout.widget.ConstraintLayout>

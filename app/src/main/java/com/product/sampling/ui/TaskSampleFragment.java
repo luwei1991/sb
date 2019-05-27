@@ -2,6 +2,7 @@ package com.product.sampling.ui;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,14 +15,10 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.product.sampling.R;
 import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
@@ -42,15 +39,13 @@ import org.devio.takephoto.model.TImage;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.disposables.Disposable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-import static com.product.sampling.Constants.IMAGE_BASE_URL;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * 样品信息
@@ -61,6 +56,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
      * represents.
      */
     public static final String ARG_ITEM_ID = "item_id";
+    public static final String TAG = TaskSampleFragment.class.getSimpleName();
 
     /**
      * The dummy content this fragment is presenting.
@@ -98,7 +94,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
 
             Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+            CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(mItem.content);
             }
@@ -119,14 +115,14 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-        mRecyclerView = rootView.findViewById(R.id.item_list);
+        mRecyclerView = rootView.findViewById(R.id.item_image_list);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         rootView.findViewById(R.id.btn_save).setOnClickListener(this);
         return rootView;
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List task) {
-        recyclerView.setAdapter(new TaskSampleRecyclerViewAdapter((AppCompatActivity) getActivity(), this, task, false));
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List list) {
+        recyclerView.setAdapter(new TaskSampleRecyclerViewAdapter(getActivity(), this, list, false));
     }
 
     @Override
@@ -163,85 +159,9 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
 
         } else if (v.getId() == R.id.btn_save) {
-//            postSample();
             postSampleByBody();
 
         }
-    }
-
-
-    private void postSample() {
-        File file = new File("/storage/emulated/0/table.pdf");
-        if (!file.exists()) {
-            Log.e("file", file.getAbsolutePath());
-            ToastUtil.showToast(getActivity(), "无文件");
-            return;
-        }
-        RequestBody requestFile = RequestBody.create(MultipartBody.FORM, file);//把文件与类型放入请求体
-        MultipartBody.Part part = MultipartBody.Part
-                .createFormData("userid", AccountManager.getInstance().getUserId())
-                .createFormData("taskid", taskDetailViewModel.taskEntity.id)
-                .createFormData("id", "1111")
-                .createFormData("islastone", "1")
-                .createFormData("advice.companyname", "1")
-                .createFormData("samplingfile", file.getName(), requestFile)
-                .createFormData("sampling.taskfrom", "1")
-                .createFormData("disposalfile", file.getName(), requestFile)
-
-                .createFormData("picstrs", "1111")
-                .createFormData("uploadpics", file.getName(), requestFile);
-
-        Map<String, MultipartBody> array = new HashMap<>();
-        Map<String, MultipartBody> arrayStr = new HashMap<>();
-
-//        for (int i = 0; i < taskDetailViewModel.imageList.size(); i++) {
-//            TaskImageEntity taskImageEntity = taskDetailViewModel.imageList.get(i);
-//            File f = new File(taskImageEntity.getOriginalPath());
-//            if (!f.exists()) {
-//                continue;
-//            }
-//
-//            RequestBody imageBody = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-////            requestBody.addFormDataPart("uploadpics", f.getName(), imageBody);//把文件与类型放入请求体)
-////            requestBody.addFormDataPart("picstrs", "鞍山");//把文件与类型放入请求体)
-//            MultipartBody.Builder imgRequestBody = new MultipartBody.Builder()
-//                    .setType(MultipartBody.FORM)
-//                    .addFormDataPart("uploadpics", f.getName(), imageBody);
-//
-//            array.put("uploadpics", imgRequestBody.build());
-//
-//            MultipartBody.Builder strRequestBody = new MultipartBody.Builder()
-//                    .setType(MultipartBody.FORM)
-//                    .addFormDataPart("picstrs", f.getName(), RequestBody.create(MultipartBody.FORM, "sss"));
-//            arrayStr.put("picstrs", strRequestBody.build());
-//
-//        }
-
-        RequestBody userid = RequestBody.create(null, AccountManager.getInstance().getUserId());
-        RequestBody taskid = RequestBody.create(null, taskDetailViewModel.taskEntity.id);
-        RequestBody id = RequestBody.create(null, "111111111");
-
-        RetrofitService.createApiService(Request.class)
-                .savesample(id, taskid, userid, part)
-                .compose(RxSchedulersHelper.io_main())
-                .compose(RxSchedulersHelper.ObsHandHttpResult())
-                .subscribe(new ZBaseObserver<String>() {
-                    @Override
-                    public void onSuccess(String s) {
-                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加成功" + s);
-                    }
-
-                    @Override
-                    public void onFailure(int code, String message) {
-                        super.onFailure(code, message);
-                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), message);
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        super.onSubscribe(d);
-                    }
-                });
     }
 
     void createNewSample(String text) {
@@ -276,28 +196,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         }
         RequestBody requestFile = RequestBody.create(MultipartBody.FORM, file);//把文件与类型放入请求体
 
-//        RequestBody requestBody = new MultipartBody.Builder()
-//                .setType(MultipartBody.FORM)
-//                .addFormDataPart("userid", AccountManager.getInstance().getUserId())
-//                .addFormDataPart("taskid", taskDetailViewModel.taskEntity.id)
-//                .addFormDataPart("id", "1111")
-//                .addFormDataPart("islastone", "1")
-//                .addFormDataPart("advice.companyname", "1")
-//                .addFormDataPart("samplingfile", file.getName(), requestFile)
-//                .addFormDataPart("sampling.taskfrom", "1")
-//                .addFormDataPart("disposalfile", file.getName(), requestFile)
-//                .addFormDataPart("picstrs", "1111")
-//                .addFormDataPart("uploadpics", file.getName(), requestFile).build();
-
-
         MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder();
         multipartBodyBuilder.setType(MultipartBody.FORM);
-        Map<String, RequestBody> array = new HashMap<>();
-        Map<String, RequestBody> arrayStr = new HashMap<>();
-        //遍历map中所有参数到builder
-
-        //遍历paths中所有图片绝对路径到builder，并约定key如“upload”作为后台接受多张图片的key
-
 
         multipartBodyBuilder.addFormDataPart("userid", AccountManager.getInstance().getUserId())
                 .addFormDataPart("taskid", taskDetailViewModel.taskEntity.id)
@@ -354,5 +254,21 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                         com.product.sampling.maputil.ToastUtil.show(getActivity(), message + "");
                     }
                 });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (data != null) {
+                int index = data.getIntExtra("task", -1);
+                if (index != -1) {
+                    //把生成的pdf 赋值给列表
+                    taskDetailViewModel.taskList.get(index).checkSheet = data.getStringExtra("pdf");
+                    taskDetailViewModel.taskList.get(index).handleSheet = data.getStringExtra("pdf");
+                    mRecyclerView.getAdapter().notifyDataSetChanged();
+                }
+            }
+        }
     }
 }

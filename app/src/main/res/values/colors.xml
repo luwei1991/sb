@@ -30,7 +30,6 @@
     <color name="trans">#00000000</color>
 
 
-
     <color name="tab_title_normal">#3A476B</color>
 
     <color name="color_31E9B2">#31E9B2</color>
@@ -94,4 +93,6 @@
     <color name="blue_color_30">#4C5BCBF5</color>
 
     <color name="text_color">#333333</color>
+
+    <color name="table_divider_color">#9EA7B4</color>
 </resources>
