@@ -1,15 +1,19 @@
 package com.product.sampling.ui;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +26,7 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.product.sampling.R;
 import com.product.sampling.adapter.ImageAndTextRecyclerViewAdapter;
 import com.product.sampling.adapter.VideoAndTextRecyclerViewAdapter;
+import com.product.sampling.bean.LocalMediaInfo;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.dummy.DummyContent;
@@ -170,8 +175,8 @@ public class TaskSceneFragment extends BasePhotoFragment {
                         .rotateEnabled(true) // 裁剪是否可旋转图片 true or false
                         .scaleEnabled(true)// 裁剪是否可放大缩小图片 true or false
                         .videoQuality(1)// 视频录制质量 0 or 1 int
-                        .videoMaxSecond(600)// 显示多少秒以内的视频or音频也可适用 int
-                        .videoMinSecond(10)// 显示多少秒以内的视频or音频也可适用 int
+                        .videoMaxSecond(6000)// 显示多少秒以内的视频or音频也可适用 int
+                        .videoMinSecond(1)// 显示多少秒以内的视频or音频也可适用 int
                         .recordVideoSecond(600)//视频秒数录制 默认60s int
                         .isDragFrame(false)// 是否可拖动裁剪框(固定)
                         .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
@@ -188,7 +193,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
     }
 
     private void postData() {
-        
+
         File file = new File("/storage/emulated/0/table.pdf");
         if (!file.exists()) {
             Log.e("file", file.getAbsolutePath());
@@ -216,7 +221,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 return;
             }
             RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-            multipartBodyBuilder.addFormDataPart("picstrs", "8888")
+            multipartBodyBuilder.addFormDataPart("picstrs", taskDetailViewModel.imageList.get(i).title)
                     .addFormDataPart("uploadpics", f.getName(), requestImage);
         }
         if (null != taskDetailViewModel.videoList && !taskDetailViewModel.videoList.isEmpty()) {
@@ -228,10 +233,11 @@ public class TaskSceneFragment extends BasePhotoFragment {
                     return;
                 }
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("videostrs", "vvvvvvv8")
+                multipartBodyBuilder.addFormDataPart("videostrs", taskDetailViewModel.videoList.get(i).title)
                         .addFormDataPart("uploadvideos", f.getName(), requestImage);
             }
         }
+        showLoadingDialog();
         RetrofitService.createApiService(Request.class)
                 .uploadtaskinfo(multipartBodyBuilder.build())
                 .compose(RxSchedulersHelper.io_main())
@@ -239,12 +245,14 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 .subscribe(new ZBaseObserver<String>() {
                     @Override
                     public void onSuccess(String s) {
+                        dismissLoadingDialog();
                         com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加成功" + s);
                     }
 
                     @Override
                     public void onFailure(int code, String message) {
                         super.onFailure(code, message);
+                        dismissLoadingDialog();
                         com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), message);
                     }
 
@@ -258,7 +266,8 @@ public class TaskSceneFragment extends BasePhotoFragment {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List task) {
-        recyclerView.setAdapter(new ImageAndTextRecyclerViewAdapter(getActivity(), task, false));
+        ImageAndTextRecyclerViewAdapter adapter = new ImageAndTextRecyclerViewAdapter(getActivity(), task, false);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -283,7 +292,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
         setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.videoList);
     }
 
-    private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, ArrayList<LocalMedia> videoList) {
+    private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, ArrayList<LocalMediaInfo> videoList) {
         mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this));
     }
 
@@ -300,11 +309,34 @@ public class TaskSceneFragment extends BasePhotoFragment {
                     // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true  注意：音视频除外
                     // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true  注意：音视频除外
                     // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
-                    taskDetailViewModel.videoList.addAll(selectList);
+                    List<LocalMediaInfo> mediaInfos = new ArrayList<>();
+                    for (LocalMedia media :
+                            selectList) {
+                        LocalMediaInfo mediaInfo = new LocalMediaInfo();
+                        mediaInfo.setPath(media.getPath());
+                        mediaInfo.setCompressPath(media.getCompressPath());
+                        mediaInfo.setCutPath(media.getCutPath());
+                        mediaInfo.setDuration(media.getDuration());
+                        mediaInfo.setChecked(media.isChecked());
+                        mediaInfo.setCut(media.isCut());
+
+                        mediaInfo.setPosition(media.getPosition());
+                        mediaInfo.setNum(media.getNum());
+                        mediaInfo.setMimeType(media.getMimeType());
+                        mediaInfo.setPictureType(media.getPictureType());
+                        mediaInfo.setCompressed(media.isCompressed());
+                        mediaInfo.setWidth(media.getWidth());
+                        mediaInfo.setHeight(media.getHeight());
+
+                        mediaInfos.add(mediaInfo);
+                    }
+                    taskDetailViewModel.videoList.addAll(mediaInfos);
                     mRecyclerViewVideoList.getAdapter().notifyDataSetChanged();
                     break;
             }
         }
 
     }
+
+
 }

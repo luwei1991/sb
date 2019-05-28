@@ -1,14 +1,17 @@
 package com.product.sampling.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.product.sampling.R;
+import com.product.sampling.bean.LocalMediaInfo;
 import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.ui.TaskDetailActivity;
@@ -25,21 +29,18 @@ import java.util.List;
 
 public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoAndTextRecyclerViewAdapter.ViewHolder> {
 
-    private final List<LocalMedia> mValues;
+    private final List<LocalMediaInfo> mValues;
     private boolean mTwoPane;
     private Fragment fragment;//当前图片列表所属样品id
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (view.getId() == R.id.iv_task) {
-                LocalMedia media = (LocalMedia) view.getTag();
-                PictureSelector.create(fragment).externalPictureVideo(media.getPath());
-            }
+            showListDialog(view.getContext(), (int) view.getTag());
         }
     };
 
     public VideoAndTextRecyclerViewAdapter(Context parent,
-                                           List<LocalMedia> items,
+                                           List<LocalMediaInfo> items,
                                            Fragment pos) {
         mValues = items;
         fragment = pos;
@@ -54,11 +55,12 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        LocalMedia task = mValues.get(position);
+        LocalMediaInfo task = mValues.get(position);
         Glide.with(holder.itemView.getContext()).load(task.getPath()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);
-        holder.mImageView.setOnClickListener(mOnClickListener);
-        holder.mImageView.setTag(task);
-        holder.mTextViewTitle.setText("");
+        holder.mTextViewTitle.setText(task.title);
+        holder.itemView.setTag(position);
+        holder.itemView.setOnClickListener(mOnClickListener);
+
     }
 
     @Override
@@ -75,5 +77,42 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
             mTextViewTitle = view.findViewById(R.id.tv_title);
             mImageView = view.findViewById(R.id.iv_task);
         }
+    }
+
+    private void showListDialog(Context context, int taskPostion) {
+        final String[] items = {"编辑说明", "删除", "播放"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(context);
+        listDialog.setTitle("");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        EditText et = new EditText(context);
+                        new AlertDialog.Builder(context).setTitle("请输入图片描述")
+                                .setView(et)
+                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        //按下确定键后的事件
+                                        String text = et.getText().toString();
+                                        mValues.get(taskPostion).title = text;
+                                        notifyDataSetChanged();
+                                    }
+                                }).setNegativeButton("取消", null).show();
+
+                        break;
+                    case 1:
+                        mValues.remove(taskPostion);
+                        notifyDataSetChanged();
+                        break;
+                    case 2:
+                        PictureSelector.create(fragment).externalPictureVideo(mValues.get(taskPostion).getPath());
+                        break;
+                }
+            }
+        });
+        listDialog.show();
     }
 }

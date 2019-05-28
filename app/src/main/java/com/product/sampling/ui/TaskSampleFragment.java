@@ -20,8 +20,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.product.sampling.R;
 import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
+import com.product.sampling.bean.LocalMediaInfo;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.bean.TaskSample;
@@ -51,13 +55,10 @@ import static android.app.Activity.RESULT_OK;
  * 样品信息
  */
 public class TaskSampleFragment extends BasePhotoFragment implements View.OnClickListener {
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
+
     public static final String ARG_ITEM_ID = "item_id";
     public static final String TAG = TaskSampleFragment.class.getSimpleName();
-
+    public int selectId = -1;
     /**
      * The dummy content this fragment is presenting.
      */
@@ -212,24 +213,40 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             ToastUtil.showToast(getActivity(), "请创建样品数据");
             return;
         }
+        for (int i = 0; i < taskDetailViewModel.taskList.size(); i++) {
+            List<TaskImageEntity> list = taskDetailViewModel.taskList.get(i).list;
 
-        for (int i = 0; i < taskDetailViewModel.taskList.get(0).list.size(); i++) {
-            List<TaskImageEntity> list = taskDetailViewModel.taskList.get(0).list;
             if (null == list || list.isEmpty()) {
                 ToastUtil.showToast(getActivity(), "请选择图片");
-                return;
+                continue;
             }
-            File f = new File(list.get(i).getOriginalPath());
-            if (!f.exists()) {
-                Log.e("file", f.getAbsolutePath());
-                ToastUtil.showToast(getActivity(), "无效图片");
-                return;
+            for (TaskImageEntity entity : list) {
+                File f = new File(entity.getOriginalPath());
+                if (!f.exists()) {
+                    Log.e("file", f.getAbsolutePath());
+                    ToastUtil.showToast(getActivity(), "无效图片");
+                    continue;
+                }
+                RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
+                multipartBodyBuilder.addFormDataPart("picstrs", entity.title)
+                        .addFormDataPart("uploadpics", f.getName(), requestImage);
             }
-            RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-            multipartBodyBuilder.addFormDataPart("picstrs", "8888")
-                    .addFormDataPart("uploadpics", f.getName(), requestImage);
-        }
+            List<LocalMediaInfo> listVideo = taskDetailViewModel.taskList.get(i).videoList;
 
+            for (LocalMediaInfo localMedia :
+                    listVideo) {
+                File f = new File(localMedia.getPath());
+                if (!f.exists()) {
+                    Log.e("file", f.getAbsolutePath());
+                    ToastUtil.showToast(getActivity(), "无效视频");
+                    continue;
+                }
+                RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
+                multipartBodyBuilder.addFormDataPart("videostrs", localMedia.title)
+                        .addFormDataPart("uploadvideos", f.getName(), requestImage);
+            }
+        }
+        showLoadingDialog();
 
         RetrofitService.createApiService(Request.class)
                 .savesampleByBody(multipartBodyBuilder.build())
@@ -238,6 +255,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 .subscribe(new ZBaseObserver<String>() {
                     @Override
                     public void onSuccess(String s) {
+                        dismissLoadingDialog();
                         if (!TextUtils.isEmpty(s)) {
                             com.product.sampling.maputil.ToastUtil.show(getActivity(), s);
                         }
@@ -251,6 +269,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     @Override
                     public void onFailure(int code, String message) {
                         super.onFailure(code, message);
+                        dismissLoadingDialog();
                         com.product.sampling.maputil.ToastUtil.show(getActivity(), message + "");
                     }
                 });
@@ -260,14 +279,53 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (data != null) {
-                int index = data.getIntExtra("task", -1);
-                if (index != -1) {
-                    //把生成的pdf 赋值给列表
-                    taskDetailViewModel.taskList.get(index).checkSheet = data.getStringExtra("pdf");
-                    taskDetailViewModel.taskList.get(index).handleSheet = data.getStringExtra("pdf");
-                    mRecyclerView.getAdapter().notifyDataSetChanged();
-                }
+            switch (requestCode) {
+                case PictureConfig.CHOOSE_REQUEST:
+                    // 图片、视频、音频选择结果回调
+                    List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
+                    // 例如 LocalMedia 里面返回三种path
+                    // 1.media.getPath(); 为原图path
+                    // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true  注意：音视频除外
+                    // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true  注意：音视频除外
+                    // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
+
+                    if (selectId != -1) {
+                        List<LocalMediaInfo> mediaInfos = new ArrayList<>();
+                        for (LocalMedia media :
+                                selectList) {
+                            LocalMediaInfo mediaInfo = new LocalMediaInfo();
+                            mediaInfo.setPath(media.getPath());
+                            mediaInfo.setCompressPath(media.getCompressPath());
+                            mediaInfo.setCutPath(media.getCutPath());
+                            mediaInfo.setDuration(media.getDuration());
+                            mediaInfo.setChecked(media.isChecked());
+                            mediaInfo.setCut(media.isCut());
+
+                            mediaInfo.setPosition(media.getPosition());
+                            mediaInfo.setNum(media.getNum());
+                            mediaInfo.setMimeType(media.getMimeType());
+                            mediaInfo.setPictureType(media.getPictureType());
+                            mediaInfo.setCompressed(media.isCompressed());
+                            mediaInfo.setWidth(media.getWidth());
+                            mediaInfo.setHeight(media.getHeight());
+
+                            mediaInfos.add(mediaInfo);
+                        }
+                        taskDetailViewModel.taskList.get(selectId).videoList.addAll(mediaInfos);
+                        mRecyclerView.getAdapter().notifyDataSetChanged();
+                    }
+                    break;
+                case 1:
+                    if (data != null) {
+                        int index = data.getIntExtra("task", -1);
+                        if (index != -1) {
+                            //把生成的pdf 赋值给列表
+                            taskDetailViewModel.taskList.get(index).checkSheet = data.getStringExtra("pdf");
+                            taskDetailViewModel.taskList.get(index).handleSheet = data.getStringExtra("pdf");
+                            mRecyclerView.getAdapter().notifyDataSetChanged();
+                        }
+                    }
+                    break;
             }
         }
     }

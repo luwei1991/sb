@@ -80,6 +80,51 @@
             android:src="@mipmap/form_add" />
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="样品视频" />
+
+        <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/item_video_list"
+            android:name="com.product.sampling.TaskListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="150dp"
+            app:layoutManager="LinearLayoutManager"
+            tools:context="com.product.sampling.ui.ItemListActivity"
+            tools:listitem="@layout/item_scene_list_content" />
+
+
+        <ImageView
+            android:id="@+id/iv_reduce_video"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/form_reduce" />
+
+        <ImageView
+            android:id="@+id/iv_add_video"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="80dp"
+            android:layout_toLeftOf="@+id/iv_reduce_video"
+            android:src="@mipmap/form_add" />
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -161,6 +206,7 @@
             android:layout_height="50dp"
             android:gravity="center"
             android:text="附件2抽样封存处置单" />
+
         <TextView
             android:id="@+id/tv_handle_sheet"
             android:layout_width="wrap_content"
@@ -170,6 +216,7 @@
             android:text=""
 
             />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -196,5 +243,6 @@
                 android:textColor="@color/white" />
 
         </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.luck.picture.lib.entity.LocalMedia;
+import com.product.sampling.bean.LocalMediaInfo;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.bean.TaskMenu;
@@ -28,7 +29,7 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
     public TaskEntity taskEntity = new TaskEntity();
     public List<TaskSample> taskList = new ArrayList<>();
     public ArrayList<TaskImageEntity> imageList = new ArrayList<>();
-    public ArrayList<LocalMedia> videoList = new ArrayList<>();
+    public ArrayList<LocalMediaInfo> videoList = new ArrayList<>();
 
     public MutableLiveData<LoadDataModel<String>> orderLoadLiveData = new MutableLiveData<>();
 

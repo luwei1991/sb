@@ -4,11 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
+import com.luck.picture.lib.entity.LocalMedia;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TaskSample implements Parcelable {
-    public List<TaskImageEntity> list;
+    public List<TaskImageEntity> list = new ArrayList<>();
+    public List<LocalMediaInfo> videoList = new ArrayList<>();
     public String title = "";
     public String handleSheet = "";
     public String checkSheet = "";
