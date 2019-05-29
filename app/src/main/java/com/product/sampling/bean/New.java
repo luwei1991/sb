@@ -5,13 +5,15 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class New {
-    @SerializedName("title")
+    @SerializedName("id")
+    public String id;
+    @SerializedName("newstitle")
     public String title;
-    @SerializedName("conent")
+    @SerializedName("newstext")
     public String conent;
-    @SerializedName("pubdate")
+    @SerializedName("createTime")
     public String pubdate;
-    @SerializedName("imgurl")
+    @SerializedName("newspic")
     public String imgurl;
 
     public String getTitle() {

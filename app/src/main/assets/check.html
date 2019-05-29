@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>产品质量监督抽查/复查抽样单</title>
+  <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+	<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    input,textarea{
+        outline: none
+    }
+    input{
+        border: none;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    input[type="text"]{
+      width: 100%
+    }
+    input[type="checkbox"],input[type="radio"]{
+      margin-right: 3px;
+    }
+    html,body{
+        background-color: #fff;
+    }
+    body{
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    .page{
+        margin: 0 auto;
+        max-width: 1000px;
+        padding: 10px 0;
+        background-color: #fff;
+    }
+    .ov{
+        overflow: hidden;
+    }
+    .left{
+        float: left;
+    }
+    .right{
+        float: right;
+    }
+    .tc{
+        text-align: center
+    }
+    .title{
+        line-height: 1.4;
+        font-size: 16px;
+        text-align: center;
+        padding: 40px 20px;
+    }
+    .text{
+        text-indent: 2em;
+        line-height: 2.2;
+    }
+    .bh{
+        padding-bottom: 8px;
+    }
+    .footer{
+        padding-top: 30px;
+    }
+    table.tftable {color:#333333;width:100%;border-width: 1px;border-color: #333;border-collapse: collapse;}
+    table.tftable th {background-color:#fff;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;text-align:left;}
+    table.tftable tr {background-color:#fff;}
+    table.tftable td {border-width: 1px;padding: 8px;border-style: solid;border-color: #333;}
+    #jiouhcnw89293{
+      line-height: 1.4;
+      resize: none;
+      border: none;
+      font-size: 14px;
+    }
+    table.tftable td.signtd{
+      padding: 0;
+    }
+    .sign{
+      overflow: hidden;
+      height: 100%;
+    }
+    .sign>div{
+      float: left;
+      width: 33.333%;
+      height: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    .sign>div p{
+      height: 80px;
+    }
+    .sign>div span{
+      display: block;
+      text-align: right;
+      padding-bottom: 10px;
+    }
+    </style>
+</head>
+
+<body>
+<div class="page">
+  <form action="">
+    <p class="title">产品质量<input style="width:50px;font-size:16px;" class="tc" type="text" placeholder="省级">监督抽查/复查抽样单</p>
+    <div class="ov bh">
+        <div class="left">编号：<input name="number" style="width:400px;font-family: '宋体';color: red" type="text" value="952710086"></div>
+        <div class="right">报告编号：<input name="reportnum" style="width:200px" type="text" placeholder=""></div>
+    </div>
+    <table width="100%" class="tftable" cellpadding="10">
+      <tr>
+        <td colspan="4">任务来源</td>
+        <td colspan="2"><input type="text" name="tasksource" placeholder=""></td>
+        <td colspan="2">任务类别</td>
+        <td colspan="3"><input type="text" name="taskcategory" placeholder=""></td>
+      </tr>
+      <tr>
+        <td colspan="3" rowspan="3">受<br />检<br />单<br />位</td>
+        <td>名称</td>
+        <td colspan="2"><input type="text" name="sjunitname" placeholder=""></td>
+        <td colspan="2">法人代表</td>
+        <td colspan="3"><input type="text" name="sjlegalperson" placeholder=""></td>
+      </tr>
+      <tr>
+        <td rowspan="2">通讯地址</td>
+        <td colspan="2" rowspan="2" onclick="document.getElementById('ueiahksa').focus()"><input id="ueiahksa" type="text" name="sjaddress" placeholder=""></td>
+        <td height="38" colspan="2">联系人</td>
+        <td height="38" colspan="3"><input type="text" name="sjcontacts" placeholder=""></td>
+      </tr>
+      <tr>
+        <td height="39" colspan="2">电话</td>
+        <td height="39" colspan="3"><input type="text" name="sjphone" placeholder=""></td>
+      </tr>
+      <tr>
+        <td colspan="3" rowspan="11">生<br />产<br />单<br />位</td>
+        <td>单位名称</td>
+        <td colspan="2"><input type="text" name="scunitname" placeholder=""></td>
+        <td colspan="2" rowspan="11" class="tc">经<br>济<br>类<br>型</td>
+        <td width="3%" rowspan="4">内<br />资</td>
+        <td width="12%"><input type="checkbox" value="1" name="scInternal">国有</td>
+        <td width="19%"><input type="checkbox" value="2" name="scInternal">私营(含个体)</td>
+      </tr>
+      <tr>
+        <td>单位地址</td>
+        <td colspan="2"><input type="text" name="scaddress" placeholder=""></td>
+        <td><input type="checkbox" value="3" name="scInternal">集体</td>
+        <td><input type="checkbox" value="4" name="scInternal">有限责任公司</td>
+      </tr>
+      <tr>
+        <td>邮政编码</td>
+        <td colspan="2"><input type="text" name="sczipcode" placeholder=""></td>
+        <td><input type="checkbox" value="5" name="scInternal">联营</td>
+        <td><input type="checkbox" value="6" name="scInternal">股份有限公司</td>
+      </tr>
+      <tr>
+        <td>法人代表</td>
+        <td colspan="2"><input type="text" name="sclegalperson" placeholder=""></td>
+        <td><input type="checkbox" value="7" name="scInternal">股份合作</td>
+        <td><input type="checkbox" value="8" name="scInternal">其他企业</td>
+      </tr>
+      <tr>
+        <td>联系人</td>
+        <td colspan="2"><input type="text" name="sccontacts" placeholder=""></td>
+        <td rowspan="3">港<br />澳<br />台</td>
+        <td><input type="checkbox" value="1" name="scgat">合资经营</td>
+        <td><input type="checkbox" value="2" name="scgat">合作经营</td>
+      </tr>
+      <tr>
+        <td>联系电话</td>
+        <td colspan="2"><input type="text" name="scphone" placeholder=""></td>
+        <td rowspan="2"><input type="checkbox" value="3" name="scgat">港澳台独资经营</td>
+        <td rowspan="2"><input type="checkbox" value="4" name="scgat">港澳台投资股份有限公司</td>
+      </tr>
+      <tr>
+        <td>营业执照</td>
+        <td colspan="2"><input type="text" name="sclicense" placeholder=""></td>
+      </tr>
+      <tr>
+        <td>机构代码</td>
+        <td colspan="2"><input type="text" name="scorganizationcode" placeholder=""></td>
+        <td rowspan="4">外<br />资</td>
+        <td><input type="checkbox" value="1" name="scforeign">中外合资</td>
+        <td><input type="checkbox" value="2" name="scforeign">中外合作</td>
+      </tr>
+      <tr>
+        <td rowspan="3">企业规模</td>
+        <td width="10%">人数</td>
+        <td><input type="text" name="scnum" placeholder=""></td>
+        <td rowspan="3"><input type="checkbox" value="3" name="scforeign">外资企业</td>
+        <td rowspan="3"><input type="checkbox" value="4" name="scforeign">外商投资股份有限公司</td>
+      </tr>
+      <tr>
+        <td>产值</td>
+        <td><input type="text" name="scoutputvalue" placeholder=""></td>
+      </tr>
+      <tr>
+        <td>产量</td>
+        <td><input type="text" name="scyield" placeholder=""></td>
+      </tr>
+      <tr>
+        <td colspan="3" rowspan="9">受<br />检<br />产<br />品<br />信<br />息</td>
+        <td colspan="3"><input type="radio" value="1" name="sjcphaslicence">工业产品生产许可证&nbsp;&nbsp;<input type="radio" value="2" name="sjcphaslicence">QS&nbsp;&nbsp;<input type="radio" value="3" name="sjcphaslicence">CCC&nbsp;&nbsp;<input type="radio" value="4" name="sjcphaslicence">其他</td>
+        <td colspan="4">证书编号</td>
+        <td><input type="text" name="sjcpcertificatenum" placeholder=""></td>
+      </tr>
+      <tr>
+        <td colspan="2">产品名称</td>
+        <td width="28%"><input type="text" name="sjcpname" placeholder=""></td>
+        <td colspan="4">规格型号</td>
+        <td><input type="text" name="sjcpmodel" placeholder=""></td>
+      </tr>
+      <tr>
+        <td colspan="2">生产日期/编号</td>
+        <td><input type="text" name="sjcpmanufacturedata" placeholder=""></td>
+        <td colspan="4">商标</td>
+        <td><input type="text" name="sjcptrademark" placeholder=""></td>
+      </tr>
+      <tr>
+        <td colspan="2">抽样数量</td>
+        <td><input type="text" name="sjcpsamplingquantity" placeholder=""></td>
+        <td colspan="4">产品等级</td>
+        <td><input type="text" name="sjcpgrade" placeholder=""></td>
+      </tr>
+      <tr>
+        <td colspan="2">抽样基数/批量</td>
+        <td><input type="text" name="sjcpsamplingbase" placeholder=""></td>
+        <td colspan="4">标注执行标准/技术文件</td>
+        <td><input type="text" name="sjcpexecutivestandard" placeholder=""></td>
+      </tr>
+      <tr>
+        <td colspan="2">抽样日期</td>
+        <td><input type="text" name="sjcpsamplingdate" placeholder=""></td>
+        <td colspan="4">封样状态</td>
+        <td><input type="text" name="sjcpsealedstate" placeholder=""></td>
+      </tr>
+      <tr>
+        <td colspan="2">备样量</td>
+        <td><input type="text" name="sjcpreadynum" placeholder=""></td>
+        <td colspan="4" rowspan="2">寄送样地点</td>
+        <td rowspan="2" onclick="document.getElementById('aadsafdvev').focus()"><input id="aadsafdvev" type="text" name="sjcpplacedelivery" placeholder=""></td>
+      </tr>
+      <tr>
+        <td colspan="2">封存地点</td>
+        <td><input type="text" name="sjcpstoragelivery" placeholder=""></td>
+        </tr>
+      <tr>
+        <td colspan="2">是否为出口产品</td>
+        <td><input type="checkbox" value="1" name="sjcpisexport">是&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="0" name="sjcpisexport">否</td>
+        <td colspan="4">寄送样截止期日</td>
+        <td><input type="text" name="sjcpclosedate" placeholder=""></td>
+      </tr>
+      <tr>
+        <td colspan="3" rowspan="3">抽<br />样<br />单<br />位</td>
+        <td width="17%">单位名称</td>
+        <td colspan="3">湖南省产商品质量监督检验研究院</td>
+        <td colspan="2">联系人</td>
+        <td colspan="2">康峰</td>
+      </tr>
+      <tr>
+        <td>单位地址</td>
+        <td colspan="3">湖南省长沙市新建西路189号</td>
+        <td colspan="2">联系电话</td>
+        <td colspan="2">0731-89775245</td>
+      </tr>
+      <tr>
+        <td>邮政编码</td>
+        <td colspan="3">41007</td>
+        <td colspan="2">传真</td>
+        <td colspan="2">0731-89775245</td>
+      </tr>
+      <tr>
+        <td colspan="8" rowspan="3" onclick="document.getElementById('jiouhcnw89293').focus()">备注（需要说明的其他问题）<br><br><textarea id="jiouhcnw89293" name="Remarks" cols="80" rows="6"></textarea></td>
+        <td colspan="2" onclick="document.getElementById('xxxahi7ywassye').focus()">项目备案号：<input id="xxxahi7ywassye" type="text" name="xmrecordnumber" placeholder=""></td>
+        <td onclick="document.getElementById('xxxahi7ywyasase').focus()">单价:<input id="xxxahi7ywyasase"  type="text" name="xmprice" placeholder=""></td>
+        </tr>
+      <tr>
+        <td colspan="3">取报告方式：<input type="checkbox" value="1" name="xmcollect">自取&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="0" name="xmcollect">邮寄</td>
+      </tr>
+      <tr>
+        <td height="117" colspan="3">检毕样品的处理：<br /><br /><input type="checkbox" value="1" name="xmcollect">邮寄返回&nbsp;&nbsp;<input type="checkbox" value="0" name="xmcollect">企业自行取回<br /><input type="checkbox" value="0" name="xmcollect">由省质检院处理</td>
+      </tr>
+      <tr>
+        <td height="150" colspan="11" class="signtd">
+          <div class="sign">
+          <div style="border-right: 1px solid #333">
+            <p>受检单位对上述内容无异议<br />受检单位签名(盖章)：</p>
+            <span>
+                签字：<input class="tc" name="sjcompanysign" style="width:150px;border-bottom:1px solid #333; font-size: 16px;" type="text" placeholder="">
+              </span>
+            <span>
+              <input class="tc year" style="width:40px" type="text" placeholder="">年
+              <input class="tc month" style="width:20px" placeholder="">月
+              <input class="tc day" style="width:30px" placeholder="">日
+            </span>
+          </div>
+          <div style="border-right: 1px solid #333">
+            <p>生产单位对上述内容无异议<br />生产单位签名(盖章)：
+            </p>
+            <span>
+              签字：<input class="tc" name="sccompanysign" style="width:150px;border-bottom:1px solid #333; font-size: 16px;" type="text" placeholder="">
+            </span>
+            <span>
+              <input class="tc year" style="width:40px" type="text" placeholder="">年
+              <input class="tc month" style="width:20px" placeholder="">月
+              <input class="tc day" style="width:30px" placeholder="">日
+            </span>
+          </div>
+          <div>
+            <p>抽样人签名(盖章)：</p>
+            <span>
+                签字：<input class="tc" name="cysign" style="width:150px;border-bottom:1px solid #333; font-size: 16px;" type="text" placeholder="">
+              </span>
+            <span>
+              <input class="tc year" style="width:40px" type="text" placeholder="">年
+              <input class="tc month" style="width:20px" placeholder="">月
+              <input class="tc day" style="width:30px" placeholder="">日
+            </span>
+          </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </form>
+  <div class="footer">注：1、技术文件指执行标准外的图纸、技术合同、产品说明书等有关产品技术的文件。<br>2、选择许可证、QS、CCC等类别后，填写相应证书编号。</div>
+  <button id="submit" style="width: 200px;height: 44px;margin-top: 100px">提交</button>
+</div>
+<script>
+$(function(){
+
+    //显示当前时间
+    var date = new Date();
+    var dateParse = {
+        year: date.getFullYear(),
+        month: date.getMonth(),
+        day: date.getDate()
+    }
+    $('.year').val(dateParse.year)
+    $('.month').val(dateParse.month)
+    $('.day').val(dateParse.day)
+
+    //html转图片
+    function htmlCanvas(cb){
+        var targetDom = $(".page");  
+        var copyDom = targetDom.clone();  
+        copyDom.width(targetDom.width() + "px");  
+        copyDom.height(targetDom.height() + "px");  
+        $('body').append(copyDom);
+        html2canvas(copyDom, {
+            onrendered: function(canvas){
+                $(".page")[1].remove()
+                var img = canvas.toDataURL();
+                cb && cb(img)
+            }
+        })
+    }
+
+    //提交
+    $("#submit").click(function(e){
+        // 序列化表单
+        var fromData = $("form").serialize();
+        console.log('序列化后的表单数据:' + fromData)
+
+        htmlCanvas(function(base64){ // 网页截图转成base64
+        console.log("截图base64:")
+        console.log(base64)
+
+        $.ajax({
+            url: '',
+            method: 'post',
+            data:{
+            from: fromData,
+            img: base64
+            }
+        })
+
+        })
+    })
+})
+</script>
+</body>
+</html>

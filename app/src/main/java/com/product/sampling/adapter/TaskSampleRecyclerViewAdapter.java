@@ -23,11 +23,13 @@ import com.product.sampling.R;
 import com.product.sampling.bean.TaskSample;
 import com.product.sampling.ui.PdfDocumentActivity;
 import com.product.sampling.ui.TaskSampleFragment;
+import com.product.sampling.ui.WebViewActivity;
 
 import java.util.List;
 
 public class TaskSampleRecyclerViewAdapter extends RecyclerView.Adapter<TaskSampleRecyclerViewAdapter.ViewHolder> {
 
+    public static final int RequestCodePdf = 101;
     private final List<TaskSample> mValues;
     private final Activity activity;
     private TaskSampleFragment fragment;
@@ -49,9 +51,9 @@ public class TaskSampleRecyclerViewAdapter extends RecyclerView.Adapter<TaskSamp
                         }).setNegativeButton("取消", null).show();
 
             } else if (R.id.btn_edit_check_sheet == view.getId()) {//检查单编辑
-                fragment.startActivityForResult(new Intent(view.getContext(), PdfDocumentActivity.class).putExtra("task", (int) view.getTag()), 1);
+                fragment.startActivityForResult(new Intent(view.getContext(), WebViewActivity.class).putExtra("task", (int) view.getTag()), RequestCodePdf);
             } else if (R.id.btn_edit_handling_sheet == view.getId()) {//处置单编辑
-                view.getContext().startActivity(new Intent(view.getContext(), PdfDocumentActivity.class));
+                fragment.startActivityForResult(new Intent(view.getContext(), WebViewActivity.class).putExtra("task", (int) view.getTag()), RequestCodePdf);
             } else if (R.id.btn_upload_check_sheet == view.getId()) {//检查单上传
 
             } else if (R.id.btn_upload_handling_sheet == view.getId()) {//检查单上传

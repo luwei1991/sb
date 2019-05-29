@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>产品质量监督抽查样品封存和处置通知单</title>
+    <link rel="stylesheet" type="text/css" href="./style/css.css">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="page">
+        <form action="">
+        <p class="title">2018年第五批重点工业产品质量升级监督抽查<br>样品封存和处置通知单</p>
+        <div class="ov bh">
+            <div class="left" style="padding-top: 10px;"><input style="width:200px" type="text" name="companyname" placeholder="">：</div>
+            <div class="right" style="padding-bottom: 20px">编号：<input style="width:200px" name="number" type="text" placeholder=""></div>
+        </div>
+        <div class="text">
+                受<input class="tc" name="entrustedcompany"  style="width:200px" type="text" placeholder="">委托，我单位于
+                <input class="tc" name="entrustedyear" style="width:50px" type="text" placeholder="">年
+                <input class="tc" name="entrustedmonth" style="width:50px" placeholder="">月
+                <input class="tc" name="entrustedday" style="width:50px" placeholder="">日
+                对贵单位生产的：<input name="productname" class="tc" style="width:200px" placeholder="">
+                型号规格：<input name="productmodel" class="tc" style="width:200px" placeholder="">产品进行了
+                <input class="tc" name="level" style="width:70px" placeholder="">级质量监督抽查(产品详细信息见编号为<input class="tc" name="listnumber" type="text" style="width:150px" placeholder="">的抽样单)。
+                现将样品(备用样品)封存于贵单位,请妥善保管该样品(保持封样状态防潮、防火、防损),不得擅自更改、隐匿、处理已抽查封存的样品。
+        </div>
+        <div class="text">
+            若贵单位收到检验结果为合格且对检验结果无异议的，可自行处置样品；若贵单位收到检验结果为不合格的，应当保持封样状态至检验结果异议期满三个月，并按负责监督抽查后处理的质量技术监督部门意见处理样品。<br>特此通知。
+        </div>
+        <div style="padding-top: 50px;height: 140px;">
+            <div class="left">
+                <p style="height: 100px">
+                被抽查企业签字（盖章）<br>
+                我单位已悉知所通知内容，<br>
+                并将按通知内容执行。<br>
+                </p>
+                <p>
+                    <input class="tc year" style="width:40px" type="text" placeholder="">年
+                    <input class="tc month" style="width:20px" placeholder="">月
+                    <input class="tc day" style="width:30px" placeholder="">日
+                </p>
+            </div>
+            <div class="right seal-box">
+                <!-- <div class="seal" style="top: -80px;left: 10px"></div> -->
+                <p style="height: 100px">
+                承检单位签字盖章<br><br>
+                签字：<input class="tc" name="companysign" style="width:150px;border-bottom:1px solid #333; font-size: 16px;" type="text" placeholder="">
+                </p>
+                <p>
+                    <input class="tc year" style="width:40px" type="text" placeholder="">年
+                    <input class="tc month" style="width:20px" placeholder="">月
+                    <input class="tc day" style="width:30px" placeholder="">日
+                </p>
+            </div>
+        </div>
+        <div class="footer">(备注：此表单一式两份，被抽查企业和承检单位各存一份。)</div>
+    </form>
+    <button id="submit" style="width: 200px;height: 44px;margin-top: 100px">提交</button>
+</div>
+
+<script src="./js/js.js"></script>
+            
+</body>
+</html>

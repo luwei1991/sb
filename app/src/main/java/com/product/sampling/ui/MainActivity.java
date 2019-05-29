@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.UserManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -37,6 +38,7 @@ import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.net.response.ResponseTransformer;
 import com.product.sampling.net.schedulers.SchedulerProvider;
+import com.product.sampling.personal.User;
 import com.product.sampling.utils.GdLocationUtil;
 import com.product.sampling.utils.ToastUtil;
 import com.product.sampling.utils.ToastUtils;
@@ -128,7 +130,7 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
     }
 
     private void getData() {
-        disposable = NetWorkManager.getRequest().getNewsList()
+        disposable = NetWorkManager.getRequest().getNewsList(AccountManager.getInstance().getUserId())
                 .compose(ResponseTransformer.handleResult())
                 .compose(SchedulerProvider.getInstance().applySchedulers())
                 .subscribe(news -> {

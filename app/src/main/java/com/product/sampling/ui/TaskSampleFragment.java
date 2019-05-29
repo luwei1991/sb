@@ -50,6 +50,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
+import static com.product.sampling.adapter.TaskSampleRecyclerViewAdapter.RequestCodePdf;
 
 /**
  * 样品信息
@@ -189,14 +190,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     }
 
     private void postSampleByBody() {
-        File file = new File("/storage/emulated/0/table.pdf");
-        if (!file.exists()) {
-            Log.e("file", file.getAbsolutePath());
-            ToastUtil.showToast(getActivity(), "无效文件");
-            return;
-        }
-        RequestBody requestFile = RequestBody.create(MultipartBody.FORM, file);//把文件与类型放入请求体
-
         MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder();
         multipartBodyBuilder.setType(MultipartBody.FORM);
 
@@ -205,15 +198,26 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 .addFormDataPart("id", "7777")
                 .addFormDataPart("islastone", "1")
                 .addFormDataPart("advice.companyname", "1")
-                .addFormDataPart("samplingfile", file.getName(), requestFile)
-                .addFormDataPart("sampling.taskfrom", "1")
-                .addFormDataPart("disposalfile", file.getName(), requestFile);
+                .addFormDataPart("sampling.taskfrom", "1");
 
         if (null == taskDetailViewModel.taskList || taskDetailViewModel.taskList.isEmpty()) {
             ToastUtil.showToast(getActivity(), "请创建样品数据");
             return;
         }
         for (int i = 0; i < taskDetailViewModel.taskList.size(); i++) {
+            File file = new File(taskDetailViewModel.taskList.get(i).checkSheet);
+            if (file.exists()) {
+                Log.e("file", file.getAbsolutePath());
+                RequestBody requestFile = RequestBody.create(MultipartBody.FORM, file);//把文件与类型放入请求体
+                multipartBodyBuilder.addFormDataPart("samplingfile", file.getName(), requestFile);//抽样单
+            }
+            File fileHandle = new File(taskDetailViewModel.taskList.get(i).handleSheet);
+            if (fileHandle.exists()) {
+                Log.e("file", fileHandle.getAbsolutePath());
+                RequestBody requestFile = RequestBody.create(MultipartBody.FORM, fileHandle);//把文件与类型放入请求体
+                multipartBodyBuilder.addFormDataPart("disposalfile", file.getName(), requestFile);//处置单
+            }
+
             List<TaskImageEntity> list = taskDetailViewModel.taskList.get(i).list;
 
             if (null == list || list.isEmpty()) {
@@ -315,7 +319,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                         mRecyclerView.getAdapter().notifyDataSetChanged();
                     }
                     break;
-                case 1:
+                case RequestCodePdf:
                     if (data != null) {
                         int index = data.getIntExtra("task", -1);
                         if (index != -1) {

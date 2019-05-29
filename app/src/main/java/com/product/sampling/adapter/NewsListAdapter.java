@@ -20,7 +20,7 @@ public class NewsListAdapter extends BaseQuickAdapter<New, BaseViewHolder> {
 
     @Override
     protected void convert(BaseViewHolder helper, New item) {
-        helper.setText(R.id.tv_title, item.conent);
+        helper.setText(R.id.tv_title, item.title);
 
     }
 }

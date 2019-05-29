@@ -1,0 +1,104 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+input,textarea{
+    outline: none
+}
+input{
+    border: none;
+    font-size: 14px;
+    line-height: 1.4;
+}
+input[type="text"]{
+  width: 100%
+}
+input[type="checkbox"],input[type="radio"]{
+  margin-right: 3px;
+}
+html,body{
+    background-color: #fff;
+}
+body{
+    font-size: 14px;
+    line-height: 1.4;
+}
+.page{
+    margin: 0 auto;
+    width: 96%;
+    padding: 10px 10px;
+    background-color: #fff;
+}
+.ov{
+    overflow: hidden;
+}
+.left{
+    float: left;
+}
+.right{
+    float: right;
+}
+.tc{
+    text-align: center
+}
+.title{
+    line-height: 1.4;
+    font-size: 16px;
+    text-align: center;
+    padding: 40px 20px;
+}
+.text{
+    text-indent: 2em;
+    line-height: 2.2;
+}
+.bh{
+    padding-bottom: 8px;
+}
+.footer{
+    padding-top: 30px;
+}
+table.tftable {color:#333333;width:100%;border-width: 1px;border-color: #333;border-collapse: collapse;}
+table.tftable th {background-color:#fff;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;text-align:left;}
+table.tftable tr {background-color:#fff;}
+table.tftable td {border-width: 1px;padding: 8px;border-style: solid;border-color: #333;}
+#jiouhcnw89293{
+  line-height: 1.4;
+  resize: none;
+  border: none;
+  font-size: 14px;
+}
+table.tftable td.signtd{
+  padding: 0;
+}
+.sign{
+  height: 100%;
+}
+.sign>div{
+  float: left;
+  width: 33.333%;
+  height: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.sign>div p{
+  height: 80px;
+}
+.sign>div span{
+  display: block;
+  text-align: right;
+  padding-bottom: 10px;
+}
+.seal-box{
+    position: relative;
+}
+.seal{
+    width: 220px;
+    height: 100px;
+    position: absolute;
+    top: -30px;
+    left: 40px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url('../images/20190529142046.png');
+    opacity: 0.8
+}

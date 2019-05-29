@@ -50,8 +50,8 @@ public interface Request {
     @GET("yzm")
     Observable<Response<List<SmsBean>>> getSmsCode(@Query("user_phone") String phone);
 
-    @GET("news")
-    Observable<Response<List<New>>> getNewsList();
+    @GET("app/common/newslist")
+    Observable<Response<List<New>>> getNewsList(@Query("userid") String userid);
 
     @GET("tasklist")
     Observable<Response<List<Task>>> getTaskList();

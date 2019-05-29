@@ -109,5 +109,6 @@ dependencies {
     implementation project(path: ':takephoto_library')
     implementation 'com.android.support:gridlayout-v7:28.+'
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
+    implementation 'com.github.lzyzsd:jsbridge:1.0.4'
 
 }

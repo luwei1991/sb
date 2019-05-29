@@ -96,6 +96,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".ui.WebViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ui.ChangePasswordActivity"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
