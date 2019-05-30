@@ -68,10 +68,11 @@
                 android:text="企业名称" />
 
             <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/companyname"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center"
-                android:text="计划XXX" />
+                android:text="" />
         </LinearLayout>
 
 
@@ -93,28 +94,12 @@
                 android:text="企业地址" />
 
             <androidx.appcompat.widget.AppCompatEditText
-                android:layout_width="100dp"
+                android:id="@+id/companyaddress"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center"
                 android:hint="省" />
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:hint="市" />
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:hint="区" />
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:hint="地址" />
         </LinearLayout>
 
         <LinearLayout
@@ -135,10 +120,11 @@
                 android:text="联系人/电话" />
 
             <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/companytel"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center"
-                android:text="计划XXX" />
+                android:text="" />
         </LinearLayout>
 
         <LinearLayout
@@ -154,10 +140,11 @@
                 android:text="备注" />
 
             <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/remark"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center"
-                android:text="计划XXX" />
+                android:text="" />
         </LinearLayout>
 
         <LinearLayout

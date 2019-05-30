@@ -3,6 +3,7 @@ package com.product.sampling.net.request;
 import com.product.sampling.bean.New;
 import com.product.sampling.bean.SmsBean;
 import com.product.sampling.bean.Task;
+import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskMenu;
 import com.product.sampling.bean.TaskResultBean;
 import com.product.sampling.bean.UserInfoBean;
@@ -113,7 +114,6 @@ public interface Request {
     Call<ResponseBody> uploadaddress(@Part MultipartBody.Part file);
 
     @GET("app/task/taskdetail")
-    Observable<BaseHttpResult<String>> taskdetail(@Query("userid") String userid, @Query("id") String id);
-
+    Observable<BaseHttpResult<TaskEntity>> taskdetail(@Query("userid") String userid, @Query("id") String id);
 
 }

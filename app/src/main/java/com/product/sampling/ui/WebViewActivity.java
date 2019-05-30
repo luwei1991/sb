@@ -47,6 +47,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class WebViewActivity extends AppCompatActivity {
+    public static final String Intent_Order = "order";
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private final int QualityMiddle = 1;
     private final int QualitySmall = 2;
@@ -58,7 +59,13 @@ public class WebViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_webview);
         webView = this.findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("file:///android_asset/2产品质量监督抽查样品封存和处置通知单.html");
+
+        if (1 == getIntent().getIntExtra(Intent_Order, 1)) {
+            webView.loadUrl("file:///android_asset/1产品质量监督抽查-复查抽样单.html");
+        } else {
+            webView.loadUrl("file:///android_asset/2产品质量监督抽查样品封存和处置通知单.html");
+        }
+
         webView.addJavascriptInterface(new JSInterface(), "register_js");
 
         //支持缩放

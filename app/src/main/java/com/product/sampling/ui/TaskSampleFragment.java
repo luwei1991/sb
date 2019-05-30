@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,6 +59,9 @@ import static com.product.sampling.adapter.TaskSampleRecyclerViewAdapter.Request
 public class TaskSampleFragment extends BasePhotoFragment implements View.OnClickListener {
 
     public static final String ARG_ITEM_ID = "item_id";
+    public static final int Select_Check = 101;
+    public static final int Select_Handle = 102;
+
     public static final String TAG = TaskSampleFragment.class.getSimpleName();
     public int selectId = -1;
     /**
@@ -68,7 +72,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     RecyclerView mRecyclerView;
     TaskDetailViewModel taskDetailViewModel;
     private static TaskSampleFragment fragment;
-    Button btnSave;
+    TaskSampleRecyclerViewAdapter adapter;
 
     public TaskSampleFragment() {
     }
@@ -113,18 +117,37 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         if (mItem != null) {
 //            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.details);
         }
-        rootView.findViewById(R.id.tv_create).setOnClickListener(this);
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         mRecyclerView = rootView.findViewById(R.id.item_image_list);
         mRecyclerView.setLayoutManager(linearLayoutManager);
+
         rootView.findViewById(R.id.btn_save).setOnClickListener(this);
         return rootView;
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List list) {
-        recyclerView.setAdapter(new TaskSampleRecyclerViewAdapter(getActivity(), this, list, false));
+        adapter = new TaskSampleRecyclerViewAdapter(R.layout.item_sample_list_content, list, this);
+        adapter.addHeaderView(getHeaderView(), 0);
+        adapter.addHeaderView(getAddView(), 1);
+        recyclerView.setAdapter(adapter);
+    }
+
+    private View getHeaderView() {
+        View view = View.inflate(getContext(), R.layout.layout_task_step, null);
+        TextView tv = view.findViewById(R.id.tv_step_2);
+        tv.setBackgroundResource(R.drawable.bg_circle_blue);
+
+        TextView tvStep = view.findViewById(R.id.tv_step_3);
+        tvStep.setBackgroundResource(R.drawable.bg_circle_blue);
+
+        return view;
+    }
+
+    private View getAddView() {
+        View view = View.inflate(getContext(), R.layout.layout_task_add, null);
+        view.findViewById(R.id.tv_create).setOnClickListener(this);
+        return view;
     }
 
     @Override
@@ -185,8 +208,9 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             sample.title = "北京";
             sample.list = new ArrayList<>();
             taskDetailViewModel.taskList.add(sample);
-            setupRecyclerView(mRecyclerView, taskDetailViewModel.taskList);
         }
+        setupRecyclerView(mRecyclerView, taskDetailViewModel.taskList);
+
     }
 
     private void postSampleByBody() {
@@ -330,6 +354,18 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                         }
                     }
                     break;
+                case Select_Handle:
+                    if (data != null) {
+                        int index = data.getIntExtra("task", -1);
+                    }
+                    break;
+                case Select_Check:
+                    if (data != null) {
+                        int index = data.getIntExtra("task", -1);
+                    }
+                    break;
+
+
             }
         }
     }

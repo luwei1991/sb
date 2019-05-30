@@ -135,7 +135,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                     assert recyclerView != null;
                     setupRecyclerView((RecyclerView) recyclerView, tasks);
                 }, throwable -> {
-                    if (isVisible()){
+                    if (isVisible()) {
                         showToast(((ApiException) throwable).getDisplayMessage());
                     }
                     Log.e("throwable", "" + ((ApiException) throwable).getDisplayMessage());
@@ -149,7 +149,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                 .subscribe(tasks -> {
                     Log.e("tasks", tasks.toString());
                 }, throwable -> {
-                    if (isVisible()){
+                    if (isVisible()) {
                         showToast(((ApiException) throwable).getDisplayMessage());
                     }
 
@@ -221,13 +221,17 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             TaskEntity task = mValues.get(position);
-            holder.mTextViewNum.setText(task.id);
+            holder.mTextViewNum.setText(task.taskCode);
             holder.mTextViewName.setText(task.companyname);
             holder.mTextViewAddress.setText(task.companyaddress);
             holder.mTextViewType.setText("产品类型:" + task.tasktypecount);
             holder.mTextViewStartTime.setText("开始时间：" + task.starttime);
             holder.mTextViewEndTime.setText("结束时间：" + task.endtime);
-            holder.mTextViewCountDown.setText(task.remark);
+            if (task.leftday >= 0) {
+                holder.mTextViewCountDown.setText("剩余" + task.leftday + "天");
+            } else {
+                holder.mTextViewCountDown.setText("超时" + Math.abs(task.leftday) + "天");
+            }
 
             holder.itemView.setTag(task);
             holder.itemView.setOnClickListener(mOnClickListener);

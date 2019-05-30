@@ -10,6 +10,7 @@ import com.product.sampling.utils.ToastUtils;
 
 public class MainApplication extends Application {
     public static MainApplication INSTANCE;
+    public static String myLocation = null;
 
     @Override
     public void onCreate() {
@@ -42,5 +43,13 @@ public class MainApplication extends Application {
         Log.i("mzh", "onTerminate");
         //停止定位服务
         GdLocationUtil.getInstance().destoryLocationService();
+    }
+
+    public static String getMyLocation() {
+        return myLocation;
+    }
+
+    public static void setMyLocation(String myLocation) {
+        MainApplication.myLocation = myLocation;
     }
 }

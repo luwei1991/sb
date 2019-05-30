@@ -11,11 +11,14 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.product.sampling.R;
 import com.product.sampling.bean.TaskEntity;
+import com.product.sampling.manager.AccountManager;
+import com.product.sampling.net.LoadDataModel;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 
 /**

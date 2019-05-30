@@ -1,6 +1,7 @@
 package com.product.sampling.ui;
 
 import android.Manifest;
+import android.app.Application;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -166,6 +167,7 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
                 df.format(date);//定位时间
                 tvTemperature.setText(amapLocation.getCity() + amapLocation.getDistrict());
                 Log.e("amapLocation", amapLocation.toString());
+                MainApplication.INSTANCE.setMyLocation(amapLocation.getLocationDetail());
                 getWeather(amapLocation.getDistrict(), 0);
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。

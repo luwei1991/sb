@@ -8,17 +8,21 @@ import androidx.lifecycle.ViewModel;
 
 import com.luck.picture.lib.entity.LocalMedia;
 import com.product.sampling.bean.LocalMediaInfo;
+import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.bean.TaskMenu;
 import com.product.sampling.bean.TaskSample;
+import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.LoadDataModel;
 import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.net.ZBaseObserver;
+import com.product.sampling.net.request.Request;
 import com.product.sampling.net.response.ResponseTransformer;
 import com.product.sampling.net.schedulers.SchedulerProvider;
 import com.product.sampling.ui.viewmodel.AutoDisposViewModel;
+import com.product.sampling.utils.RxSchedulersHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +30,17 @@ import java.util.List;
 import io.reactivex.disposables.Disposable;
 
 public class TaskDetailViewModel extends AutoDisposViewModel {
+    public boolean isImageRequestFromServer = true;//
+    public boolean isVideoRequestFromServer = true;//
+
     public TaskEntity taskEntity = new TaskEntity();
     public List<TaskSample> taskList = new ArrayList<>();
     public ArrayList<TaskImageEntity> imageList = new ArrayList<>();
     public ArrayList<LocalMediaInfo> videoList = new ArrayList<>();
 
     public MutableLiveData<LoadDataModel<String>> orderLoadLiveData = new MutableLiveData<>();
+    public MutableLiveData<LoadDataModel<TaskEntity>> orderDetailLiveData = new MutableLiveData<>();
+
 
     public void requestOrderList(String symbol, String orderType, int page, boolean isRefrash) {
 
@@ -61,4 +70,20 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
                 });
     }
 
+    public void requestOrderList(String userid, String id) {
+
+        //未登录判断
+
+        orderDetailLiveData.setValue(new LoadDataModel());
+        RetrofitService.createApiService(Request.class)
+                .taskdetail(userid, id)
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<TaskEntity>() {
+                    @Override
+                    public void onSuccess(TaskEntity entity) {
+                        orderDetailLiveData.setValue(new LoadDataModel(entity));
+                    }
+                });
+    }
 }
