@@ -13,8 +13,8 @@ public class TaskSample implements Parcelable {
     public List<LocalMediaInfo> videoList = new ArrayList<>();
     public String handleSheet = "";
     public String checkSheet = "";
-    public HashMap checkInfo;
-    public HashMap handleInfo;
+    public HashMap<String, String> checkInfo = new HashMap<>();
+    public HashMap<String, String> handleInfo = new HashMap<>();
     Advice advice = new Advice();
     Sampling sampling = new Sampling();
     List<Pics> pics = new ArrayList<>();

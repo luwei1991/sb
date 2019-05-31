@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -239,11 +240,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
         multipartBodyBuilder.addFormDataPart("userid", AccountManager.getInstance().getUserId())
                 .addFormDataPart("taskid", taskDetailViewModel.taskEntity.id)
-                .addFormDataPart("id", "7777")
-                .addFormDataPart("islastone", "1")
-                .addFormDataPart("Advice.companyname", "1")
-                .addFormDataPart("sampling.taskfrom", "1");
-
+                .addFormDataPart("id", System.currentTimeMillis() + "")
+                .addFormDataPart("islastone", "1");
         if (null == taskDetailViewModel.taskList || taskDetailViewModel.taskList.isEmpty()) {
             ToastUtil.showToast(getActivity(), "请创建样品数据");
             return;
@@ -255,13 +253,20 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 Log.e("file", file.getAbsolutePath());
                 RequestBody requestFile = RequestBody.create(MultipartBody.FORM, file);//把文件与类型放入请求体
                 multipartBodyBuilder.addFormDataPart("samplingfile", file.getName(), requestFile);//抽样单
-
+                HashMap<String, String> map = taskDetailViewModel.taskList.get(i).checkInfo;
+                for (String s : map.keySet()) {
+                    multipartBodyBuilder.addFormDataPart(s, map.get(s));//抽样单
+                }
             }
             File fileHandle = new File(taskDetailViewModel.taskList.get(i).handleSheet);
             if (fileHandle.exists()) {
                 Log.e("file", fileHandle.getAbsolutePath());
                 RequestBody requestFile = RequestBody.create(MultipartBody.FORM, fileHandle);//把文件与类型放入请求体
                 multipartBodyBuilder.addFormDataPart("disposalfile", file.getName(), requestFile);//处置单
+                HashMap<String, String> map = taskDetailViewModel.taskList.get(i).handleInfo;
+                for (String s : map.keySet()) {
+                    multipartBodyBuilder.addFormDataPart(s, map.get(s));//抽样单
+                }
             }
 
             List<Pics> list = taskDetailViewModel.taskList.get(i).getPics();
@@ -372,8 +377,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                         if (index != -1) {
 
                             //把生成的pdf 赋值给列表
-                            taskDetailViewModel.taskList.get(index).checkSheet = data.getStringExtra("pdf");
-                            taskDetailViewModel.taskList.get(index).handleSheet = data.getStringExtra("pdf");
+
                             mRecyclerView.getAdapter().notifyDataSetChanged();
                             HashMap map = new HashMap();
                             String para = data.getStringExtra("data");
@@ -391,9 +395,11 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                                 }
                                 int pos = data.getIntExtra(Intent_Order, 1);
                                 if (pos == 1) {
+                                    taskDetailViewModel.taskList.get(index).checkSheet = data.getStringExtra("pdf");
                                     taskDetailViewModel.taskList.get(index).checkInfo = map;
                                 } else if (pos == 2) {
                                     taskDetailViewModel.taskList.get(index).handleInfo = map;
+                                    taskDetailViewModel.taskList.get(index).handleSheet = data.getStringExtra("pdf");
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

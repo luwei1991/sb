@@ -30,15 +30,23 @@ connectWebViewJavascriptBridge(function(bridge) {
     // });
 })
 
+function c(){
+    var fromData = $("form").serialize();
+    console.log({
+        type: postType,
+        data: fromData
+    })
+}
+
 
 $(function(){
-    var fromData = $("form").serialize();
-    console.log(
-        JSON.stringify({
-            type: postType,
-            data: fromData
-        })
-    )
+    // var fromData = $("form").serialize();
+    // console.log(
+    //     JSON.stringify({
+    //         type: postType,
+    //         data: fromData
+    //     })
+    // )
     //显示当前时间
     var date = new Date();
     var dateParse = {

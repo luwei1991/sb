@@ -21,147 +21,147 @@
     <table width="100%" class="tftable" cellpadding="10">
       <tr>
         <td colspan="4"><div style="width:100px">任务来源</div></td>
-        <td colspan="2"><input type="text" name="tasksource" placeholder=""></td>
+        <td colspan="2"><input type="text" name="sampling.taskfrom" placeholder=""></td>
         <td colspan="2"><div style="width:80px">任务类别</div></td>
-        <td colspan="3"><input type="text" name="taskcategory" placeholder=""></td>
+        <td colspan="3"><input type="text" name="sampling.tasktype" placeholder=""></td>
       </tr>
       <tr>
-        <td colspan="3" rowspan="3">受<br />检<br />单<br />位</td>
+        <td colspan="3" rowspan="3" align="center">受<br />检<br />单<br />位</td>
         <td>名称</td>
-        <td colspan="2"><input type="text" name="sjunitname" placeholder=""></td>
+        <td colspan="2"><input type="text" name="sampling.producename" placeholder=""></td>
         <td colspan="2">法人代表</td>
-        <td colspan="3"><input type="text" name="sjlegalperson" placeholder=""></td>
+        <td colspan="3"><input type="text" name="sampling.representative" placeholder=""></td>
       </tr>
       <tr>
         <td rowspan="2">通讯地址</td>
-        <td colspan="2" rowspan="2" onclick="document.getElementById('ueiahksa').focus()"><input id="ueiahksa" type="text" name="sjaddress" placeholder=""></td>
-        <td height="38" colspan="2">联系人</td>
-        <td height="38" colspan="3"><input type="text" name="sjcontacts" placeholder=""></td>
+        <td colspan="2" rowspan="2" onclick="document.getElementById('ueiahksa').focus()"><input id="ueiahksa" type="text" name="sampling.addressandname" placeholder=""></td>
+        <td colspan="2">联系人</td>
+        <td colspan="3"><input type="text" name="sjcontacts" placeholder=""></td>
       </tr>
       <tr>
-        <td height="39" colspan="2">电话</td>
-        <td height="39" colspan="3"><input type="text" name="sjphone" placeholder=""></td>
+        <td colspan="2">电话</td>
+        <td colspan="3"><input type="text" name="sjphone" placeholder=""></td>
       </tr>
       <tr>
-        <td colspan="3" rowspan="11">生<br />产<br />单<br />位</td>
+        <td colspan="3" rowspan="11" align="center">生<br />产<br />单<br />位</td>
         <td>单位名称</td>
-        <td colspan="2"><input type="text" name="scunitname" placeholder=""></td>
+        <td colspan="2"><input type="text" name="sampling.producename" placeholder=""></td>
         <td colspan="2" rowspan="11" class="tc">经<br>济<br>类<br>型</td>
         <td width="3%" rowspan="4">内<br />资</td>
-        <td width="12%"><input id="aaa1" type="radio" value="1" name="economictype"><label for="aaa1">国有</label></td>
-        <td width="19%"><input id="aaa2" type="radio" value="2" name="economictype"><label for="aaa2">私营(含个体)</td>
+        <td width="12%"><div style="width:6em"><input id="aaa1" type="radio" value="1" name="sampling.producesamlltype"><label for="aaa1">国有</label></div></td>
+        <td width="19%"><div style="widows: 7em"><input id="aaa2" type="radio" value="2" name="sampling.producesamlltype"><label for="aaa2">私营(含个体)</div></td>
       </tr>
       <tr>
         <td>单位地址</td>
-        <td colspan="2"><input type="text" name="scaddress" placeholder=""></td>
-        <td><input type="radio" id="aaa3" value="3" name="economictype"><label for="aaa3">集体</label></td>
-        <td><input type="radio" id="aaa4" value="4" name="economictype"><label for="aaa4">有限责任公司</label></td>
+        <td colspan="2"><input type="text" name="sampling.produceaddress" placeholder=""></td>
+        <td><input type="radio" id="aaa3" value="3" name="sampling.producesamlltype"><label for="aaa3">集体</label></td>
+        <td><input type="radio" id="aaa4" value="4" name="sampling.producesamlltype"><label for="aaa4">有限责任公司</label></td>
       </tr>
       <tr>
         <td>邮政编码</td>
-        <td colspan="2"><input type="text" name="sczipcode" placeholder=""></td>
-        <td><input type="radio" id="aaa5" value="5" name="economictype"><label for="aaa5">联营</label></td>
-        <td><input type="radio" id="aaa6" value="6" name="economictype"><label for="aaa6">股份有限公司</label></td>
+        <td colspan="2"><input type="text" name="sampling.producezipcode" placeholder=""></td>
+        <td><input type="radio" id="aaa5" value="5" name="sampling.producesamlltype"><label for="aaa5">联营</label></td>
+        <td><input type="radio" id="aaa6" value="6" name="sampling.producesamlltype"><label for="aaa6">股份有限公司</label></td>
       </tr>
       <tr>
         <td>法人代表</td>
-        <td colspan="2"><input type="text" name="sclegalperson" placeholder=""></td>
-        <td><input type="radio" id="aaa7" value="7" name="economictype"><label for="aaa7">股份合作</label></td>
-        <td><input type="radio" id="aaa8" value="8" name="economictype"><label for="aaa8">其他企业</label></td>
+        <td colspan="2"><input type="text" name="sampling.prepresentative" placeholder=""></td>
+        <td><input type="radio" id="aaa7" value="7" name="sampling.producesamlltype"><label for="aaa7">股份合作</label></td>
+        <td><input type="radio" id="aaa8" value="8" name="sampling.producesamlltype"><label for="aaa8">其他企业</label></td>
       </tr>
       <tr>
         <td>联系人</td>
-        <td colspan="2"><input type="text" name="sccontacts" placeholder=""></td>
+        <td colspan="2"><input type="text" name="sampling.produceconman" placeholder=""></td>
         <td rowspan="3">港<br />澳<br />台</td>
-        <td><input type="radio" id="aaa9" value="9" name="economictype"><label for="aaa9">合资经营</label></td>
-        <td><input type="radio" id="aaa10" value="10" name="economictype"><label for="aaa10">合作经营</label></td>
+        <td><input type="radio" id="aaa9" value="9" name="sampling.producesamlltype"><label for="aaa9">合资经营</label></td>
+        <td><input type="radio" id="aaa10" value="10" name="sampling.producesamlltype"><label for="aaa10">合作经营</label></td>
       </tr>
       <tr>
         <td>联系电话</td>
-        <td colspan="2"><input type="text" name="scphone" placeholder=""></td>
-        <td rowspan="2"><input id="aaa11" type="radio" value="11" name="economictype"><label for="aaa11">港澳台独资经营</label></td>
-        <td rowspan="2"><input id="aaa12" type="radio" value="12" name="economictype"><label for="aaa12">港澳台投资股份有限公司</label></td>
+        <td colspan="2"><input type="text" name="sampling.producetel" placeholder=""></td>
+        <td rowspan="2"><input id="aaa11" type="radio" value="11" name="sampling.producesamlltype"><label for="aaa11">港澳台独资经营</label></td>
+        <td rowspan="2"><input id="aaa12" type="radio" value="12" name="sampling.producesamlltype"><label for="aaa12">港澳台投资股份有限公司</label></td>
       </tr>
       <tr>
         <td>营业执照</td>
-        <td colspan="2"><input type="text" name="sclicense" placeholder=""></td>
+        <td colspan="2"><input type="text" name="sampling.producelicense" placeholder=""></td>
       </tr>
       <tr>
         <td>机构代码</td>
-        <td colspan="2"><input type="text" name="scorganizationcode" placeholder=""></td>
+        <td colspan="2"><input type="text" name="sampling.producecode" placeholder=""></td>
         <td rowspan="4">外<br />资</td>
-        <td><input type="radio" id="aaa13" value="13" name="economictype"><label for="aaa13">中外合资</label></td>
-        <td><input type="radio" id="aaa14" value="14" name="economictype"><label for="aaa14">中外合作</label></td>
+        <td><input type="radio" id="aaa13" value="13" name="sampling.producesamlltype"><label for="aaa13">中外合资</label></td>
+        <td><input type="radio" id="aaa14" value="14" name="sampling.producesamlltype"><label for="aaa14">中外合作</label></td>
       </tr>
       <tr>
         <td rowspan="3">企业规模</td>
         <td width="10%">人数</td>
-        <td><input type="text" name="scnum" placeholder=""></td>
-        <td rowspan="3"><input id="aaa15" type="radio" value="15" name="economictype"><label for="aaa15">外资企业</label></td>
-        <td rowspan="3"><input id="aaa16" type="radio" value="16" name="economictype"><label for="aaa16">外商投资股份有限公司</label></td>
+        <td><input type="text" name="sampling.producepcount" placeholder=""></td>
+        <td rowspan="3"><input id="aaa15" type="radio" value="15" name="sampling.producesamlltype"><label for="aaa15">外资企业</label></td>
+        <td rowspan="3"><input id="aaa16" type="radio" value="16" name="sampling.producesamlltype"><label for="aaa16">外商投资股份有限公司</label></td>
       </tr>
       <tr>
         <td>产值</td>
-        <td><input type="text" name="scoutputvalue" placeholder=""></td>
+        <td><input type="text" name="sampling.produceoutput" placeholder=""></td>
       </tr>
       <tr>
         <td>产量</td>
-        <td><input type="text" name="scyield" placeholder=""></td>
+        <td><input type="text" name="sampling.produceharvest" placeholder=""></td>
       </tr>
       <tr>
-        <td colspan="3" rowspan="9">受<br />检<br />产<br />品<br />信<br />息</td>
-        <td colspan="3"><input id="bbb1" type="radio" value="1" name="sjcphaslicence"><label for="bbb1">工业产品生产许可证</label>&nbsp;&nbsp;<input id="bbb2" type="radio" value="2" name="sjcphaslicence"><label for="bbb2">QS</label>&nbsp;&nbsp;<input id="bbb3" type="radio" value="3" name="sjcphaslicence"><label for="bbb3">CCC</label>&nbsp;&nbsp;<input id="bbb4" type="radio" value="4" name="sjcphaslicence"><label for="bbb4">其他</label></td>
+        <td colspan="3" rowspan="9" align="center">受<br />检<br />产<br />品<br />信<br />息</td>
+        <td colspan="3"><input id="bbb1" type="radio" value="1" name="sampling.productnumtype"><label for="bbb1">工业产品生产许可证</label>&nbsp;&nbsp;<input id="bbb2" type="radio" value="2" name="sampling.productnumtype"><label for="bbb2">QS</label>&nbsp;&nbsp;<input id="bbb3" type="radio" value="3" name="sampling.productnumtype"><label for="bbb3">CCC</label>&nbsp;&nbsp;<input id="bbb4" type="radio" value="4" name="sampling.productnumtype"><label for="bbb4">其他</label></td>
         <td colspan="4">证书编号</td>
-        <td><input type="text" name="sjcpcertificatenum" placeholder=""></td>
+        <td><input type="text" name="sampling.productnum" placeholder=""></td>
       </tr>
       <tr>
         <td colspan="2">产品名称</td>
-        <td width="28%"><input type="text" name="sjcpname" placeholder=""></td>
+        <td width="28%"><input type="text" name="sampling.productname" placeholder=""></td>
         <td colspan="4">规格型号</td>
-        <td><input type="text" name="sjcpmodel" placeholder=""></td>
+        <td><input type="text" name="sampling.productmodel" placeholder=""></td>
       </tr>
       <tr>
         <td colspan="2">生产日期/编号</td>
-        <td><input type="text" name="sjcpmanufacturedata" placeholder=""></td>
+        <td><input type="text" name="sampling.productbnum" placeholder=""></td>
         <td colspan="4">商标</td>
-        <td><input type="text" name="sjcptrademark" placeholder=""></td>
+        <td><input type="text" name="sampling.productmark" placeholder=""></td>
       </tr>
       <tr>
         <td colspan="2">抽样数量</td>
-        <td><input type="text" name="sjcpsamplingquantity" placeholder=""></td>
+        <td><input type="text" name="sampling.samplingcount" placeholder=""></td>
         <td colspan="4">产品等级</td>
-        <td><input type="text" name="sjcpgrade" placeholder=""></td>
+        <td><input type="text" name="sampling.productlevel" placeholder=""></td>
       </tr>
       <tr>
         <td colspan="2">抽样基数/批量</td>
-        <td><input type="text" name="sjcpsamplingbase" placeholder=""></td>
+        <td><input type="text" name="sampling.productpl" placeholder=""></td>
         <td colspan="4">标注执行标准/技术文件</td>
-        <td><input type="text" name="sjcpexecutivestandard" placeholder=""></td>
+        <td><input type="text" name="sampling.dostandard" placeholder=""></td>
       </tr>
       <tr>
         <td colspan="2">抽样日期</td>
         <td><input type="text" name="sjcpsamplingdate" placeholder=""></td>
         <td colspan="4">封样状态</td>
-        <td><input type="text" name="sjcpsealedstate" placeholder=""></td>
+        <td><input type="text" name="sampling.encapsulationstate" placeholder=""></td>
       </tr>
       <tr>
         <td colspan="2">备样量</td>
         <td><input type="text" name="sjcpreadynum" placeholder=""></td>
         <td colspan="4" rowspan="2">寄送样地点</td>
-        <td rowspan="2" onclick="document.getElementById('aadsafdvev').focus()"><input id="aadsafdvev" type="text" name="sjcpplacedelivery" placeholder=""></td>
+        <td rowspan="2" onclick="document.getElementById('aadsafdvev').focus()"><input id="aadsafdvev" type="text" name="sampling.sendaddress" placeholder=""></td>
       </tr>
       <tr>
         <td colspan="2">封存地点</td>
-        <td><input type="text" name="sjcpstoragelivery" placeholder=""></td>
+        <td><input type="text" name="sampling.rvandfc" placeholder=""></td>
         </tr>
       <tr>
         <td colspan="2">是否为出口产品</td>
-        <td><input type="radio" value="1" id="ccc1" name="sjcpisexport"><label for="ccc1">是</label>&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="ccc2" value="0" name="sjcpisexport"><label for="ccc2">否</label></td>
+        <td><input type="radio" value="1" id="ccc1" name="sampling.export"><label for="ccc1">是</label>&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="ccc2" value="0" name="sampling.export"><label for="ccc2">否</label></td>
         <td colspan="4">寄送样截止期日</td>
-        <td><input type="text" name="sjcpclosedate" placeholder=""></td>
+        <td><input type="text" name="sampling.endtime" placeholder=""></td>
       </tr>
       <tr>
-        <td colspan="3" rowspan="3">抽<br />样<br />单<br />位</td>
+        <td colspan="3" rowspan="3" align="center">抽<br />样<br />单<br />位</td>
         <td width="17%">单位名称</td>
         <td colspan="3">湖南省产商品质量监督检验研究院</td>
         <td colspan="2">联系人</td>
@@ -188,44 +188,44 @@
         <td colspan="3">取报告方式：<input id="ddd1" type="radio" value="1" name="xmcollect"><label for="ddd1">自取</label>&nbsp;&nbsp;&nbsp;&nbsp;<input id="ddd2" type="radio" value="0" name="xmcollect"><label for="ddd2">邮寄</label></td>
       </tr>
       <tr>
-        <td height="117" colspan="3">检毕样品的处理：<br /><br /><input id="eee1" type="radio" value="1" name="xmcollect"><label for="eee1">邮寄返回</label>&nbsp;&nbsp;<input id="eee2" type="radio" value="0" name="xmcollect"><label for="eee2">企业自行取回</label><br /><input id="eee3" type="radio" value="0" name="xmcollect"><label for="eee3">由省质检院处理</label></td>
+        <td height="60" colspan="3">检毕样品的处理：<br /><br /><input id="eee1" type="radio" value="1" name="xmcollect"><label for="eee1">邮寄返回</label>&nbsp;&nbsp;<input id="eee2" type="radio" value="0" name="xmcollect"><label for="eee2">企业自行取回</label><br /><input id="eee3" type="radio" value="0" name="xmcollect"><label for="eee3">由省质检院处理</label></td>
       </tr>
       <tr>
-        <td height="150" colspan="11" class="signtd">
+        <td height="100" colspan="11" class="signtd">
           <div class="sign">
           <div style="border-right: 1px solid #333">
             <p>受检单位对上述内容无异议<br />受检单位签名(盖章)：</p>
             <span>
-                签字：<input class="tc" name="sjcompanysign" style="width:150px;border-bottom:1px solid #333; font-size: 16px;" type="text" placeholder="">
+                签字：<input class="tc" name="sjcompanysign" style="width:100px;border-bottom:1px solid #333; font-size: 16px;" type="text" placeholder="">
               </span>
             <span>
-              <input class="tc year" style="width:40px" type="text" placeholder="">年
-              <input class="tc month" style="width:20px" placeholder="">月
-              <input class="tc day" style="width:30px" placeholder="">日
+              <input class="tc year" name="sjcompanyyear" style="width:40px" type="text" placeholder="">年
+              <input class="tc month" name="sjcompanymonth" style="width:20px" placeholder="">月
+              <input class="tc day" name="sjcompanyday" style="width:30px" placeholder="">日
             </span>
           </div>
           <div style="border-right: 1px solid #333">
             <p>生产单位对上述内容无异议<br />生产单位签名(盖章)：
             </p>
             <span>
-              签字：<input class="tc" name="sccompanysign" style="width:150px;border-bottom:1px solid #333; font-size: 16px;" type="text" placeholder="">
+              签字：<input class="tc" name="sccompanysign" style="width:100px;border-bottom:1px solid #333; font-size: 16px;" type="text" placeholder="">
             </span>
             <span>
-              <input class="tc year" style="width:40px" type="text" placeholder="">年
-              <input class="tc month" style="width:20px" placeholder="">月
-              <input class="tc day" style="width:30px" placeholder="">日
+              <input class="tc year" name="sccompanyyear" style="width:40px" type="text" placeholder="">年
+              <input class="tc month" name="sccompanymonth" style="width:20px" placeholder="">月
+              <input class="tc day" name="sccompanyday" style="width:30px" placeholder="">日
             </span>
           </div>
           <div class="seal-box">
-            <div class="seal"></div>
+            <img class="seal" onclick="document.getElementById('uuahbaucgy9').focus()" src="./images/20190529142046.png" alt="">
             <p>抽样人签名(盖章)：</p>
             <span>
-                签字：<input class="tc" name="cysign" style="width:150px;border-bottom:1px solid #333; font-size: 16px;" type="text" placeholder="">
+                签字：<input class="tc" id="uuahbaucgy9" name="cysign" style="width:100px;border-bottom:1px solid #333; font-size: 16px;" type="text" placeholder="">
               </span>
             <span>
-              <input class="tc year" style="width:40px" type="text" placeholder="">年
-              <input class="tc month" style="width:20px" placeholder="">月
-              <input class="tc day" style="width:30px" placeholder="">日
+              <input class="tc year" name="cyyear" style="width:40px" type="text" placeholder="">年
+              <input class="tc month" name="cymonth" style="width:20px" placeholder="">月
+              <input class="tc day" name="cyday" style="width:30px" placeholder="">日
             </span>
           </div>
           </div>
@@ -234,7 +234,6 @@
     </table>
   </form>
   <div class="footer">注：1、技术文件指执行标准外的图纸、技术合同、产品说明书等有关产品技术的文件。<br>2、选择许可证、QS、CCC等类别后，填写相应证书编号。</div>
-  <button id="submit" style="width: 200px;height: 44px;margin-top: 100px">提交</button>
 </div>
 
 <script type="text/javascript">
