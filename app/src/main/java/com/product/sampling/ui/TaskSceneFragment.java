@@ -219,6 +219,13 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 .addFormDataPart("id", taskDetailViewModel.taskEntity.id)
                 .addFormDataPart("taskisok", "0")
                 .addFormDataPart("samplecount", "1");
+
+        if (null != MainApplication.INSTANCE.getMyLocation()) {
+            multipartBodyBuilder.addFormDataPart("taskaddress", MainApplication.INSTANCE.getMyLocation().getAddress() + "")
+                    .addFormDataPart("longitude", MainApplication.INSTANCE.getMyLocation().getLongitude() + "")
+                    .addFormDataPart("latitude", MainApplication.INSTANCE.getMyLocation().getLatitude() + "");
+        }
+
         boolean hasData = false;
         if (!taskDetailViewModel.isImageRequestFromServer && null != taskDetailViewModel.imageList && !taskDetailViewModel.imageList.isEmpty()) {
             for (int i = 0; i < taskDetailViewModel.imageList.size(); i++) {

@@ -167,7 +167,7 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
                 df.format(date);//定位时间
                 tvTemperature.setText(amapLocation.getCity() + amapLocation.getDistrict());
                 Log.e("amapLocation", amapLocation.toString());
-                MainApplication.INSTANCE.setMyLocation(amapLocation.getLocationDetail());
+                MainApplication.INSTANCE.setMyLocation(amapLocation);
                 getWeather(amapLocation.getDistrict(), 0);
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。

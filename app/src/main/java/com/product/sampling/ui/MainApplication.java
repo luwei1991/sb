@@ -3,6 +3,7 @@ package com.product.sampling.ui;
 import android.app.Application;
 import android.util.Log;
 
+import com.amap.api.location.AMapLocation;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.utils.GdLocationUtil;
@@ -10,7 +11,7 @@ import com.product.sampling.utils.ToastUtils;
 
 public class MainApplication extends Application {
     public static MainApplication INSTANCE;
-    public static String myLocation = null;
+    public static AMapLocation myLocation = null;
 
     @Override
     public void onCreate() {
@@ -45,11 +46,11 @@ public class MainApplication extends Application {
         GdLocationUtil.getInstance().destoryLocationService();
     }
 
-    public static String getMyLocation() {
+    public static AMapLocation getMyLocation() {
         return myLocation;
     }
 
-    public static void setMyLocation(String myLocation) {
-        MainApplication.myLocation = myLocation;
+    public void setMyLocation(AMapLocation myLocation) {
+        this.myLocation = myLocation;
     }
 }
