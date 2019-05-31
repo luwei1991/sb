@@ -40,6 +40,7 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
 
     public MutableLiveData<LoadDataModel<String>> orderLoadLiveData = new MutableLiveData<>();
     public MutableLiveData<LoadDataModel<TaskEntity>> orderDetailLiveData = new MutableLiveData<>();
+    public MutableLiveData<LoadDataModel<List<TaskSample>>> sampleDetailLiveData = new MutableLiveData<>();
 
 
     public void requestOrderList(String symbol, String orderType, int page, boolean isRefrash) {
@@ -50,11 +51,7 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
         NetWorkManager.getRequest().getArea(null, null)
                 .compose(ResponseTransformer.handleResult())
                 .compose(SchedulerProvider.getInstance().applySchedulers())
-                .subscribe(new ZBaseObserver<TaskMenu>() {
-                    @Override
-                    public void onSuccess(TaskMenu balanceEntity) {
-                        orderLoadLiveData.postValue(new LoadDataModel(balanceEntity));
-                    }
+                .subscribe(new ZBaseObserver<List<TaskMenu>>() {
 
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -66,6 +63,11 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
                     public void onFailure(int code, String message) {
                         super.onFailure(code, message);
                         orderLoadLiveData.postValue(new LoadDataModel<>(code, message));
+                    }
+
+                    @Override
+                    public void onSuccess(List<TaskMenu> taskMenus) {
+                        orderLoadLiveData.postValue(new LoadDataModel(taskMenus));
                     }
                 });
     }
@@ -86,4 +88,23 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
                     }
                 });
     }
+
+    public void requestTasksamples(String userid, String id) {
+
+        //未登录判断
+
+        sampleDetailLiveData.setValue(new LoadDataModel());
+        RetrofitService.createApiService(Request.class)
+                .tasksamples(userid, id)
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<List<TaskSample>>() {
+                    @Override
+                    public void onSuccess(List<TaskSample> entity) {
+                        sampleDetailLiveData.setValue(new LoadDataModel(entity));
+                    }
+                });
+    }
+
+
 }

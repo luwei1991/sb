@@ -8,6 +8,5 @@ import org.devio.takephoto.model.TImage;
 public class TaskImageEntity extends TImage {
     public String title = "";
 
-
 }
 

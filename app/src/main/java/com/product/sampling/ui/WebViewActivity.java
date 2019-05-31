@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
@@ -30,12 +31,16 @@ import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.ScreenUtils;
 import com.product.sampling.utils.ToastUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
@@ -52,6 +57,7 @@ public class WebViewActivity extends AppCompatActivity {
     private final int QualityMiddle = 1;
     private final int QualitySmall = 2;
     BridgeWebView webView;
+    public static String para;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,13 +89,14 @@ public class WebViewActivity extends AppCompatActivity {
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                KeyboardUtils.closeKeyboard(WebViewActivity.this);
-                verifyStoragePermissions(WebViewActivity.this);
 
                 webView.send("requestform", new CallBackFunction() {
                     @Override
                     public void onCallBack(String data) { //js回传的数据
-                        Toast.makeText(WebViewActivity.this, data, Toast.LENGTH_LONG).show();
+                        para = data;
+
+                        KeyboardUtils.closeKeyboard(WebViewActivity.this);
+                        verifyStoragePermissions(WebViewActivity.this);
                     }
                 });
             }
@@ -295,7 +302,7 @@ public class WebViewActivity extends AppCompatActivity {
                     public void onComplete() {
                         Toast.makeText(WebViewActivity.this, "生成table.pdf成功,请查看目录" + path, Toast.LENGTH_LONG).show();
                         if (null != getIntent()) {
-                            setResult(RESULT_OK, getIntent().putExtra("pdf", path));
+                            setResult(RESULT_OK, getIntent().putExtra("pdf", path).putExtra("data", para));
                             finish();
                         }
 //                        hideLoading();

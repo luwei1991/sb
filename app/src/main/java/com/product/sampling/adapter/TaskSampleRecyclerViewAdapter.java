@@ -2,6 +2,7 @@ package com.product.sampling.adapter;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,6 +33,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
 
     public static final int RequestCodePdf = 99;
     private TaskSampleFragment fragment;
+    boolean isLocalData;
 
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -40,7 +42,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                 fragment.selectPhoto(10, false, false, false, (int) view.getTag());
             } else if (R.id.iv_reduce == view.getId() || R.id.iv_reduce_video == view.getId()) {
                 int index = (int) view.getTag();
-                new AlertDialog.Builder(fragment.getContext()).setTitle("确认删除" + mData.get(index).title + "的样品信息吗?")
+                new AlertDialog.Builder(fragment.getContext()).setTitle("确认删除" + mData.get(index).getRemarks() + "的样品信息吗?")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -194,11 +196,28 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
 
     @Override
     protected void convert(ViewHolder holder, TaskSample task) {
-        int position = holder.getAdapterPosition() - 1 >= 0 ? holder.getAdapterPosition() - 1 : 0;
-        holder.mTextViewTitle.setText(task.title + "");
 
-        holder.mTextViewHandleSheet.setText(task.handleSheet + "");
-        holder.mTextViewCheckSheet.setText(task.checkSheet + "");
+        int position = holder.getAdapterPosition() - 1 >= 0 ? holder.getAdapterPosition() - 1 : 0;
+
+        holder.mTextViewTitle.setText(TextUtils.isEmpty(task.getRemarks())?"":task.getRemarks());
+        if (task.isLocalData) {
+            holder.mTextViewHandleSheet.setText(task.handleSheet + "");
+            holder.mTextViewCheckSheet.setText(task.checkSheet + "");
+            holder.mImageViewAdd.setVisibility(View.VISIBLE);
+            holder.mBtnEditCheck.setVisibility(View.VISIBLE);
+            holder.mBtnEditHandle.setVisibility(View.VISIBLE);
+            holder.mBtnUploadHandle.setVisibility(View.VISIBLE);
+            holder.mBtnUploadCheck.setVisibility(View.VISIBLE);
+        } else {
+            holder.mTextViewHandleSheet.setText(task.getAdvice().getId() + "");
+            holder.mTextViewCheckSheet.setText(task.getSampling().getId() + "");
+            holder.mImageViewAdd.setVisibility(View.INVISIBLE);
+            holder.mBtnEditCheck.setVisibility(View.INVISIBLE);
+            holder.mBtnEditHandle.setVisibility(View.INVISIBLE);
+            holder.mBtnUploadHandle.setVisibility(View.INVISIBLE);
+            holder.mBtnUploadCheck.setVisibility(View.INVISIBLE);
+        }
+
 
         holder.mImageViewAdd.setTag(position);
         holder.mImageViewAdd.setOnClickListener(mOnClickListener);
@@ -227,7 +246,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         holder.mRecyclerViewImage.setLayoutManager(linearLayoutManager);
 
-        holder.mRecyclerViewImage.setAdapter(new ImageAndTextRecyclerViewAdapter(holder.itemView.getContext(), task.list, false));
+        holder.mRecyclerViewImage.setAdapter(new ImageSampleRecyclerViewAdapter(holder.itemView.getContext(), task.getPics(), task.isLocalData));
 
         linearLayoutManager = new LinearLayoutManager(holder.itemView.getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -236,10 +255,10 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
 
     }
 
-    public TaskSampleRecyclerViewAdapter(int layoutResId, @Nullable List<TaskSample> data, TaskSampleFragment fragment) {
+    public TaskSampleRecyclerViewAdapter(int layoutResId, @Nullable List<TaskSample> data, TaskSampleFragment fragment, boolean isLocalData) {
         super(layoutResId, data);
         this.fragment = fragment;
-
+        this.isLocalData = isLocalData;
     }
 
     class ViewHolder extends BaseViewHolder {

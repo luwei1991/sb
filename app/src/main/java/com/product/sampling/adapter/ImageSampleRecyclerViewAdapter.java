@@ -3,6 +3,7 @@ package com.product.sampling.adapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,40 +13,32 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
-import com.luck.picture.lib.PictureExternalPreviewActivity;
-import com.luck.picture.lib.PictureSelector;
-import com.luck.picture.lib.config.PictureConfig;
-import com.luck.picture.lib.entity.LocalMedia;
 import com.product.sampling.R;
+import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.ui.TaskDetailActivity;
-import com.product.sampling.ui.TaskListFragment;
 
-import org.devio.takephoto.model.TImage;
-
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageAndTextRecyclerViewAdapter.ViewHolder> {
+import static com.product.sampling.Constants.IMAGE_BASE_URL;
 
-    private final List<TaskImageEntity> mValues;
+public class ImageSampleRecyclerViewAdapter extends RecyclerView.Adapter<ImageSampleRecyclerViewAdapter.ViewHolder> {
+
+    private final List<Pics> mValues;
     private boolean isLocalData;
     private int taskPostion = -1;//当前图片列表所属样品id
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            if (!isLocalData) return;
             if (view.getId() == R.id.iv_task) {
                 view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task", (Task) view.getTag()));
             } else {
-
                 showListDialog(view.getContext(), (int) view.getTag());
             }
         }
@@ -69,7 +62,7 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         //按下确定键后的事件
                                         String text = et.getText().toString();
-                                        mValues.get(taskPostion).title = text;
+                                        mValues.get(taskPostion).setRemarks(text);
                                         notifyDataSetChanged();
                                     }
                                 }).setNegativeButton("取消", null).show();
@@ -85,16 +78,16 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
         listDialog.show();
     }
 
-    public ImageAndTextRecyclerViewAdapter(Context parent,
-                                           List<TaskImageEntity> items,
-                                           boolean isLocalData) {
+    public ImageSampleRecyclerViewAdapter(Context parent,
+                                          List<Pics> items,
+                                          boolean isLocalData) {
         mValues = items;
         this.isLocalData = isLocalData;
     }
 
-    public ImageAndTextRecyclerViewAdapter(Context parent,
-                                           List<TaskImageEntity> items,
-                                           int pos) {
+    public ImageSampleRecyclerViewAdapter(Context parent,
+                                          List<Pics> items,
+                                          int pos) {
         mValues = items;
         taskPostion = pos;
     }
@@ -108,14 +101,18 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TaskImageEntity task = mValues.get(position);
-        holder.mTextViewTitle.setText(task.title + "");
+        Pics task = mValues.get(position);
+        holder.mTextViewTitle.setText(TextUtils.isEmpty(task.getRemarks()) ? "" : task.getRemarks());
         if (taskPostion != -1) {
             holder.mImageView.setTag(taskPostion);
         }
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(mOnClickListener);
-        Glide.with(holder.itemView.getContext()).load(task.getOriginalPath()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);
+        if (isLocalData) {
+            Glide.with(holder.itemView.getContext()).load(task.getOriginalPath()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);
+        } else {
+            Glide.with(holder.itemView.getContext()).load(IMAGE_BASE_URL + task.getId()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);
+        }
     }
 
     @Override

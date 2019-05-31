@@ -12,6 +12,8 @@ public class TaskMenu implements Parcelable {
     String type;
     String label;
 
+
+
     protected TaskMenu(Parcel in) {
     }
 

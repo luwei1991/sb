@@ -226,10 +226,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 multipartBodyBuilder.addFormDataPart("picstrs", taskDetailViewModel.imageList.get(i).title)
                         .addFormDataPart("uploadpics", f.getName(), requestImage);
             }
-        }
-
-
-        if (!taskDetailViewModel.isVideoRequestFromServer && null != taskDetailViewModel.videoList && !taskDetailViewModel.videoList.isEmpty()) {
+        } else if (!taskDetailViewModel.isVideoRequestFromServer && null != taskDetailViewModel.videoList && !taskDetailViewModel.videoList.isEmpty()) {
             for (int i = 0; i < taskDetailViewModel.videoList.size(); i++) {
                 File f = new File(taskDetailViewModel.videoList.get(i).getPath());
                 if (!f.exists()) {
@@ -241,6 +238,9 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 multipartBodyBuilder.addFormDataPart("videostrs", taskDetailViewModel.videoList.get(i).title)
                         .addFormDataPart("uploadvideos", f.getName(), requestImage);
             }
+        } else {
+            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "请先选择图片或者视频");
+            return;
         }
         showLoadingDialog();
         RetrofitService.createApiService(Request.class)
@@ -251,7 +251,11 @@ public class TaskSceneFragment extends BasePhotoFragment {
                     @Override
                     public void onSuccess(String s) {
                         dismissLoadingDialog();
-                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加成功" + s);
+                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加成功,现场id为" + s);
+
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.item_detail_container, TaskSampleFragment.newInstance(taskDetailViewModel.taskEntity))
+                                .commit();
                     }
 
                     @Override
@@ -271,7 +275,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List task) {
-        ImageAndTextRecyclerViewAdapter adapter = new ImageAndTextRecyclerViewAdapter(getActivity(), task, false);
+        ImageAndTextRecyclerViewAdapter adapter = new ImageAndTextRecyclerViewAdapter(getActivity(), task, true);
         recyclerView.setAdapter(adapter);
     }
 

@@ -6,6 +6,7 @@ import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskMenu;
 import com.product.sampling.bean.TaskResultBean;
+import com.product.sampling.bean.TaskSample;
 import com.product.sampling.bean.UserInfoBean;
 import com.product.sampling.httpmoudle.BaseHttpResult;
 import com.product.sampling.net.response.Response;
@@ -83,7 +84,7 @@ public interface Request {
      * @return
      */
     @GET("app/task/getarea")
-    Observable<Response<TaskMenu>> getArea(@Query("areaid") String areaid, @Query("type") String type);
+    Observable<Response<List<TaskMenu>>> getArea(@Query("areaid") String areaid, @Query("type") String type);
 
     /**
      * 修改图像接口
@@ -115,5 +116,7 @@ public interface Request {
 
     @GET("app/task/taskdetail")
     Observable<BaseHttpResult<TaskEntity>> taskdetail(@Query("userid") String userid, @Query("id") String id);
+    @GET("app/task/tasksamples")
+    Observable<BaseHttpResult<List<TaskSample>>> tasksamples(@Query("userid") String userid, @Query("id") String id);
 
 }

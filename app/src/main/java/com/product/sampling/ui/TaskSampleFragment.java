@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,12 +28,15 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.product.sampling.R;
 import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
 import com.product.sampling.bean.LocalMediaInfo;
+import com.product.sampling.bean.Pics;
+import com.product.sampling.bean.Sampling;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.bean.TaskSample;
 import com.product.sampling.dummy.DummyContent;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
+import com.product.sampling.net.LoadDataModel;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
 import com.product.sampling.photo.BasePhotoFragment;
@@ -41,9 +45,12 @@ import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.ToastUtil;
 
 import org.devio.takephoto.model.TImage;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.disposables.Disposable;
@@ -52,6 +59,7 @@ import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
 import static com.product.sampling.adapter.TaskSampleRecyclerViewAdapter.RequestCodePdf;
+import static com.product.sampling.ui.WebViewActivity.Intent_Order;
 
 /**
  * 样品信息
@@ -126,8 +134,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         return rootView;
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List list) {
-        adapter = new TaskSampleRecyclerViewAdapter(R.layout.item_sample_list_content, list, this);
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List list, boolean isLocalData) {
+        adapter = new TaskSampleRecyclerViewAdapter(R.layout.item_sample_list_content, list, this, isLocalData);
         adapter.addHeaderView(getHeaderView(), 0);
         adapter.addHeaderView(getAddView(), 1);
         recyclerView.setAdapter(adapter);
@@ -152,17 +160,17 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
     @Override
     public void showResultImages(ArrayList<TImage> images, int pos) {
-        ArrayList<TaskImageEntity> imageList = new ArrayList<>();
+        List<Pics> imageList = new ArrayList<>();
         for (TImage image :
                 images) {
-            TaskImageEntity taskImageEntity = new TaskImageEntity();
-            taskImageEntity.setCompressPath(image.getCompressPath());
-            taskImageEntity.setOriginalPath(image.getOriginalPath());
-            taskImageEntity.setFromType(image.getFromType());
-            imageList.add(taskImageEntity);
+            Pics pics = new Pics();
+            pics.setCompressPath(image.getCompressPath());
+            pics.setOriginalPath(image.getOriginalPath());
+            pics.setFromType(image.getFromType());
+            imageList.add(pics);
         }
         if (pos > -1 && taskDetailViewModel.taskList.size() > pos) {
-            taskDetailViewModel.taskList.get(pos).list = imageList;
+            taskDetailViewModel.taskList.get(pos).setPics(imageList);
         }
         mRecyclerView.getAdapter().notifyDataSetChanged();
     }
@@ -185,15 +193,17 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
         } else if (v.getId() == R.id.btn_save) {
             postSampleByBody();
-
+        } else if (R.id.btn_save_upload == v.getId()) {
+            postSampleByBody();
         }
     }
 
     void createNewSample(String text) {
         if (null != text && !text.isEmpty()) {
             TaskSample sample = new TaskSample();
-            sample.title = text;
+            sample.setRemarks(text);
             sample.list = new ArrayList<>();
+            sample.isLocalData = true;
             taskDetailViewModel.taskList.add(sample);
             mRecyclerView.getAdapter().notifyDataSetChanged();
         }
@@ -205,12 +215,22 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         taskDetailViewModel = ViewModelProviders.of(getActivity()).get(TaskDetailViewModel.class);
         if (taskDetailViewModel.taskList.isEmpty()) {
             TaskSample sample = new TaskSample();
-            sample.title = "北京";
+            sample.setRemarks("北京");
             sample.list = new ArrayList<>();
             taskDetailViewModel.taskList.add(sample);
         }
-        setupRecyclerView(mRecyclerView, taskDetailViewModel.taskList);
+        setupRecyclerView(mRecyclerView, taskDetailViewModel.taskList, true);
 
+        taskDetailViewModel.requestTasksamples(AccountManager.getInstance().getUserId(), taskDetailViewModel.taskEntity.id);
+        taskDetailViewModel.sampleDetailLiveData.observe(this, new Observer<LoadDataModel<List<TaskSample>>>() {
+            @Override
+            public void onChanged(LoadDataModel<List<TaskSample>> taskEntityLoadDataModel) {
+                if (taskEntityLoadDataModel.isSuccess()) {
+                    taskDetailViewModel.taskList = taskEntityLoadDataModel.getData();
+                    setupRecyclerView(mRecyclerView, taskDetailViewModel.taskList, false);
+                }
+            }
+        });
     }
 
     private void postSampleByBody() {
@@ -221,7 +241,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 .addFormDataPart("taskid", taskDetailViewModel.taskEntity.id)
                 .addFormDataPart("id", "7777")
                 .addFormDataPart("islastone", "1")
-                .addFormDataPart("advice.companyname", "1")
+                .addFormDataPart("Advice.companyname", "1")
                 .addFormDataPart("sampling.taskfrom", "1");
 
         if (null == taskDetailViewModel.taskList || taskDetailViewModel.taskList.isEmpty()) {
@@ -229,11 +249,13 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             return;
         }
         for (int i = 0; i < taskDetailViewModel.taskList.size(); i++) {
+            if (!taskDetailViewModel.taskList.get(i).isLocalData) continue;
             File file = new File(taskDetailViewModel.taskList.get(i).checkSheet);
             if (file.exists()) {
                 Log.e("file", file.getAbsolutePath());
                 RequestBody requestFile = RequestBody.create(MultipartBody.FORM, file);//把文件与类型放入请求体
                 multipartBodyBuilder.addFormDataPart("samplingfile", file.getName(), requestFile);//抽样单
+
             }
             File fileHandle = new File(taskDetailViewModel.taskList.get(i).handleSheet);
             if (fileHandle.exists()) {
@@ -242,13 +264,13 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 multipartBodyBuilder.addFormDataPart("disposalfile", file.getName(), requestFile);//处置单
             }
 
-            List<TaskImageEntity> list = taskDetailViewModel.taskList.get(i).list;
+            List<Pics> list = taskDetailViewModel.taskList.get(i).getPics();
 
             if (null == list || list.isEmpty()) {
                 ToastUtil.showToast(getActivity(), "请选择图片");
                 continue;
             }
-            for (TaskImageEntity entity : list) {
+            for (Pics entity : list) {
                 File f = new File(entity.getOriginalPath());
                 if (!f.exists()) {
                     Log.e("file", f.getAbsolutePath());
@@ -256,23 +278,24 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     continue;
                 }
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("picstrs", entity.title)
+                multipartBodyBuilder.addFormDataPart("picstrs", entity.getRemarks() + "")
                         .addFormDataPart("uploadpics", f.getName(), requestImage);
             }
-            List<LocalMediaInfo> listVideo = taskDetailViewModel.taskList.get(i).videoList;
+//            List<LocalMediaInfo> listVideo = taskDetailViewModel.taskList.get(i).videoList;
 
-            for (LocalMediaInfo localMedia :
-                    listVideo) {
-                File f = new File(localMedia.getPath());
-                if (!f.exists()) {
-                    Log.e("file", f.getAbsolutePath());
-                    ToastUtil.showToast(getActivity(), "无效视频");
-                    continue;
-                }
-                RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("videostrs", localMedia.title)
-                        .addFormDataPart("uploadvideos", f.getName(), requestImage);
-            }
+//            for (LocalMediaInfo localMedia :
+//                    listVideo) {
+//                File f = new File(localMedia.getPath());
+//                if (!f.exists()) {
+//                    Log.e("file", f.getAbsolutePath());
+//                    ToastUtil.showToast(getActivity(), "无效视频");
+//                    continue;
+//                }
+//                RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
+//                multipartBodyBuilder.addFormDataPart("videostrs", localMedia.title)
+//                        .addFormDataPart("uploadvideos", f.getName(), requestImage);
+//            }
+
         }
         showLoadingDialog();
 
@@ -285,7 +308,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     public void onSuccess(String s) {
                         dismissLoadingDialog();
                         if (!TextUtils.isEmpty(s)) {
-                            com.product.sampling.maputil.ToastUtil.show(getActivity(), s);
+                            com.product.sampling.maputil.ToastUtil.show(getActivity(), "上传成功,样品记录为" + s);
                         }
                     }
 
@@ -347,21 +370,50 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     if (data != null) {
                         int index = data.getIntExtra("task", -1);
                         if (index != -1) {
+
                             //把生成的pdf 赋值给列表
                             taskDetailViewModel.taskList.get(index).checkSheet = data.getStringExtra("pdf");
                             taskDetailViewModel.taskList.get(index).handleSheet = data.getStringExtra("pdf");
                             mRecyclerView.getAdapter().notifyDataSetChanged();
+                            HashMap map = new HashMap();
+                            String para = data.getStringExtra("data");
+                            JSONObject jsonObject;
+                            try {
+                                jsonObject = new JSONObject(para);
+                                String jsonData = jsonObject.get("data").toString();
+                                String[] sourceStrArray = jsonData.split("&");
+                                for (int i = 0; i < sourceStrArray.length; i++) {
+                                    String[] value = sourceStrArray[i].split("=");
+                                    if (value.length > 1) {
+                                        map.put(value[0], value[1]);
+                                    } else {
+                                    }
+                                }
+                                int pos = data.getIntExtra(Intent_Order, 1);
+                                if (pos == 1) {
+                                    taskDetailViewModel.taskList.get(index).checkInfo = map;
+                                } else if (pos == 2) {
+                                    taskDetailViewModel.taskList.get(index).handleInfo = map;
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Log.e("para", para);
                         }
                     }
                     break;
                 case Select_Handle:
                     if (data != null) {
                         int index = data.getIntExtra("task", -1);
+                        List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
+                        taskDetailViewModel.taskList.get(selectId).handleSheet = selectHandle.get(0).getPath();
                     }
                     break;
                 case Select_Check:
                     if (data != null) {
                         int index = data.getIntExtra("task", -1);
+                        List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
+                        taskDetailViewModel.taskList.get(selectId).checkSheet = selectHandle.get(0).getPath();
                     }
                     break;
 
