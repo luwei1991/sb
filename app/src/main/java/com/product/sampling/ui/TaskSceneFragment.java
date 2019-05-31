@@ -2,7 +2,12 @@ package com.product.sampling.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
+import android.media.ThumbnailUtils;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +49,7 @@ import org.devio.takephoto.model.TImage;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.disposables.Disposable;
@@ -213,7 +219,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 .addFormDataPart("id", taskDetailViewModel.taskEntity.id)
                 .addFormDataPart("taskisok", "0")
                 .addFormDataPart("samplecount", "1");
-
+        boolean hasData = false;
         if (!taskDetailViewModel.isImageRequestFromServer && null != taskDetailViewModel.imageList && !taskDetailViewModel.imageList.isEmpty()) {
             for (int i = 0; i < taskDetailViewModel.imageList.size(); i++) {
                 File f = new File(taskDetailViewModel.imageList.get(i).getOriginalPath());
@@ -225,20 +231,28 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
                 multipartBodyBuilder.addFormDataPart("picstrs", taskDetailViewModel.imageList.get(i).title)
                         .addFormDataPart("uploadpics", f.getName(), requestImage);
+                hasData = true;
             }
-        } else if (!taskDetailViewModel.isVideoRequestFromServer && null != taskDetailViewModel.videoList && !taskDetailViewModel.videoList.isEmpty()) {
-            for (int i = 0; i < taskDetailViewModel.videoList.size(); i++) {
-                File f = new File(taskDetailViewModel.videoList.get(i).getPath());
+        }
+        if (!taskDetailViewModel.isVideoRequestFromServer && null != taskDetailViewModel.taskEntity.voides && !taskDetailViewModel.taskEntity.voides.isEmpty()) {
+
+            for (int i = 0; i < taskDetailViewModel.taskEntity.voides.size(); i++) {
+                if (!taskDetailViewModel.taskEntity.voides.get(i).isLocal) {
+                    continue;
+                }
+                File f = new File(taskDetailViewModel.taskEntity.voides.get(i).getPath());
                 if (!f.exists()) {
                     Log.e("视频", f.getAbsolutePath());
                     com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "无效视频");
                     continue;
                 }
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("videostrs", taskDetailViewModel.videoList.get(i).title)
+                multipartBodyBuilder.addFormDataPart("videostrs", taskDetailViewModel.taskEntity.voides.get(i).title)
                         .addFormDataPart("uploadvideos", f.getName(), requestImage);
+                hasData = true;
             }
-        } else {
+        }
+        if (!hasData) {
             com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "请先选择图片或者视频");
             return;
         }
@@ -320,20 +334,20 @@ public class TaskSceneFragment extends BasePhotoFragment {
                     taskDetailViewModel.isVideoRequestFromServer = true;
 
                     setupRecyclerViewFromServer(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
-                    setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskDetailViewModel.videoList);
+                    setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
                 }
             }
         });
         setupRecyclerView(mRecyclerViewImageList, taskDetailViewModel.imageList);
-        setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.videoList);
+        setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
     }
 
-    private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, ArrayList<LocalMediaInfo> videoList) {
-        mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this));
+    private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, List<TaskEntity.Videos> videoList) {
+        mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, true));
     }
 
-    private void setupRecyclerViewVideoFromServer(RecyclerView mRecyclerViewVideoList, ArrayList<LocalMediaInfo> videoList) {
-        mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this));
+    private void setupRecyclerViewVideoFromServer(RecyclerView mRecyclerViewVideoList, List<TaskEntity.Videos> videoList) {
+        mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, false));
     }
 
     @Override
@@ -349,10 +363,10 @@ public class TaskSceneFragment extends BasePhotoFragment {
                     // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true  注意：音视频除外
                     // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true  注意：音视频除外
                     // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
-                    List<LocalMediaInfo> mediaInfos = new ArrayList<>();
+                    List<TaskEntity.Videos> mediaInfos = new ArrayList<>();
                     for (LocalMedia media :
                             selectList) {
-                        LocalMediaInfo mediaInfo = new LocalMediaInfo();
+                        TaskEntity.Videos mediaInfo = new TaskEntity.Videos();
                         mediaInfo.setPath(media.getPath());
                         mediaInfo.setCompressPath(media.getCompressPath());
                         mediaInfo.setCutPath(media.getCutPath());
@@ -367,17 +381,50 @@ public class TaskSceneFragment extends BasePhotoFragment {
                         mediaInfo.setCompressed(media.isCompressed());
                         mediaInfo.setWidth(media.getWidth());
                         mediaInfo.setHeight(media.getHeight());
-
+                        mediaInfo.isLocal = true;
                         mediaInfos.add(mediaInfo);
                     }
+
+                    for (int i = 0; i < taskDetailViewModel.taskEntity.voides.size(); i++) {
+                        if (!taskDetailViewModel.taskEntity.voides.get(i).isLocal) {
+                            taskDetailViewModel.taskEntity.voides.remove(i);
+                        }
+                    }
                     taskDetailViewModel.isVideoRequestFromServer = false;
-                    taskDetailViewModel.videoList.addAll(mediaInfos);
-                    mRecyclerViewVideoList.getAdapter().notifyDataSetChanged();
+                    taskDetailViewModel.taskEntity.voides.addAll(mediaInfos);
+                    setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
                     break;
             }
         }
 
     }
 
-
+    private Bitmap createVideoThumbnail(String url, int width, int height) {
+        Bitmap bitmap = null;
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        int kind = MediaStore.Video.Thumbnails.MINI_KIND;
+        try {
+            if (Build.VERSION.SDK_INT >= 14) {
+                retriever.setDataSource(url, new HashMap<String, String>());
+            } else {
+                retriever.setDataSource(url);
+            }
+            bitmap = retriever.getFrameAtTime();
+        } catch (IllegalArgumentException ex) {
+            // Assume this is a corrupt video file
+        } catch (RuntimeException ex) {
+            // Assume this is a corrupt video file.
+        } finally {
+            try {
+                retriever.release();
+            } catch (RuntimeException ex) {
+                // Ignore failures while cleaning up.
+            }
+        }
+        if (kind == MediaStore.Images.Thumbnails.MICRO_KIND && bitmap != null) {
+            bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,
+                    ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+        }
+        return bitmap;
+    }
 }

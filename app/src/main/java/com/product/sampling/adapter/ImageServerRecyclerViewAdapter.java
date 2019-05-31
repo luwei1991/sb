@@ -3,6 +3,11 @@ package com.product.sampling.adapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
+import android.media.ThumbnailUtils;
+import android.os.Build;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +27,7 @@ import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.ui.TaskDetailActivity;
 
+import java.util.HashMap;
 import java.util.List;
 
 import static com.product.sampling.Constants.IMAGE_BASE_URL;
@@ -29,7 +35,7 @@ import static com.product.sampling.Constants.IMAGE_BASE_URL;
 public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageServerRecyclerViewAdapter.ViewHolder> {
 
     private final List<TaskEntity.Pics> mValues;
-    private boolean mTwoPane;
+    private boolean isLocal;
     private int taskPostion = -1;//当前图片列表所属样品id
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -66,9 +72,9 @@ public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageSe
 
     public ImageServerRecyclerViewAdapter(Context parent,
                                           List<TaskEntity.Pics> items,
-                                          boolean twoPane) {
+                                          boolean isLocal) {
         mValues = items;
-        mTwoPane = twoPane;
+        this.isLocal = isLocal;
     }
 
     public ImageServerRecyclerViewAdapter(Context parent,
@@ -112,4 +118,6 @@ public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageSe
             mImageView = view.findViewById(R.id.iv_task);
         }
     }
+
+
 }

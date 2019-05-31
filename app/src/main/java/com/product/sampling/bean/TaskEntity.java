@@ -3,6 +3,7 @@ package com.product.sampling.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TaskEntity implements Parcelable {
@@ -42,8 +43,8 @@ public class TaskEntity implements Parcelable {
     public String latitude;//任务提交时的维度
     public int leftday;//任务剩余天数
 
-    public List<Pics> pics;
-    public List<Videos> voides;
+    public List<Pics> pics = new ArrayList<>();
+    public List<Videos> voides = new ArrayList<>();
 
 
     public boolean isNewRecord;
@@ -133,7 +134,7 @@ public class TaskEntity implements Parcelable {
         dest.writeString(latitude);
     }
 
-    public class Videos {
+    public static class Videos extends LocalMediaInfo {
 
         /**
          * id : 00e5f055a9c84156b58e38fddd36fa46
@@ -149,10 +150,13 @@ public class TaskEntity implements Parcelable {
          * belongID : a6ff0f67783f41cdbb3dfcace4f9c459
          * ftpFileName : 00e5f055a9c84156b58e38fddd36fa46.mp4
          */
+        public Videos() {
+
+        }
 
         private String id;
         private boolean isNewRecord;
-        private String remarks;
+        private String remarks = "";
         private String createDate;
         private String updateDate;
         private String fileName;
@@ -162,6 +166,8 @@ public class TaskEntity implements Parcelable {
         private Object isMarge;
         private String belongID;
         private String ftpFileName;
+
+        public boolean isLocal = false;
 
         public String getId() {
             return id;

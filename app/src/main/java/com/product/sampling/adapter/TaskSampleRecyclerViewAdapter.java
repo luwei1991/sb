@@ -251,7 +251,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         linearLayoutManager = new LinearLayoutManager(holder.itemView.getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         holder.mRecyclerViewVideo.setLayoutManager(linearLayoutManager);
-        holder.mRecyclerViewVideo.setAdapter(new VideoAndTextRecyclerViewAdapter(holder.itemView.getContext(), task.videoList, fragment));
+//        holder.mRecyclerViewVideo.setAdapter(new VideoAndTextRecyclerViewAdapter(holder.itemView.getContext(), task.videoList, fragment,isLocalData));
 
     }
 
