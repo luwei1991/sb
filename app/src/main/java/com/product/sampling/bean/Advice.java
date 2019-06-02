@@ -21,7 +21,7 @@ public class Advice {
      * deleteFlag : 0
      */
 
-    private String id;
+    private String id = "";
     private boolean isNewRecord;
     private Object remarks;
     private Object createDate;

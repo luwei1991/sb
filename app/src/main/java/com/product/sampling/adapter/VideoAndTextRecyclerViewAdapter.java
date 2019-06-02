@@ -32,9 +32,20 @@ import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.ui.PlayerActivity;
 import com.product.sampling.ui.TaskDetailActivity;
 
+import org.reactivestreams.Subscriber;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.product.sampling.Constants.IMAGE_BASE_URL;
 
@@ -80,7 +91,7 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
             Glide.with(holder.itemView.getContext()).load(task.getPath()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);
         } else {
             holder.mTextViewTitle.setText(task.getRemarks() + "");
-            holder.mImageView.setImageBitmap(createVideoThumbnail(IMAGE_BASE_URL + task.getId(), 400, 300));
+            createBitmapInThread(task.getId(), holder.mImageView);
         }
     }
 
@@ -164,5 +175,46 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
                     ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
         }
         return bitmap;
+    }
+
+    void createBitmapInThread(String taskid, ImageView imageView) {
+
+        Observable
+                .create(new ObservableOnSubscribe<String>() {
+                    @Override
+                    public void subscribe(@NonNull ObservableEmitter<String> emitter) throws
+                            Exception {
+                        emitter.onNext(IMAGE_BASE_URL + taskid);
+                    }
+                })
+                .map(new Function<String, Bitmap>() {
+                    @Override
+                    public Bitmap apply(String videourl) throws Exception {
+                        return createVideoThumbnail(videourl, 400, 300);
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Bitmap>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Bitmap s) {
+                        imageView.setImageBitmap(s);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 }

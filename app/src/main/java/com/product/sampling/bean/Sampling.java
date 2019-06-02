@@ -59,7 +59,7 @@ public class Sampling {
      * producesamlltype : null
      */
 
-    private String id;
+    private String id = "";
     private boolean isNewRecord;
     private Object remarks;
     private Object createDate;

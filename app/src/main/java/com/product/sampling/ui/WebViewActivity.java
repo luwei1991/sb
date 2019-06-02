@@ -230,8 +230,8 @@ public class WebViewActivity extends AppCompatActivity {
                         }
 
                         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(
-                                pdfview.getWidth(),
-                                pdfview.getHeight(),
+                                screenW,
+                                screenH + 100,
                                 1).create();
 
                         // start a page

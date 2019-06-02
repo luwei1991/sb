@@ -15,8 +15,8 @@ public class TaskSample implements Parcelable {
     public String checkSheet = "";
     public HashMap<String, String> checkInfo = new HashMap<>();
     public HashMap<String, String> handleInfo = new HashMap<>();
-    Advice advice = new Advice();
-    Sampling sampling = new Sampling();
+    public Advice advice = new Advice();
+    public Sampling sampling = new Sampling();
     List<Pics> pics = new ArrayList<>();
     /**
      * id : 7777

@@ -218,6 +218,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
         multipartBodyBuilder.addFormDataPart("userid", AccountManager.getInstance().getUserId())
                 .addFormDataPart("id", taskDetailViewModel.taskEntity.id)
                 .addFormDataPart("taskisok", "0")
+                .addFormDataPart("updateorsave", "0")
                 .addFormDataPart("samplecount", "1");
 
         if (null != MainApplication.INSTANCE.getMyLocation()) {
@@ -345,8 +346,8 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 }
             }
         });
-        setupRecyclerView(mRecyclerViewImageList, taskDetailViewModel.imageList);
-        setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
+//        setupRecyclerView(mRecyclerViewImageList, taskDetailViewModel.imageList);
+//        setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
     }
 
     private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, List<TaskEntity.Videos> videoList) {
@@ -404,34 +405,5 @@ public class TaskSceneFragment extends BasePhotoFragment {
             }
         }
 
-    }
-
-    private Bitmap createVideoThumbnail(String url, int width, int height) {
-        Bitmap bitmap = null;
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        int kind = MediaStore.Video.Thumbnails.MINI_KIND;
-        try {
-            if (Build.VERSION.SDK_INT >= 14) {
-                retriever.setDataSource(url, new HashMap<String, String>());
-            } else {
-                retriever.setDataSource(url);
-            }
-            bitmap = retriever.getFrameAtTime();
-        } catch (IllegalArgumentException ex) {
-            // Assume this is a corrupt video file
-        } catch (RuntimeException ex) {
-            // Assume this is a corrupt video file.
-        } finally {
-            try {
-                retriever.release();
-            } catch (RuntimeException ex) {
-                // Ignore failures while cleaning up.
-            }
-        }
-        if (kind == MediaStore.Images.Thumbnails.MICRO_KIND && bitmap != null) {
-            bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,
-                    ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
-        }
-        return bitmap;
     }
 }
