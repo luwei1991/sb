@@ -283,6 +283,26 @@ public class TaskEntity implements Parcelable {
          * ftpFileName : 764543eb7df24fe78d79c210555b96dd.jpg
          */
 
+
+        // 0602
+        /**
+         * 	"pics": [{
+         * 			"id": "1a69acb72420432cb687d47c7c53779a",
+         * 			"isNewRecord": false,
+         * 			"remarks": "中国尊",
+         * 			"createDate": "2019-06-02 09:03:08",
+         * 			"updateDate": "2019-06-02 09:03:08",
+         * 			"fileName": "P90602-165603.jpg",
+         * 			"fileSize": "1889786",
+         * 			"fileType": ".jpg",
+         * 			"folderPath": "/d444d03c23ca4a75aae89c81dbcbcdf6",
+         * 			"isMarge": null,
+         * 			"belongID": "0cb2d6b25d09464fb7882252d2a6f168",
+         * 			"ftpFileName": "1a69acb72420432cb687d47c7c53779a.jpg",
+         * 			"picorpdf": "0"
+         *                }],
+         */
+
         private String id;
         private boolean isNewRecord;
         private String remarks;
@@ -295,6 +315,15 @@ public class TaskEntity implements Parcelable {
         private Object isMarge;
         private String belongID;
         private String ftpFileName;
+        private String picorpdf;
+
+        public String getPicorpdf() {
+            return picorpdf;
+        }
+
+        public void setPicorpdf(String picorpdf) {
+            this.picorpdf = picorpdf;
+        }
 
         public String getId() {
             return id;

@@ -1,19 +1,40 @@
 package com.product.sampling.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.product.sampling.R;
+import com.product.sampling.adapter.ImageAndTextRecyclerViewAdapter;
+import com.product.sampling.adapter.ImageServerRecyclerViewAdapter;
+import com.product.sampling.adapter.VideoAndTextRecyclerViewAdapter;
 import com.product.sampling.bean.TaskEntity;
+import com.product.sampling.bean.TaskImageEntity;
+import com.product.sampling.manager.AccountManager;
+import com.product.sampling.net.LoadDataModel;
 import com.product.sampling.photo.BasePhotoFragment;
+import com.product.sampling.ui.viewmodel.TaskExecptionViewModel;
+
+import org.devio.takephoto.model.TImage;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * 未抽到样品
@@ -23,6 +44,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
     RecyclerView mRecyclerViewImageList;
     RecyclerView mRecyclerViewVideoList;
     static TaskUnfindSampleFragment fragment;
+    TaskExecptionViewModel taskExecptionViewModel;
 
     public TaskUnfindSampleFragment() {
 
@@ -53,6 +75,22 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
      * @param view
      */
     private void initView(View view){
+
+        // image
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+
+        mRecyclerViewImageList = view.findViewById(R.id.item_image_list);
+        mRecyclerViewImageList.setLayoutManager(linearLayoutManager);
+
+
+        // video
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+
+        mRecyclerViewVideoList = view.findViewById(R.id.item_video_list);
+        mRecyclerViewVideoList.setLayoutManager(linearLayoutManager);
+
 
         // 现场照片选择
         view.findViewById(R.id.iv_choose).setOnClickListener(new View.OnClickListener() {
@@ -124,6 +162,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
         });
 
 
+        // TODO 保存并提交
         // 保存并提交
         view.findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener() {
             /**
@@ -139,6 +178,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
 
 
 
+        // TODO 保存
         // 保存
         view.findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             /**
@@ -153,6 +193,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
         });
 
 
+        // TODO 编辑单据并打印
         // 编辑单据并打印
         view.findViewById(R.id.btn_edit_handling_sheet).setOnClickListener(new View.OnClickListener() {
             /**
@@ -167,6 +208,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
         });
 
 
+        //TODO 上传
         // 上传
         view.findViewById(R.id.btn_upload_handling_sheet).setOnClickListener(new View.OnClickListener() {
             /**
@@ -181,7 +223,120 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
         });
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        taskExecptionViewModel = ViewModelProviders.of(getActivity()).get(TaskExecptionViewModel.class);
+
+        TaskEntity taskEntity = taskExecptionViewModel.taskEntity;
+
+        taskExecptionViewModel.requestOrderList(AccountManager.getInstance().getUserId(), taskEntity.id);
+        taskExecptionViewModel.orderDetailLiveData.observe(this, new Observer<LoadDataModel<TaskEntity>>() {
+            @Override
+            public void onChanged(LoadDataModel<TaskEntity> taskEntityLoadDataModel) {
+                taskExecptionViewModel.taskEntity = taskEntityLoadDataModel.getData();
+                taskExecptionViewModel.isImageRequestFromServer = true;
+                taskExecptionViewModel.isVideoRequestFromServer = true;
+
+                if (taskExecptionViewModel.taskEntity != null) {
+                    setupRecyclerViewFromServer(mRecyclerViewImageList, taskExecptionViewModel.taskEntity.pics);
+                    setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskExecptionViewModel.taskEntity.voides);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case PictureConfig.CHOOSE_REQUEST:
+                    // 图片、视频、音频选择结果回调
+                    List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
+                    // 例如 LocalMedia 里面返回三种path
+                    // 1.media.getPath(); 为原图path
+                    // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true  注意：音视频除外
+                    // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true  注意：音视频除外
+                    // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
+                    List<TaskEntity.Videos> mediaInfos = new ArrayList<>();
+
+                    for (LocalMedia media:selectList){
+                        TaskEntity.Videos mediaInfo = new TaskEntity.Videos();
+                        mediaInfo.setPath(media.getPath());
+                        mediaInfo.setCompressPath(media.getCompressPath());
+                        mediaInfo.setCutPath(media.getCutPath());
+                        mediaInfo.setDuration(media.getDuration());
+                        mediaInfo.setChecked(media.isChecked());
+                        mediaInfo.setCut(media.isCut());
+                        mediaInfo.setPosition(media.getPosition());
+                        mediaInfo.setNum(media.getNum());
+                        mediaInfo.setMimeType(media.getMimeType());
+                        mediaInfo.setPictureType(media.getPictureType());
+                        mediaInfo.setCompressed(media.isCompressed());
+                        mediaInfo.setWidth(media.getWidth());
+                        mediaInfo.setHeight(media.getHeight());
+                        mediaInfo.isLocal = true;
+                        mediaInfos.add(mediaInfo);
+                    }
+
+                    for (int i = 0; i < taskExecptionViewModel.taskEntity.voides.size(); i++) {
+                        if (!taskExecptionViewModel.taskEntity.voides.get(i).isLocal) {
+                            taskExecptionViewModel.taskEntity.voides.remove(i);
+                        }
+                    }
+                    taskExecptionViewModel.isVideoRequestFromServer = false;
+                    taskExecptionViewModel.taskEntity.voides.addAll(mediaInfos);
+                    setupRecyclerViewVideo(mRecyclerViewVideoList, taskExecptionViewModel.taskEntity.voides);
+                    break;
+
+            }
+        }
+    }
+
+    /**
+     * show image.
+     * @param images
+     */
+    @Override
+    public void showResultImages(ArrayList<TImage> images) {
+        super.showResultImages(images);
+
+        for (TImage image:
+                images) {
+            TaskImageEntity taskImageEntity = new TaskImageEntity();
+            taskImageEntity.setCompressPath(image.getCompressPath());
+            taskImageEntity.setOriginalPath(image.getOriginalPath());
+            taskImageEntity.setFromType(image.getFromType());
+
+            taskExecptionViewModel.imageList.add(taskImageEntity);
+        }
+        taskExecptionViewModel.isImageRequestFromServer = false;
+        setupRecyclerView(mRecyclerViewImageList, taskExecptionViewModel.imageList);
+
+    }
+
     // help method.
+
+    /**
+     * display images
+     * @param recyclerView
+     * @param task
+     */
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List task) {
+        ImageAndTextRecyclerViewAdapter adapter = new ImageAndTextRecyclerViewAdapter(getActivity(), task, true);
+        recyclerView.setAdapter(adapter);
+    }
+
+
+    /**
+     * display video
+     * @param mRecyclerViewVideoList
+     * @param videoList
+     */
+    private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, List<TaskEntity.Videos> videoList) {
+        mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, true));
+    }
 
     /**
      * getPath
@@ -191,5 +346,26 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
     private String getPath() {
         return "/storage/emulated/0/zip";
     }
+
+
+    /**
+     *
+     * @param recyclerView
+     * @param task
+     */
+    private void setupRecyclerViewFromServer(@NonNull RecyclerView recyclerView, List task) {
+        ImageServerRecyclerViewAdapter adapter = new ImageServerRecyclerViewAdapter(getActivity(), task, false);
+        recyclerView.setAdapter(adapter);
+    }
+
+    /**
+     *
+     * @param mRecyclerViewVideoList
+     * @param videoList
+     */
+    private void setupRecyclerViewVideoFromServer(RecyclerView mRecyclerViewVideoList, List<TaskEntity.Videos> videoList) {
+        mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, false));
+    }
+
 
 }

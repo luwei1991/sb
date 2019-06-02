@@ -84,9 +84,17 @@ public class TaskSceneFragment extends BasePhotoFragment {
         View rootView = inflater.inflate(R.layout.fragment_scene_detail, container, false);
 
         companyname = rootView.findViewById(R.id.companyname);
+        setCanNotEdit(companyname);
+
         companyaddress = rootView.findViewById(R.id.companyaddress);
+        setCanNotEdit(companyaddress);
+
         companytel = rootView.findViewById(R.id.companytel);
+        setCanNotEdit(companytel);
+
         remark = rootView.findViewById(R.id.remark);
+        setCanNotEdit(remark);
+
         TextView tv = rootView.findViewById(R.id.tv_step_2);
         tv.setBackgroundResource(R.drawable.bg_circle_blue);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -157,6 +165,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
 
             }
         });
+
 
 
         return rootView;
@@ -361,5 +370,14 @@ public class TaskSceneFragment extends BasePhotoFragment {
             }
         }
 
+    }
+
+
+    // help method
+
+    private void setCanNotEdit(EditText mEditText){
+        mEditText.setFocusable(false);
+        mEditText.setFocusableInTouchMode(false);
+        mEditText.setOnClickListener(null);
     }
 }
