@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>未抽到样品企业情况说明书</title>
+  <link rel="stylesheet" type="text/css" href="./style/css.css">
+  <script src="./js/jquery.min.js"></script>
+  <script src="./js/html2canvas.min.js"></script>
+</head>
+
+<body>
+<div class="page">
+  <form action="">
+    <p class="title">未抽到样品企业情况说明书</p>
+    
+    <table width="100%" class="tftable" cellpadding="10">
+      <tr>
+        <td width="16%" height="44" align="center" valign="middle">任务来源</td>
+        <td height="44" colspan="2" align="center"><input name="tasksource" style="width:100%;text-indent: 2em" placeholder=""></td>
+        <td width="17%" align="center">任务类别</td>
+        <td width="34%"><input name="taskcategory" style="width:100%;text-indent: 2em" placeholder=""></td>
+      </tr>
+      <tr>
+        <td height="44" align="center" valign="middle">抽查产品</td>
+        <td height="44" colspan="2" align="center"><input name="samplingproduct" style="width:100%;text-indent: 2em" placeholder=""></td>
+        <td align="center">抽查时间</td>
+        <td><input name="samplingdata" style="width:100%;text-indent: 2em" placeholder=""></td>
+      </tr>
+      <tr>
+        <td height="40" align="center" valign="middle">企业名称</td>
+        <td height="40" colspan="4" align="center"><input name="enterprisename" style="width:100%;text-indent: 2em" placeholder=""></td>
+      </tr>
+      <tr>
+        <td height="30" align="center" valign="middle"><p>企业地址</p></td>
+        <td height="30" colspan="4" align="center"><input name="enterpriseaddress" style="width:100%;text-indent: 2em" placeholder=""></td>
+      </tr>
+      <tr>
+        <td height="32" align="center" valign="middle">企业联系人</td>
+        <td height="32" colspan="2" align="center"><input name="enterprisecontacts" style="width:100%;text-indent: 2em" placeholder=""></td>
+        <td align="center" valign="middle">联系电话</td>
+        <td><input name="enterprisephone" style="width:100%;text-indent: 2em" placeholder=""></td>
+      </tr>
+      <tr>
+        <td height="40" colspan="5" align="center">未抽查原因</td>
+      </tr>
+      <tr>
+        <td height="41" colspan="5">&nbsp;&nbsp;&nbsp;&nbsp;企业：
+            <input id="bbb1" type="radio" value="1" name="enterprisestatus"><label for="bbb1">倒闭</label>&nbsp;&nbsp;
+            <input id="bbb2" type="radio" value="2" name="enterprisestatus"><label for="bbb2">注销</label>&nbsp;&nbsp;
+            <input id="bbb3" type="radio" value="3" name="enterprisestatus"><label for="bbb3">停产</label>&nbsp;&nbsp;
+            <input id="bbb4" type="radio" value="4" name="enterprisestatus"><label for="bbb4">转产</label>&nbsp;&nbsp;
+            <input id="bbb5" type="radio" value="5" name="enterprisestatus"><label for="bbb5">全部用于出口</label>&nbsp;&nbsp;
+            <input id="bbb6" type="radio" value="6" name="enterprisestatus"><label for="bbb6">其他</label>&nbsp;&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td colspan="5">
+            <div style="padding: 10px">
+                （过程简要描述）：
+                <textarea name="briefdescription" rows="8" style="margin-top:5px;width: 100%;resize: none;border:0"></textarea>
+            </div>    
+        </td>
+      </tr>
+      <tr>
+        <td colspan="6">
+        <div class="sign">
+          <div style="border-right: 1px solid #333;padding:10px">
+            <div>当地质检管理部门意见：</div>
+            <textarea name="qualityinspectionopinion" rows="8" style="margin-top:5px;width: 100%;resize: none;border:0"></textarea>            
+            <div style="text-align: right;padding-bottom: 5px">（公章）</div>
+            <span>
+              <input class="tc" style="width:40px" name="qualityinspectionopinionyear" type="text" placeholder="">年
+              <input class="tc" style="width:40px" name="qualityinspectionopinionmonth" type="text" placeholder="">月
+              <input class="tc" style="width:40px" name="qualityinspectionopinionday" type="text" placeholder="">日
+            </span>
+          </div>
+          <div style="border-right: 1px solid #333;padding:10px">
+              <div>抽样人员：</div>
+              <textarea name="samplingpersonnel" rows="8" style="margin-top:5px;width: 100%;resize: none;border:0"></textarea>            
+              <div style="text-align: right;padding-bottom: 5px">（抽样单位公章）</div>
+              <span>
+                <input class="tc" style="width:40px" name="samplingpersonnelyear" type="text" placeholder="">年
+                <input class="tc" style="width:40px" name="samplingpersonnelmonth" type="text" placeholder="">月
+                <input class="tc" style="width:40px" name="samplingpersonnelday" type="text" placeholder="">日
+              </span>
+            </div>
+            <div style="padding:10px">
+                <div style="text-align: right;padding-bottom: 5px;padding-top: 145px">（被抽查单位公章）</div>
+                <span>
+                  <input class="tc" style="width:40px" name="beingsampledyear" type="text" placeholder="">年
+                  <input class="tc" style="width:40px" name="beingsampledmonth" type="text" placeholder="">月
+                  <input class="tc" style="width:40px" name="beingsampledday" type="text" placeholder="">日
+                </span>
+              </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </form>
+  <div class="footer">注：本表一式三份，第一联报送下达任务部门，第二联后处理部门，第三联抽样单位存档。</div>
+</div>
+
+<script>
+    var postType = "未抽到样品企业情况说明书"
+</script>
+<script src="./js/js.js"></script>
+</body>
+</html>
