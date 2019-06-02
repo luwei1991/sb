@@ -96,6 +96,7 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
                 .subscribe(userbean -> {
                     saveUserData(userbean);
                     startActivity(new Intent(getActivity(), MainActivity.class));
+                    getActivity().finish();
                 }, throwable -> {
                     String displayMessage = ((ApiException) throwable).getDisplayMessage();
                     ToastUtils.showToast(displayMessage);
@@ -124,6 +125,7 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
                     mTextViewSendCode.setClickable(true);
                 });
     }
+
     private void saveUserData(UserInfoBean userInfoBean) {
         AccountManager.getInstance().setUserInfoBean(userInfoBean);
     }

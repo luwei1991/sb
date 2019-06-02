@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.product.sampling.R;
+import com.product.sampling.bean.UserInfoBean;
+import com.product.sampling.manager.AccountManager;
 import com.product.sampling.view.LeverageLockHintDialog;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -60,8 +62,12 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Set up the login form.
-        initView();
+        UserInfoBean userInfoBean = AccountManager.getInstance().getUserInfoBean();
+        if (null == userInfoBean) {
+            initView();
+        } else {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        }
     }
 
     protected void initView() {

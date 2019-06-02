@@ -8,7 +8,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="vertical"
     android:showDividers="middle"
-    tools:context=".ui.ItemListActivity">
+    tools:context=".ui.MainTaskListActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -91,7 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
-        tools:context="com.product.sampling.ui.ItemListActivity"
+        tools:context="com.product.sampling.ui.MainTaskListActivity"
         tools:listitem="@layout/item_task_list_content" />
 
     <FrameLayout

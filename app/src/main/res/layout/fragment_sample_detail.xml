@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="LinearLayoutManager"
-            tools:context="com.product.sampling.ui.ItemListActivity"
+            tools:context="com.product.sampling.ui.MainTaskListActivity"
             tools:listitem="@layout/item_sample_list_content" />
 
 

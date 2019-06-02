@@ -8,9 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +23,7 @@ import java.util.List;
 /**
  * 任务列表
  */
-public class ItemListActivity extends BaseActivity {
+public class MainTaskListActivity extends BaseActivity {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -46,7 +43,7 @@ public class ItemListActivity extends BaseActivity {
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 //        toolbar.setTitle(getTitle());
-        
+
 
         if (findViewById(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the
@@ -72,7 +69,7 @@ public class ItemListActivity extends BaseActivity {
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final ItemListActivity mParentActivity;
+        private final MainTaskListActivity mParentActivity;
         private final List<ImageItem> mValues;
         private final boolean mTwoPane;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -116,7 +113,7 @@ public class ItemListActivity extends BaseActivity {
             }
         };
 
-        SimpleItemRecyclerViewAdapter(ItemListActivity parent,
+        SimpleItemRecyclerViewAdapter(MainTaskListActivity parent,
                                       List<ImageItem> items,
                                       boolean twoPane) {
             mValues = items;

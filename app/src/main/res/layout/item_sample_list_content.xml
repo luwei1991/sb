@@ -57,7 +57,7 @@
             android:layout_marginLeft="60dp"
             android:layout_marginRight="150dp"
             app:layoutManager="LinearLayoutManager"
-            tools:context="com.product.sampling.ui.ItemListActivity"
+            tools:context="com.product.sampling.ui.MainTaskListActivity"
             tools:listitem="@layout/item_scene_list_content" />
 
 
@@ -103,7 +103,7 @@
             android:layout_marginLeft="60dp"
             android:layout_marginRight="150dp"
             app:layoutManager="LinearLayoutManager"
-            tools:context="com.product.sampling.ui.ItemListActivity"
+            tools:context="com.product.sampling.ui.MainTaskListActivity"
             tools:listitem="@layout/item_scene_list_content" />
 
 

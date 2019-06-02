@@ -2,12 +2,7 @@ package com.product.sampling.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
-import android.media.ThumbnailUtils;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +26,6 @@ import com.product.sampling.R;
 import com.product.sampling.adapter.ImageAndTextRecyclerViewAdapter;
 import com.product.sampling.adapter.ImageServerRecyclerViewAdapter;
 import com.product.sampling.adapter.VideoAndTextRecyclerViewAdapter;
-import com.product.sampling.bean.LocalMediaInfo;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.dummy.DummyContent;
@@ -43,13 +37,11 @@ import com.product.sampling.net.request.Request;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 import com.product.sampling.utils.RxSchedulersHelper;
-import com.product.sampling.utils.ToastUtil;
 
 import org.devio.takephoto.model.TImage;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.disposables.Disposable;
@@ -60,7 +52,7 @@ import static android.app.Activity.RESULT_OK;
 
 /**
  * A fragment representing a single Item detail screen.
- * This fragment is either contained in a {@link ItemListActivity}
+ * This fragment is either contained in a {@link MainTaskListActivity}
  * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
  * on handsets.
  */

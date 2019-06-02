@@ -2,7 +2,16 @@ package com.product.sampling.manager;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.product.sampling.bean.UserInfoBean;
+import com.product.sampling.ui.MainApplication;
+import com.product.sampling.utils.SPUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 
 /**
  * 创建时间：2018/7/3
@@ -15,6 +24,7 @@ public class AccountManager {
     private String userId;
 
     public String getUserPhone() {
+        userInfoBean = getUserInfoBean();
         if (userInfoBean != null) {
             return userInfoBean.getPersontel();
         }
@@ -22,19 +32,25 @@ public class AccountManager {
     }
 
     public void setUserPhone(String userPhone) {
+        userInfoBean = getUserInfoBean();
         if (!TextUtils.isEmpty(userPhone) && userInfoBean != null) {
             userInfoBean.setPersontel(userPhone);
+            AccountManager.getInstance().setUserInfoBean(userInfoBean);
         }
         this.userPhone = userPhone;
     }
+
     public void setUserPhoto(String photo) {
+        userInfoBean = getUserInfoBean();
         if (!TextUtils.isEmpty(userPhoto) && userInfoBean != null) {
             userInfoBean.setPhoto(userPhone);
+            AccountManager.getInstance().setUserInfoBean(userInfoBean);
         }
         this.userPhoto = photo;
     }
 
     public String getUserId() {
+        userInfoBean = getUserInfoBean();
         if (userInfoBean != null) {
             return String.valueOf(userInfoBean.getUserid());
         }
@@ -52,11 +68,26 @@ public class AccountManager {
     }
 
     public UserInfoBean getUserInfoBean() {
-        return userInfoBean == null ? new UserInfoBean() : userInfoBean;
+        String userinfo = SPUtil.get(MainApplication.INSTANCE, "userinfo", "").toString();
+        if (TextUtils.isEmpty(userinfo)) {
+            return null;
+        }
+        Gson gson = new Gson();
+        Type type = new TypeToken<UserInfoBean>() {
+        }.getType();
+        UserInfoBean userBean = gson.fromJson(userinfo, type);
+        return userBean;
     }
 
     public void setUserInfoBean(UserInfoBean userInfoBean) {
         this.userInfoBean = userInfoBean;
+        Gson gson = new Gson();
+        String json = gson.toJson(userInfoBean);
+        SPUtil.put(MainApplication.INSTANCE, "userinfo", json);
+    }
+
+    public void clearUserInfo() {
+        SPUtil.clear(MainApplication.INSTANCE);
     }
 
     /**

@@ -411,7 +411,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     break;
                 case Select_Handle:
                     if (data != null) {
-                        int index = data.getIntExtra("task", -1);
                         List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
                         taskDetailViewModel.taskList.get(selectId).handleSheet = selectHandle.get(0).getPath();
                         mRecyclerView.getAdapter().notifyDataSetChanged();
@@ -420,7 +419,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     break;
                 case Select_Check:
                     if (data != null) {
-                        int index = data.getIntExtra("task", -1);
                         List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
                         taskDetailViewModel.taskList.get(selectId).checkSheet = selectHandle.get(0).getPath();
                         mRecyclerView.getAdapter().notifyDataSetChanged();

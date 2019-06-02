@@ -120,6 +120,7 @@ public class MyInfoFragment extends BasePhotoFragment implements View.OnClickLis
                 showDialog("确定退出登录吗", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        AccountManager.getInstance().clearUserInfo();
                         startActivity(new Intent(getActivity(), LoginActivity.class));
                         getActivity().finish();
                         ActivityManager am = ActivityManager.getInstance();

@@ -21,6 +21,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.amap.api.location.AMapLocationListener;
 import com.jaeger.library.StatusBarUtil;
 import com.product.sampling.R;
+import com.product.sampling.bean.UserInfoBean;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.utils.GdLocationUtil;
 import com.umeng.analytics.MobclickAgent;
@@ -192,16 +193,21 @@ public class BaseActivity extends AppCompatActivity implements EasyPermissions.P
         if (toolbar != null) {
             tvLoginOut = findViewById(R.id.tv_login_out);
             tvUserName = findViewById(R.id.tv_user_name);
-            String name = AccountManager.getInstance().getUserInfoBean().getName();
-            if (null != name && !TextUtils.isEmpty(name)) {
-                tvUserName.setText(name);
+            UserInfoBean userInfoBean = AccountManager.getInstance().getUserInfoBean();
+            if (null != userInfoBean) {
+                String name = userInfoBean.getName();
+                if (null != name && !TextUtils.isEmpty(name)) {
+                    tvUserName.setText(name);
+                }
             }
+
             tvLoginOut.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showSimpleDialog("确定退出登录吗", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            AccountManager.getInstance().clearUserInfo();
                             startActivity(new Intent(BaseActivity.this, LoginActivity.class));
                             popAllActivity();
                         }

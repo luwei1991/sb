@@ -1,29 +1,17 @@
 package com.product.sampling.photo;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.product.sampling.R;
-import com.product.sampling.dummy.DummyContent;
 import com.product.sampling.ui.ItemDetailActivity;
-import com.product.sampling.ui.ItemListActivity;
+import com.product.sampling.ui.MainTaskListActivity;
 import com.product.sampling.utils.ToastUtil;
-import com.product.sampling.utils.ToastUtils;
 
 import org.devio.takephoto.app.TakePhoto;
 import org.devio.takephoto.app.TakePhotoFragment;
@@ -38,13 +26,10 @@ import org.devio.takephoto.permission.TakePhotoInvocationHandler;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
-
-import io.reactivex.disposables.Disposable;
 
 /**
  * A fragment representing a single Item detail screen.
- * This fragment is either contained in a {@link ItemListActivity}
+ * This fragment is either contained in a {@link MainTaskListActivity}
  * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
  * on handsets.
  */
