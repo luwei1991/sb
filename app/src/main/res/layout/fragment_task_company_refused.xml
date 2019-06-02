@@ -6,5 +6,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:textIsSelectable="true"
-    tools:context=".ui.ItemDetailFragment" />
+    android:text="企业拒检"
+    android:textIsSelectable="true" />

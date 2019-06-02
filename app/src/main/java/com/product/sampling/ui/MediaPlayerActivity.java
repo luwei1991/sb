@@ -23,7 +23,7 @@ import cn.jzvd.JZDataSource;
 import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdStd;
 
-public class PlayerActivity extends AppCompatActivity {
+public class MediaPlayerActivity extends AppCompatActivity {
     MyJzvdStd myJzvdStd;
 
     @Override

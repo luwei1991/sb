@@ -1,6 +1,5 @@
 package com.product.sampling.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,29 +10,17 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.product.sampling.R;
 import com.product.sampling.bean.TaskEntity;
-import com.product.sampling.manager.AccountManager;
-import com.product.sampling.net.LoadDataModel;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 
 /**
  * 任务信息
  */
 public class TaskDetailFragment extends Fragment implements View.OnClickListener {
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
-    public static final String ARG_ITEM_ID = "item_id";
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
     private static TaskDetailFragment fragment;
 
     TaskDetailViewModel taskDetailViewModel;
@@ -59,19 +46,6 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
         }
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle("hhh");
-            }
-        }
     }
 
     @Override
@@ -103,15 +77,15 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
     }
 
     private void initView(View view) {
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        tvPlanname = (TextView) view.findViewById(R.id.tv_planname);
-        tvPlanno = (TextView) view.findViewById(R.id.tv_planno);
-        tvTasktypecount = (TextView) view.findViewById(R.id.tv_tasktypecount);
-        tvPlanfrom = (TextView) view.findViewById(R.id.tv_planfrom);
-        tvStarttime = (TextView) view.findViewById(R.id.tv_starttime);
-        tvEndtime = (TextView) view.findViewById(R.id.tv_endtime);
-        tvCompanyname = (TextView) view.findViewById(R.id.tv_companyname);
-        btnSubmit = (Button) view.findViewById(R.id.btn_submit);
+        toolbar = view.findViewById(R.id.toolbar);
+        tvPlanname = view.findViewById(R.id.tv_planname);
+        tvPlanno = view.findViewById(R.id.tv_planno);
+        tvTasktypecount = view.findViewById(R.id.tv_tasktypecount);
+        tvPlanfrom = view.findViewById(R.id.tv_planfrom);
+        tvStarttime = view.findViewById(R.id.tv_starttime);
+        tvEndtime = view.findViewById(R.id.tv_endtime);
+        tvCompanyname = view.findViewById(R.id.tv_companyname);
+        btnSubmit = view.findViewById(R.id.btn_submit);
 
         btnSubmit.setOnClickListener(this);
     }

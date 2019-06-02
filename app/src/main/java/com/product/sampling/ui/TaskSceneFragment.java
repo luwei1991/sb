@@ -28,7 +28,6 @@ import com.product.sampling.adapter.ImageServerRecyclerViewAdapter;
 import com.product.sampling.adapter.VideoAndTextRecyclerViewAdapter;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskImageEntity;
-import com.product.sampling.dummy.DummyContent;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.LoadDataModel;
@@ -51,22 +50,9 @@ import okhttp3.RequestBody;
 import static android.app.Activity.RESULT_OK;
 
 /**
- * A fragment representing a single Item detail screen.
- * This fragment is either contained in a {@link MainTaskListActivity}
- * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
- * on handsets.
+    现场信息
  */
 public class TaskSceneFragment extends BasePhotoFragment {
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
-    public static final String ARG_ITEM_ID = "item_id";
-
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private DummyContent.DummyItem mItem;
 
     RecyclerView mRecyclerViewImageList;
     RecyclerView mRecyclerViewVideoList;
@@ -93,32 +79,10 @@ public class TaskSceneFragment extends BasePhotoFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
-
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
-            }
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_scene_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-//            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.details);
-        }
         companyname = rootView.findViewById(R.id.companyname);
         companyaddress = rootView.findViewById(R.id.companyaddress);
         companytel = rootView.findViewById(R.id.companytel);
@@ -338,8 +302,8 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 }
             }
         });
-//        setupRecyclerView(mRecyclerViewImageList, taskDetailViewModel.imageList);
-//        setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
+//        setupRecyclerView(mRecyclerViewImageList, taskExecptionViewModel.imageList);
+//        setupRecyclerViewVideo(mRecyclerViewVideoList, taskExecptionViewModel.taskEntity.voides);
     }
 
     private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, List<TaskEntity.Videos> videoList) {

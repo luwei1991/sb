@@ -23,16 +23,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.luck.picture.lib.PictureSelector;
-import com.luck.picture.lib.entity.LocalMedia;
 import com.product.sampling.R;
-import com.product.sampling.bean.LocalMediaInfo;
-import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskEntity;
-import com.product.sampling.bean.TaskImageEntity;
-import com.product.sampling.ui.PlayerActivity;
-import com.product.sampling.ui.TaskDetailActivity;
-
-import org.reactivestreams.Subscriber;
+import com.product.sampling.ui.MediaPlayerActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,7 +54,7 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
                 showListDialog(view.getContext(), (int) view.getTag());
             } else {
                 TaskEntity.Videos videos = mValues.get((int) view.getTag());
-                view.getContext().startActivity(new Intent(view.getContext(), PlayerActivity.class).putExtra("title", videos.getRemarks() + "").putExtra("url", IMAGE_BASE_URL + videos.getId()));
+                view.getContext().startActivity(new Intent(view.getContext(), MediaPlayerActivity.class).putExtra("title", videos.getRemarks() + "").putExtra("url", IMAGE_BASE_URL + videos.getId()));
             }
         }
     };

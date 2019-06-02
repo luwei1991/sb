@@ -1,18 +1,15 @@
 package com.product.sampling.ui;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.product.sampling.R;
 import com.product.sampling.bean.ImageItem;
@@ -97,18 +94,14 @@ public class MainTaskListActivity extends BaseActivity {
                                 .replace(R.id.item_detail_container, myinfoFragment)
                                 .commit();
                     } else {
-                        ItemDetailFragment taskFragment = new ItemDetailFragment();
+                        TaskUnfindSampleFragment taskFragment = new TaskUnfindSampleFragment();
                         mParentActivity.getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.item_detail_container, taskFragment)
                                 .commit();
                     }
 
                 } else {
-                    Context context = view.getContext();
-                    Intent intent = new Intent(context, ItemDetailActivity.class);
-                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, item.getTitle());
 
-                    context.startActivity(intent);
                 }
             }
         };

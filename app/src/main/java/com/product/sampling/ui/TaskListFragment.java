@@ -200,6 +200,8 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                     view.getContext().startActivity(new Intent(view.getContext(), BasicMapActivity.class));
                 } else if (view.getId() == R.id.tv_fill_info) {
                     view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task", (TaskEntity) view.getTag()));
+                } else if (view.getId() == R.id.tv_exception) {
+                    view.getContext().startActivity(new Intent(view.getContext(), TaskExceptionActivity.class).putExtra("task", (TaskEntity) view.getTag()));
                 }
             }
         };
@@ -238,6 +240,10 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
             holder.mTextViewMap.setOnClickListener(mOnClickListener);
             holder.mTextViewFill.setOnClickListener(mOnClickListener);
             holder.mTextViewFill.setTag(task);
+
+            holder.mTextViewException.setOnClickListener(mOnClickListener);
+            holder.mTextViewException.setTag(task);
+
 
         }
 

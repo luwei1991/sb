@@ -9,7 +9,6 @@ import android.view.KeyEvent;
 import androidx.appcompat.app.AlertDialog;
 
 import com.product.sampling.R;
-import com.product.sampling.ui.ItemDetailActivity;
 import com.product.sampling.ui.MainTaskListActivity;
 import com.product.sampling.utils.ToastUtil;
 

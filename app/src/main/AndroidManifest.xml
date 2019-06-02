@@ -76,10 +76,6 @@
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.ItemDetailActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".ui.MainActivity"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -90,10 +86,6 @@
         <activity
             android:name=".ui.BasicMapActivity"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ui.PdfDocumentActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.WebViewActivity"
@@ -117,9 +109,16 @@
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.PlayerActivity"
+            android:name=".ui.MediaPlayerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" /> <!-- or android:screenOrientation="landscape"-->
+
+        <activity
+            android:name=".ui.TaskExceptionActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" /> <!-- or android:screenOrientation="landscape"-->
+
 
         <activity
             android:name=".ui.LoginActivity"

@@ -1,16 +1,13 @@
 package com.product.sampling.ui;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -22,7 +19,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -31,11 +27,8 @@ import com.product.sampling.R;
 import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
 import com.product.sampling.bean.LocalMediaInfo;
 import com.product.sampling.bean.Pics;
-import com.product.sampling.bean.Sampling;
 import com.product.sampling.bean.TaskEntity;
-import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.bean.TaskSample;
-import com.product.sampling.dummy.DummyContent;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.LoadDataModel;
@@ -67,17 +60,13 @@ import static com.product.sampling.ui.WebViewActivity.Intent_Order;
  * 样品信息
  */
 public class TaskSampleFragment extends BasePhotoFragment implements View.OnClickListener {
+    public static final String TAG = TaskSampleFragment.class.getSimpleName();
 
-    public static final String ARG_ITEM_ID = "item_id";
     public static final int Select_Check = 101;
     public static final int Select_Handle = 102;
 
-    public static final String TAG = TaskSampleFragment.class.getSimpleName();
     public int selectId = -1;
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private DummyContent.DummyItem mItem;
+
 
     RecyclerView mRecyclerView;
     TaskDetailViewModel taskDetailViewModel;
@@ -100,33 +89,10 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
-
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
-            }
-        }
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_sample_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-//            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.details);
-        }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         mRecyclerView = rootView.findViewById(R.id.item_image_list);
@@ -287,7 +253,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 multipartBodyBuilder.addFormDataPart("picstrs", entity.getRemarks() + "")
                         .addFormDataPart("uploadpics", f.getName(), requestImage);
             }
-//            List<LocalMediaInfo> listVideo = taskDetailViewModel.taskList.get(i).videoList;
+//            List<LocalMediaInfo> listVideo = taskExecptionViewModel.taskList.get(i).videoList;
 
 //            for (LocalMediaInfo localMedia :
 //                    listVideo) {
