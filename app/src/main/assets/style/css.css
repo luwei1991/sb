@@ -7,7 +7,7 @@ input,textarea{
 }
 input{
     border: none;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 1.4;
 }
 input[type="text"]{
@@ -60,7 +60,7 @@ body{
 table.tftable {color:#333333;width:100%;border-width: 1px;border-color: #333;border-collapse: collapse;}
 table.tftable th {background-color:#fff;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;text-align:left;}
 table.tftable tr {background-color:#fff;}
-table.tftable td {border-width: 1px;padding: 2px;border-style: solid;border-color: #333;}
+table.tftable td {border-width: 1px;padding:0 2px;border-style: solid;border-color: #333;}
 #jiouhcnw89293{
   line-height: 1.4;
   resize: none;
@@ -92,8 +92,8 @@ table.tftable td.signtd{
     position: relative;
 }
 .seal{
-    width: 150px;
-    height: 100px;
+    width: 130px;
+    height: 90px;
     position: absolute;
     top: -20px;
     right: 10px;

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>流通领域商品质量抽查检验工作单</title>
+  <link rel="stylesheet" type="text/css" href="./style/css.css">
+  <script src="./js/jquery.min.js"></script>
+  <script src="./js/html2canvas.min.js"></script>
+</head>
+
+<body>
+<div class="page">
+  <form action="">
+    <p class="title" style="padding-bottom:5px;">流通领域商品质量抽查检验工作单</p>
+    <p style="text-align: center;padding-bottom:5px;">
+      <input name="tradeyear" style="width:50px;font-size:14px;border-bottom: 1px solid #333;" class="tc" type="text" placeholder="">年<input name="tradename" style="width:100px;font-size:14px;border-bottom: 1px solid #333;" class="tc" type="text" placeholder="">商品质量抽查检验
+    </p>
+  <table width="100%%" class="tftable">
+  <tr>
+    <td><div style="width: 5em">样品名称</div></td>
+    <td colspan="5"><input type="text" name="samplename" placeholder=""></td>
+    <td width="7%">商标</td>
+    <td colspan="5"><input type="text" name="sampletrademark" placeholder=""></td>
+    <td colspan="2">等级</td>
+    <td width="18%" colspan="3"><input type="text" name="samplelevel" placeholder=""></td>
+    </tr>
+  <tr>
+    <td>规格型号</td>
+    <td colspan="5"><input type="text" name="samplemodel" placeholder=""></td>
+    <td colspan="3"><div style="width: 4.2em">产品标准</div></td>
+    <td colspan="8"><input type="text" name="samplestandard" placeholder=""></td>
+    </tr>
+  <tr>
+    <td>生产日期</td>
+    <td colspan="5"><input type="text" name="samplesdate" placeholder=""></td>
+    <td colspan="3">样品编号</td>
+    <td colspan="8"><input type="text" name="samplesnumber" placeholder=""></td>
+    </tr>
+  <tr>
+    <td>销售单价</td>
+    <td colspan="3"><div style="min-width: 2em"><input type="text" name="samplesprice" placeholder=""></div></td>
+    <td align="center"><div style="width: 4.2em">进货量</div></td>
+    <td><div style="min-width: 2em"><input type="text" name="samplespurchasenum" placeholder=""></div</td>
+    <td colspan="3">销售量</td>
+    <td colspan="2"><input type="text" name="samplessalenum" placeholder=""></td>
+    <td colspan="2"><div style="width: 4.2em">存货量</div></td>
+    <td colspan="4"><input type="text" name="samplessurvivalnum" placeholder=""></td>
+    </tr>
+  <tr>
+    <td>检验用<br>样品数量</td>
+    <td colspan="3" onclick="document.getElementById('aadsafdvev').focus()"><input id="aadsafdvev" type="text" name="testname" placeholder=""></td>
+    <td align="center">备份样品<br>
+      数量</td>
+    <td onclick="document.getElementById('aadsafd132vev').focus()"><input id="aadsafd132vev" type="text" name="testname" placeholder=""></td>
+    <td colspan="3"><p>备份样品</p>
+      <p>封存地</p></td>
+    <td colspan="2" onclick="document.getElementById('aadsafd13112vev').focus()"><input id="aadsafd13112vev" type="text" name="testname" placeholder=""></td>
+    <td colspan="2">存货地点</td>
+    <td colspan="4" onclick="document.getElementById('aafd13112vev').focus()"><input id="aafd13112vev" type="text" name="testname" placeholder=""></td>
+    </tr>
+  <tr>
+    <td>经营者名称</td>
+    <td colspan="7"><input type="text" name="testname" placeholder=""></td>
+    <td colspan="2"><div style="width: 4.2em">营业执照</div></td>
+    <td colspan="7"><input type="text" name="testname" placeholder=""></td>
+    </tr>
+  <tr>
+    <td>通讯地址</td>
+    <td colspan="7"><input type="text" name="testname" placeholder=""></td>
+    <td colspan="2">邮编</td>
+    <td colspan="7"><input type="text" name="testname" placeholder=""></td>
+    </tr>
+  <tr>
+    <td>法定联系人</td>
+    <td colspan="3"><input type="text" name="testname" placeholder=""></td>
+    <td>电话</td>
+    <td colspan="3"><input type="text" name="testname" placeholder=""></td>
+    <td colspan="2">传真</td>
+    <td colspan="7"><input type="text" name="testname" placeholder=""></td>
+    </tr>
+  <tr>
+    <td>联系人</td>
+    <td colspan="3"><input type="text" name="testname" placeholder=""></td>
+    <td>移动电话</td>
+    <td colspan="3"><input type="text" name="testname" placeholder=""></td>
+    <td colspan="2">E-mail</td>
+    <td colspan="7"><input type="text" name="testname" placeholder=""></td>
+    </tr>
+  <tr>
+    <td colspan="2">经营者所在地</td>
+    <td colspan="15">
+        <input id="bbbb1" type="radio" value="1" name="locationofoperator"><label for="bbbb1">城区</label>&nbsp;&nbsp;
+        <input id="bbbb2" type="radio" value="2" name="locationofoperator"><label for="bbbb2">城乡结合部</label>&nbsp;&nbsp;
+        <input id="bbbb3" type="radio" value="3" name="locationofoperator"><label for="bbbb3">乡镇</label>
+    </td>
+    </tr>
+  <tr>
+    <td colspan="2">抽查检验场所</td>
+    <td colspan="15">
+        <input id="bbb1" type="radio" value="1" name="spotcheckinspectionsites"><label for="bbb1">集贸市场</label>&nbsp;
+        <input id="bbb2" type="radio" value="2" name="spotcheckinspectionsites"><label for="bbb2">专业市场</label>&nbsp;
+        <input id="bbb3" type="radio" value="3" name="spotcheckinspectionsites"><label for="bbb3">商场</label>&nbsp;
+        <input id="bbb4" type="radio" value="4" name="spotcheckinspectionsites"><label for="bbb4">超市</label>&nbsp;<br>
+        <input id="bbb5" type="radio" value="5" name="spotcheckinspectionsites"><label for="bbb5">专卖店</label>&nbsp;
+        <input id="bbb6" type="radio" value="6" name="spotcheckinspectionsites"><label for="bbb6">小商铺</label>&nbsp;
+        <input id="bbb7" type="radio" value="7" name="spotcheckinspectionsites"><label for="bbb7">其他</label>&nbsp;<input name="spotcheckinspectionsitesother" style="width:80px;border-bottom:1px solid #333; font-size: 14px;margin-bottom: 1px" type="text" placeholder="">  
+    </td>
+    </tr>
+  <tr>
+    <td><p>生产或供货</p>
+      <p>单位名称</p></td>
+    <td colspan="16" onclick="document.getElementById('fdsfa4224324').focus()">
+      <input id="fdsfa4224324" type="text" name="testname" placeholder=""></td>
+    </tr>
+  <tr>
+    <td>通讯地址</td>
+    <td colspan="7"><input type="text" name="testname" placeholder=""></td>
+    <td colspan="3">邮编</td>
+    <td colspan="6"><input type="text" name="testname" placeholder=""></td>
+    </tr>
+  <tr>
+    <td>联系人</td>
+    <td colspan="3" width="14%">
+      <input type="text" name="testname" placeholder="">
+    </td>
+    <td>电话</td>
+    <td colspan="3"><input type="text" name="testname" placeholder=""></td>
+    <td colspan="3">传真</td>
+    <td colspan="6"><input type="text" name="testname" placeholder=""></td>
+  </tr>
+  <tr>
+    <td colspan="7" rowspan="2">
+      <div style="padding: 10px">
+        商品质量抽查检验通知书编号：<input type="text" style="width: 100px" name="testname" placeholder=""><br><br>
+        经营者（公章）：<input type="text" style="width: 150px" name="testname" placeholder=""><br><br>
+        负责人签字：<input type="text" style="width: 150px" name="testname" placeholder=""><br><br>
+        <p style="text-align: right;padding-top: 50px;" >
+            <input class="tc" name="commodityyear" style="width:40px" type="text" placeholder="">年
+            <input class="tc" name="commoditymonth" style="width:40px" placeholder="">月
+            <input class="tc" name="commodityday" style="width:40px" placeholder="">日
+        </p>
+      </div>
+    </td>
+    <td height="104" colspan="10">
+        <div style="padding: 10px">
+          <p>抽样日期：
+              <input class="tc" name="samplingyear" style="width:30px" type="text" placeholder="">年
+              <input class="tc" name="samplingmonth" style="width:30px" placeholder="">月
+              <input class="tc" name="samplingday" style="width:30px" placeholder="">日
+          </p><br>
+          抽样人签字：<input type="text" style="width: 150px" name="testname" placeholder=""><br><br>
+          承检机构（公章）：<input type="text" style="width: 150px" name="testname" placeholder="">
+        </div>
+    </td>
+  </tr>
+  <tr>
+    <td height="126" colspan="10">
+      <div style="padding: 10px">
+        市场监督管理执法人员签字：<input type="text" style="width: 100px" name="testname" placeholder=""><br><br>
+        <p style="text-align: right;padding-top: 30px;" >
+            <input class="tc" name="superviseyear" style="width:40px" type="text" placeholder="">年
+            <input class="tc" name="supervisemonth" style="width:40px" placeholder="">月
+            <input class="tc" name="superviseday" style="width:40px" placeholder="">日
+        </p>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td height="110" colspan="7">
+      <div style="padding: 10px" onclick="document.getElementById('sajahgdhe').focus()">
+          <div>备注：</div>
+          <textarea id="sajahgdhe" name="remarks" style="height:50px;margin-top:5px;width: 100%;resize: none;border:0"></textarea>
+      </div>
+    </td>
+    <td colspan="10">
+        <div style="padding: 10px">
+          备份样品接收记录：<input type="text" style="width: 100px" name="testname" placeholder=""><br><br>
+          签收人：<input type="text" style="width: 100px" name="testname" placeholder=""><br><br>
+          <p style="text-align: right;" >
+              <input class="tc" name="receiveyear" style="width:40px" type="text" placeholder="">年
+              <input class="tc" name="receivemonth" style="width:40px" placeholder="">月
+              <input class="tc" name="receiveday" style="width:40px" placeholder="">日
+          </p>
+        </div>
+    </td>
+  </tr>
+  </table>
+</form>
+  <div class="footer" style="line-height:1.6">注:<br>1.本工作单由经营者、承检机构抽样工作人员协助市场监督管理执法人员如实填写;<br>2.本工作单一式四联,第一联留组织实施抽检的市场监管部门,第二联留经营者,第三联留承检机构,第四联交经营者所在地市场监管部门。<br>3.进货量以同一商品规格型号计。库存量为进货量减去销售量;<br>4.需要做选择的项目,在选中项目的“()”中打√;<br>5.备份样品由经营者保管的,经营者须填写备份样品接收记录;备份样品由承检机构带回的,抽样工
+人员应当在备份样品接收记录中注明“带回”字样。</div>
+</div>
+
+<script>
+    var postType = "流通领域商品质量抽查检验工作单"
+</script>
+<script src="./js/js.js"></script>
+</body>
+</html>
