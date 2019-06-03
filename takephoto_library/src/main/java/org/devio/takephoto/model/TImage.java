@@ -1,6 +1,8 @@
 package org.devio.takephoto.model;
 
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.Serializable;
 
@@ -10,7 +12,7 @@ import java.io.Serializable;
  * Author: JPH
  * Date: 2016/8/11 17:01
  */
-public class TImage implements Serializable {
+public class TImage implements Serializable, Parcelable {
     private String originalPath;
     private String compressPath;//只有开启压缩压缩路径才有值
     private FromType fromType;
@@ -20,6 +22,25 @@ public class TImage implements Serializable {
    public TImage() {
 
     }
+
+    protected TImage(Parcel in) {
+        originalPath = in.readString();
+        compressPath = in.readString();
+        cropped = in.readByte() != 0;
+        compressed = in.readByte() != 0;
+    }
+
+    public static final Creator<TImage> CREATOR = new Creator<TImage>() {
+        @Override
+        public TImage createFromParcel(Parcel in) {
+            return new TImage(in);
+        }
+
+        @Override
+        public TImage[] newArray(int size) {
+            return new TImage[size];
+        }
+    };
 
     public static TImage of(String path, FromType fromType) {
         return new TImage(path, fromType);
@@ -77,6 +98,19 @@ public class TImage implements Serializable {
 
     public void setCompressed(boolean compressed) {
         this.compressed = compressed;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(originalPath);
+        dest.writeString(compressPath);
+        dest.writeByte((byte) (cropped ? 1 : 0));
+        dest.writeByte((byte) (compressed ? 1 : 0));
     }
 
     public enum FromType {

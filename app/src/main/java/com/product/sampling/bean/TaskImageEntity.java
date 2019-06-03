@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import org.devio.takephoto.model.TImage;
 
-public class TaskImageEntity extends TImage {
+public class TaskImageEntity extends TImage implements Parcelable{
     public String title = "";
 
 }

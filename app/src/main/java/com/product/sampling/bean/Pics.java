@@ -1,6 +1,9 @@
 package com.product.sampling.bean;
 
-public class Pics extends TaskImageEntity {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Pics extends TaskImageEntity implements Parcelable {
 
     /**
      * id : 764543eb7df24fe78d79c210555b96dd
@@ -54,6 +57,33 @@ public class Pics extends TaskImageEntity {
     public Pics() {
 
     }
+
+    protected Pics(Parcel in) {
+        id = in.readString();
+        isNewRecord = in.readByte() != 0;
+        remarks = in.readString();
+        createDate = in.readString();
+        updateDate = in.readString();
+        fileName = in.readString();
+        fileSize = in.readString();
+        fileType = in.readString();
+        folderPath = in.readString();
+        belongID = in.readString();
+        ftpFileName = in.readString();
+        picorpdf = in.readString();
+    }
+
+    public static final Creator<Pics> CREATOR = new Creator<Pics>() {
+        @Override
+        public Pics createFromParcel(Parcel in) {
+            return new Pics(in);
+        }
+
+        @Override
+        public Pics[] newArray(int size) {
+            return new Pics[size];
+        }
+    };
 
     public String getPicorpdf() {
         return picorpdf;
@@ -157,5 +187,26 @@ public class Pics extends TaskImageEntity {
 
     public void setFtpFileName(String ftpFileName) {
         this.ftpFileName = ftpFileName;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeByte((byte) (isNewRecord ? 1 : 0));
+        dest.writeString(remarks);
+        dest.writeString(createDate);
+        dest.writeString(updateDate);
+        dest.writeString(fileName);
+        dest.writeString(fileSize);
+        dest.writeString(fileType);
+        dest.writeString(folderPath);
+        dest.writeString(belongID);
+        dest.writeString(ftpFileName);
+        dest.writeString(picorpdf);
     }
 }

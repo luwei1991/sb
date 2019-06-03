@@ -43,15 +43,17 @@ public class TaskEntity implements Parcelable {
     public String latitude;//任务提交时的维度
     public int leftday;//任务剩余天数
 
-    public List<Pics> pics = new ArrayList<>();
-    public List<Videos> voides = new ArrayList<>();
+    public ArrayList<Pics> pics = new ArrayList<>();
+    public ArrayList<Videos> voides = new ArrayList<>();
     public boolean isNewRecord;
+
+    public boolean isLoadLocalData;
 
     public TaskEntity() {
 
     }
 
-    public TaskEntity(Parcel in) {
+    protected TaskEntity(Parcel in) {
         id = in.readString();
         planid = in.readString();
         companyid = in.readString();
@@ -80,6 +82,11 @@ public class TaskEntity implements Parcelable {
         taskTime = in.readString();
         longitude = in.readString();
         latitude = in.readString();
+        leftday = in.readInt();
+        pics = in.createTypedArrayList(Pics.CREATOR);
+        voides = in.createTypedArrayList(Videos.CREATOR);
+        isNewRecord = in.readByte() != 0;
+        isLoadLocalData = in.readByte() != 0;
     }
 
     public static final Creator<TaskEntity> CREATOR = new Creator<TaskEntity>() {
@@ -129,8 +136,11 @@ public class TaskEntity implements Parcelable {
         dest.writeString(taskTime);
         dest.writeString(longitude);
         dest.writeString(latitude);
+        dest.writeInt(leftday);
+        dest.writeTypedList(pics);
+        dest.writeTypedList(voides);
+        dest.writeByte((byte) (isNewRecord ? 1 : 0));
+        dest.writeByte((byte) (isLoadLocalData ? 1 : 0));
     }
-
-
 }
 

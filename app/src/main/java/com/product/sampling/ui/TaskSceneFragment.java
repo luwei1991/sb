@@ -124,7 +124,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
         rootView.findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                postData();
+//                postData();
                 saveData();
             }
         });
@@ -181,28 +181,62 @@ public class TaskSceneFragment extends BasePhotoFragment {
         return rootView;
     }
 
-    private void saveData() {
+    List<TaskEntity> listTask;
 
-        String taskList = (String) SPUtil.get(getActivity(), "tasklist", "");
-        if (!TextUtils.isEmpty(taskList)) {
-            Gson gson = new Gson();
+    private void saveData() {
+        boolean hasData = false;
+        if (!taskDetailViewModel.isImageRequestFromServer && null != taskDetailViewModel.taskEntity.pics && !taskDetailViewModel.taskEntity.pics.isEmpty()) {
+            for (int i = 0; i < taskDetailViewModel.taskEntity.pics.size(); i++) {
+                File f = new File(taskDetailViewModel.taskEntity.pics.get(i).getOriginalPath());
+                if (!f.exists()) {
+                    com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "无效图片");
+                    continue;
+                }
+                hasData = true;
+            }
+        }
+        if (!taskDetailViewModel.isVideoRequestFromServer && null != taskDetailViewModel.taskEntity.voides && !taskDetailViewModel.taskEntity.voides.isEmpty()) {
+
+            for (int i = 0; i < taskDetailViewModel.taskEntity.voides.size(); i++) {
+                if (!taskDetailViewModel.taskEntity.voides.get(i).isLocal) {
+                    continue;
+                }
+                File f = new File(taskDetailViewModel.taskEntity.voides.get(i).getPath());
+                if (!f.exists()) {
+                    Log.e("视频", f.getAbsolutePath());
+                    com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "无效视频");
+                    continue;
+                }
+                hasData = true;
+            }
+        }
+        if (!hasData) {
+            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "请先选择图片或者视频");
+            return;
+        }
+
+        listTask = new ArrayList<>();
+
+        Gson gson = new Gson();
+        String taskListStr = (String) SPUtil.get(getActivity(), "tasklist", "");
+        if (!TextUtils.isEmpty(taskListStr)) {
             Type listType = new TypeToken<List<TaskEntity>>() {
             }.getType();
-            List<TaskEntity> list = gson.fromJson(taskList, listType);
-            if (null != list && !list.isEmpty()) {
-                Observable.fromIterable(list).subscribe(new Consumer<TaskEntity>() {
-                    @Override
-                    public void accept(TaskEntity entity) throws Exception {
-                        if (entity.id == taskDetailViewModel.taskEntity.id) {
-                            list.remove(entity);
-                        }
+            listTask = gson.fromJson(taskListStr, listType);
+            if (null != listTask && !listTask.isEmpty()) {
+               
+                for (int i = 0; i < listTask.size(); i++) {
+                    if (listTask.get(i).id.equals(taskDetailViewModel.taskEntity.id)) {
+                        listTask.remove(i);
                     }
-                });
+                }
             }
-            //to-do
-
-            list.add(null);
         }
+        taskDetailViewModel.taskEntity.isLoadLocalData = true;
+        listTask.add(taskDetailViewModel.taskEntity);
+        String data = gson.toJson(listTask);
+        SPUtil.put(getActivity(), "tasklist", data);
+        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "保存本地成功");
     }
 
     private String getPath() {
@@ -306,6 +340,17 @@ public class TaskSceneFragment extends BasePhotoFragment {
 
     @Override
     public void showResultImages(ArrayList<TImage> images) {
+        if (null != taskDetailViewModel.taskEntity.pics && !taskDetailViewModel.taskEntity.pics.isEmpty()) {
+            Observable.fromIterable(taskDetailViewModel.taskEntity.pics).subscribe(new Consumer<Pics>() {
+                @Override
+                public void accept(Pics entity) throws Exception {
+                    if (TextUtils.isEmpty(entity.getOriginalPath())) {
+                        taskDetailViewModel.taskEntity.pics.remove(entity);
+                    }
+                }
+            });
+        }
+
 
         for (TImage image :
                 images) {
@@ -330,7 +375,6 @@ public class TaskSceneFragment extends BasePhotoFragment {
         companytel.setText(taskEntity.companytel);
         remark.setText(taskEntity.remark);
 
-        taskDetailViewModel.requestOrderList(AccountManager.getInstance().getUserId(), taskEntity.id);
         taskDetailViewModel.orderDetailLiveData.observe(this, new Observer<LoadDataModel<TaskEntity>>() {
             @Override
             public void onChanged(LoadDataModel<TaskEntity> taskEntityLoadDataModel) {
@@ -344,8 +388,16 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 }
             }
         });
-//        setupRecyclerView(mRecyclerViewImageList, taskExecptionViewModel.imageList);
-//        setupRecyclerViewVideo(mRecyclerViewVideoList, taskExecptionViewModel.taskEntity.voides);
+        if (taskEntity.isLoadLocalData) {
+            taskDetailViewModel.taskEntity = taskEntity;
+            taskDetailViewModel.isImageRequestFromServer = false;
+            taskDetailViewModel.isVideoRequestFromServer = false;
+            setupRecyclerView(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
+            setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
+        } else {
+            taskDetailViewModel.requestOrderList(AccountManager.getInstance().getUserId(), taskEntity.id);
+        }
+
     }
 
     private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, List<Videos> videoList) {

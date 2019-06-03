@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.product.sampling.R;
 import com.product.sampling.bean.ImageItem;
+import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 
@@ -41,6 +42,7 @@ public class TaskDetailActivity extends BaseActivity {
         toolbar.setTitle(getTitle());
         taskDetailViewModel = ViewModelProviders.of(this).get(TaskDetailViewModel.class);
         task = getIntent().getParcelableExtra("task");
+        taskDetailViewModel.taskEntity = task;
         View recyclerView = findViewById(R.id.item_image_list);
         assert recyclerView != null;
         List list = new ArrayList();
@@ -71,13 +73,10 @@ public class TaskDetailActivity extends BaseActivity {
                 arguments.putString(TaskListFragment.ARG_TASK_STATUS, imageItem.getTitle());
                 Fragment fragment = new TaskUnfindSampleFragment();
                 if (imageItem.getTitle().equalsIgnoreCase("任务信息")) {
-                    mParentActivity.taskDetailViewModel.taskEntity = task;
                     fragment = TaskDetailFragment.newInstance(task);
                 } else if (imageItem.getTitle().equalsIgnoreCase("现场信息")) {
-                    mParentActivity.taskDetailViewModel.taskEntity = task;
                     fragment = TaskSceneFragment.newInstance(task);
                 } else if (imageItem.getTitle().equalsIgnoreCase("样品信息")) {
-                    mParentActivity.taskDetailViewModel.taskEntity = task;
                     fragment = TaskSampleFragment.newInstance(task);
                 }
                 fragment.setArguments(arguments);

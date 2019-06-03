@@ -1,6 +1,9 @@
 package com.product.sampling.bean;
 
-public class Videos extends LocalMediaInfo {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Videos extends LocalMediaInfo implements Parcelable {
     /**
      * id : 00e5f055a9c84156b58e38fddd36fa46
      * isNewRecord : false
@@ -18,6 +21,32 @@ public class Videos extends LocalMediaInfo {
     public Videos() {
 
     }
+
+    protected Videos(Parcel in) {
+        id = in.readString();
+        isNewRecord = in.readByte() != 0;
+        remarks = in.readString();
+        createDate = in.readString();
+        updateDate = in.readString();
+        fileName = in.readString();
+        fileSize = in.readString();
+        fileType = in.readString();
+        folderPath = in.readString();
+        belongID = in.readString();
+        ftpFileName = in.readString();
+    }
+
+    public static final Creator<Videos> CREATOR = new Creator<Videos>() {
+        @Override
+        public Videos createFromParcel(Parcel in) {
+            return new Videos(in);
+        }
+
+        @Override
+        public Videos[] newArray(int size) {
+            return new Videos[size];
+        }
+    };
 
     private String id;
     private boolean isNewRecord;

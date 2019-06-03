@@ -2,6 +2,7 @@ package com.product.sampling.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +13,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.product.sampling.R;
 import com.product.sampling.adapter.SpinnerSimpleAdapter;
 import com.product.sampling.bean.TaskEntity;
@@ -25,11 +29,15 @@ import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.net.response.ResponseTransformer;
 import com.product.sampling.net.schedulers.SchedulerProvider;
+import com.product.sampling.utils.SPUtil;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * 任务列表
@@ -43,7 +51,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
     int ordertype = 1;//    0时间倒叙1时间升序
 
     Disposable disposable;
-    View recyclerView;
+    RecyclerView recyclerView;
     ImageView mIVdistance;
     ImageView mIVTime;
     boolean isTimeFromLowToHigh = true;
@@ -60,16 +68,27 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments().containsKey(ARG_TITLE)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-        }
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         getMenuData();
-        getData();
+        if (getArguments().getString(ARG_TASK_STATUS).equals("0")) {
+            getData();
+        } else if (getArguments().getString(ARG_TASK_STATUS).equals("1")) {
+            assert recyclerView != null;
+            String taskList = (String) SPUtil.get(getActivity(), "tasklist", "");
+            if (!TextUtils.isEmpty(taskList)) {
+                Gson gson = new Gson();
+                Type listType = new TypeToken<List<TaskEntity>>() {
+                }.getType();
+                List<TaskEntity> list = gson.fromJson(taskList, listType);
+                if (null != list && !list.isEmpty()) {
+                    TaskResultBean bean = new TaskResultBean();
+                    bean.list = list;
+                    setupRecyclerView((RecyclerView) recyclerView, bean);
+                }
+            }
+
+        }
     }
 
 
@@ -151,7 +170,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                 .subscribe(tasks -> {
                     Log.e("tasks", tasks.toString());
 
-                    System.out.println("------>"+tasks.toString());
+                    System.out.println("------>" + tasks.toString());
                 }, throwable -> {
                     if (isVisible()) {
                         showToast(((ApiException) throwable).getDisplayMessage());
@@ -203,7 +222,8 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                 if (view.getId() == R.id.tv_map) {
                     view.getContext().startActivity(new Intent(view.getContext(), BasicMapActivity.class));
                 } else if (view.getId() == R.id.tv_fill_info) {
-                    view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task", (TaskEntity) view.getTag()));
+                    TaskEntity taskEntity = (TaskEntity) view.getTag();
+                    view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task",taskEntity).putExtra("pic",taskEntity.pics));
                 } else if (view.getId() == R.id.tv_exception) {
                     view.getContext().startActivity(new Intent(view.getContext(), TaskExceptionActivity.class).putExtra("task", (TaskEntity) view.getTag()));
                 }
