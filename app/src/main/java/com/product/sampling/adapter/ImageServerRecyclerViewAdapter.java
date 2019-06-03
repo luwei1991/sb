@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.product.sampling.R;
+import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskImageEntity;
@@ -34,7 +35,7 @@ import static com.product.sampling.Constants.IMAGE_BASE_URL;
 
 public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageServerRecyclerViewAdapter.ViewHolder> {
 
-    private final List<TaskEntity.Pics> mValues;
+    private final List<Pics> mValues;
     private boolean isLocal;
     private int taskPostion = -1;//当前图片列表所属样品id
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -71,14 +72,14 @@ public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageSe
     }
 
     public ImageServerRecyclerViewAdapter(Context parent,
-                                          List<TaskEntity.Pics> items,
+                                          List<Pics> items,
                                           boolean isLocal) {
         mValues = items;
         this.isLocal = isLocal;
     }
 
     public ImageServerRecyclerViewAdapter(Context parent,
-                                          List<TaskEntity.Pics> items,
+                                          List<Pics> items,
                                           int pos) {
         mValues = items;
         taskPostion = pos;
@@ -93,7 +94,7 @@ public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageSe
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TaskEntity.Pics task = mValues.get(position);
+        Pics task = mValues.get(position);
         holder.mTextViewTitle.setText(task.getRemarks());
         if (taskPostion != -1) {
             holder.mImageView.setTag(taskPostion);

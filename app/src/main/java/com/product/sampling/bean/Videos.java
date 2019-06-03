@@ -1,45 +1,27 @@
 package com.product.sampling.bean;
 
-public class Pics extends TaskImageEntity {
-
+public class Videos extends LocalMediaInfo {
     /**
-     * id : 764543eb7df24fe78d79c210555b96dd
+     * id : 00e5f055a9c84156b58e38fddd36fa46
      * isNewRecord : false
      * remarks :
      * createDate : 2019-05-30 15:09:51
      * updateDate : 2019-05-30 15:09:51
-     * fileName : 1557456073738.jpg
-     * fileSize : 8102
-     * fileType : .jpg
+     * fileName : VID_20180810_185944.mp4
+     * fileSize : 5598470
+     * fileType : .mp4
      * folderPath : /d444d03c23ca4a75aae89c81dbcbcdf6
      * isMarge : null
-     * belongID : 0cb2d6b25d09464fb7882252d2a6f168
-     * ftpFileName : 764543eb7df24fe78d79c210555b96dd.jpg
+     * belongID : a6ff0f67783f41cdbb3dfcace4f9c459
+     * ftpFileName : 00e5f055a9c84156b58e38fddd36fa46.mp4
      */
+    public Videos() {
 
-
-    // 0602
-    /**
-     * "pics": [{
-     * "id": "1a69acb72420432cb687d47c7c53779a",
-     * "isNewRecord": false,
-     * "remarks": "中国尊",
-     * "createDate": "2019-06-02 09:03:08",
-     * "updateDate": "2019-06-02 09:03:08",
-     * "fileName": "P90602-165603.jpg",
-     * "fileSize": "1889786",
-     * "fileType": ".jpg",
-     * "folderPath": "/d444d03c23ca4a75aae89c81dbcbcdf6",
-     * "isMarge": null,
-     * "belongID": "0cb2d6b25d09464fb7882252d2a6f168",
-     * "ftpFileName": "1a69acb72420432cb687d47c7c53779a.jpg",
-     * "picorpdf": "0"
-     * }],
-     */
+    }
 
     private String id;
     private boolean isNewRecord;
-    private String remarks;
+    private String remarks = "";
     private String createDate;
     private String updateDate;
     private String fileName;
@@ -49,19 +31,8 @@ public class Pics extends TaskImageEntity {
     private Object isMarge;
     private String belongID;
     private String ftpFileName;
-    private String picorpdf;
 
-    public Pics() {
-
-    }
-
-    public String getPicorpdf() {
-        return picorpdf;
-    }
-
-    public void setPicorpdf(String picorpdf) {
-        this.picorpdf = picorpdf;
-    }
+    public boolean isLocal = false;
 
     public String getId() {
         return id;
@@ -158,4 +129,5 @@ public class Pics extends TaskImageEntity {
     public void setFtpFileName(String ftpFileName) {
         this.ftpFileName = ftpFileName;
     }
+
 }

@@ -111,7 +111,8 @@
         <activity
             android:name=".ui.MediaPlayerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait" /> <!-- or android:screenOrientation="landscape"-->
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" /> <!-- or android:screenOrientation="landscape"-->
 
         <activity
             android:name=".ui.TaskExceptionActivity"

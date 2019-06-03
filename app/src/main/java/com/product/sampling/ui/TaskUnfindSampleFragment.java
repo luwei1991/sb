@@ -24,6 +24,7 @@ import com.product.sampling.adapter.ImageServerRecyclerViewAdapter;
 import com.product.sampling.adapter.VideoAndTextRecyclerViewAdapter;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskImageEntity;
+import com.product.sampling.bean.Videos;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.LoadDataModel;
 import com.product.sampling.photo.BasePhotoFragment;
@@ -259,10 +260,10 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                     // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true  注意：音视频除外
                     // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true  注意：音视频除外
                     // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
-                    List<TaskEntity.Videos> mediaInfos = new ArrayList<>();
+                    List<Videos> mediaInfos = new ArrayList<>();
 
                     for (LocalMedia media:selectList){
-                        TaskEntity.Videos mediaInfo = new TaskEntity.Videos();
+                        Videos mediaInfo = new Videos();
                         mediaInfo.setPath(media.getPath());
                         mediaInfo.setCompressPath(media.getCompressPath());
                         mediaInfo.setCutPath(media.getCutPath());
@@ -334,7 +335,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
      * @param mRecyclerViewVideoList
      * @param videoList
      */
-    private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, List<TaskEntity.Videos> videoList) {
+    private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, List<Videos> videoList) {
         mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, true));
     }
 
@@ -363,7 +364,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
      * @param mRecyclerViewVideoList
      * @param videoList
      */
-    private void setupRecyclerViewVideoFromServer(RecyclerView mRecyclerViewVideoList, List<TaskEntity.Videos> videoList) {
+    private void setupRecyclerViewVideoFromServer(RecyclerView mRecyclerViewVideoList, List<Videos> videoList) {
         mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, false));
     }
 

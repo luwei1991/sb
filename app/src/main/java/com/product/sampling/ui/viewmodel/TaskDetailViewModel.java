@@ -30,9 +30,6 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
 
     public TaskEntity taskEntity = new TaskEntity();
     public List<TaskSample> taskList = new ArrayList<>();
-    public ArrayList<TaskImageEntity> imageList = new ArrayList<>();
-    public ArrayList<LocalMediaInfo> videoList = new ArrayList<>();
-
     public MutableLiveData<LoadDataModel<String>> orderLoadLiveData = new MutableLiveData<>();
     public MutableLiveData<LoadDataModel<TaskEntity>> orderDetailLiveData = new MutableLiveData<>();
     public MutableLiveData<LoadDataModel<List<TaskSample>>> sampleDetailLiveData = new MutableLiveData<>();

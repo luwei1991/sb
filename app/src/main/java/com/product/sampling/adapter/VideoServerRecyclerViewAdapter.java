@@ -20,6 +20,7 @@ import com.luck.picture.lib.PictureSelector;
 import com.product.sampling.R;
 import com.product.sampling.bean.LocalMediaInfo;
 import com.product.sampling.bean.TaskEntity;
+import com.product.sampling.bean.Videos;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ import static com.product.sampling.Constants.IMAGE_BASE_URL;
 
 public class VideoServerRecyclerViewAdapter extends RecyclerView.Adapter<VideoServerRecyclerViewAdapter.ViewHolder> {
 
-    private final List<TaskEntity.Videos> mValues;
+    private final List<Videos> mValues;
     private boolean mTwoPane;
     private Fragment fragment;//当前图片列表所属样品id
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -38,7 +39,7 @@ public class VideoServerRecyclerViewAdapter extends RecyclerView.Adapter<VideoSe
     };
 
     public VideoServerRecyclerViewAdapter(Context parent,
-                                          List<TaskEntity.Videos> items,
+                                          List<Videos> items,
                                           Fragment pos) {
         mValues = items;
         fragment = pos;
@@ -53,7 +54,7 @@ public class VideoServerRecyclerViewAdapter extends RecyclerView.Adapter<VideoSe
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TaskEntity.Videos task = mValues.get(position);
+        Videos task = mValues.get(position);
         Glide.with(holder.itemView.getContext()).load(IMAGE_BASE_URL + task.getId()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);
         holder.mTextViewTitle.setText(task.getRemarks());
         holder.itemView.setTag(position);

@@ -3,6 +3,7 @@ package com.product.sampling.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -26,8 +29,11 @@ import com.product.sampling.R;
 import com.product.sampling.adapter.ImageAndTextRecyclerViewAdapter;
 import com.product.sampling.adapter.ImageServerRecyclerViewAdapter;
 import com.product.sampling.adapter.VideoAndTextRecyclerViewAdapter;
+import com.product.sampling.bean.Pics;
+import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskImageEntity;
+import com.product.sampling.bean.Videos;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.LoadDataModel;
@@ -36,21 +42,25 @@ import com.product.sampling.net.request.Request;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 import com.product.sampling.utils.RxSchedulersHelper;
+import com.product.sampling.utils.SPUtil;
 
 import org.devio.takephoto.model.TImage;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
 
 /**
-    现场信息
+ * 现场信息
  */
 public class TaskSceneFragment extends BasePhotoFragment {
 
@@ -115,6 +125,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
             @Override
             public void onClick(View v) {
                 postData();
+                saveData();
             }
         });
 
@@ -167,8 +178,31 @@ public class TaskSceneFragment extends BasePhotoFragment {
         });
 
 
-
         return rootView;
+    }
+
+    private void saveData() {
+
+        String taskList = (String) SPUtil.get(getActivity(), "tasklist", "");
+        if (!TextUtils.isEmpty(taskList)) {
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<TaskEntity>>() {
+            }.getType();
+            List<TaskEntity> list = gson.fromJson(taskList, listType);
+            if (null != list && !list.isEmpty()) {
+                Observable.fromIterable(list).subscribe(new Consumer<TaskEntity>() {
+                    @Override
+                    public void accept(TaskEntity entity) throws Exception {
+                        if (entity.id == taskDetailViewModel.taskEntity.id) {
+                            list.remove(entity);
+                        }
+                    }
+                });
+            }
+            //to-do
+
+            list.add(null);
+        }
     }
 
     private String getPath() {
@@ -193,16 +227,15 @@ public class TaskSceneFragment extends BasePhotoFragment {
         }
 
         boolean hasData = false;
-        if (!taskDetailViewModel.isImageRequestFromServer && null != taskDetailViewModel.imageList && !taskDetailViewModel.imageList.isEmpty()) {
-            for (int i = 0; i < taskDetailViewModel.imageList.size(); i++) {
-                File f = new File(taskDetailViewModel.imageList.get(i).getOriginalPath());
+        if (!taskDetailViewModel.isImageRequestFromServer && null != taskDetailViewModel.taskEntity.pics && !taskDetailViewModel.taskEntity.pics.isEmpty()) {
+            for (int i = 0; i < taskDetailViewModel.taskEntity.pics.size(); i++) {
+                File f = new File(taskDetailViewModel.taskEntity.pics.get(i).getOriginalPath());
                 if (!f.exists()) {
-                    Log.e("file", f.getAbsolutePath());
                     com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "无效图片");
                     continue;
                 }
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("picstrs", taskDetailViewModel.imageList.get(i).title)
+                multipartBodyBuilder.addFormDataPart("picstrs", taskDetailViewModel.taskEntity.pics.get(i).title)
                         .addFormDataPart("uploadpics", f.getName(), requestImage);
                 hasData = true;
             }
@@ -276,14 +309,14 @@ public class TaskSceneFragment extends BasePhotoFragment {
 
         for (TImage image :
                 images) {
-            TaskImageEntity taskImageEntity = new TaskImageEntity();
+            Pics taskImageEntity = new Pics();
             taskImageEntity.setCompressPath(image.getCompressPath());
             taskImageEntity.setOriginalPath(image.getOriginalPath());
             taskImageEntity.setFromType(image.getFromType());
-            taskDetailViewModel.imageList.add(taskImageEntity);
+            taskDetailViewModel.taskEntity.pics.add(taskImageEntity);
         }
         taskDetailViewModel.isImageRequestFromServer = false;
-        setupRecyclerView(mRecyclerViewImageList, taskDetailViewModel.imageList);
+        setupRecyclerView(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
     }
 
     @Override
@@ -315,11 +348,11 @@ public class TaskSceneFragment extends BasePhotoFragment {
 //        setupRecyclerViewVideo(mRecyclerViewVideoList, taskExecptionViewModel.taskEntity.voides);
     }
 
-    private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, List<TaskEntity.Videos> videoList) {
+    private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, List<Videos> videoList) {
         mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, true));
     }
 
-    private void setupRecyclerViewVideoFromServer(RecyclerView mRecyclerViewVideoList, List<TaskEntity.Videos> videoList) {
+    private void setupRecyclerViewVideoFromServer(RecyclerView mRecyclerViewVideoList, List<Videos> videoList) {
         mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, false));
     }
 
@@ -336,10 +369,10 @@ public class TaskSceneFragment extends BasePhotoFragment {
                     // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true  注意：音视频除外
                     // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true  注意：音视频除外
                     // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
-                    List<TaskEntity.Videos> mediaInfos = new ArrayList<>();
+                    List<Videos> mediaInfos = new ArrayList<>();
                     for (LocalMedia media :
                             selectList) {
-                        TaskEntity.Videos mediaInfo = new TaskEntity.Videos();
+                        Videos mediaInfo = new Videos();
                         mediaInfo.setPath(media.getPath());
                         mediaInfo.setCompressPath(media.getCompressPath());
                         mediaInfo.setCutPath(media.getCutPath());
@@ -375,7 +408,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
 
     // help method
 
-    private void setCanNotEdit(EditText mEditText){
+    private void setCanNotEdit(EditText mEditText) {
         mEditText.setFocusable(false);
         mEditText.setFocusableInTouchMode(false);
         mEditText.setOnClickListener(null);

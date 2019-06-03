@@ -25,6 +25,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.luck.picture.lib.PictureSelector;
 import com.product.sampling.R;
 import com.product.sampling.bean.TaskEntity;
+import com.product.sampling.bean.Videos;
 import com.product.sampling.ui.MediaPlayerActivity;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ import static com.product.sampling.Constants.IMAGE_BASE_URL;
 
 public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoAndTextRecyclerViewAdapter.ViewHolder> {
 
-    private List<TaskEntity.Videos> mValues = new ArrayList<>();
+    private List<Videos> mValues = new ArrayList<>();
     private boolean isLocal;
     private Fragment fragment;//当前图片列表所属样品id
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -53,14 +54,14 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
             if (isLocal) {
                 showListDialog(view.getContext(), (int) view.getTag());
             } else {
-                TaskEntity.Videos videos = mValues.get((int) view.getTag());
+                Videos videos = mValues.get((int) view.getTag());
                 view.getContext().startActivity(new Intent(view.getContext(), MediaPlayerActivity.class).putExtra("title", videos.getRemarks() + "").putExtra("url", IMAGE_BASE_URL + videos.getId()));
             }
         }
     };
 
     public VideoAndTextRecyclerViewAdapter(Context parent,
-                                           List<TaskEntity.Videos> items,
+                                           List<Videos> items,
                                            Fragment pos, boolean isLocal) {
         mValues = items;
         fragment = pos;
@@ -76,7 +77,7 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TaskEntity.Videos task = mValues.get(position);
+        Videos task = mValues.get(position);
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(mOnClickListener);
         if (isLocal) {
