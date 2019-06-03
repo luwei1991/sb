@@ -86,6 +86,8 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         mIVTime = rootView.findViewById(R.id.iv_sort_time);
         rootView.findViewById(R.id.tv_range).setOnClickListener(this);
         rootView.findViewById(R.id.tv_date).setOnClickListener(this);
+
+
         ArrayList type = new ArrayList();
         type.add("食品");
         type.add("化工");
@@ -148,6 +150,8 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                 .compose(SchedulerProvider.getInstance().applySchedulers())
                 .subscribe(tasks -> {
                     Log.e("tasks", tasks.toString());
+
+                    System.out.println("------>"+tasks.toString());
                 }, throwable -> {
                     if (isVisible()) {
                         showToast(((ApiException) throwable).getDisplayMessage());
