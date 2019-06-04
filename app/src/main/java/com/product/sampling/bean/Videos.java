@@ -3,7 +3,9 @@ package com.product.sampling.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Videos extends LocalMediaInfo implements Parcelable {
+import java.io.Serializable;
+
+public class Videos extends LocalMediaInfo implements Parcelable, Serializable {
     /**
      * id : 00e5f055a9c84156b58e38fddd36fa46
      * isNewRecord : false

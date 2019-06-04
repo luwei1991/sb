@@ -224,7 +224,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
             }.getType();
             listTask = gson.fromJson(taskListStr, listType);
             if (null != listTask && !listTask.isEmpty()) {
-               
+
                 for (int i = 0; i < listTask.size(); i++) {
                     if (listTask.get(i).id.equals(taskDetailViewModel.taskEntity.id)) {
                         listTask.remove(i);
@@ -369,11 +369,21 @@ public class TaskSceneFragment extends BasePhotoFragment {
         super.onActivityCreated(savedInstanceState);
         taskDetailViewModel = ViewModelProviders.of(getActivity()).get(TaskDetailViewModel.class);
 
-        TaskEntity taskEntity = taskDetailViewModel.taskEntity;
-        companyname.setText(taskEntity.companyname);
-        companyaddress.setText(taskEntity.companyaddress);
-        companytel.setText(taskEntity.companytel);
-        remark.setText(taskEntity.remark);
+        //刷新本地图片和视频列表
+        if (taskDetailViewModel.taskEntity.isLoadLocalData) {
+            findTaskInLocalFile();
+            taskDetailViewModel.isImageRequestFromServer = false;
+            taskDetailViewModel.isVideoRequestFromServer = false;
+            setupRecyclerView(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
+            setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
+        } else {
+            taskDetailViewModel.requestOrderList(AccountManager.getInstance().getUserId(), taskDetailViewModel.taskEntity.id);
+        }
+        companyname.setText(taskDetailViewModel.taskEntity.companyname);
+        companyaddress.setText(taskDetailViewModel.taskEntity.companyaddress);
+        companytel.setText(taskDetailViewModel.taskEntity.companytel);
+        remark.setText(taskDetailViewModel.taskEntity.remark);
+
 
         taskDetailViewModel.orderDetailLiveData.observe(this, new Observer<LoadDataModel<TaskEntity>>() {
             @Override
@@ -388,16 +398,6 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 }
             }
         });
-        if (taskEntity.isLoadLocalData) {
-            taskDetailViewModel.taskEntity = taskEntity;
-            taskDetailViewModel.isImageRequestFromServer = false;
-            taskDetailViewModel.isVideoRequestFromServer = false;
-            setupRecyclerView(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
-            setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
-        } else {
-            taskDetailViewModel.requestOrderList(AccountManager.getInstance().getUserId(), taskEntity.id);
-        }
-
     }
 
     private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, List<Videos> videoList) {
@@ -464,5 +464,22 @@ public class TaskSceneFragment extends BasePhotoFragment {
         mEditText.setFocusable(false);
         mEditText.setFocusableInTouchMode(false);
         mEditText.setOnClickListener(null);
+    }
+
+    void findTaskInLocalFile() {
+        Gson gson = new Gson();
+        String taskListStr = (String) SPUtil.get(getActivity(), "tasklist", "");
+        if (!TextUtils.isEmpty(taskListStr)) {
+            Type listType = new TypeToken<List<TaskEntity>>() {
+            }.getType();
+            listTask = gson.fromJson(taskListStr, listType);
+            if (null != listTask && !listTask.isEmpty()) {
+                for (int i = 0; i < listTask.size(); i++) {
+                    if (listTask.get(i).id.equals(taskDetailViewModel.taskEntity.id)) {
+                        taskDetailViewModel.taskEntity = listTask.get(i);
+                    }
+                }
+            }
+        }
     }
 }

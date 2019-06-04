@@ -3,7 +3,11 @@ package com.product.sampling.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Pics extends TaskImageEntity implements Parcelable {
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
+public class Pics extends TaskImageEntity implements Parcelable, Serializable {
 
     /**
      * id : 764543eb7df24fe78d79c210555b96dd
@@ -71,6 +75,7 @@ public class Pics extends TaskImageEntity implements Parcelable {
         belongID = in.readString();
         ftpFileName = in.readString();
         picorpdf = in.readString();
+
     }
 
     public static final Creator<Pics> CREATOR = new Creator<Pics>() {

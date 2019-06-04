@@ -2,11 +2,14 @@ package com.product.sampling.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.SparseArray;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class TaskEntity implements Parcelable {
+public class TaskEntity implements Parcelable, Serializable {
     public String id;//任务唯一id
     public String planid;//所属计划id
     public String companyid;//抽样企业id
@@ -43,8 +46,8 @@ public class TaskEntity implements Parcelable {
     public String latitude;//任务提交时的维度
     public int leftday;//任务剩余天数
 
-    public ArrayList<Pics> pics = new ArrayList<>();
-    public ArrayList<Videos> voides = new ArrayList<>();
+    public List<Pics> pics = new ArrayList<Pics>();
+    public List<Videos> voides = new ArrayList<Videos>();
     public boolean isNewRecord;
 
     public boolean isLoadLocalData;
@@ -83,10 +86,15 @@ public class TaskEntity implements Parcelable {
         longitude = in.readString();
         latitude = in.readString();
         leftday = in.readInt();
-        pics = in.createTypedArrayList(Pics.CREATOR);
-        voides = in.createTypedArrayList(Videos.CREATOR);
+
         isNewRecord = in.readByte() != 0;
         isLoadLocalData = in.readByte() != 0;
+
+        in.readTypedList(pics, Pics.CREATOR);
+
+        //        in.readTypedList(pics, Pics.CREATOR);
+        in.readTypedList(voides, Videos.CREATOR);
+
     }
 
     public static final Creator<TaskEntity> CREATOR = new Creator<TaskEntity>() {
@@ -137,10 +145,15 @@ public class TaskEntity implements Parcelable {
         dest.writeString(longitude);
         dest.writeString(latitude);
         dest.writeInt(leftday);
-        dest.writeTypedList(pics);
-        dest.writeTypedList(voides);
         dest.writeByte((byte) (isNewRecord ? 1 : 0));
         dest.writeByte((byte) (isLoadLocalData ? 1 : 0));
+        dest.writeTypedList(pics);
+        dest.writeTypedList(voides);
+
+//        if (pics != null)
+//            dest.writeParcelableArray(
+//                    pics.toArray(new Pics[pics.size()]), flags);
     }
+
 }
 

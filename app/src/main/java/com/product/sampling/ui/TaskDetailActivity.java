@@ -41,7 +41,9 @@ public class TaskDetailActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
         taskDetailViewModel = ViewModelProviders.of(this).get(TaskDetailViewModel.class);
-        task = getIntent().getParcelableExtra("task");
+
+        Bundle bundle = getIntent().getExtras();    //得到传过来的bundle
+        task = (TaskEntity) bundle.getSerializable("task");//读出数据
         taskDetailViewModel.taskEntity = task;
         View recyclerView = findViewById(R.id.item_image_list);
         assert recyclerView != null;

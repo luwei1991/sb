@@ -2,6 +2,7 @@ package com.product.sampling.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +32,9 @@ import com.product.sampling.net.response.ResponseTransformer;
 import com.product.sampling.net.schedulers.SchedulerProvider;
 import com.product.sampling.utils.SPUtil;
 
+import org.devio.takephoto.model.TImage;
+
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -217,15 +221,15 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mTwoPane) {
-                }
                 if (view.getId() == R.id.tv_map) {
                     view.getContext().startActivity(new Intent(view.getContext(), BasicMapActivity.class));
                 } else if (view.getId() == R.id.tv_fill_info) {
                     TaskEntity taskEntity = (TaskEntity) view.getTag();
-                    view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task",taskEntity).putExtra("pic",taskEntity.pics));
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("task", taskEntity);
+                    view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtras(bundle));
                 } else if (view.getId() == R.id.tv_exception) {
-                    view.getContext().startActivity(new Intent(view.getContext(), TaskExceptionActivity.class).putExtra("task", (TaskEntity) view.getTag()));
+//                    view.getContext().startActivity(new Intent(view.getContext(), TaskExceptionActivity.class).putExtra("task", (TaskEntity) view.getTag()));
                 }
             }
         };

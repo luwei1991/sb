@@ -13,11 +13,11 @@ import java.io.Serializable;
  * Date: 2016/8/11 17:01
  */
 public class TImage implements Serializable, Parcelable {
-    private String originalPath;
-    private String compressPath;//只有开启压缩压缩路径才有值
-    private FromType fromType;
-    private boolean cropped;
-    private boolean compressed;
+    public String originalPath;
+    public String compressPath;//只有开启压缩压缩路径才有值
+    public FromType fromType;
+    public boolean cropped;
+    public boolean compressed;
 
    public TImage() {
 
