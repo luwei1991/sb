@@ -52,6 +52,9 @@ public class TaskEntity implements Parcelable, Serializable {
 
     public boolean isLoadLocalData;
 
+    public List<TaskSample> taskSamples = new ArrayList<TaskSample>();
+
+
     public TaskEntity() {
 
     }

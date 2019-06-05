@@ -29,7 +29,7 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
     public boolean isVideoRequestFromServer = true;//
 
     public TaskEntity taskEntity = new TaskEntity();
-    public List<TaskSample> taskList = new ArrayList<>();
+
     public MutableLiveData<LoadDataModel<String>> orderLoadLiveData = new MutableLiveData<>();
     public MutableLiveData<LoadDataModel<TaskEntity>> orderDetailLiveData = new MutableLiveData<>();
     public MutableLiveData<LoadDataModel<List<TaskSample>>> sampleDetailLiveData = new MutableLiveData<>();

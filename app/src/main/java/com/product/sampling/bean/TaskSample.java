@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class TaskSample implements Parcelable {
+public class TaskSample{
 
     public List<TaskImageEntity> list = new ArrayList<>();
     public List<LocalMediaInfo> videoList = new ArrayList<>();
@@ -17,7 +17,7 @@ public class TaskSample implements Parcelable {
     public HashMap<String, String> handleInfo = new HashMap<>();
     public Advice advice = new Advice();
     public Sampling sampling = new Sampling();
-    List<Pics> pics = new ArrayList<>();
+    public List<Pics> pics = new ArrayList<>();
     /**
      * id : 7777
      * isNewRecord : false
@@ -102,6 +102,22 @@ public class TaskSample implements Parcelable {
         this.checkSheet = checkSheet;
     }
 
+    public HashMap<String, String> getCheckInfo() {
+        return checkInfo;
+    }
+
+    public void setCheckInfo(HashMap<String, String> checkInfo) {
+        this.checkInfo = checkInfo;
+    }
+
+    public HashMap<String, String> getHandleInfo() {
+        return handleInfo;
+    }
+
+    public void setHandleInfo(HashMap<String, String> handleInfo) {
+        this.handleInfo = handleInfo;
+    }
+
     public Advice getAdvice() {
         return advice;
     }
@@ -126,12 +142,24 @@ public class TaskSample implements Parcelable {
         this.pics = pics;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public boolean isNewRecord() {
         return isNewRecord;
     }
 
     public void setNewRecord(boolean newRecord) {
         isNewRecord = newRecord;
+    }
+
+    public String getRemarks() {
+        return remarks;
     }
 
     public void setRemarks(String remarks) {
@@ -194,6 +222,14 @@ public class TaskSample implements Parcelable {
         this.samplebase = samplebase;
     }
 
+    public String getTaskid() {
+        return taskid;
+    }
+
+    public void setTaskid(String taskid) {
+        this.taskid = taskid;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -226,8 +262,32 @@ public class TaskSample implements Parcelable {
         this.batchnum = batchnum;
     }
 
+    public String getSamplingreprotid() {
+        return samplingreprotid;
+    }
+
+    public void setSamplingreprotid(String samplingreprotid) {
+        this.samplingreprotid = samplingreprotid;
+    }
+
+    public String getRiskreprotid() {
+        return riskreprotid;
+    }
+
     public void setRiskreprotid(String riskreprotid) {
         this.riskreprotid = riskreprotid;
+    }
+
+    public String getDisposalreportid() {
+        return disposalreportid;
+    }
+
+    public void setDisposalreportid(String disposalreportid) {
+        this.disposalreportid = disposalreportid;
+    }
+
+    public String getWorkreportid() {
+        return workreportid;
     }
 
     public void setWorkreportid(String workreportid) {
@@ -250,91 +310,12 @@ public class TaskSample implements Parcelable {
         this.type = type;
     }
 
-    protected TaskSample(Parcel in) {
-        remarks = in.readString();
-        remark = in.readString();
-        handleSheet = in.readString();
-        checkSheet = in.readString();
+    public boolean isLocalData() {
+        return isLocalData;
     }
 
-    public static final Creator<TaskSample> CREATOR = new Creator<TaskSample>() {
-        @Override
-        public TaskSample createFromParcel(Parcel in) {
-            return new TaskSample(in);
-        }
-
-        @Override
-        public TaskSample[] newArray(int size) {
-            return new TaskSample[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public void setLocalData(boolean localData) {
+        isLocalData = localData;
     }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(remarks);
-        dest.writeString(remark);
-        dest.writeString(handleSheet);
-        dest.writeString(checkSheet);
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public boolean isIsNewRecord() {
-        return isNewRecord;
-    }
-
-    public void setIsNewRecord(boolean isNewRecord) {
-        this.isNewRecord = isNewRecord;
-    }
-
-    public String getRemarks() {
-        return remarks;
-    }
-
-
-    public String getTaskid() {
-        return taskid;
-    }
-
-    public void setTaskid(String taskid) {
-        this.taskid = taskid;
-    }
-
-
-    public String getSamplingreprotid() {
-        return samplingreprotid;
-    }
-
-    public void setSamplingreprotid(String samplingreprotid) {
-        this.samplingreprotid = samplingreprotid;
-    }
-
-    public Object getRiskreprotid() {
-        return riskreprotid;
-    }
-
-    public String getDisposalreportid() {
-        return disposalreportid;
-    }
-
-    public void setDisposalreportid(String disposalreportid) {
-        this.disposalreportid = disposalreportid;
-    }
-
-    public Object getWorkreportid() {
-        return workreportid;
-    }
-
 }
 
