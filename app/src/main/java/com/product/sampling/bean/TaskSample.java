@@ -1,20 +1,19 @@
 package com.product.sampling.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class TaskSample{
+public class TaskSample {
 
     public List<TaskImageEntity> list = new ArrayList<>();
     public List<LocalMediaInfo> videoList = new ArrayList<>();
-    public String handleSheet = "";
-    public String checkSheet = "";
-    public HashMap<String, String> checkInfo = new HashMap<>();
-    public HashMap<String, String> handleInfo = new HashMap<>();
+    public String samplingfile = "";
+    public String disposalfile = "";
+    public String samplingpicfile = "";
+    public String disposalpicfile = "";
+    public HashMap<String, String> samplingInfoMap = new HashMap<>();
+    public HashMap<String, String> adviceInfoMap = new HashMap<>();
     public Advice advice = new Advice();
     public Sampling sampling = new Sampling();
     public List<Pics> pics = new ArrayList<>();
@@ -86,36 +85,28 @@ public class TaskSample{
         this.videoList = videoList;
     }
 
-    public String getHandleSheet() {
-        return handleSheet;
+    public String getSamplingfile() {
+        return samplingfile;
     }
 
-    public void setHandleSheet(String handleSheet) {
-        this.handleSheet = handleSheet;
+    public void setSamplingfile(String samplingfile) {
+        this.samplingfile = samplingfile;
     }
 
-    public String getCheckSheet() {
-        return checkSheet;
+    public String getDisposalfile() {
+        return disposalfile;
     }
 
-    public void setCheckSheet(String checkSheet) {
-        this.checkSheet = checkSheet;
+    public void setDisposalfile(String disposalfile) {
+        this.disposalfile = disposalfile;
     }
 
-    public HashMap<String, String> getCheckInfo() {
-        return checkInfo;
+    public HashMap<String, String> getAdviceInfoMap() {
+        return adviceInfoMap;
     }
 
-    public void setCheckInfo(HashMap<String, String> checkInfo) {
-        this.checkInfo = checkInfo;
-    }
-
-    public HashMap<String, String> getHandleInfo() {
-        return handleInfo;
-    }
-
-    public void setHandleInfo(HashMap<String, String> handleInfo) {
-        this.handleInfo = handleInfo;
+    public void setAdviceInfoMap(HashMap<String, String> adviceInfoMap) {
+        this.adviceInfoMap = adviceInfoMap;
     }
 
     public Advice getAdvice() {

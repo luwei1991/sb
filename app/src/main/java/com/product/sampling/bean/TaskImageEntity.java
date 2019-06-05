@@ -8,7 +8,7 @@ import org.devio.takephoto.model.TImage;
 import java.io.Serializable;
 
 public class TaskImageEntity extends TImage implements Serializable {
-    public String title = "212";
+    public String title = "";
     public static final Creator<TaskImageEntity> CREATOR = new Creator<TaskImageEntity>() {
         @Override
         public TaskImageEntity createFromParcel(Parcel in) {

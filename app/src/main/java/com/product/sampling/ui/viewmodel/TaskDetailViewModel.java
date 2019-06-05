@@ -25,8 +25,6 @@ import io.reactivex.disposables.Disposable;
  * 任务数据模型 生命周期和activity绑定
  */
 public class TaskDetailViewModel extends AutoDisposViewModel {
-    public boolean isImageRequestFromServer = true;//
-    public boolean isVideoRequestFromServer = true;//
 
     public TaskEntity taskEntity = new TaskEntity();
 

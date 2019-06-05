@@ -20,7 +20,6 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.product.sampling.R;
 import com.product.sampling.bean.TaskSample;
-import com.product.sampling.maputil.ToastUtil;
 import com.product.sampling.ui.TaskSampleFragment;
 import com.product.sampling.ui.WebViewActivity;
 
@@ -122,8 +121,8 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
 
         holder.mTextViewTitle.setText(TextUtils.isEmpty(task.getRemarks()) ? "" : task.getRemarks());
         if (task.isLocalData) {
-            holder.mTextViewHandleSheet.setText(task.handleSheet + "");
-            holder.mTextViewCheckSheet.setText(task.checkSheet + "");
+            holder.mTextViewHandleSheet.setText(task.samplingfile + "");
+            holder.mTextViewCheckSheet.setText(task.disposalfile + "");
             holder.mImageViewAdd.setVisibility(View.VISIBLE);
             holder.mBtnEditCheck.setVisibility(View.VISIBLE);
             holder.mBtnEditHandle.setVisibility(View.VISIBLE);

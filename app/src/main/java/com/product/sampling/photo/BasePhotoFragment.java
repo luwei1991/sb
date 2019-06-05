@@ -27,9 +27,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * A fragment representing a single Item detail screen.
- * This fragment is either contained in a {@link MainTaskListActivity}
- * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
  * on handsets.
  */
 public abstract class BasePhotoFragment extends TakePhotoFragment {
@@ -182,6 +179,10 @@ public abstract class BasePhotoFragment extends TakePhotoFragment {
     private AlertDialog alertDialog;
 
     public void showLoadingDialog() {
+        if (alertDialog != null) {
+            alertDialog.dismiss();
+            alertDialog = null;
+        }
         alertDialog = new AlertDialog.Builder(getActivity()).create();
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable());
         alertDialog.setCancelable(true);
@@ -195,7 +196,7 @@ public abstract class BasePhotoFragment extends TakePhotoFragment {
         });
         alertDialog.show();
         alertDialog.setContentView(R.layout.loading_alert);
-        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setCanceledOnTouchOutside(true);
     }
 
     public void dismissLoadingDialog() {

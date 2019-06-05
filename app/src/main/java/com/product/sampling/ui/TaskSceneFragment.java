@@ -184,10 +184,13 @@ public class TaskSceneFragment extends BasePhotoFragment {
     List<TaskEntity> listTask;
 
     private void saveData() {
+        if (!taskDetailViewModel.taskEntity.isLoadLocalData) return;
         boolean hasData = false;
-        if (!taskDetailViewModel.isImageRequestFromServer && null != taskDetailViewModel.taskEntity.pics && !taskDetailViewModel.taskEntity.pics.isEmpty()) {
+        if (taskDetailViewModel.taskEntity.isLoadLocalData && null != taskDetailViewModel.taskEntity.pics && !taskDetailViewModel.taskEntity.pics.isEmpty()) {
             for (int i = 0; i < taskDetailViewModel.taskEntity.pics.size(); i++) {
-                File f = new File(taskDetailViewModel.taskEntity.pics.get(i).getOriginalPath());
+                String path = taskDetailViewModel.taskEntity.pics.get(i).getOriginalPath();
+                if (TextUtils.isEmpty(path)) continue;
+                File f = new File(path);
                 if (!f.exists()) {
                     com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "无效图片");
                     continue;
@@ -195,7 +198,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 hasData = true;
             }
         }
-        if (!taskDetailViewModel.isVideoRequestFromServer && null != taskDetailViewModel.taskEntity.voides && !taskDetailViewModel.taskEntity.voides.isEmpty()) {
+        if (taskDetailViewModel.taskEntity.isLoadLocalData && null != taskDetailViewModel.taskEntity.voides && !taskDetailViewModel.taskEntity.voides.isEmpty()) {
 
             for (int i = 0; i < taskDetailViewModel.taskEntity.voides.size(); i++) {
                 if (!taskDetailViewModel.taskEntity.voides.get(i).isLocal) {
@@ -211,7 +214,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
             }
         }
         if (!hasData) {
-            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "请先选择图片或者视频");
+//            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "请先选择图片或者视频");
             return;
         }
 
@@ -241,91 +244,6 @@ public class TaskSceneFragment extends BasePhotoFragment {
 
     private String getPath() {
         return "/storage/emulated/0/zip";
-    }
-
-    private void postData() {
-
-        MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder();
-        multipartBodyBuilder.setType(MultipartBody.FORM);
-
-        multipartBodyBuilder.addFormDataPart("userid", AccountManager.getInstance().getUserId())
-                .addFormDataPart("id", taskDetailViewModel.taskEntity.id)
-                .addFormDataPart("taskisok", "0")
-                .addFormDataPart("updateorsave", "0")
-                .addFormDataPart("samplecount", "1");
-
-        if (null != MainApplication.INSTANCE.getMyLocation()) {
-            multipartBodyBuilder.addFormDataPart("taskaddress", MainApplication.INSTANCE.getMyLocation().getAddress() + "")
-                    .addFormDataPart("longitude", MainApplication.INSTANCE.getMyLocation().getLongitude() + "")
-                    .addFormDataPart("latitude", MainApplication.INSTANCE.getMyLocation().getLatitude() + "");
-        }
-
-        boolean hasData = false;
-        if (!taskDetailViewModel.isImageRequestFromServer && null != taskDetailViewModel.taskEntity.pics && !taskDetailViewModel.taskEntity.pics.isEmpty()) {
-            for (int i = 0; i < taskDetailViewModel.taskEntity.pics.size(); i++) {
-                File f = new File(taskDetailViewModel.taskEntity.pics.get(i).getOriginalPath());
-                if (!f.exists()) {
-                    com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "无效图片");
-                    continue;
-                }
-                RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("picstrs", taskDetailViewModel.taskEntity.pics.get(i).title)
-                        .addFormDataPart("uploadpics", f.getName(), requestImage);
-                hasData = true;
-            }
-        }
-        if (!taskDetailViewModel.isVideoRequestFromServer && null != taskDetailViewModel.taskEntity.voides && !taskDetailViewModel.taskEntity.voides.isEmpty()) {
-
-            for (int i = 0; i < taskDetailViewModel.taskEntity.voides.size(); i++) {
-                if (!taskDetailViewModel.taskEntity.voides.get(i).isLocal) {
-                    continue;
-                }
-                File f = new File(taskDetailViewModel.taskEntity.voides.get(i).getPath());
-                if (!f.exists()) {
-                    Log.e("视频", f.getAbsolutePath());
-                    com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "无效视频");
-                    continue;
-                }
-                RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("videostrs", taskDetailViewModel.taskEntity.voides.get(i).title)
-                        .addFormDataPart("uploadvideos", f.getName(), requestImage);
-                hasData = true;
-            }
-        }
-        if (!hasData) {
-            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "请先选择图片或者视频");
-            return;
-        }
-        showLoadingDialog();
-        RetrofitService.createApiService(Request.class)
-                .uploadtaskinfo(multipartBodyBuilder.build())
-                .compose(RxSchedulersHelper.io_main())
-                .compose(RxSchedulersHelper.ObsHandHttpResult())
-                .subscribe(new ZBaseObserver<String>() {
-                    @Override
-                    public void onSuccess(String s) {
-                        dismissLoadingDialog();
-                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加成功,现场id为" + s);
-
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.item_detail_container, TaskSampleFragment.newInstance(taskDetailViewModel.taskEntity))
-                                .commit();
-                    }
-
-                    @Override
-                    public void onFailure(int code, String message) {
-                        super.onFailure(code, message);
-                        dismissLoadingDialog();
-                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), message);
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        super.onSubscribe(d);
-                    }
-                });
-
-
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List task) {
@@ -360,7 +278,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
             taskImageEntity.setFromType(image.getFromType());
             taskDetailViewModel.taskEntity.pics.add(taskImageEntity);
         }
-        taskDetailViewModel.isImageRequestFromServer = false;
+        taskDetailViewModel.taskEntity.isLoadLocalData = true;
         setupRecyclerView(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
     }
 
@@ -372,8 +290,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
         //刷新本地图片和视频列表
         if (taskDetailViewModel.taskEntity.isLoadLocalData) {
             findTaskInLocalFile();
-            taskDetailViewModel.isImageRequestFromServer = false;
-            taskDetailViewModel.isVideoRequestFromServer = false;
+            taskDetailViewModel.taskEntity.isLoadLocalData = true;
             setupRecyclerView(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
             setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
         } else {
@@ -390,8 +307,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
             public void onChanged(LoadDataModel<TaskEntity> taskEntityLoadDataModel) {
                 if (taskEntityLoadDataModel.isSuccess()) {
                     taskDetailViewModel.taskEntity = taskEntityLoadDataModel.getData();
-                    taskDetailViewModel.isImageRequestFromServer = true;
-                    taskDetailViewModel.isVideoRequestFromServer = true;
+                    taskDetailViewModel.taskEntity.isLoadLocalData = false;
 
                     setupRecyclerViewFromServer(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
                     setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
@@ -448,7 +364,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
                             taskDetailViewModel.taskEntity.voides.remove(i);
                         }
                     }
-                    taskDetailViewModel.isVideoRequestFromServer = false;
+                    taskDetailViewModel.taskEntity.isLoadLocalData = true;
                     taskDetailViewModel.taskEntity.voides.addAll(mediaInfos);
                     setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
                     break;
