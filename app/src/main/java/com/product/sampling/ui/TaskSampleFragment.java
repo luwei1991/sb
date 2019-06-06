@@ -255,12 +255,14 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
             {
                 HashMap<String, String> samplingInfoMap = taskDetailViewModel.taskEntity.taskSamples.get(i).samplingInfoMap;
-                if (null == samplingInfoMap || samplingInfoMap.isEmpty()) {
-                    multipartBodyBuilder.addFormDataPart("sampling.taskfrom", "0");
-                } else {
+                if (null != samplingInfoMap && !samplingInfoMap.isEmpty()) {
                     for (String s : samplingInfoMap.keySet()) {
-                        multipartBodyBuilder.addFormDataPart(s, samplingInfoMap.get(s));//抽样单
+                        if (!s.startsWith("sampling.")) continue;
+                        multipartBodyBuilder.addFormDataPart(s, samplingInfoMap.get(s) + "");//抽样单
                     }
+                } else {
+                    //没填的时候默认值
+                    multipartBodyBuilder.addFormDataPart("sampling.taskfrom", "1");//抽样单
                 }
             }
 
@@ -284,13 +286,15 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
             {
                 HashMap<String, String> adviceInfoMap = taskDetailViewModel.taskEntity.taskSamples.get(i).adviceInfoMap;
-                if (null == adviceInfoMap || adviceInfoMap.isEmpty()) {
-                    multipartBodyBuilder.addFormDataPart("advice.companyname", taskDetailViewModel.taskEntity.companyname);
-                } else {
+                //没填的时候默认值
+                multipartBodyBuilder.addFormDataPart("advice.companyname", taskDetailViewModel.taskEntity.companyname);
+                if (null != adviceInfoMap && !adviceInfoMap.isEmpty()) {
                     for (String s : adviceInfoMap.keySet()) {
-                        multipartBodyBuilder.addFormDataPart(s, adviceInfoMap.get(s));//抽样单
+                        if (!s.startsWith("advice.")) continue;
+                        multipartBodyBuilder.addFormDataPart(s, adviceInfoMap.get(s) + "");//抽样单
                     }
                 }
+
             }
 
             List<Pics> list = taskDetailViewModel.taskEntity.taskSamples.get(i).getPics();
@@ -420,11 +424,11 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                                 }
                                 int pos = data.getIntExtra(Intent_Order, 1);
                                 if (pos == 1) {
-                                    taskDetailViewModel.taskEntity.taskSamples.get(index).disposalfile = data.getStringExtra("pdf");
+                                    taskDetailViewModel.taskEntity.taskSamples.get(index).samplingfile = data.getStringExtra("pdf");
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).samplingInfoMap = map;
                                 } else if (pos == 2) {
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).adviceInfoMap = map;
-                                    taskDetailViewModel.taskEntity.taskSamples.get(index).samplingfile = data.getStringExtra("pdf");
+                                    taskDetailViewModel.taskEntity.taskSamples.get(index).disposalfile = data.getStringExtra("pdf");
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

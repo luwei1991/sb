@@ -121,8 +121,8 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
 
         holder.mTextViewTitle.setText(TextUtils.isEmpty(task.getRemarks()) ? "" : task.getRemarks());
         if (task.isLocalData) {
-            holder.mTextViewHandleSheet.setText(task.samplingfile + "");
-            holder.mTextViewCheckSheet.setText(task.disposalfile + "");
+            holder.mTextViewHandleSheet.setText(task.disposalfile + "");
+            holder.mTextViewCheckSheet.setText(task.samplingfile + "");
             holder.mImageViewAdd.setVisibility(View.VISIBLE);
             holder.mBtnEditCheck.setVisibility(View.VISIBLE);
             holder.mBtnEditHandle.setVisibility(View.VISIBLE);
@@ -174,7 +174,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         holder.mRecyclerViewImage.setLayoutManager(linearLayoutManager);
 
-        holder.mRecyclerViewImage.setAdapter(new ImageSampleRecyclerViewAdapter(holder.itemView.getContext(), task.getPics(),isLocalData));
+        holder.mRecyclerViewImage.setAdapter(new ImageSampleRecyclerViewAdapter(holder.itemView.getContext(), task.getPics(), isLocalData));
 
         linearLayoutManager = new LinearLayoutManager(holder.itemView.getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
