@@ -25,11 +25,11 @@
             android:layout_height="wrap_content"
             android:background="@drawable/selector_item_selected"
             android:button="@null"
-            android:drawableTop="@mipmap/menu_icon1"
+            android:drawableTop="@mipmap/menu_icon5"
             android:drawablePadding="@dimen/dp_10"
             android:gravity="center"
             android:padding="20dp"
-            android:text="待办任务" />
+            android:text="任务信息" />
 
         <View
             android:layout_width="match_parent"
@@ -42,12 +42,12 @@
             android:layout_height="wrap_content"
             android:background="@drawable/selector_item_selected"
             android:button="@null"
-            android:drawableTop="@mipmap/menu_icon2"
+            android:drawableTop="@mipmap/menu_icon6"
             android:drawablePadding="@dimen/dp_10"
             android:gravity="center"
             android:padding="20dp"
 
-            android:text="未上传" />
+            android:text="现场信息" />
 
         <View
             android:layout_width="match_parent"
@@ -60,29 +60,11 @@
             android:layout_height="wrap_content"
             android:background="@drawable/selector_item_selected"
             android:button="@null"
-            android:drawableTop="@mipmap/menu_icon3"
+            android:drawableTop="@mipmap/menu_icon7"
             android:drawablePadding="@dimen/dp_10"
             android:gravity="center"
             android:padding="20dp"
-            android:text="已上传" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/line_gray" />
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/rb4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/selector_item_selected"
-            android:button="@null"
-            android:drawableTop="@mipmap/menu_icon4"
-            android:drawablePadding="@dimen/dp_10"
-            android:gravity="center"
-            android:padding="20dp"
-            android:text="我的信息" />
-
+            android:text="样品信息" />
 
     </RadioGroup>
 

@@ -1,8 +1,8 @@
 package com.product.sampling.net;
 
 
-import com.product.sampling.net.Exception.ApiException;
-import com.product.sampling.net.Exception.ServerException;
+import com.product.sampling.httpmoudle.error.ApiException;
+import com.product.sampling.httpmoudle.error.ExecptionEngin;
 import com.product.sampling.utils.ToastUtils;
 
 import java.net.UnknownHostException;
@@ -42,14 +42,9 @@ public abstract class ZBaseObserver<T> implements Observer<T> {
 
     @Override
     public void onError(Throwable t) {
-        if (t instanceof UnknownHostException) {
-            onFailure(-1, "服务器错误");
-        } else if (t instanceof ServerException) {
-            ServerException exception = (ServerException) t;
-            onFailure(exception.getCode(), exception.getMsg());
-        } else {
-            onFailure(-1, "出现错误");
-        }
+
+        ApiException exception = ExecptionEngin.handleException(t);
+        onFailure(exception.getCode(), exception.getDisplayMessage());
 
     }
 

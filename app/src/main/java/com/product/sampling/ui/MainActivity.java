@@ -42,6 +42,7 @@ import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 
+@Deprecated
 public class MainActivity extends BaseActivity implements AMapLocationListener, WeatherSearch.OnWeatherSearchListener {
 
     MyViewPager viewPager;

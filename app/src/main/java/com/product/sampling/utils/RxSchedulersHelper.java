@@ -2,7 +2,7 @@ package com.product.sampling.utils;
 
 
 import com.product.sampling.httpmoudle.BaseHttpResult;
-import com.product.sampling.net.Exception.ServerException;
+import com.product.sampling.httpmoudle.error.ServerException;
 
 import io.reactivex.Flowable;
 import io.reactivex.FlowableTransformer;

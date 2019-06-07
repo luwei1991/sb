@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -146,6 +148,38 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
 
             }
         });
+
+//        RadioGroup rb = rootView.findViewById(R.id.rg1);
+//        rb.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//
+//                if (group.getCheckedRadioButtonId() == R.id.rb1) {
+//                  getActivity().getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.item_detail_container, taskToDoFragment)
+//                            .commit();
+//                } else if (group.getCheckedRadioButtonId() == R.id.rb2) {
+//                    getActivity().getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.item_detail_container, taskWaitUpLoadedFragment)
+//                            .commit();
+//                } else if (group.getCheckedRadioButtonId() == R.id.rb3) {
+//                    getActivity().getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.item_detail_container, taskHasUpLoadedFragment)
+//                            .commit();
+//                } else if (group.getCheckedRadioButtonId() == R.id.rb4) {
+//                    getActivity().getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.item_detail_container, myinfoFragment)
+//                            .commit();
+//                } else {
+//                    TaskUnfindSampleFragment taskFragment = new TaskUnfindSampleFragment();
+//                    getActivity().getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.item_detail_container, taskFragment)
+//                            .commit();
+//                }
+//            }
+//        });
+//        RadioButton radioButton = (RadioButton) rb.findViewById(R.id.rb1);
+//        radioButton.setChecked(true);
         return rootView;
     }
 

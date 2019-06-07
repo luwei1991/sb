@@ -25,13 +25,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.product.sampling.R;
+import com.product.sampling.bean.UserInfoBean;
+import com.product.sampling.httpmoudle.RetrofitService;
+import com.product.sampling.httpmoudle.error.ExecptionEngin;
 import com.product.sampling.manager.AccountManager;
+import com.product.sampling.maputil.ToastUtil;
 import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
+import com.product.sampling.net.ZBaseObserver;
+import com.product.sampling.net.request.Request;
 import com.product.sampling.net.response.ResponseTransformer;
 import com.product.sampling.net.schedulers.SchedulerProvider;
+import com.product.sampling.utils.ActivityUtils;
 import com.product.sampling.utils.KeyboardUtils;
+import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -39,6 +50,10 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import io.reactivex.disposables.Disposable;
+
+import static com.product.sampling.Constants.IMAGE_BASE_URL;
 
 public class LoginByPasswordFragment extends BaseFragment implements View.OnClickListener {
 
@@ -196,18 +211,36 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
     }
 
     private void loginRequest(String account, String pwd) {
-        NetWorkManager.getRequest().loginByPwd(account, pwd)
-                .compose(ResponseTransformer.handleResult())
-                .compose(SchedulerProvider.getInstance().applySchedulers())
-                .subscribe(userbean -> {
-                    AccountManager.getInstance().setUserInfoBean(userbean);
-                    startActivity(new Intent(getActivity(), MainActivity.class));
-                    getActivity().finish();
-                }, throwable -> {
-                    String displayMessage = ((ApiException) throwable).getDisplayMessage();
-                    ToastUtils.showToast(displayMessage);
-                    showProgress(false);
+
+        RetrofitService.createApiService(Request.class)
+                .loginByPwd(account, pwd)
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<UserInfoBean>() {
+
+                    @Override
+                    public void onFailure(int code, String message) {
+                        super.onFailure(code, message);
+                        showProgress(false);
+                        if (!ExecptionEngin.isNetWorkError(code)) {
+                            ToastUtil.showShortToast(getActivity(), message);
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(UserInfoBean userbean) {
+                        AccountManager.getInstance().setUserInfoBean(userbean);
+                        ActivityUtils.goMainTaskActivity(getActivity());
+
+                        getActivity().finish();
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        super.onSubscribe(d);
+                    }
                 });
+
     }
 
     @Override

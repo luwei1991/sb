@@ -13,6 +13,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.product.sampling.R;
 import com.product.sampling.bean.UserInfoBean;
 import com.product.sampling.manager.AccountManager;
+import com.product.sampling.utils.ActivityUtils;
 import com.product.sampling.view.LeverageLockHintDialog;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -66,7 +67,8 @@ public class LoginActivity extends AppCompatActivity {
         if (null == userInfoBean) {
             initView();
         } else {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            ActivityUtils.goMainTaskActivity(LoginActivity.this);
+            finish();
         }
     }
 

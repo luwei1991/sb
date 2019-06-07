@@ -18,6 +18,7 @@ import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.net.response.ResponseTransformer;
 import com.product.sampling.net.schedulers.SchedulerProvider;
+import com.product.sampling.utils.ActivityUtils;
 import com.product.sampling.utils.KeyboardUtils;
 import com.product.sampling.utils.ToastUtil;
 import com.product.sampling.utils.ToastUtils;
@@ -95,7 +96,7 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
                 .compose(SchedulerProvider.getInstance().applySchedulers())
                 .subscribe(userbean -> {
                     saveUserData(userbean);
-                    startActivity(new Intent(getActivity(), MainActivity.class));
+                    ActivityUtils.goMainTaskActivity(getActivity());
                     getActivity().finish();
                 }, throwable -> {
                     String displayMessage = ((ApiException) throwable).getDisplayMessage();

@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -37,138 +39,36 @@ public class MainTaskListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        toolbar.setTitle(getTitle());
-
-
-        if (findViewById(R.id.item_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
-
-        View recyclerView = findViewById(R.id.item_image_list);
-        assert recyclerView != null;
-        List list = new ArrayList();
-        for (int i = 0; i < 4; i++) {
-            list.add(createItem(i));
-        }
-        setupRecyclerView((RecyclerView) recyclerView, list);
-    }
-
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List list) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, list, mTwoPane));
-    }
-
-    public static class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-
-        private final MainTaskListActivity mParentActivity;
-        private final List<ImageItem> mValues;
-        private final boolean mTwoPane;
-        private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        RadioGroup rb = findViewById(R.id.rg1);
+        rb.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                ImageItem item = (ImageItem) view.getTag();
-                if (mTwoPane) {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-                    Bundle arguments = new Bundle();
-                    arguments.putString(TaskListFragment.ARG_TASK_STATUS, "0");
-                    if (item.getTitle().equalsIgnoreCase("待办任务")) {
-                        mParentActivity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.item_detail_container, taskToDoFragment)
-                                .commit();
-                    } else if (item.getTitle().equalsIgnoreCase("未上传")) {
-                        mParentActivity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.item_detail_container, taskWaitUpLoadedFragment)
-                                .commit();
-                    } else if (item.getTitle().equalsIgnoreCase("已上传")) {
-                        mParentActivity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.item_detail_container, taskHasUpLoadedFragment)
-                                .commit();
-                    } else if (item.getTitle().equalsIgnoreCase("我的信息")) {
-                        mParentActivity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.item_detail_container, myinfoFragment)
-                                .commit();
-                    } else {
-                        TaskUnfindSampleFragment taskFragment = new TaskUnfindSampleFragment();
-                        mParentActivity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.item_detail_container, taskFragment)
-                                .commit();
-                    }
-
+                if (group.getCheckedRadioButtonId() == R.id.rb1) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.item_detail_container, taskToDoFragment)
+                            .commit();
+                } else if (group.getCheckedRadioButtonId() == R.id.rb2) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.item_detail_container, taskWaitUpLoadedFragment)
+                            .commit();
+                } else if (group.getCheckedRadioButtonId() == R.id.rb3) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.item_detail_container, taskHasUpLoadedFragment)
+                            .commit();
+                } else if (group.getCheckedRadioButtonId() == R.id.rb4) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.item_detail_container, myinfoFragment)
+                            .commit();
                 } else {
-
+                    TaskUnfindSampleFragment taskFragment = new TaskUnfindSampleFragment();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.item_detail_container, taskFragment)
+                            .commit();
                 }
             }
-        };
-
-        SimpleItemRecyclerViewAdapter(MainTaskListActivity parent,
-                                      List<ImageItem> items,
-                                      boolean twoPane) {
-            mValues = items;
-            mParentActivity = parent;
-            mTwoPane = twoPane;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_list_content, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            ImageItem imageItem = mValues.get(position);
-            holder.mImageView.setImageResource(imageItem.getRes());
-            holder.mContentView.setText(imageItem.getTitle());
-
-            holder.itemView.setTag(imageItem);
-            holder.itemView.setOnClickListener(mOnClickListener);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mValues.size();
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-            final ImageView mImageView;
-            final TextView mContentView;
-
-            ViewHolder(View view) {
-                super(view);
-                mImageView = (ImageView) view.findViewById(R.id.iv_task);
-                mContentView = (TextView) view.findViewById(R.id.content);
-            }
-        }
-    }
-
-    private static ImageItem createItem(int position) {
-        String text = "";
-        int res = 0;
-        switch (position) {
-            case 0:
-                text = "待办任务";
-                res = R.mipmap.menu_icon1;
-                break;
-            case 1:
-                text = "未上传";
-                res = R.mipmap.menu_icon2;
-                break;
-            case 2:
-                text = "已上传";
-                res = R.mipmap.menu_icon3;
-                break;
-            case 3:
-                text = "我的信息";
-                res = R.mipmap.menu_icon4;
-                break;
-        }
-        return new ImageItem(text, res);
+        });
+        RadioButton radioButton = (RadioButton) rb.findViewById(R.id.rb1);
+        radioButton.setChecked(true);
     }
 }

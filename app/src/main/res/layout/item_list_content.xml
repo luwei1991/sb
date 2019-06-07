@@ -2,19 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center"
-    android:divider="@color/colorAccent"
-    android:showDividers="end"
     android:clickable="true"
+    android:divider="@color/colorAccent"
+    android:gravity="center"
+    android:orientation="vertical"
     android:paddingTop="10dp"
-    android:background="?selectableItemBackground"
-    android:orientation="vertical">
+    android:showDividers="end">
+
     <ImageView
         android:id="@+id/iv_task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher"
-        />
+        android:src="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/content"
@@ -22,4 +21,5 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem" />
+
 </LinearLayout>

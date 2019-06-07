@@ -28,6 +28,7 @@
     <color name="system_bg">#f6f6f6</color>
     <color name="line_color">#F0F0F2</color>
     <color name="trans">#00000000</color>
+    <color name="line_gray">#CBCCCD</color>
 
 
     <color name="tab_title_normal">#3A476B</color>

@@ -65,7 +65,7 @@ public interface Request {
     Observable<Response<UserInfoBean>> loginByPhone(@Query("persontel") String persontel, @Query("appcode") String appcode);
 
     @GET("app/user/login")
-    Observable<Response<UserInfoBean>> loginByPwd(@Query("loginName") String loginName, @Query("password") String password);
+    Observable<BaseHttpResult<UserInfoBean>> loginByPwd(@Query("loginName") String loginName, @Query("password") String password);
 
     @GET("app/user/changepassword")
     Observable<Response<String>> changepassword(@Query("userid") String userid, @Query("password") String password, @Query("newPassword") String newPassword);
