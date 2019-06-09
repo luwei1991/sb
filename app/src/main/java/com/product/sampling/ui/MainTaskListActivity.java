@@ -1,23 +1,12 @@
 package com.product.sampling.ui;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.product.sampling.R;
-import com.product.sampling.bean.ImageItem;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 任务列表
@@ -37,7 +26,7 @@ public class MainTaskListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_list);
+        setContentView(R.layout.activity_task_list);
 
         RadioGroup rb = findViewById(R.id.rg1);
         rb.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

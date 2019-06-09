@@ -14,8 +14,6 @@
         android:src="@mipmap/ic_launcher" />
 
 
-
-
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
@@ -23,7 +21,6 @@
         android:layout_below="@+id/iv_task"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        android:background="?selectableItemBackground"
         android:drawablePadding="10dp"
         android:gravity="center"
         android:text="受检单位大门" />

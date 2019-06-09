@@ -96,6 +96,7 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.item_detail_container, TaskSceneFragment.newInstance(taskDetailViewModel.taskEntity))
                     .commit();
+            ((TaskDetailActivity) getActivity()).checkSelectMenu(2);
         }
     }
 }

@@ -23,7 +23,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
-import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.product.sampling.R;
 import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
@@ -37,6 +36,7 @@ import com.product.sampling.net.LoadDataModel;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
 import com.product.sampling.photo.BasePhotoFragment;
+import com.product.sampling.photo.MediaHelper;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.SPUtil;
@@ -132,23 +132,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     }
 
     @Override
-    public void showResultImages(ArrayList<TImage> images, int pos) {
-        List<Pics> imageList = new ArrayList<>();
-        for (TImage image : images) {
-            Pics pics = new Pics();
-            pics.setCompressPath(image.getCompressPath());
-            pics.setOriginalPath(image.getOriginalPath());
-            pics.setFromType(image.getFromType());
-            imageList.add(pics);
-        }
-        if (pos > -1 && taskDetailViewModel.taskEntity.taskSamples.size() > pos) {
-            taskDetailViewModel.taskEntity.taskSamples.get(pos).setPics(imageList);
-            taskDetailViewModel.taskEntity.isLoadLocalData = true;
-            setupRecyclerView(mRecyclerView, taskDetailViewModel.taskEntity.taskSamples, true);
-        }
-    }
-
-    @Override
     public void onClick(View v) {
         if (v.getId() == R.id.tv_create) {
             EditText et = new EditText(getActivity());
@@ -228,14 +211,18 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
         multipartBodyBuilder.addFormDataPart("userid", AccountManager.getInstance().getUserId())
                 .addFormDataPart("taskid", taskDetailViewModel.taskEntity.id)
-                .addFormDataPart("id", System.currentTimeMillis() + "")
-                .addFormDataPart("islastone", "1");
+                .addFormDataPart("id", System.currentTimeMillis() + "");
         if (null == taskDetailViewModel.taskEntity.taskSamples || taskDetailViewModel.taskEntity.taskSamples.isEmpty()) {
             ToastUtil.showToast(getActivity(), "请创建样品数据");
             return;
         }
         for (int i = 0; i < taskDetailViewModel.taskEntity.taskSamples.size(); i++) {
+
             if (!taskDetailViewModel.taskEntity.taskSamples.get(i).isLocalData) continue;
+            //是否是最后一个
+            if (i == taskDetailViewModel.taskEntity.taskSamples.size() - 1) {
+                multipartBodyBuilder.addFormDataPart("islastone", "1");
+            }
             {
                 File samplingfile = new File(taskDetailViewModel.taskEntity.taskSamples.get(i).samplingfile);
                 if (samplingfile.exists()) {
@@ -255,14 +242,13 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
             {
                 HashMap<String, String> samplingInfoMap = taskDetailViewModel.taskEntity.taskSamples.get(i).samplingInfoMap;
+                //没填的时候默认值
+                multipartBodyBuilder.addFormDataPart("sampling.taskfrom", "1");//抽样单
                 if (null != samplingInfoMap && !samplingInfoMap.isEmpty()) {
                     for (String s : samplingInfoMap.keySet()) {
                         if (!s.startsWith("sampling.")) continue;
                         multipartBodyBuilder.addFormDataPart(s, samplingInfoMap.get(s) + "");//抽样单
                     }
-                } else {
-                    //没填的时候默认值
-                    multipartBodyBuilder.addFormDataPart("sampling.taskfrom", "1");//抽样单
                 }
             }
 
@@ -287,7 +273,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             {
                 HashMap<String, String> adviceInfoMap = taskDetailViewModel.taskEntity.taskSamples.get(i).adviceInfoMap;
                 //没填的时候默认值
-                multipartBodyBuilder.addFormDataPart("advice.companyname", taskDetailViewModel.taskEntity.companyname);
+                multipartBodyBuilder.addFormDataPart("advice.companyname", "3");
                 if (null != adviceInfoMap && !adviceInfoMap.isEmpty()) {
                     for (String s : adviceInfoMap.keySet()) {
                         if (!s.startsWith("advice.")) continue;
@@ -365,7 +351,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case PictureConfig.CHOOSE_REQUEST:
+                case MediaHelper.REQUEST_IMAGE_CODE:
                     // 图片、视频、音频选择结果回调
                     List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
                     // 例如 LocalMedia 里面返回三种path
@@ -375,28 +361,16 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
 
                     if (selectId != -1) {
-                        List<LocalMediaInfo> mediaInfos = new ArrayList<>();
+                        List<Pics> mediaInfos = new ArrayList<>();
                         for (LocalMedia media :
                                 selectList) {
-                            LocalMediaInfo mediaInfo = new LocalMediaInfo();
-                            mediaInfo.setPath(media.getPath());
+                            Pics mediaInfo = new Pics();
+                            mediaInfo.setOriginalPath(media.getPath());
                             mediaInfo.setCompressPath(media.getCompressPath());
-                            mediaInfo.setCutPath(media.getCutPath());
-                            mediaInfo.setDuration(media.getDuration());
-                            mediaInfo.setChecked(media.isChecked());
-                            mediaInfo.setCut(media.isCut());
-
-                            mediaInfo.setPosition(media.getPosition());
-                            mediaInfo.setNum(media.getNum());
-                            mediaInfo.setMimeType(media.getMimeType());
-                            mediaInfo.setPictureType(media.getPictureType());
                             mediaInfo.setCompressed(media.isCompressed());
-                            mediaInfo.setWidth(media.getWidth());
-                            mediaInfo.setHeight(media.getHeight());
-
                             mediaInfos.add(mediaInfo);
                         }
-                        taskDetailViewModel.taskEntity.taskSamples.get(selectId).videoList.addAll(mediaInfos);
+                        taskDetailViewModel.taskEntity.taskSamples.get(selectId).pics.addAll(mediaInfos);
                         mRecyclerView.getAdapter().notifyDataSetChanged();
                     }
                     break;
@@ -459,53 +433,12 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     }
 
     /**
-     * 取选择图片
+     * 取pdf截图
      *
-     * @param index      当前第几个样品
      * @param requstCode
      */
-    public void startGallery(int index, int requstCode) {
-        PictureSelector.create(TaskSampleFragment.this)
-                .openGallery(PictureMimeType.ofImage())//全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
-//                        .theme()//主题样式(不设置为默认样式) 也可参考demo values/styles下 例如：R.style.picture.white.style
-                .maxSelectNum(1)// 最大图片选择数量 int
-                .minSelectNum(1)// 最小选择数量 int
-                .imageSpanCount(4)// 每行显示个数 int
-                .selectionMode(PictureConfig.SINGLE)// 多选 or 单选 PictureConfig.MULTIPLE or PictureConfig.SINGLE
-                .previewImage(true)// 是否可预览图片 true or false
-                .previewVideo(true)// 是否可预览视频 true or false
-                .enablePreviewAudio(true) // 是否可播放音频 true or false
-                .isCamera(true)// 是否显示拍照按钮 true or false
-                .imageFormat(PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg
-                .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
-                .sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
-                .setOutputCameraPath("/CustomPath")// 自定义拍照保存路径,可不填
-                .enableCrop(false)// 是否裁剪 true or false
-                .compress(false)// 是否压缩 true or false
-                .glideOverride(200, 200)// int glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
-                .withAspectRatio(3, 4)// int 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
-                .hideBottomControls(false)// 是否显示uCrop工具栏，默认不显示 true or false
-                .isGif(true)// 是否显示gif图片 true or false
-//                .compressSavePath(getPath())//压缩图片保存地址
-                .freeStyleCropEnabled(true)// 裁剪框是否可拖拽 true or false
-                .circleDimmedLayer(true)// 是否圆形裁剪 true or false
-                .showCropFrame(true)// 是否显示裁剪矩形边框 圆形裁剪时建议设为false   true or false
-                .showCropGrid(true)// 是否显示裁剪矩形网格 圆形裁剪时建议设为false    true or false
-                .openClickSound(false)// 是否开启点击声音 true or false
-//                        .selectionMedia()// 是否传入已选图片 List<LocalMedia> list
-                .previewEggs(true)// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中) true or false
-                .cropCompressQuality(80)// 裁剪压缩质量 默认90 int
-                .minimumCompressSize(100)// 小于100kb的图片不压缩
-                .synOrAsy(true)//同步true或异步false 压缩 默认同步
-                .cropWH(200, 200)// 裁剪宽高比，设置如果大于图片本身宽高则无效 int
-                .rotateEnabled(true) // 裁剪是否可旋转图片 true or false
-                .scaleEnabled(true)// 裁剪是否可放大缩小图片 true or false
-                .videoQuality(1)// 视频录制质量 0 or 1 int
-                .videoMaxSecond(6000)// 显示多少秒以内的视频or音频也可适用 int
-                .videoMinSecond(1)// 显示多少秒以内的视频or音频也可适用 int
-                .recordVideoSecond(600)//视频秒数录制 默认60s int
-                .isDragFrame(false)// 是否可拖动裁剪框(固定)
-                .forResult(requstCode);//结果回调onActivityResult code
+    public void startGalleryForPdf(int index, int requstCode) {
+        MediaHelper.startGallery(TaskSampleFragment.this, PictureConfig.SINGLE, requstCode);
     }
 
     private void saveTaskInLocalFile(boolean isRemove) {

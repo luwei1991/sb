@@ -1,29 +1,16 @@
 package com.product.sampling.ui;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.product.sampling.R;
-import com.product.sampling.bean.ImageItem;
-import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * 待办任务详情
@@ -32,11 +19,12 @@ public class TaskDetailActivity extends BaseActivity {
 
     TaskEntity task = null;
     TaskDetailViewModel taskDetailViewModel;
+    RadioGroup rb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_list);
+        setContentView(R.layout.activity_task_menu);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -47,7 +35,7 @@ public class TaskDetailActivity extends BaseActivity {
         task = (TaskEntity) bundle.getSerializable("task");//读出数据
         taskDetailViewModel.taskEntity = task;
 
-        RadioGroup rb = findViewById(R.id.rg1);
+        rb = findViewById(R.id.rg1);
         rb.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -67,6 +55,18 @@ public class TaskDetailActivity extends BaseActivity {
             }
         });
         RadioButton radioButton = rb.findViewById(R.id.rb1);
+        radioButton.setChecked(true);
+    }
+
+    public void checkSelectMenu(int pos) {
+        RadioButton radioButton = rb.findViewById(R.id.rb1);
+        if (pos == 1) {
+            radioButton = rb.findViewById(R.id.rb1);
+        } else if (pos == 2) {
+            radioButton = rb.findViewById(R.id.rb2);
+        } else if (pos == 3) {
+            radioButton = rb.findViewById(R.id.rb3);
+        }
         radioButton.setChecked(true);
     }
 }

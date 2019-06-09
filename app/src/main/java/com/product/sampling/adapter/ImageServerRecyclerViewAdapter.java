@@ -44,8 +44,7 @@ public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageSe
             if (view.getId() == R.id.iv_task) {
                 view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task", (Task) view.getTag()));
             } else {
-
-                showListDialog(view.getContext(), (int) view.getTag());
+//                showListDialog(view.getContext(), (int) view.getTag());
             }
         }
     };

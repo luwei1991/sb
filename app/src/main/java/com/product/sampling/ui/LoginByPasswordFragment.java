@@ -43,6 +43,7 @@ import com.product.sampling.net.schedulers.SchedulerProvider;
 import com.product.sampling.utils.ActivityUtils;
 import com.product.sampling.utils.KeyboardUtils;
 import com.product.sampling.utils.RxSchedulersHelper;
+import com.product.sampling.utils.SPUtil;
 import com.product.sampling.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -105,6 +106,12 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
         mLoginFormView = mRootView.findViewById(R.id.login_form);
         mProgressView = mRootView.findViewById(R.id.login_progress);
         KeyboardUtils.closeKeyboard(getActivity());
+
+        UserInfoBean userInfoBean = AccountManager.getInstance().getUserInfoBean();
+        if (null != userInfoBean) {
+            mAccountView.setText(userInfoBean.getAccount() + "");
+            mPasswordView.setText(userInfoBean.getPassword() + "");
+        }
     }
 
     @Override
@@ -229,9 +236,10 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
 
                     @Override
                     public void onSuccess(UserInfoBean userbean) {
+                        userbean.setAccount(account);
+                        userbean.setPassword(pwd);
                         AccountManager.getInstance().setUserInfoBean(userbean);
                         ActivityUtils.goMainTaskActivity(getActivity());
-
                         getActivity().finish();
                     }
 

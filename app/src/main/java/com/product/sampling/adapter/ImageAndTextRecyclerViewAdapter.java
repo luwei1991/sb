@@ -45,7 +45,6 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
             if (view.getId() == R.id.iv_task) {
                 view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task", (Task) view.getTag()));
             } else {
-
                 showListDialog(view.getContext(), (int) view.getTag());
             }
         }
@@ -62,6 +61,7 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
                 switch (which) {
                     case 0:
                         EditText et = new EditText(context);
+                        et.setText(mValues.get(taskPostion).title + "");
                         new AlertDialog.Builder(context).setTitle("请输入图片描述")
                                 .setView(et)
                                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -69,7 +69,7 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         //按下确定键后的事件
                                         String text = et.getText().toString();
-                                        mValues.get(taskPostion).title = text;
+                                        mValues.get(taskPostion).title = text + "";
                                         notifyDataSetChanged();
                                     }
                                 }).setNegativeButton("取消", null).show();

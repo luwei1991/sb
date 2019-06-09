@@ -76,7 +76,7 @@ public class ExecptionEngin {
                     ex.setDisplayMessage(MainApplication.INSTANCE.getResources().getString(R.string.auth_info_faild));
                 case FORBIDDEN:
                 case NOT_FOUND:
-                    ex.setDisplayMessage("404:" + MainApplication.INSTANCE.getString(R.string.app_net_error_msg));
+                    ex.setDisplayMessage(MainApplication.INSTANCE.getString(R.string.app_server_error));
                     break;
                 case REQUEST_TIMEOUT:
                 case GATEWAY_TIMEOUT:

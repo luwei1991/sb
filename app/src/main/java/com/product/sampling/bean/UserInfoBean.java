@@ -1,7 +1,6 @@
 package com.product.sampling.bean;
 
 /**
-
  * 创建时间：2018/7/3
  * 描述：
  */
@@ -13,6 +12,8 @@ public class UserInfoBean {
     private String name;
     private String persontel;
     private String photo;
+
+    private String account;
 
     public String getUserid() {
         return userid;
@@ -60,5 +61,13 @@ public class UserInfoBean {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
     }
 }

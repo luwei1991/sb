@@ -55,6 +55,7 @@ public class ImageSampleRecyclerViewAdapter extends RecyclerView.Adapter<ImageSa
                 switch (which) {
                     case 0:
                         EditText et = new EditText(context);
+                        et.setText(mValues.get(taskPostion).getRemarks() + "");
                         new AlertDialog.Builder(context).setTitle("请输入图片描述")
                                 .setView(et)
                                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -62,7 +63,7 @@ public class ImageSampleRecyclerViewAdapter extends RecyclerView.Adapter<ImageSa
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         //按下确定键后的事件
                                         String text = et.getText().toString();
-                                        mValues.get(taskPostion).setRemarks(text);
+                                        mValues.get(taskPostion).setRemarks(text + "");
                                         notifyDataSetChanged();
                                     }
                                 }).setNegativeButton("取消", null).show();
