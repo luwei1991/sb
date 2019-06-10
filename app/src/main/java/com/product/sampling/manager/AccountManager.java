@@ -79,6 +79,30 @@ public class AccountManager {
         return userBean;
     }
 
+    public String getUserAccount() {
+        String account = SPUtil.get(MainApplication.INSTANCE, "account", "").toString();
+        if (TextUtils.isEmpty(account)) {
+            return null;
+        }
+        return account;
+    }
+
+    public void setUserAccount(String account) {
+        SPUtil.put(MainApplication.INSTANCE, "account", account);
+    }
+
+    public String getUserPassword() {
+        String account = SPUtil.get(MainApplication.INSTANCE, "password", "").toString();
+        if (TextUtils.isEmpty(account)) {
+            return null;
+        }
+        return account;
+    }
+
+    public void setUserPassword(String password) {
+        SPUtil.put(MainApplication.INSTANCE, "password", password);
+    }
+
     public void setUserInfoBean(UserInfoBean userInfoBean) {
         this.userInfoBean = userInfoBean;
         Gson gson = new Gson();
@@ -87,7 +111,7 @@ public class AccountManager {
     }
 
     public void clearUserInfo() {
-        SPUtil.clear(MainApplication.INSTANCE);
+        SPUtil.remove(MainApplication.INSTANCE, "userinfo");
     }
 
     /**

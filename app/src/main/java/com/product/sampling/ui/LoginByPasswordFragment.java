@@ -107,10 +107,13 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
         mProgressView = mRootView.findViewById(R.id.login_progress);
         KeyboardUtils.closeKeyboard(getActivity());
 
-        UserInfoBean userInfoBean = AccountManager.getInstance().getUserInfoBean();
-        if (null != userInfoBean) {
-            mAccountView.setText(userInfoBean.getAccount() + "");
-            mPasswordView.setText(userInfoBean.getPassword() + "");
+        String account = AccountManager.getInstance().getUserAccount();
+        if (!TextUtils.isEmpty(account)) {
+            mAccountView.setText(account + "");
+        }
+        String password = AccountManager.getInstance().getUserPassword();
+        if (!TextUtils.isEmpty(password)) {
+            mPasswordView.setText(password + "");
         }
     }
 
@@ -236,8 +239,8 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
 
                     @Override
                     public void onSuccess(UserInfoBean userbean) {
-                        userbean.setAccount(account);
-                        userbean.setPassword(pwd);
+                        AccountManager.getInstance().setUserAccount(account);
+                        AccountManager.getInstance().setUserPassword(pwd);
                         AccountManager.getInstance().setUserInfoBean(userbean);
                         ActivityUtils.goMainTaskActivity(getActivity());
                         getActivity().finish();
