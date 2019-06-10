@@ -38,8 +38,11 @@ public class TaskExceptionActivity extends BaseActivity {
 //        setSupportActionBar(toolbar);
 //        toolbar.setTitle(getTitle());
 
-        task = getIntent().getParcelableExtra("task");
+        Bundle bundle = getIntent().getExtras();    //得到传过来的bundle
+        task = (TaskEntity) bundle.getSerializable("task");//读出数据
+
         taskExecptionViewModel = ViewModelProviders.of(this).get(TaskExecptionViewModel.class);
+        taskExecptionViewModel.taskEntity = task;
 
         View recyclerView = findViewById(R.id.item_image_list);
         assert recyclerView != null;
@@ -47,7 +50,7 @@ public class TaskExceptionActivity extends BaseActivity {
         for (int i = 0; i < 2; i++) {
             list.add(createItem(i));
         }
-        setupRecyclerView((RecyclerView) recyclerView, list);
+//        setupRecyclerView((RecyclerView) recyclerView, list);
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List list) {

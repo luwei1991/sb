@@ -263,7 +263,10 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                     bundle.putSerializable("task", taskEntity);
                     view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtras(bundle));
                 } else if (view.getId() == R.id.tv_exception) {
-//                    view.getContext().startActivity(new Intent(view.getContext(), TaskExceptionActivity.class).putExtra("task", (TaskEntity) view.getTag()));
+                    TaskEntity taskEntity = (TaskEntity) view.getTag();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("task", taskEntity);
+                    view.getContext().startActivity(new Intent(view.getContext(), TaskExceptionActivity.class).putExtras(bundle));
                 }
             }
         };
