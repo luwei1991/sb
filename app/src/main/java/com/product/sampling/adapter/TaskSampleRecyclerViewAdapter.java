@@ -40,7 +40,8 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         @Override
         public void onClick(View view) {
             if (view.getId() == R.id.iv_add) {
-                MediaHelper.startGallery(fragment, PictureConfig.SINGLE, MediaHelper.REQUEST_IMAGE_CODE);
+                fragment.selectId = (int) view.getTag();
+                MediaHelper.startGallery(fragment, PictureConfig.MULTIPLE, MediaHelper.REQUEST_IMAGE_CODE);
             } else if (R.id.iv_reduce == view.getId() || R.id.iv_reduce_video == view.getId()) {
                 int index = (int) view.getTag();
                 new AlertDialog.Builder(fragment.getContext()).setTitle("确认删除" + mData.get(index).getRemarks() + "的样品信息吗?")
@@ -135,7 +136,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         holder.mRecyclerViewImage.setLayoutManager(linearLayoutManager);
 
-        holder.mRecyclerViewImage.setAdapter(new ImageSampleRecyclerViewAdapter(holder.itemView.getContext(), task.getPics(), isLocalData));
+        holder.mRecyclerViewImage.setAdapter(new ImageSampleRecyclerViewAdapter(holder.itemView.getContext(), task.getPics(), task.isLocalData));
 
         linearLayoutManager = new LinearLayoutManager(holder.itemView.getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);

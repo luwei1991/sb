@@ -2,6 +2,7 @@ package com.product.sampling.ui;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -52,7 +53,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
@@ -165,7 +172,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 //            if (fileHandle.exists()) {
 //            }
 //        }
-        if (!taskDetailViewModel.taskEntity.isLoadLocalData) return;
+//        if (!taskDetailViewModel.taskEntity.isLoadLocalData) return;
         if (!taskDetailViewModel.taskEntity.taskSamples.isEmpty()) {
             saveTaskInLocalFile(false);
         }
@@ -219,10 +226,10 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         for (int i = 0; i < taskDetailViewModel.taskEntity.taskSamples.size(); i++) {
 
             if (!taskDetailViewModel.taskEntity.taskSamples.get(i).isLocalData) continue;
-            //是否是最后一个
-            if (i == taskDetailViewModel.taskEntity.taskSamples.size() - 1) {
-                multipartBodyBuilder.addFormDataPart("islastone", "1");
-            }
+            //TODO:是否是最后一个
+//            if (i == taskDetailViewModel.taskEntity.taskSamples.size() - 1) {
+//                multipartBodyBuilder.addFormDataPart("islastone", "1");
+//            }
             {
                 File samplingfile = new File(taskDetailViewModel.taskEntity.taskSamples.get(i).samplingfile);
                 if (samplingfile.exists()) {
@@ -370,7 +377,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                             mediaInfo.setCompressed(media.isCompressed());
                             mediaInfos.add(mediaInfo);
                         }
-                        taskDetailViewModel.taskEntity.taskSamples.get(selectId).pics.addAll(mediaInfos);
+                        taskDetailViewModel.taskEntity.taskSamples.get(selectId).isLocalData = true;
+                        taskDetailViewModel.taskEntity.taskSamples.get(selectId).pics = mediaInfos;
                         mRecyclerView.getAdapter().notifyDataSetChanged();
                     }
                     break;
@@ -478,7 +486,17 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                         taskDetailViewModel.taskEntity = listTask.get(i);
                     }
                 }
+//                if (null != taskDetailViewModel.taskEntity.taskSamples && !taskDetailViewModel.taskEntity.taskSamples.isEmpty()) {
+//                    for (int j = 0; j < taskDetailViewModel.taskEntity.taskSamples.size(); j++) {
+//                        TaskSample taskSample = taskDetailViewModel.taskEntity.taskSamples.get(j);
+//                        if (!taskSample.isLocalData) {
+//                            taskDetailViewModel.taskEntity.taskSamples.remove(taskSample);
+//                        }
+//                    }
+//                }
+
             }
+
         }
     }
 

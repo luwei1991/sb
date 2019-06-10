@@ -173,7 +173,7 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
+        //TODO: 密码规则logic
         return password.length() > 1;
     }
 

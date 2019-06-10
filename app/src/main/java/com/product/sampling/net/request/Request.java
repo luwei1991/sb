@@ -37,11 +37,6 @@ import retrofit2.http.Query;
  * 描述：
  */
 public interface Request {
-    /**
-     * 服务器url
-     */
-    String BASE_URL_DEBUG = "http://185.38.15.46/";
-    //    String BASE_URL = "http://nfxypf.natappfree.cc/";
 
     /**
      * 获取验证码
@@ -116,7 +111,10 @@ public interface Request {
 
     @GET("app/task/taskdetail")
     Observable<BaseHttpResult<TaskEntity>> taskdetail(@Query("userid") String userid, @Query("id") String id);
+
     @GET("app/task/tasksamples")
     Observable<BaseHttpResult<List<TaskSample>>> tasksamples(@Query("userid") String userid, @Query("id") String id);
 
+    @GET("base/tBaFile/showImage")
+    Observable<ResponseBody> downloadVideo(@Query("id") String id);
 }

@@ -1,5 +1,6 @@
 package com.product.sampling.ui;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,12 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.luck.picture.lib.PictureSelectionModel;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
-import com.luck.picture.lib.config.PictureMimeType;
-import com.luck.picture.lib.config.PictureSelectionConfig;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.product.sampling.Constants;
 import com.product.sampling.R;
 import com.product.sampling.adapter.ImageAndTextRecyclerViewAdapter;
 import com.product.sampling.adapter.ImageServerRecyclerViewAdapter;
@@ -32,22 +31,24 @@ import com.product.sampling.adapter.VideoAndTextRecyclerViewAdapter;
 import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.Videos;
+import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.LoadDataModel;
+import com.product.sampling.net.request.Request;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.photo.MediaHelper;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
+import com.product.sampling.utils.FileDownloader;
+import com.product.sampling.utils.LogUtils;
 import com.product.sampling.utils.SPUtil;
-
-import org.devio.takephoto.model.TImage;
 
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
-import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -197,10 +198,6 @@ public class TaskSceneFragment extends BasePhotoFragment {
         ((TaskDetailActivity) getActivity()).checkSelectMenu(3);
     }
 
-    private String getPath() {
-        return "/storage/emulated/0/zip";
-    }
-
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List task) {
         ImageAndTextRecyclerViewAdapter adapter = new ImageAndTextRecyclerViewAdapter(getActivity(), task, true);
         recyclerView.setAdapter(adapter);
@@ -211,10 +208,6 @@ public class TaskSceneFragment extends BasePhotoFragment {
         recyclerView.setAdapter(adapter);
     }
 
-    @Override
-    public void showResultImages(ArrayList<TImage> images) {
-
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -245,10 +238,14 @@ public class TaskSceneFragment extends BasePhotoFragment {
 
                     setupRecyclerViewFromServer(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
                     setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
+
+                    downLoadVideo();
                 }
             }
         });
+        rxPermissionTest();
     }
+
 
     private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, List<Videos> videoList) {
         mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, true));
@@ -357,6 +354,46 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 }
             }
         }
+
     }
 
+    private void downLoadVideo() {
+//        FileDownloader.downloadFile(RetrofitService.createApiService(Request.class).downloadVideo(taskDetailViewModel.taskEntity.voides.get(0).getId()), Constants.getPath(), "test.mp4", new DownloadProgressHandler() {
+//
+//
+//            @Override
+//            public void onProgress(int progress, long total, long speed) {
+//                LogUtils.i("下载文件中:" + progress / total);
+//            }
+//
+//            @Override
+//            public void onCompleted(File file) {
+//                LogUtils.i("下载文件成功");
+////                                    FileDownloader.clear();
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                LogUtils.e("下载文件异常", e.getMessage());
+//            }
+//        });
+    }
+
+    private void rxPermissionTest() {
+
+//        com.tbruyelle.rxpermissions2.RxPermissions rxPermissions = new com.tbruyelle.rxpermissions2.RxPermissions(getActivity());
+//        rxPermissions
+//                .request(Manifest.permission.CAMERA,
+//                        Manifest.permission.READ_PHONE_STATE)
+//                .subscribe(granted -> {
+//                    if (granted) {
+//                        // All requested permissions are granted
+//                    } else {
+//                        // At least one permission is denied
+//                    }
+//                });
+
+
+
+    }
 }
