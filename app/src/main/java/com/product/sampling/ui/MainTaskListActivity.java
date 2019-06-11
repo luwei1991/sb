@@ -59,5 +59,8 @@ public class MainTaskListActivity extends BaseActivity {
         });
         RadioButton radioButton = (RadioButton) rb.findViewById(R.id.rb1);
         radioButton.setChecked(true);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.item_detail_container, taskToDoFragment)
+                .commit();
     }
 }

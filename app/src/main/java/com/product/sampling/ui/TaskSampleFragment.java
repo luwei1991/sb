@@ -1,10 +1,16 @@
 package com.product.sampling.ui;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +22,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -410,9 +417,11 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                                 if (pos == 1) {
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).samplingfile = data.getStringExtra("pdf");
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).samplingInfoMap = map;
+                                    shareIntent(data.getStringExtra("pdf"));
                                 } else if (pos == 2) {
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).adviceInfoMap = map;
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).disposalfile = data.getStringExtra("pdf");
+                                    shareIntent(data.getStringExtra("pdf"));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -426,7 +435,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                         List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
                         taskDetailViewModel.taskEntity.taskSamples.get(selectId).samplingpicfile = selectHandle.get(0).getPath();
                         mRecyclerView.getAdapter().notifyDataSetChanged();
-                        shareIntent(selectHandle.get(0).getPath());
+                        sharePic(selectHandle.get(0).getPath());
                     }
                     break;
                 case Select_Check:
@@ -434,7 +443,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                         List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
                         taskDetailViewModel.taskEntity.taskSamples.get(selectId).disposalpicfile = selectHandle.get(0).getPath();
                         mRecyclerView.getAdapter().notifyDataSetChanged();
-                        shareIntent(selectHandle.get(0).getPath());
+                        sharePic(selectHandle.get(0).getPath());
                     }
                     break;
 
@@ -444,12 +453,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     }
 
     private void shareIntent(String pdf) {
-        Uri imageUri = Uri.fromFile(new File(pdf));
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
-        shareIntent.setType("image/*");
-        startActivity(Intent.createChooser(shareIntent, "分享到"));
+        getDayinWenjian(pdf);
     }
 
     /**
@@ -599,4 +603,70 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
 
     }
+
+    @Override
+    public void startIntentSenderForResult(IntentSender intent, int requestCode, @Nullable Intent fillInIntent, int flagsMask, int flagsValues, int extraFlags, Bundle options) throws IntentSender.SendIntentException {
+        super.startIntentSenderForResult(intent, requestCode, fillInIntent, flagsMask, flagsValues, extraFlags, options);
+    }
+
+    private void sharePic(String path){
+        File doc = new File(path);
+        Intent share = new Intent();
+        share.setAction(Intent.ACTION_SEND);
+        share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(doc));
+
+        share.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Uri contentUri = FileProvider.getUriForFile(getActivity(), "com.product.sampling.fileprovider",doc);
+//        share.setDataAndType(contentUri, "application/vnd.android.package-archive");
+        share.setDataAndType(contentUri, "application/pdf");
+
+        startActivity(Intent.createChooser(share, "分享文件"));
+
+    }
+
+    public void getDayinWenjian(String path) {
+   /* Intent intent = new Intent(this, DayinActivity.class);http://xzc.197746.com/printershare11165.apk
+    startActivity(intent);*/
+        if (isAvilible(getActivity(), "com.dynamixsoftware.printershare")) {
+            File doc = new File(path);
+            ComponentName comp = new ComponentName("com.dynamixsoftware.printershare", "com.dynamixsoftware.printershare.ActivityPrintPDF");
+            // ComponentName comp = new ComponentName("com.dynamixsoftware.printershare","com.dynamixsoftware.printershare.ActivityPrintDocuments");
+            Intent intent = new Intent();
+            intent.setComponent(comp);
+            intent.setAction("android.intent.action.VIEW");
+            intent.setType("application/doc");
+//            intent.setData(Uri.fromFile(doc));
+//            startActivity(intent);
+
+
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri contentUri = FileProvider.getUriForFile(getActivity(), "com.product.sampling.fileprovider",doc);
+            intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+            startActivity(intent);
+
+
+        } else {
+            String destPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                    .getAbsolutePath() + File.separator + "printershare11165.apk";
+//            new DownloadTask(this).execute("http://xzc.197746.com/printershare11165.apk",destPath);
+        }
+    }
+
+    private boolean isAvilible(Context context, String packageName) {
+        final PackageManager packageManager = context.getPackageManager();//获取packagemanager
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);//获取所有已安装程序的包信息
+        List<String> pName = new ArrayList<String>();//用于存储所有已安装程序的包名
+        //从pinfo中将包名字逐一取出，压入pName list中
+        if (pinfo != null) {
+            for (int i = 0; i < pinfo.size(); i++) {
+                String pn = pinfo.get(i).packageName;
+                if (pn.contains("canon")) {
+                    Log.e("canon", pn);
+                }
+                pName.add(pn);
+            }
+        }
+        return pName.contains(packageName);//判断pName中是否有目标程序的包名，有TRUE，没有FALSE
+    }
+
 }
