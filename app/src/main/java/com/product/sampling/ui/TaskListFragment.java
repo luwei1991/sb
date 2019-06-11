@@ -90,7 +90,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                 if (null != list && !list.isEmpty()) {
                     TaskResultBean bean = new TaskResultBean();
                     bean.list = list;
-                    setupRecyclerView((RecyclerView) recyclerView, bean);
+                    setupRecyclerView((RecyclerView) recyclerView, list);
                 }
             }
 
@@ -111,7 +111,6 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         mIVTime = rootView.findViewById(R.id.iv_sort_time);
         rootView.findViewById(R.id.tv_range).setOnClickListener(this);
         rootView.findViewById(R.id.tv_date).setOnClickListener(this);
-
 
         ArrayList type = new ArrayList();
         type.add("食品");
@@ -218,8 +217,8 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                 });
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView, TaskResultBean task) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter((AppCompatActivity) getActivity(), task.list, false));
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List task) {
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter((AppCompatActivity) getActivity(), task, false));
     }
 
     @Override

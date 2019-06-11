@@ -3,6 +3,7 @@ package com.product.sampling.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -49,6 +50,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.Type;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -424,20 +426,30 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                         List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
                         taskDetailViewModel.taskEntity.taskSamples.get(selectId).samplingpicfile = selectHandle.get(0).getPath();
                         mRecyclerView.getAdapter().notifyDataSetChanged();
+                        shareIntent(selectHandle.get(0).getPath());
                     }
-
                     break;
                 case Select_Check:
                     if (data != null) {
                         List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
                         taskDetailViewModel.taskEntity.taskSamples.get(selectId).disposalpicfile = selectHandle.get(0).getPath();
                         mRecyclerView.getAdapter().notifyDataSetChanged();
+                        shareIntent(selectHandle.get(0).getPath());
                     }
                     break;
 
 
             }
         }
+    }
+
+    private void shareIntent(String pdf) {
+        Uri imageUri = Uri.fromFile(new File(pdf));
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+        shareIntent.setType("image/*");
+        startActivity(Intent.createChooser(shareIntent, "分享到"));
     }
 
     /**

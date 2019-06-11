@@ -66,7 +66,7 @@ public interface Request {
     Observable<Response<String>> changepassword(@Query("userid") String userid, @Query("password") String password, @Query("newPassword") String newPassword);
 
     @GET("app/task/tasklist")
-    Observable<Response<TaskResultBean>> taskList(@Query("userid") String userid, @Query("taskstatus") String taskstatus, @Query("ordertype") String ordertype);
+    Observable<Response<List<TaskEntity>>> taskList(@Query("userid") String userid, @Query("taskstatus") String taskstatus, @Query("ordertype") String ordertype);
 
     @GET("app/task/getdict")
     Observable<Response<TaskMenu>> taskMenu(@Query("type") String type, @Query("value") String value);
