@@ -66,17 +66,12 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                 int index = (int) view.getTag();
                 fragment.startActivityForResult(new Intent(view.getContext(), WebViewActivity.class)
                         .putExtra("task", (int) view.getTag())
-                        .putExtra("map", (Serializable)mData.get(index).adviceInfoMap)
+                        .putExtra("map", (Serializable) mData.get(index).adviceInfoMap)
                         .putExtra(Intent_Order, 2), RequestCodePdf);
             } else if (R.id.btn_upload_check_sheet == view.getId()) {//检查单上传
-//                fragment.selectId = (int) view.getTag();
-//                fragment.startGalleryForPdf((int) view.getTag(), Select_Check);
+                fragment.selectId = (int) view.getTag();
+                fragment.startGalleryForPdf((int) view.getTag(), Select_Check);
 
-                int index = (int) view.getTag();
-                fragment.startActivityForResult(new Intent(view.getContext(), WebViewActivity.class)
-                        .putExtra("task", index)
-                        .putExtra("map", (Serializable) mData.get(index).samplingInfoMap)
-                        .putExtra(Intent_Order, 1), RequestCodePdf);
             } else if (R.id.btn_upload_handling_sheet == view.getId()) {//处置单上传
                 fragment.selectId = (int) view.getTag();
                 fragment.startGalleryForPdf((int) view.getTag(), Select_Handle);
