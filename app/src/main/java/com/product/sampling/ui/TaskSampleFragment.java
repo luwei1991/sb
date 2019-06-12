@@ -407,7 +407,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                                 if (pos == 1) {
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).samplingfile = data.getStringExtra("pdf");
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).samplingInfoMap = map;
-                                    findPrintShare(data.getStringExtra("pdf"));
+                                    shareBySystem(data.getStringExtra("pdf"));
                                 } else if (pos == 2) {
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).adviceInfoMap = map;
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).disposalfile = data.getStringExtra("pdf");
@@ -614,9 +614,9 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     public void findPrintShare(String path) {
    /* Intent intent = new Intent(this, DayinActivity.class);http://xzc.197746.com/printershare11165.apk
     startActivity(intent);*/
-        if (isAvilible(getActivity(), "com.dynamixsoftware.printershare")) {
+        if (isAvilible(getActivity(), "org.mopria.printplugin")) {
             File doc = new File(path);
-            ComponentName comp = new ComponentName("com.dynamixsoftware.printershare", "com.dynamixsoftware.printershare.ActivityPrintPDF");
+            ComponentName comp = new ComponentName("org.mopria.printplugin", "org.mopria.printplugin.DocumentRenderingActivity");
             // ComponentName comp = new ComponentName("com.dynamixsoftware.printershare","com.dynamixsoftware.printershare.ActivityPrintDocuments");
             Intent intent = new Intent();
             intent.setComponent(comp);
