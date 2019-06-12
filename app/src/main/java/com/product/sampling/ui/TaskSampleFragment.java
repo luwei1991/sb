@@ -412,7 +412,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                                 } else if (pos == 2) {
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).adviceInfoMap = map;
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).disposalfile = data.getStringExtra("pdf");
-                                    findPrintShare(data.getStringExtra("pdf"));
+                                    shareBySystem(data.getStringExtra("pdf"));
+//                                    findPrintShare(data.getStringExtra("pdf"));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
