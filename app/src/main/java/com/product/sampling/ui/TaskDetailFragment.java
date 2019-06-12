@@ -93,9 +93,6 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if (btnSubmit.getId() == v.getId()) {
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.item_detail_container, TaskSceneFragment.newInstance(taskDetailViewModel.taskEntity))
-                    .commit();
             ((TaskDetailActivity) getActivity()).checkSelectMenu(2);
         }
     }

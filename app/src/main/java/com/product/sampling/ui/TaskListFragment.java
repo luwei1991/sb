@@ -26,12 +26,21 @@ import com.google.gson.reflect.TypeToken;
 import com.product.sampling.R;
 import com.product.sampling.adapter.SpinnerSimpleAdapter;
 import com.product.sampling.bean.TaskEntity;
+import com.product.sampling.bean.TaskMenu;
 import com.product.sampling.bean.TaskResultBean;
+import com.product.sampling.bean.UserInfoBean;
+import com.product.sampling.httpmoudle.RetrofitService;
+import com.product.sampling.httpmoudle.error.ExecptionEngin;
 import com.product.sampling.manager.AccountManager;
+import com.product.sampling.maputil.ToastUtil;
 import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
+import com.product.sampling.net.ZBaseObserver;
+import com.product.sampling.net.request.Request;
 import com.product.sampling.net.response.ResponseTransformer;
 import com.product.sampling.net.schedulers.SchedulerProvider;
+import com.product.sampling.utils.ActivityUtils;
+import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.SPUtil;
 
 import org.devio.takephoto.model.TImage;
@@ -94,6 +103,8 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                 }
             }
 
+        } else if (getArguments().getString(ARG_TASK_STATUS).equals("2")) {
+            getData();
         }
     }
 
@@ -186,38 +197,75 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         Bundle b = getArguments();
         String status = b.getString(ARG_TASK_STATUS);
 
-        disposable = NetWorkManager.getRequest().taskList(AccountManager.getInstance().getUserId(), status, null)
-                .compose(ResponseTransformer.handleResult())
-                .compose(SchedulerProvider.getInstance().applySchedulers())
-                .subscribe(tasks -> {
-                    assert recyclerView != null;
-                    setupRecyclerView((RecyclerView) recyclerView, tasks);
-                }, throwable -> {
-                    if (isVisible()) {
-                        showToast(((ApiException) throwable).getDisplayMessage());
+        RetrofitService.createApiService(Request.class)
+                .taskList(AccountManager.getInstance().getUserId(), status, null)
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<List<TaskEntity>>() {
+
+                    @Override
+                    public void onFailure(int code, String message) {
+                        super.onFailure(code, message);
+                        if (isVisible()) {
+                            showToast(message);
+                        }
                     }
-                    Log.e("throwable", "" + ((ApiException) throwable).getDisplayMessage());
+
+                    @Override
+                    public void onSuccess(List<TaskEntity> tasks) {
+                        assert recyclerView != null;
+                        List<TaskEntity> localData = findTaskInLocalFile();
+                        if (null != localData && !localData.isEmpty()) {
+                            for (TaskEntity taskEntity : localData) {
+                                for (int i = 0; i < tasks.size(); i++) {
+                                    if (tasks.get(i).id.equals(taskEntity.id)) {
+                                        tasks.remove(i);
+                                        break;
+                                    }
+                                }
+
+                            }
+
+                        }
+                        setupRecyclerView(recyclerView, tasks);
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        super.onSubscribe(d);
+                    }
                 });
     }
 
     private void getMenuData() {
-        disposable = NetWorkManager.getRequest().getArea(null, null)
-                .compose(ResponseTransformer.handleResult())
-                .compose(SchedulerProvider.getInstance().applySchedulers())
-                .subscribe(tasks -> {
-                    Log.e("tasks", tasks.toString());
+        RetrofitService.createApiService(Request.class)
+                .getArea(null, null)
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<List<TaskMenu>>() {
 
-                    System.out.println("------>" + tasks.toString());
-                }, throwable -> {
-                    if (isVisible()) {
-                        showToast(((ApiException) throwable).getDisplayMessage());
+                    @Override
+                    public void onFailure(int code, String message) {
+                        super.onFailure(code, message);
+                        if (isVisible()) {
+                            showToast(message);
+                        }
                     }
 
-                    Log.e("throwable", "" + ((ApiException) throwable).getDisplayMessage());
+                    @Override
+                    public void onSuccess(List<TaskMenu> tasks) {
+                        Log.e("tasks", tasks.toString());
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        super.onSubscribe(d);
+                    }
                 });
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List task) {
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<TaskEntity> task) {
+
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter((AppCompatActivity) getActivity(), task, false));
     }
 
@@ -344,5 +392,17 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
 
             }
         }
+    }
+
+    List<TaskEntity> findTaskInLocalFile() {
+        Gson gson = new Gson();
+        String taskListStr = (String) SPUtil.get(getActivity(), "tasklist", "");
+        if (!TextUtils.isEmpty(taskListStr)) {
+            Type listType = new TypeToken<List<TaskEntity>>() {
+            }.getType();
+            List<TaskEntity> listTask = gson.fromJson(taskListStr, listType);
+            return listTask;
+        }
+        return null;
     }
 }

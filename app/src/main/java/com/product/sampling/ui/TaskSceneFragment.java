@@ -1,6 +1,5 @@
 package com.product.sampling.ui;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -23,7 +22,6 @@ import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
-import com.product.sampling.Constants;
 import com.product.sampling.R;
 import com.product.sampling.adapter.ImageAndTextRecyclerViewAdapter;
 import com.product.sampling.adapter.ImageServerRecyclerViewAdapter;
@@ -31,24 +29,17 @@ import com.product.sampling.adapter.VideoAndTextRecyclerViewAdapter;
 import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.Videos;
-import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.LoadDataModel;
-import com.product.sampling.net.request.Request;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.photo.MediaHelper;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
-import com.product.sampling.utils.FileDownloader;
-import com.product.sampling.utils.LogUtils;
 import com.product.sampling.utils.SPUtil;
 
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -192,20 +183,20 @@ public class TaskSceneFragment extends BasePhotoFragment {
         String data = gson.toJson(listTask);
         SPUtil.put(getActivity(), "tasklist", data);
         com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "保存本地成功");
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.item_detail_container, TaskSampleFragment.newInstance(taskDetailViewModel.taskEntity))
-                .commit();
+
         ((TaskDetailActivity) getActivity()).checkSelectMenu(3);
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List task) {
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<Pics> task) {
         ImageAndTextRecyclerViewAdapter adapter = new ImageAndTextRecyclerViewAdapter(getActivity(), task, true);
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     private void setupRecyclerViewFromServer(@NonNull RecyclerView recyclerView, List task) {
         ImageServerRecyclerViewAdapter adapter = new ImageServerRecyclerViewAdapter(getActivity(), task, false);
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
 
@@ -213,11 +204,9 @@ public class TaskSceneFragment extends BasePhotoFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         taskDetailViewModel = ViewModelProviders.of(getActivity()).get(TaskDetailViewModel.class);
-
+        findTaskInLocalFile();
         //刷新本地图片和视频列表
         if (taskDetailViewModel.taskEntity.isLoadLocalData) {
-            findTaskInLocalFile();
-            taskDetailViewModel.taskEntity.isLoadLocalData = true;
             setupRecyclerView(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
             setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
         } else {
@@ -291,12 +280,13 @@ public class TaskSceneFragment extends BasePhotoFragment {
                         mediaInfos.add(mediaInfo);
                     }
 
-                    for (int i = 0; i < taskDetailViewModel.taskEntity.voides.size(); i++) {
+                    for (int i = taskDetailViewModel.taskEntity.voides.size() - 1; i >= 0; i--) {
                         if (!taskDetailViewModel.taskEntity.voides.get(i).isLocal) {
                             taskDetailViewModel.taskEntity.voides.remove(i);
                         }
                     }
                     taskDetailViewModel.taskEntity.isLoadLocalData = true;
+                    taskDetailViewModel.taskEntity.isEditedTaskScene = true;
                     taskDetailViewModel.taskEntity.voides.addAll(mediaInfos);
                     setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
                 }
@@ -318,10 +308,18 @@ public class TaskSceneFragment extends BasePhotoFragment {
                         mediaInfo.setOriginalPath(media.getPath());
                         mediaInfo.setCompressPath(media.getCompressPath());
                         mediaInfo.setCompressed(media.isCompressed());
+                        mediaInfo.isLocal = true;
                         mediaInfos.add(mediaInfo);
                     }
-                    taskDetailViewModel.taskEntity.pics = mediaInfos;
+                    for (int i = taskDetailViewModel.taskEntity.pics.size() - 1; i >= 0; i--) {
+                        Pics pics1 = taskDetailViewModel.taskEntity.pics.get(i);
+                        if (!pics1.isLocal) {
+                            taskDetailViewModel.taskEntity.pics.remove(pics1);
+                        }
+                    }
+                    taskDetailViewModel.taskEntity.pics.addAll(mediaInfos);
                     taskDetailViewModel.taskEntity.isLoadLocalData = true;
+                    taskDetailViewModel.taskEntity.isEditedTaskScene = true;
                     setupRecyclerView(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
                 }
                 break;
@@ -392,7 +390,6 @@ public class TaskSceneFragment extends BasePhotoFragment {
 //                        // At least one permission is denied
 //                    }
 //                });
-
 
 
     }

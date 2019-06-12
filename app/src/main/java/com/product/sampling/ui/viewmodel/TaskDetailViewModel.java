@@ -35,12 +35,11 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
 
     public void requestOrderList(String symbol, String orderType, int page, boolean isRefrash) {
 
-        //未登录判断
-
         orderLoadLiveData.setValue(new LoadDataModel());
-        NetWorkManager.getRequest().getArea(null, null)
-                .compose(ResponseTransformer.handleResult())
-                .compose(SchedulerProvider.getInstance().applySchedulers())
+        RetrofitService.createApiService(Request.class)
+                .getArea(null, null)
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
                 .subscribe(new ZBaseObserver<List<TaskMenu>>() {
 
                     @Override
@@ -64,8 +63,6 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
 
     public void requestOrderList(String userid, String id) {
 
-        //未登录判断
-
         orderDetailLiveData.setValue(new LoadDataModel());
         RetrofitService.createApiService(Request.class)
                 .taskdetail(userid, id)
@@ -81,8 +78,6 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
 
     public void requestTasksamples(String userid, String id) {
 
-        //未登录判断
-
         sampleDetailLiveData.setValue(new LoadDataModel());
         RetrofitService.createApiService(Request.class)
                 .tasksamples(userid, id)
@@ -95,5 +90,5 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
                     }
                 });
     }
-    
+
 }

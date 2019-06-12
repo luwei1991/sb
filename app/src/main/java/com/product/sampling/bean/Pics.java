@@ -57,7 +57,7 @@ public class Pics extends TaskImageEntity implements Parcelable, Serializable {
     private String belongID;
     private String ftpFileName;
     private String picorpdf;
-
+    public boolean isLocal;
     public Pics() {
 
     }

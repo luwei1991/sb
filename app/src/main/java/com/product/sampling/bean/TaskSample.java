@@ -12,8 +12,8 @@ public class TaskSample {
     public String disposalfile = "";
     public String samplingpicfile = "";
     public String disposalpicfile = "";
-    public HashMap<String, String> samplingInfoMap = new HashMap<>();
-    public HashMap<String, String> adviceInfoMap = new HashMap<>();
+    public HashMap<String, String> samplingInfoMap = new HashMap<>();//检查单信息
+    public HashMap<String, String> adviceInfoMap = new HashMap<>();//处置单信息
     public Advice advice = new Advice();
     public Sampling sampling = new Sampling();
     public List<Pics> pics = new ArrayList<>();

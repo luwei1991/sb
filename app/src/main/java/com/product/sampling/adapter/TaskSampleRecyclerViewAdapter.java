@@ -24,6 +24,7 @@ import com.product.sampling.photo.MediaHelper;
 import com.product.sampling.ui.TaskSampleFragment;
 import com.product.sampling.ui.WebViewActivity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import static com.product.sampling.ui.TaskSampleFragment.Select_Check;
@@ -55,17 +56,28 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                         }).setNegativeButton("取消", null).show();
 
             } else if (R.id.btn_edit_check_sheet == view.getId()) {//检查单编辑
+
+                int index = (int) view.getTag();
                 fragment.startActivityForResult(new Intent(view.getContext(), WebViewActivity.class)
-                        .putExtra("task", (int) view.getTag())
+                        .putExtra("task", index)
+                        .putExtra("map", (Serializable) mData.get(index).samplingInfoMap)
                         .putExtra(Intent_Order, 1), RequestCodePdf);
             } else if (R.id.btn_edit_handling_sheet == view.getId()) {//处置单编辑
+                int index = (int) view.getTag();
                 fragment.startActivityForResult(new Intent(view.getContext(), WebViewActivity.class)
                         .putExtra("task", (int) view.getTag())
+                        .putExtra("map", (Serializable)mData.get(index).adviceInfoMap)
                         .putExtra(Intent_Order, 2), RequestCodePdf);
             } else if (R.id.btn_upload_check_sheet == view.getId()) {//检查单上传
-                fragment.selectId = (int) view.getTag();
-                fragment.startGalleryForPdf((int) view.getTag(), Select_Check);
-            } else if (R.id.btn_upload_handling_sheet == view.getId()) {//检查单上传
+//                fragment.selectId = (int) view.getTag();
+//                fragment.startGalleryForPdf((int) view.getTag(), Select_Check);
+
+                int index = (int) view.getTag();
+                fragment.startActivityForResult(new Intent(view.getContext(), WebViewActivity.class)
+                        .putExtra("task", index)
+                        .putExtra("map", (Serializable) mData.get(index).samplingInfoMap)
+                        .putExtra(Intent_Order, 1), RequestCodePdf);
+            } else if (R.id.btn_upload_handling_sheet == view.getId()) {//处置单上传
                 fragment.selectId = (int) view.getTag();
                 fragment.startGalleryForPdf((int) view.getTag(), Select_Handle);
             } else if (R.id.iv_add_video == view.getId()) {

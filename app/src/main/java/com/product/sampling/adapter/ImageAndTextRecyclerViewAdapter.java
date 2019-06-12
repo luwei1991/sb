@@ -22,7 +22,9 @@ import com.luck.picture.lib.PictureExternalPreviewActivity;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.product.sampling.Constants;
 import com.product.sampling.R;
+import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.ui.TaskDetailActivity;
@@ -36,7 +38,7 @@ import java.util.List;
 
 public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageAndTextRecyclerViewAdapter.ViewHolder> {
 
-    private final List<TaskImageEntity> mValues;
+    private final List<Pics> mValues;
     private boolean isLocalData;
     private int taskPostion = -1;//当前图片列表所属样品id
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -86,17 +88,10 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
     }
 
     public ImageAndTextRecyclerViewAdapter(Context parent,
-                                           List<TaskImageEntity> items,
+                                           List<Pics> items,
                                            boolean isLocalData) {
         mValues = items;
         this.isLocalData = isLocalData;
-    }
-
-    public ImageAndTextRecyclerViewAdapter(Context parent,
-                                           List<TaskImageEntity> items,
-                                           int pos) {
-        mValues = items;
-        taskPostion = pos;
     }
 
     @Override
@@ -108,14 +103,18 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TaskImageEntity task = mValues.get(position);
+        Pics task = mValues.get(position);
         holder.mTextViewTitle.setText(task.title + "");
         if (taskPostion != -1) {
             holder.mImageView.setTag(taskPostion);
         }
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(mOnClickListener);
-        Glide.with(holder.itemView.getContext()).load(task.getOriginalPath()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);
+        if (task.isLocal) {
+            Glide.with(holder.itemView.getContext()).load(task.getOriginalPath()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);
+        } else {
+            Glide.with(holder.itemView.getContext()).load(Constants.IMAGE_BASE_URL + task.getId()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);
+        }
     }
 
     @Override

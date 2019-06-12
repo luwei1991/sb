@@ -80,7 +80,7 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
         Videos task = mValues.get(position);
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(mOnClickListener);
-        if (isLocal) {
+        if (task.isLocal) {
             holder.mTextViewTitle.setText(task.title);
             Glide.with(holder.itemView.getContext()).load(task.getPath()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);
         } else {

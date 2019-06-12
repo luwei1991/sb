@@ -10,6 +10,7 @@ import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 /**
@@ -20,6 +21,10 @@ public class TaskDetailActivity extends BaseActivity {
     TaskEntity task = null;
     TaskDetailViewModel taskDetailViewModel;
     RadioGroup rb;
+    TaskDetailFragment taskDetailFragment;
+    TaskSceneFragment taskSceneFragment;
+    TaskSampleFragment taskSampleFragment;
+    Fragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,37 +40,66 @@ public class TaskDetailActivity extends BaseActivity {
         task = (TaskEntity) bundle.getSerializable("task");//读出数据
         taskDetailViewModel.taskEntity = task;
 
+        taskDetailFragment = TaskDetailFragment.newInstance(task);
+        taskSceneFragment = TaskSceneFragment.newInstance(task);
+        taskSampleFragment = TaskSampleFragment.newInstance(task);
+
         rb = findViewById(R.id.rg1);
         rb.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                Fragment fragment = new TaskUnfindSampleFragment();
                 if (group.getCheckedRadioButtonId() == R.id.rb1) {
-                    fragment = TaskDetailFragment.newInstance(task);
+                    switchContent(currentFragment, taskDetailFragment);
+                    currentFragment = taskDetailFragment;
                 } else if (group.getCheckedRadioButtonId() == R.id.rb2) {
-                    fragment = TaskSceneFragment.newInstance(task);
+                    switchContent(currentFragment, taskSceneFragment);
+                    currentFragment = taskSceneFragment;
+
                 } else if (group.getCheckedRadioButtonId() == R.id.rb3) {
-                    fragment = TaskSampleFragment.newInstance(task);
+                    switchContent(currentFragment, taskSampleFragment);
+                    currentFragment = taskSampleFragment;
                 }
-                Bundle arguments = new Bundle();
-                fragment.setArguments(arguments);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.item_detail_container, fragment)
-                        .commit();
             }
         });
         RadioButton radioButton = rb.findViewById(R.id.rb1);
         radioButton.setChecked(true);
+
+    }
+
+    public void switchContent(Fragment from, Fragment to) {
+        FragmentTransaction transactio = getSupportFragmentManager().beginTransaction();
+        getSupportFragmentManager().executePendingTransactions();
+        if (!to.isAdded()) { // 先判断是否被add过,没有添加就添加
+            if (from != null) {
+                transactio.hide(from);
+                transactio.addToBackStack(null);
+            }
+            transactio.add(R.id.item_detail_container, to);
+            transactio.commit(); // 隐藏当前的fragment，add下一个到Activity中
+        } else {
+            if (from != null) {
+                transactio.hide(from);
+            }
+//            to.onResume();//这里用户更新数据，不加这句就可以实现单例了，但是不会调用任何生命周期里的方法，不会更新数据
+            transactio.show(to).commit(); // 隐藏当前的fragment，显示下一个
+        }
+
     }
 
     public void checkSelectMenu(int pos) {
         RadioButton radioButton = rb.findViewById(R.id.rb1);
         if (pos == 1) {
             radioButton = rb.findViewById(R.id.rb1);
+            switchContent(currentFragment, taskDetailFragment);
+            currentFragment = taskDetailFragment;
         } else if (pos == 2) {
             radioButton = rb.findViewById(R.id.rb2);
+            switchContent(currentFragment, taskSceneFragment);
+            currentFragment = taskSceneFragment;
         } else if (pos == 3) {
             radioButton = rb.findViewById(R.id.rb3);
+            switchContent(currentFragment, taskSampleFragment);
+            currentFragment = taskSampleFragment;
         }
         radioButton.setChecked(true);
     }

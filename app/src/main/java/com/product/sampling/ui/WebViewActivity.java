@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -70,6 +71,27 @@ public class WebViewActivity extends AppCompatActivity {
             webView.loadUrl("file:///android_asset/1产品质量监督抽查-复查抽样单.html");
         } else {
             webView.loadUrl("file:///android_asset/2产品质量监督抽查样品封存和处置通知单.html");
+        }
+        HashMap<String, String> map = (HashMap) getIntent().getSerializableExtra("map");
+        if (null != map && !map.isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+            for (String s : map.keySet()) {
+                if (!TextUtils.isEmpty(s)) {
+                    builder.append(s).append('=').append(map.get(s)).append('&');
+                }
+            }
+            if (builder.toString().endsWith("&")) {
+                builder.deleteCharAt(builder.length() - 1);
+            }
+            String data = builder.toString();
+            if (!TextUtils.isEmpty(data)) {
+                webView.callHandler("dataBackfill", data, new CallBackFunction() {
+                    @Override
+                    public void onCallBack(String s) { //js回传的数据
+
+                    }
+                });
+            }
         }
 
         webView.addJavascriptInterface(new JSInterface(), "register_js");
@@ -318,5 +340,17 @@ public class WebViewActivity extends AppCompatActivity {
         public void send(String dataInfo) {
             Toast.makeText(WebViewActivity.this, dataInfo, Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        webView.send("requestform", new CallBackFunction() {
+            @Override
+            public void onCallBack(String data) { //js回传的数据
+                para = data;
+                KeyboardUtils.closeKeyboard(WebViewActivity.this);
+                verifyStoragePermissions(WebViewActivity.this);
+            }
+        });
     }
 }

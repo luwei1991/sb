@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -35,7 +34,6 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.product.sampling.R;
 import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
-import com.product.sampling.bean.LocalMediaInfo;
 import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskSample;
@@ -51,24 +49,16 @@ import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.SPUtil;
 import com.product.sampling.utils.ToastUtil;
 
-import org.devio.takephoto.model.TImage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.Type;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import io.reactivex.Flowable;
-import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
@@ -387,7 +377,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                             mediaInfos.add(mediaInfo);
                         }
                         taskDetailViewModel.taskEntity.taskSamples.get(selectId).isLocalData = true;
-                        taskDetailViewModel.taskEntity.taskSamples.get(selectId).pics = mediaInfos;
+                        taskDetailViewModel.taskEntity.taskSamples.get(selectId).pics.addAll(mediaInfos);
                         mRecyclerView.getAdapter().notifyDataSetChanged();
                     }
                     break;
@@ -417,11 +407,11 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                                 if (pos == 1) {
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).samplingfile = data.getStringExtra("pdf");
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).samplingInfoMap = map;
-                                    shareIntent(data.getStringExtra("pdf"));
+                                    findPrintShare(data.getStringExtra("pdf"));
                                 } else if (pos == 2) {
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).adviceInfoMap = map;
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).disposalfile = data.getStringExtra("pdf");
-                                    shareIntent(data.getStringExtra("pdf"));
+                                    findPrintShare(data.getStringExtra("pdf"));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -435,7 +425,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                         List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
                         taskDetailViewModel.taskEntity.taskSamples.get(selectId).samplingpicfile = selectHandle.get(0).getPath();
                         mRecyclerView.getAdapter().notifyDataSetChanged();
-                        sharePic(selectHandle.get(0).getPath());
+                        shareBySystem(selectHandle.get(0).getPath());
                     }
                     break;
                 case Select_Check:
@@ -443,7 +433,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                         List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
                         taskDetailViewModel.taskEntity.taskSamples.get(selectId).disposalpicfile = selectHandle.get(0).getPath();
                         mRecyclerView.getAdapter().notifyDataSetChanged();
-                        sharePic(selectHandle.get(0).getPath());
+                        shareBySystem(selectHandle.get(0).getPath());
                     }
                     break;
 
@@ -452,9 +442,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         }
     }
 
-    private void shareIntent(String pdf) {
-        getDayinWenjian(pdf);
-    }
 
     /**
      * 取pdf截图
@@ -609,14 +596,14 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         super.startIntentSenderForResult(intent, requestCode, fillInIntent, flagsMask, flagsValues, extraFlags, options);
     }
 
-    private void sharePic(String path){
+    private void shareBySystem(String path) {
         File doc = new File(path);
         Intent share = new Intent();
         share.setAction(Intent.ACTION_SEND);
         share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(doc));
 
         share.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        Uri contentUri = FileProvider.getUriForFile(getActivity(), "com.product.sampling.fileprovider",doc);
+        Uri contentUri = FileProvider.getUriForFile(getActivity(), "com.product.sampling.fileprovider", doc);
 //        share.setDataAndType(contentUri, "application/vnd.android.package-archive");
         share.setDataAndType(contentUri, "application/pdf");
 
@@ -624,7 +611,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
     }
 
-    public void getDayinWenjian(String path) {
+    public void findPrintShare(String path) {
    /* Intent intent = new Intent(this, DayinActivity.class);http://xzc.197746.com/printershare11165.apk
     startActivity(intent);*/
         if (isAvilible(getActivity(), "com.dynamixsoftware.printershare")) {
@@ -640,7 +627,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
 
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            Uri contentUri = FileProvider.getUriForFile(getActivity(), "com.product.sampling.fileprovider",doc);
+            Uri contentUri = FileProvider.getUriForFile(getActivity(), "com.product.sampling.fileprovider", doc);
             intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
             startActivity(intent);
 

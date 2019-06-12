@@ -43,9 +43,10 @@ public class TaskExecptionViewModel extends AutoDisposViewModel {
         //未登录判断
 
         orderLoadLiveData.setValue(new LoadDataModel());
-        NetWorkManager.getRequest().getArea(null, null)
-                .compose(ResponseTransformer.handleResult())
-                .compose(SchedulerProvider.getInstance().applySchedulers())
+        RetrofitService.createApiService(Request.class)
+                .getArea(null, null)
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
                 .subscribe(new ZBaseObserver<List<TaskMenu>>() {
 
                     @Override

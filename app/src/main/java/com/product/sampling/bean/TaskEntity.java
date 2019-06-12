@@ -51,6 +51,7 @@ public class TaskEntity implements Parcelable, Serializable {
     public boolean isNewRecord;
 
     public boolean isLoadLocalData;
+    public boolean isEditedTaskScene;//是否编辑过现场
 
     public List<TaskSample> taskSamples = new ArrayList<TaskSample>();
 
