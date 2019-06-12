@@ -1,7 +1,11 @@
 package com.product.sampling.ui;
 
+import android.Manifest;
+import android.app.DownloadManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +26,7 @@ import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.product.sampling.Constants;
 import com.product.sampling.R;
 import com.product.sampling.adapter.ImageAndTextRecyclerViewAdapter;
 import com.product.sampling.adapter.ImageServerRecyclerViewAdapter;
@@ -29,11 +34,15 @@ import com.product.sampling.adapter.VideoAndTextRecyclerViewAdapter;
 import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.Videos;
+import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.LoadDataModel;
+import com.product.sampling.net.request.Request;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.photo.MediaHelper;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
+import com.product.sampling.utils.FileDownloader;
+import com.product.sampling.utils.LogUtils;
 import com.product.sampling.utils.SPUtil;
 
 import java.io.File;
@@ -188,7 +197,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<Pics> task) {
-        ImageAndTextRecyclerViewAdapter adapter = new ImageAndTextRecyclerViewAdapter(getActivity(), task, true);
+        ImageAndTextRecyclerViewAdapter adapter = new ImageAndTextRecyclerViewAdapter(this, task, true);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -227,12 +236,12 @@ public class TaskSceneFragment extends BasePhotoFragment {
 
                     setupRecyclerViewFromServer(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
                     setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
-
-                    downLoadVideo();
+                    if (null != taskDetailViewModel.taskEntity.voides && !taskDetailViewModel.taskEntity.voides.isEmpty()) {
+                        rxPermissionTest();
+                    }
                 }
             }
         });
-        rxPermissionTest();
     }
 
 
@@ -356,41 +365,56 @@ public class TaskSceneFragment extends BasePhotoFragment {
     }
 
     private void downLoadVideo() {
-//        FileDownloader.downloadFile(RetrofitService.createApiService(Request.class).downloadVideo(taskDetailViewModel.taskEntity.voides.get(0).getId()), Constants.getPath(), "test.mp4", new DownloadProgressHandler() {
-//
-//
-//            @Override
-//            public void onProgress(int progress, long total, long speed) {
-//                LogUtils.i("下载文件中:" + progress / total);
-//            }
-//
-//            @Override
-//            public void onCompleted(File file) {
-//                LogUtils.i("下载文件成功");
-////                                    FileDownloader.clear();
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//                LogUtils.e("下载文件异常", e.getMessage());
-//            }
-//        });
+        for (Videos videos : taskDetailViewModel.taskEntity.voides) {
+
+            FileDownloader.downloadFile(RetrofitService.createApiService(Request.class).downloadVideo(videos.getId()), Constants.getPath(), videos.getFileName(), new DownloadProgressHandler() {
+
+
+                @Override
+                public void onProgress(int progress, long total, long speed) {
+                    LogUtils.i("下载文件中:" + progress / total);
+                }
+
+                @Override
+                public void onCompleted(File file) {
+                    videos.setPath(file.getPath());
+                    setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
+                    LogUtils.i("下载文件成功", file.getAbsolutePath() + "-" + file.getPath() + "-" + file.getName());
+//                                    FileDownloader.clear();
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    LogUtils.e("下载文件异常", e.getMessage());
+                }
+            });
+        }
+
+
     }
 
     private void rxPermissionTest() {
 
-//        com.tbruyelle.rxpermissions2.RxPermissions rxPermissions = new com.tbruyelle.rxpermissions2.RxPermissions(getActivity());
-//        rxPermissions
-//                .request(Manifest.permission.CAMERA,
-//                        Manifest.permission.READ_PHONE_STATE)
-//                .subscribe(granted -> {
-//                    if (granted) {
-//                        // All requested permissions are granted
-//                    } else {
-//                        // At least one permission is denied
-//                    }
-//                });
+        com.tbruyelle.rxpermissions2.RxPermissions rxPermissions = new com.tbruyelle.rxpermissions2.RxPermissions(getActivity());
+        rxPermissions
+                .request(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                .subscribe(granted -> {
+                    if (granted) {
+                        downLoadVideo();
+                    } else {
+                        // At least one permission is denied
+                    }
+                });
 
 
+    }
+
+    public void onRefreshTitle(boolean isImage, int index, String text) {
+        if (isImage) {
+            taskDetailViewModel.taskEntity.pics.get(index).title = text;
+        } else {
+            taskDetailViewModel.taskEntity.voides.get(index).title = text;
+        }
     }
 }

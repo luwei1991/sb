@@ -29,6 +29,7 @@ import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.ui.TaskDetailActivity;
 import com.product.sampling.ui.TaskListFragment;
+import com.product.sampling.ui.TaskSceneFragment;
 
 import org.devio.takephoto.model.TImage;
 
@@ -40,6 +41,7 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
 
     private final List<Pics> mValues;
     private boolean isLocalData;
+    TaskSceneFragment fragment;
     private int taskPostion = -1;//当前图片列表所属样品id
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -73,6 +75,7 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
                                         String text = et.getText().toString();
                                         mValues.get(taskPostion).title = text + "";
                                         notifyDataSetChanged();
+                                        fragment.onRefreshTitle(true, taskPostion, text + "");
                                     }
                                 }).setNegativeButton("取消", null).show();
 
@@ -87,9 +90,10 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
         listDialog.show();
     }
 
-    public ImageAndTextRecyclerViewAdapter(Context parent,
+    public ImageAndTextRecyclerViewAdapter(TaskSceneFragment parent,
                                            List<Pics> items,
                                            boolean isLocalData) {
+        fragment = parent;
         mValues = items;
         this.isLocalData = isLocalData;
     }

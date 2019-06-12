@@ -8,6 +8,7 @@ import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,9 @@ import com.product.sampling.R;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.Videos;
 import com.product.sampling.ui.MediaPlayerActivity;
+import com.product.sampling.ui.TaskSceneFragment;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +50,7 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
 
     private List<Videos> mValues = new ArrayList<>();
     private boolean isLocal;
-    private Fragment fragment;//当前图片列表所属样品id
+    private TaskSceneFragment fragment;//当前图片列表所属样品id
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -55,14 +58,19 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
                 showListDialog(view.getContext(), (int) view.getTag());
             } else {
                 Videos videos = mValues.get((int) view.getTag());
-                view.getContext().startActivity(new Intent(view.getContext(), MediaPlayerActivity.class).putExtra("title", videos.getRemarks() + "").putExtra("url", IMAGE_BASE_URL + videos.getId()));
+                if (!TextUtils.isEmpty(videos.getPath())) {
+                    File file = new File(videos.getPath());
+                    if (file.exists()) {
+                        PictureSelector.create(fragment).externalPictureVideo(videos.getPath());
+                    }
+                }
             }
         }
     };
 
     public VideoAndTextRecyclerViewAdapter(Context parent,
                                            List<Videos> items,
-                                           Fragment pos, boolean isLocal) {
+                                           TaskSceneFragment pos, boolean isLocal) {
         mValues = items;
         fragment = pos;
         this.isLocal = isLocal;
@@ -86,6 +94,13 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
         } else {
             holder.mTextViewTitle.setText(task.getRemarks() + "");
             createBitmapInThread(task.getId(), holder.mImageView);
+
+            if (!TextUtils.isEmpty(task.getPath())) {
+                File f = new File(task.getPath());
+                if (f.exists()) {
+                    Glide.with(holder.itemView.getContext()).load(task.getPath()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);
+                }
+            }
         }
     }
 
@@ -126,6 +141,7 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
                                         String text = et.getText().toString();
                                         mValues.get(taskPostion).title = text + "";
                                         notifyDataSetChanged();
+                                        fragment.onRefreshTitle(false,taskPostion,text+"");
                                     }
                                 }).setNegativeButton("取消", null).show();
 

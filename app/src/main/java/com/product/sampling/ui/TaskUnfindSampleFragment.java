@@ -325,8 +325,8 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
      * @param task
      */
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List task) {
-        ImageAndTextRecyclerViewAdapter adapter = new ImageAndTextRecyclerViewAdapter(getActivity(), task, true);
-        recyclerView.setAdapter(adapter);
+//        ImageAndTextRecyclerViewAdapter adapter = new ImageAndTextRecyclerViewAdapter(this, task, true);
+//        recyclerView.setAdapter(adapter);
     }
 
 
@@ -336,7 +336,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
      * @param videoList
      */
     private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, List<Videos> videoList) {
-        mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, true));
+//        mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(this, videoList, this, true));
     }
 
     /**
@@ -365,7 +365,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
      * @param videoList
      */
     private void setupRecyclerViewVideoFromServer(RecyclerView mRecyclerViewVideoList, List<Videos> videoList) {
-        mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, false));
+//        mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, false));
     }
 
 

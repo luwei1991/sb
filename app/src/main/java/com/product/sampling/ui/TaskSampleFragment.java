@@ -212,6 +212,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     }
 
     private void postSampleData() {
+        showLoadingDialog();
         MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder();
         multipartBodyBuilder.setType(MultipartBody.FORM);
 
@@ -532,7 +533,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     continue;
                 }
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("picstrs", taskDetailViewModel.taskEntity.pics.get(i).title)
+                multipartBodyBuilder.addFormDataPart("picstrs", taskDetailViewModel.taskEntity.pics.get(i).title + "")
                         .addFormDataPart("uploadpics", f.getName(), requestImage);
                 hasData = true;
             }
@@ -550,7 +551,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     continue;
                 }
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("videostrs", taskDetailViewModel.taskEntity.voides.get(i).title)
+                multipartBodyBuilder.addFormDataPart("videostrs", taskDetailViewModel.taskEntity.voides.get(i).title + "")
                         .addFormDataPart("uploadvideos", f.getName(), requestImage);
                 hasData = true;
             }
@@ -569,10 +570,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     public void onSuccess(String s) {
                         dismissLoadingDialog();
                         com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加成功,现场id为" + s);
-
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.item_detail_container, TaskSampleFragment.newInstance(taskDetailViewModel.taskEntity))
-                                .commit();
                     }
 
                     @Override
