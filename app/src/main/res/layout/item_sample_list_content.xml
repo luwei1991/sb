@@ -180,7 +180,7 @@
                 android:layout_marginLeft="10dp"
                 android:background="@color/colorPrimary"
                 android:gravity="center"
-                android:text="上传"
+                android:text="(签字)拍照"
                 android:textColor="@color/white" />
 
         </LinearLayout>
@@ -240,7 +240,7 @@
                 android:layout_marginLeft="10dp"
                 android:background="@color/colorPrimary"
                 android:gravity="center"
-                android:text="上传"
+                android:text="(签字)拍照"
                 android:textColor="@color/white" />
 
         </LinearLayout>
