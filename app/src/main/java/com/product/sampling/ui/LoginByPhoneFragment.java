@@ -1,6 +1,10 @@
 package com.product.sampling.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
@@ -13,18 +17,25 @@ import android.widget.TextView;
 
 import com.product.sampling.R;
 import com.product.sampling.bean.UserInfoBean;
+import com.product.sampling.httpmoudle.RetrofitService;
+import com.product.sampling.httpmoudle.error.ExecptionEngin;
 import com.product.sampling.manager.AccountManager;
+import com.product.sampling.maputil.ToastUtil;
 import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
+import com.product.sampling.net.ZBaseObserver;
+import com.product.sampling.net.request.Request;
 import com.product.sampling.net.response.ResponseTransformer;
 import com.product.sampling.net.schedulers.SchedulerProvider;
 import com.product.sampling.utils.ActivityUtils;
 import com.product.sampling.utils.KeyboardUtils;
-import com.product.sampling.utils.ToastUtil;
+import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.ToastUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import io.reactivex.disposables.Disposable;
 
 public class LoginByPhoneFragment extends BaseFragment implements View.OnClickListener {
 
@@ -32,6 +43,8 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
     TextView mTextViewSendCode;
     private EditText mEditTextPhone;
     private EditText mEditTextCode;
+    View mLoginFormView;
+    View mProgressView;
 
     private MyCountDownTimer myCountDownTimer;
 
@@ -54,7 +67,8 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
         mEditTextPhone = mRootView.findViewById(R.id.et_phone_num);
         mEditTextCode = mRootView.findViewById(R.id.et_ver_code);
 
-
+        mLoginFormView = mRootView.findViewById(R.id.login_form);
+        mProgressView = mRootView.findViewById(R.id.login_progress);
         mRootView.findViewById(R.id.sign_in_button).setOnClickListener(this);
     }
 
@@ -91,39 +105,69 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
     }
 
     private void loginRequest() {
-        NetWorkManager.getRequest().loginByPhone(mEditTextPhone.getText().toString().trim(), mEditTextCode.getText().toString().trim())
-                .compose(ResponseTransformer.handleResult())
-                .compose(SchedulerProvider.getInstance().applySchedulers())
-                .subscribe(userbean -> {
-                    saveUserData(userbean);
-                    ActivityUtils.goMainTaskActivity(getActivity());
-                    getActivity().finish();
-                }, throwable -> {
-                    String displayMessage = ((ApiException) throwable).getDisplayMessage();
-                    ToastUtils.showToast(displayMessage);
+        showProgress(true);
+        RetrofitService.createApiService(Request.class)
+                .loginByPhone(mEditTextPhone.getText().toString().trim(), mEditTextCode.getText().toString().trim())
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<UserInfoBean>() {
 
+                    @Override
+                    public void onFailure(int code, String message) {
+                        super.onFailure(code, message);
+                        showProgress(false);
+                        ToastUtils.showToast(message);
+                    }
+
+                    @Override
+                    public void onSuccess(UserInfoBean userbean) {
+                        showProgress(false);
+                        saveUserData(userbean);
+                        ActivityUtils.goMainTaskActivity(getActivity());
+                        getActivity().finish();
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        super.onSubscribe(d);
+                    }
                 });
     }
 
     private void getSmsCode() {
+        showProgress(true);
+        RetrofitService.createApiService(Request.class)
+                .sendCode(mEditTextPhone.getText().toString().trim())
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<String>() {
 
-        NetWorkManager.getRequest().sendCode(mEditTextPhone.getText().toString().trim())
-                .compose(ResponseTransformer.handleResult())
-                .compose(SchedulerProvider.getInstance().applySchedulers())
-                .subscribe(smsBean -> {
-                    ToastUtils.showToast("验证码已发送" + smsBean);
-                    if (myCountDownTimer == null) {
-                        myCountDownTimer = new MyCountDownTimer(90000, 1000);
+                    @Override
+                    public void onFailure(int code, String message) {
+                        super.onFailure(code, message);
+                        showProgress(false);
+                        ToastUtils.showToast(message);
+                        if (myCountDownTimer != null) {
+                            myCountDownTimer.cancel();
+                        }
+                        mTextViewSendCode.setText("重新获取");
+                        mTextViewSendCode.setClickable(true);
                     }
-                    myCountDownTimer.start();
-                }, throwable -> {
-                    String displayMessage = ((ApiException) throwable).getDisplayMessage();
-                    ToastUtils.showToast(displayMessage);
-                    if (myCountDownTimer != null) {
-                        myCountDownTimer.cancel();
+
+                    @Override
+                    public void onSuccess(String code) {
+                        showProgress(false);
+                        ToastUtils.showToast("验证码已发送"+code);
+                        if (myCountDownTimer == null) {
+                            myCountDownTimer = new MyCountDownTimer(90000, 1000);
+                        }
+                        myCountDownTimer.start();
                     }
-                    mTextViewSendCode.setText("重新获取");
-                    mTextViewSendCode.setClickable(true);
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        super.onSubscribe(d);
+                    }
                 });
     }
 
@@ -165,4 +209,41 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
         }
         return result;
     }
+
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
 }

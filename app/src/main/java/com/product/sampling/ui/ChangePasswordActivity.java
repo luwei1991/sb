@@ -3,37 +3,28 @@ package com.product.sampling.ui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-
-import com.google.android.material.tabs.TabLayout;
 import com.product.sampling.R;
+import com.product.sampling.httpmoudle.BaseHttpResult;
+import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
-import com.product.sampling.net.Exception.ApiException;
-import com.product.sampling.net.NetWorkManager;
-import com.product.sampling.net.response.ResponseTransformer;
-import com.product.sampling.net.schedulers.SchedulerProvider;
+import com.product.sampling.net.ZBaseObserver;
+import com.product.sampling.net.request.Request;
+import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.ToastUtils;
-import com.product.sampling.view.LeverageLockHintDialog;
 
-import java.util.ArrayList;
-import java.util.List;
+import io.reactivex.disposables.Disposable;
 
 /**
- * A login screen that offers login via email/password.
+ * A login screen that offers login via phone.
  */
 public class ChangePasswordActivity extends BaseActivity implements View.OnClickListener {
 
@@ -111,7 +102,6 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
             changePwdRequest(oldPassword, configPassword);
         }
     }
@@ -158,16 +148,31 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
     }
 
     private void changePwdRequest(String oldpwd, String pwd) {
-        NetWorkManager.getRequest().changepassword(AccountManager.getInstance().getUserId(), oldpwd, pwd)
-//                .compose(ResponseTransformer.handleResult())
-                .compose(SchedulerProvider.getInstance().applySchedulers())
-                .subscribe(userbean -> {
-                    ToastUtils.showToast("密码修改成功!");
-                    finish();
-                }, throwable -> {
-                    String displayMessage = ((ApiException) throwable).getDisplayMessage();
-                    ToastUtils.showToast(displayMessage);
-                    showProgress(false);
+        showProgress(true);
+        RetrofitService.createApiService(Request.class)
+                .changepassword(AccountManager.getInstance().getUserId(), oldpwd, pwd)
+                .compose(RxSchedulersHelper.io_main())
+//                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<BaseHttpResult>() {
+
+                    @Override
+                    public void onFailure(int code, String message) {
+                        super.onFailure(code, message);
+                        showProgress(false);
+                        ToastUtils.showToast(message);
+                    }
+
+                    @Override
+                    public void onSuccess(BaseHttpResult result) {
+                        showProgress(false);
+                        ToastUtils.showToast(result.message);
+                        finish();
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        super.onSubscribe(d);
+                    }
                 });
     }
 }

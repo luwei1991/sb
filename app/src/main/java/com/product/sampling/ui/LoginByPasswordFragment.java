@@ -59,8 +59,7 @@ import static com.product.sampling.Constants.IMAGE_BASE_URL;
 public class LoginByPasswordFragment extends BaseFragment implements View.OnClickListener {
 
     private View mRootView;
-    // UI references.
-    private AutoCompleteTextView mAccountView;
+    private EditText mAccountView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;

@@ -7,7 +7,7 @@
     <ProgressBar
         android:id="@+id/login_progress"
         style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
@@ -21,14 +21,14 @@
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="300dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="300dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
-                <AutoCompleteTextView
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_phone_num"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -41,6 +41,7 @@
                     android:inputType="phone"
                     android:maxLength="11"
                     android:maxLines="1"
+                    android:nextFocusDown="@id/et_ver_code"
                     android:singleLine="true"
                     android:textColorHint="#888888"
                     android:textSize="15dp" />
@@ -72,6 +73,7 @@
                         android:imeOptions="actionUnspecified"
                         android:inputType="number"
                         android:maxLines="1"
+                        android:nextFocusDown="@id/et_phone_num"
                         android:singleLine="true"
                         android:textColorHint="#888888"
                         android:textSize="15dp" />
@@ -94,8 +96,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:visibility="gone"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
                 <EditText
                     android:id="@+id/password"
@@ -113,8 +115,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:visibility="gone"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
                 <EditText
                     android:id="@+id/password_config"

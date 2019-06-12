@@ -54,16 +54,16 @@ public interface Request {
     Observable<Response<List<Task>>> getTaskList();
 
     @GET("app/user/sendcode")
-    Observable<Response<String>> sendCode(@Query("persontel") String persontel);
+    Observable<BaseHttpResult<String>> sendCode(@Query("persontel") String persontel);
 
     @GET("app/user/logintel")
-    Observable<Response<UserInfoBean>> loginByPhone(@Query("persontel") String persontel, @Query("appcode") String appcode);
+    Observable<BaseHttpResult<UserInfoBean>> loginByPhone(@Query("persontel") String persontel, @Query("appcode") String appcode);
 
     @GET("app/user/login")
     Observable<BaseHttpResult<UserInfoBean>> loginByPwd(@Query("loginName") String loginName, @Query("password") String password);
 
     @GET("app/user/changepassword")
-    Observable<Response<String>> changepassword(@Query("userid") String userid, @Query("password") String password, @Query("newPassword") String newPassword);
+    Observable<BaseHttpResult> changepassword(@Query("userid") String userid, @Query("password") String password, @Query("newPassword") String newPassword);
 
     @GET("app/task/tasklist")
     Observable<Response<List<TaskEntity>>> taskList(@Query("userid") String userid, @Query("taskstatus") String taskstatus, @Query("ordertype") String ordertype);
