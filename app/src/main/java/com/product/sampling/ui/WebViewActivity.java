@@ -76,7 +76,7 @@ public class WebViewActivity extends AppCompatActivity {
             StringBuilder builder = new StringBuilder();
             for (String s : map.keySet()) {
                 if (!TextUtils.isEmpty(s)) {
-                    builder.append(s).append('=').append(map.get(s)).append('&');
+                    builder.append(s).append('=').append(map.get(s) + "").append('&');
                 }
             }
             if (builder.toString().endsWith("&")) {
@@ -87,7 +87,7 @@ public class WebViewActivity extends AppCompatActivity {
                 webView.callHandler("dataBackfill", data, new CallBackFunction() {
                     @Override
                     public void onCallBack(String s) { //js回传的数据
-                        Log.e("dataBackfill", s);
+
                     }
                 });
             }

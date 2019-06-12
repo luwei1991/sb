@@ -24,10 +24,8 @@ connectWebViewJavascriptBridge(function(bridge) {
     });
 
     bridge.registerHandler("dataBackfill", function(data, responseCallback) {
-        setTimeout(function(){
-            dataFill(data)
-            responseCallback('数据回填完成');
-        }, 200)
+        responseCallback(data);
+        dataFill(data)
     });
 })
 

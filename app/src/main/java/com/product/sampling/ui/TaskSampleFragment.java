@@ -53,7 +53,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -254,7 +256,12 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 if (null != samplingInfoMap && !samplingInfoMap.isEmpty()) {
                     for (String s : samplingInfoMap.keySet()) {
                         if (!s.startsWith("sampling.")) continue;
-                        multipartBodyBuilder.addFormDataPart(s, samplingInfoMap.get(s) + "");//抽样单
+                        try {
+                            String value = URLEncoder.encode(samplingInfoMap.get(s) + "", "Utf-8");
+                            multipartBodyBuilder.addFormDataPart(s, value);//抽样单
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -284,7 +291,12 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 if (null != adviceInfoMap && !adviceInfoMap.isEmpty()) {
                     for (String s : adviceInfoMap.keySet()) {
                         if (!s.startsWith("advice.")) continue;
-                        multipartBodyBuilder.addFormDataPart(s, adviceInfoMap.get(s) + "");//抽样单
+                        try {
+                            String value = URLEncoder.encode(adviceInfoMap.get(s) + "", "Utf-8");
+                            multipartBodyBuilder.addFormDataPart(s, value);//抽样单
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
 
