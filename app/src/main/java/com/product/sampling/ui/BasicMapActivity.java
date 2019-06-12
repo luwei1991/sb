@@ -14,15 +14,19 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.LatLngBounds;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
 import com.amap.api.maps2d.overlay.BusRouteOverlay;
 import com.amap.api.maps2d.overlay.WalkRouteOverlay;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.geocoder.GeocodeAddress;
+import com.amap.api.services.geocoder.GeocodeQuery;
 import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeQuery;
@@ -37,6 +41,7 @@ import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkPath;
 import com.amap.api.services.route.WalkRouteResult;
 import com.product.sampling.R;
+import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.maputil.AMapUtil;
 import com.product.sampling.maputil.ToastUtil;
 import com.product.sampling.overlay.DrivingRouteOverlay;
@@ -65,8 +70,8 @@ public class BasicMapActivity extends BaseActivity implements OnClickListener, A
 
     private RadioGroup mRadioGroup;
     // 起点终点坐标
-    private LatLonPoint startPoint = new LatLonPoint(39.989614, 116.481763);
-    private LatLonPoint endPoint = new LatLonPoint(39.983456, 116.3154950);
+    private LatLonPoint startPoint = null;
+    private LatLonPoint endPoint = null;
 
     private RouteSearch mRouteSearch;
 
@@ -78,7 +83,9 @@ public class BasicMapActivity extends BaseActivity implements OnClickListener, A
         mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);// 此方法必须重写
         init();
-        setCurrentLocationDetails();
+//        setCurrentLocationDetails();
+        TaskEntity taskEntity = (TaskEntity) getIntent().getSerializableExtra("task");
+        getLatlon(taskEntity.companyaddress);
         //获取权限定位（如果没有开启权限，会弹出对话框，询问是否开启权限）
         requestLocation(this);
     }
@@ -90,6 +97,7 @@ public class BasicMapActivity extends BaseActivity implements OnClickListener, A
         // 第一个参数表示一个Latlng(经纬度)，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
         RegeocodeQuery query = new RegeocodeQuery(endPoint, 500, GeocodeSearch.AMAP);
         geocoderSearch.getFromLocationAsyn(query);
+
     }
 
     /**
@@ -181,7 +189,8 @@ public class BasicMapActivity extends BaseActivity implements OnClickListener, A
                 myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
                 aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
                 aMap.getUiSettings().setMyLocationButtonEnabled(true);//设置默认定位按钮是否显示，非必需设置。
-                aMap.setMyLocationEnabled(true);//
+                aMap.setMyLocationEnabled(true);
+                zoomToSpan();
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                 Log.e("AmapError", "location Error, ErrCode:"
@@ -389,12 +398,54 @@ public class BasicMapActivity extends BaseActivity implements OnClickListener, A
     }
 
     @Override
-    public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
-
+    public void onGeocodeSearched(GeocodeResult result, int rCode) {
+        if (rCode == AMapException.CODE_AMAP_SUCCESS) {
+            if (result != null && result.getGeocodeAddressList() != null && result.getGeocodeAddressList().size() > 0) {
+                GeocodeAddress address = result.getGeocodeAddressList().get(0);
+                if (address != null) {
+                    endPoint = address.getLatLonPoint();
+                    aMap.addMarker(new MarkerOptions()
+                            .position(AMapUtil.convertToLatLng(endPoint))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.amap_end)));
+                    zoomToSpan();
+                }
+            } else {
+                ToastUtil.show(BasicMapActivity.this, "无法获取目的地坐标");
+            }
+        } else {
+            ToastUtil.showerror(BasicMapActivity.this, rCode);
+        }
     }
+
+    private void zoomToSpan() {
+        if (startPoint != null && endPoint != null) {
+            if (aMap == null) {
+                return;
+            }
+            try {
+                LatLngBounds.Builder b = LatLngBounds.builder();
+                b.include(new LatLng(startPoint.getLatitude(), startPoint.getLongitude()));
+                b.include(new LatLng(endPoint.getLatitude(), endPoint.getLongitude()));
+                LatLngBounds bounds = b.build();
+                aMap.animateCamera(CameraUpdateFactory
+                        .newLatLngBounds(bounds, 100));
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
         GdLocationUtil.getInstance().stopLoaction();
+    }
+
+    public void getLatlon(String name) {
+        tvDestination.setText(name);
+        GeocodeSearch geocoderSearch = new GeocodeSearch(this);
+        GeocodeQuery query = new GeocodeQuery(name, "");// 第一个参数表示地址，第二个参数表示查询城市，中文或者中文全拼，citycode、adcode， 
+        geocoderSearch.getFromLocationNameAsyn(query);// 设置同步地理编码请求 
+        geocoderSearch.setOnGeocodeSearchListener(this);
     }
 }

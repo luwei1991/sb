@@ -23,30 +23,40 @@ connectWebViewJavascriptBridge(function(bridge) {
         }));
     });
 
-    // bridge.registerHandler("functionInJs", function(data, responseCallback) {
-    //     bridgeLog('指定接收收到来自Java数据： ' + data);
-    //     var responseData = '指定接收收到来自Java的数据，回传数据给你';
-    //     responseCallback(responseData);
-    // });
+    bridge.registerHandler("dataBackfill", function(data, responseCallback) {
+        setTimeout(function(){
+            dataFill(data)
+            responseCallback('数据回填完成');
+        }, 200)
+    });
 })
 
-function c(){
-    var fromData = $("form").serialize();
-    console.log({
-        type: postType,
-        data: fromData
-    })
+
+// 数据回填（根据标签类型填入相应数据）
+function dataFillByType(els, data){
+    var type = $(els[0]).attr('type');
+    if(type == 'radio'){
+        $(els).each(function(){
+            if($(this).val() == data){
+                $(this).click()
+            }
+        })
+    }else{
+        $(els[0]).val(decodeURIComponent(data))
+    }
 }
 
+// 数据回填
+function dataFill(data){
+    data.split('&').forEach(item => {
+        var d = item.match(/(.+)=(.+)/)
+        if(d && d[1] && d[2]){
+            dataFillByType($("[name='"+d[1]+"']"), d[2])
+        }
+    });
+}
 
 $(function(){
-    // var fromData = $("form").serialize();
-    // console.log(
-    //     JSON.stringify({
-    //         type: postType,
-    //         data: fromData
-    //     })
-    // )
     //显示当前时间
     var date = new Date();
     var dateParse = {
@@ -57,28 +67,75 @@ $(function(){
     $('.year').val(dateParse.year)
     $('.month').val(dateParse.month)
     $('.day').val(dateParse.day)
-    
+})
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 测试用例
+function d(data){
+    setTimeout(function(){
+        dataFill(data)
+        console.log('数据回填完成')
+    }, 200)
+}
+
+function c(){
+    var fromData = $("form").serialize();
+    console.log({
+        type: postType,
+        data: fromData
+    })
+    console.log(fromData)
+}
+
+
+//$(function(){
     //html转图片
-    function htmlCanvas(cb){
-        var targetDom = $(".page");  
-        var copyDom = targetDom.clone();  
-        copyDom.width(targetDom.width() + "px");  
-        copyDom.height(targetDom.height() + "px");  
-        $('body').append(copyDom);
-        html2canvas(copyDom, {
-            onrendered: function(canvas){
-                $(".page")[1].remove()
-                var img = canvas.toDataURL();
-                cb && cb(img)
-            }
-        })
-    }
-
-    // var register_js = {
-    //     send: function(str){
-    //         console.log(JSON.parse(str))
-    //     }
+    // function htmlCanvas(cb){
+    //     var targetDom = $(".page");  
+    //     var copyDom = targetDom.clone();  
+    //     copyDom.width(targetDom.width() + "px");  
+    //     copyDom.height(targetDom.height() + "px");  
+    //     $('body').append(copyDom);
+    //     html2canvas(copyDom, {
+    //         onrendered: function(canvas){
+    //             $(".page")[1].remove()
+    //             var img = canvas.toDataURL();
+    //             cb && cb(img)
+    //         }
+    //     })
     // }
 
     //提交
@@ -108,4 +165,4 @@ $(function(){
 	// 		console.log(base64)
 	// 	})
     // })
-})
+//})

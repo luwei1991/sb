@@ -303,7 +303,10 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onClick(View view) {
                 if (view.getId() == R.id.tv_map) {
-                    view.getContext().startActivity(new Intent(view.getContext(), BasicMapActivity.class));
+                    TaskEntity taskEntity = (TaskEntity) view.getTag();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("task", taskEntity);
+                    view.getContext().startActivity(new Intent(view.getContext(), BasicMapActivity.class).putExtras(bundle));
                 } else if (view.getId() == R.id.tv_fill_info) {
                     TaskEntity taskEntity = (TaskEntity) view.getTag();
                     Bundle bundle = new Bundle();
@@ -350,6 +353,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
             holder.itemView.setTag(task);
             holder.itemView.setOnClickListener(mOnClickListener);
             holder.mTextViewMap.setOnClickListener(mOnClickListener);
+            holder.mTextViewMap.setTag(task);
             holder.mTextViewFill.setOnClickListener(mOnClickListener);
             holder.mTextViewFill.setTag(task);
 

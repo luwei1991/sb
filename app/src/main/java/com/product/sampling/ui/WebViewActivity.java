@@ -65,7 +65,6 @@ public class WebViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
         webView = this.findViewById(R.id.webView);
-        webView.getSettings().setJavaScriptEnabled(true);
 
         if (1 == getIntent().getIntExtra(Intent_Order, 1)) {
             webView.loadUrl("file:///android_asset/1产品质量监督抽查-复查抽样单.html");
@@ -88,7 +87,7 @@ public class WebViewActivity extends AppCompatActivity {
                 webView.callHandler("dataBackfill", data, new CallBackFunction() {
                     @Override
                     public void onCallBack(String s) { //js回传的数据
-
+                        Log.e("dataBackfill", s);
                     }
                 });
             }
