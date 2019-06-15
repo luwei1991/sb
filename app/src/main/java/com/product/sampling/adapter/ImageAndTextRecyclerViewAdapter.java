@@ -27,6 +27,7 @@ import com.product.sampling.R;
 import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskImageEntity;
+import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.ui.TaskDetailActivity;
 import com.product.sampling.ui.TaskListFragment;
 import com.product.sampling.ui.TaskSceneFragment;
@@ -41,7 +42,7 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
 
     private final List<Pics> mValues;
     private boolean isLocalData;
-    TaskSceneFragment fragment;
+    BasePhotoFragment fragment;
     private int taskPostion = -1;//当前图片列表所属样品id
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -90,7 +91,7 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
         listDialog.show();
     }
 
-    public ImageAndTextRecyclerViewAdapter(TaskSceneFragment parent,
+    public ImageAndTextRecyclerViewAdapter(BasePhotoFragment parent,
                                            List<Pics> items,
                                            boolean isLocalData) {
         fragment = parent;

@@ -410,6 +410,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
 
     }
 
+    @Override
     public void onRefreshTitle(boolean isImage, int index, String text) {
         if (isImage) {
             taskDetailViewModel.taskEntity.pics.get(index).title = text;

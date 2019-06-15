@@ -27,6 +27,7 @@ import com.luck.picture.lib.PictureSelector;
 import com.product.sampling.R;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.Videos;
+import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.ui.MediaPlayerActivity;
 import com.product.sampling.ui.TaskSceneFragment;
 
@@ -50,7 +51,7 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
 
     private List<Videos> mValues = new ArrayList<>();
     private boolean isLocal;
-    private TaskSceneFragment fragment;//当前图片列表所属样品id
+    private BasePhotoFragment fragment;//当前图片列表所属样品id
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -70,7 +71,7 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
 
     public VideoAndTextRecyclerViewAdapter(Context parent,
                                            List<Videos> items,
-                                           TaskSceneFragment pos, boolean isLocal) {
+                                           BasePhotoFragment pos, boolean isLocal) {
         mValues = items;
         fragment = pos;
         this.isLocal = isLocal;

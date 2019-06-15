@@ -7,6 +7,7 @@ import android.util.SparseArray;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class TaskEntity implements Parcelable, Serializable {
@@ -55,6 +56,13 @@ public class TaskEntity implements Parcelable, Serializable {
 
     public List<TaskSample> taskSamples = new ArrayList<TaskSample>();
 
+    public HashMap<String, String> unfindSampleInfoMap;//未检测到样品单 填写内容
+    public String unfindfile = "";//未检测到样品单 pdf
+    public String unfindpicfile = "";//未检测到样品单 照片
+
+    public HashMap<String, String> refuseInfoMap;//企业拒检单 填写内容
+    public String refusefile = "";//企业拒检单 pdf
+    public String refusepicfile = "";//企业拒检单 照片
 
     public TaskEntity() {
 

@@ -65,11 +65,15 @@ public class WebViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
         webView = this.findViewById(R.id.webView);
-
-        if (1 == getIntent().getIntExtra(Intent_Order, 1)) {
+        int pos = getIntent().getIntExtra(Intent_Order, 1);
+        if (1 == pos) {
             webView.loadUrl("file:///android_asset/1产品质量监督抽查-复查抽样单.html");
-        } else {
+        } else if (2 == pos) {
             webView.loadUrl("file:///android_asset/2产品质量监督抽查样品封存和处置通知单.html");
+        } else if (3 == pos) {
+            webView.loadUrl("file:///android_asset/3产品质量监督抽查企业拒检认定表.html");
+        } else if (4 == pos) {
+            webView.loadUrl("file:///android_asset/4未抽到样品企业情况说明书.html");
         }
         HashMap<String, String> map = (HashMap) getIntent().getSerializableExtra("map");
         if (null != map && !map.isEmpty()) {

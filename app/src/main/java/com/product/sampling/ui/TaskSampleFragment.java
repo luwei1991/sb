@@ -228,10 +228,9 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         for (int i = 0; i < taskDetailViewModel.taskEntity.taskSamples.size(); i++) {
 
             if (!taskDetailViewModel.taskEntity.taskSamples.get(i).isLocalData) continue;
-            //TODO:是否是最后一个
-//            if (i == taskDetailViewModel.taskEntity.taskSamples.size() - 1) {
-//                multipartBodyBuilder.addFormDataPart("islastone", "1");
-//            }
+            if (i == taskDetailViewModel.taskEntity.taskSamples.size() - 1) {
+                multipartBodyBuilder.addFormDataPart("islastone", "1");
+            }
             {
                 File samplingfile = new File(taskDetailViewModel.taskEntity.taskSamples.get(i).samplingfile);
                 if (samplingfile.exists()) {
@@ -526,8 +525,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         multipartBodyBuilder.addFormDataPart("userid", AccountManager.getInstance().getUserId())
                 .addFormDataPart("id", taskDetailViewModel.taskEntity.id)
                 .addFormDataPart("taskisok", "0")
-                .addFormDataPart("updateorsave", "0")
-                .addFormDataPart("samplecount", "1");
+                .addFormDataPart("updateorsave", "0");
 
         if (null != MainApplication.INSTANCE.getMyLocation()) {
             multipartBodyBuilder.addFormDataPart("taskaddress", MainApplication.INSTANCE.getMyLocation().getAddress() + "")
@@ -569,6 +567,12 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 hasData = true;
             }
         }
+        if (null != taskDetailViewModel.taskEntity.taskSamples && !taskDetailViewModel.taskEntity.taskSamples.isEmpty()) {
+            multipartBodyBuilder.addFormDataPart("samplecount", taskDetailViewModel.taskEntity.taskSamples.size() + "");
+        } else {
+            multipartBodyBuilder.addFormDataPart("samplecount", "0");
+        }
+
         if (!hasData) {
 //            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "请先选择图片或者视频");
             return;
@@ -604,21 +608,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     @Override
     public void startIntentSenderForResult(IntentSender intent, int requestCode, @Nullable Intent fillInIntent, int flagsMask, int flagsValues, int extraFlags, Bundle options) throws IntentSender.SendIntentException {
         super.startIntentSenderForResult(intent, requestCode, fillInIntent, flagsMask, flagsValues, extraFlags, options);
-    }
-
-    private void shareBySystem(String path) {
-        File doc = new File(path);
-        Intent share = new Intent();
-        share.setAction(Intent.ACTION_SEND);
-        share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(doc));
-
-        share.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        Uri contentUri = FileProvider.getUriForFile(getActivity(), "com.product.sampling.fileprovider", doc);
-//        share.setDataAndType(contentUri, "application/vnd.android.package-archive");
-        share.setDataAndType(contentUri, "application/pdf");
-
-        startActivity(Intent.createChooser(share, "分享文件"));
-
     }
 
     public void findPrintShare(String path) {

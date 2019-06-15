@@ -30,14 +30,9 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
 
-            <TextView
-                android:layout_width="10dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text=" "
-                android:textColor="@color/main_text_red" />
 
             <TextView
+                android:id="@+id/tv_companyname"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:gravity="center"
@@ -230,7 +225,8 @@
                 android:layout_marginBottom="20dp"
                 android:background="@color/colorPrimary"
                 android:text="保存"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

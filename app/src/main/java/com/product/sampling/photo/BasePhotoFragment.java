@@ -1,12 +1,14 @@
 package com.product.sampling.photo;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.view.KeyEvent;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.FileProvider;
 
 import com.product.sampling.R;
 import com.product.sampling.ui.MainTaskListActivity;
@@ -205,5 +207,21 @@ public abstract class BasePhotoFragment extends TakePhotoFragment {
         }
     }
 
+    public void onRefreshTitle(boolean isImage, int index, String text) {
+    }
 
+    public void shareBySystem(String path) {
+        File doc = new File(path);
+        Intent share = new Intent();
+        share.setAction(Intent.ACTION_SEND);
+        share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(doc));
+
+        share.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Uri contentUri = FileProvider.getUriForFile(getActivity(), "com.product.sampling.fileprovider", doc);
+//        share.setDataAndType(contentUri, "application/vnd.android.package-archive");
+        share.setDataAndType(contentUri, "application/pdf");
+
+        startActivity(Intent.createChooser(share, "分享文件"));
+
+    }
 }
