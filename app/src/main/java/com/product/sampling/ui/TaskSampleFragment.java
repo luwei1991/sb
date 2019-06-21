@@ -159,7 +159,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             saveSampleInFile();
         } else if (R.id.btn_save_upload == v.getId()) {
             postSceneData();
-            postSampleData();
         }
     }
 
@@ -214,7 +213,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     }
 
     private void postSampleData() {
-        showLoadingDialog();
         MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder();
         multipartBodyBuilder.setType(MultipartBody.FORM);
 
@@ -256,9 +254,9 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     for (String s : samplingInfoMap.keySet()) {
                         if (!s.startsWith("sampling.")) continue;
                         try {
-                            String value = URLEncoder.encode(samplingInfoMap.get(s) + "", "Utf-8");
+                            String value = samplingInfoMap.get(s);
                             multipartBodyBuilder.addFormDataPart(s, value);//抽样单
-                        } catch (UnsupportedEncodingException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -291,9 +289,9 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     for (String s : adviceInfoMap.keySet()) {
                         if (!s.startsWith("advice.")) continue;
                         try {
-                            String value = URLEncoder.encode(adviceInfoMap.get(s) + "", "Utf-8");
+                            String value = adviceInfoMap.get(s);
                             multipartBodyBuilder.addFormDataPart(s, value);//抽样单
-                        } catch (UnsupportedEncodingException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -345,7 +343,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     public void onSuccess(String s) {
                         dismissLoadingDialog();
                         if (!TextUtils.isEmpty(s)) {
-                            com.product.sampling.maputil.ToastUtil.show(getActivity(), "上传成功,样品记录为" + s);
+                            com.product.sampling.maputil.ToastUtil.show(getActivity(), "上传样品成功,样品记录为" + s);
                         }
                         saveTaskInLocalFile(true);
                     }
@@ -587,6 +585,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     public void onSuccess(String s) {
                         dismissLoadingDialog();
                         com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加成功,现场id为" + s);
+                        postSampleData();
                     }
 
                     @Override

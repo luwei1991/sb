@@ -86,9 +86,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getMenuData();
-        if (getArguments().getString(ARG_TASK_STATUS).equals("0")) {
-            getData();
-        } else if (getArguments().getString(ARG_TASK_STATUS).equals("1")) {
+        if (getArguments().getString(ARG_TASK_STATUS).equals("-1")) {
             assert recyclerView != null;
             String taskList = (String) SPUtil.get(getActivity(), "tasklist", "");
             if (!TextUtils.isEmpty(taskList)) {
@@ -102,8 +100,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                     setupRecyclerView((RecyclerView) recyclerView, list);
                 }
             }
-
-        } else if (getArguments().getString(ARG_TASK_STATUS).equals("2")) {
+        } else {
             getData();
         }
     }
@@ -170,7 +167,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
 //                            .commit();
 //                } else if (group.getCheckedRadioButtonId() == R.id.rb2) {
 //                    getActivity().getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.item_detail_container, taskWaitUpLoadedFragment)
+//                            .replace(R.id.item_detail_container, taskBackFragment)
 //                            .commit();
 //                } else if (group.getCheckedRadioButtonId() == R.id.rb3) {
 //                    getActivity().getSupportFragmentManager().beginTransaction()

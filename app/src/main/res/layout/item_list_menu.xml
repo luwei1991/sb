@@ -35,9 +35,24 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/line_gray" />
-
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/rb2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_item_selected"
+            android:button="@null"
+            android:drawableTop="@mipmap/menu_icon8"
+            android:drawablePadding="@dimen/dp_10"
+            android:gravity="center"
+            android:padding="20dp"
+
+            android:text="信息复核" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_gray" />
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/rb3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/selector_item_selected"
@@ -55,7 +70,7 @@
             android:background="@color/line_gray" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/rb3"
+            android:id="@+id/rb4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/selector_item_selected"
@@ -71,8 +86,9 @@
             android:layout_height="1dp"
             android:background="@color/line_gray" />
 
+
         <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/rb4"
+            android:id="@+id/rb5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/selector_item_selected"

@@ -19,8 +19,10 @@ public class MainTaskListActivity extends BaseActivity {
      */
     private boolean mTwoPane;
     static Fragment taskToDoFragment = TaskListFragment.newInstance("待办任务", "0");
-    static Fragment taskWaitUpLoadedFragment = TaskListFragment.newInstance("未上传", "1");
+    static Fragment taskBackFragment = TaskListFragment.newInstance("退回", "1");
     static Fragment taskHasUpLoadedFragment = TaskListFragment.newInstance("已上传", "2");
+    static Fragment taskLocalFragment = TaskListFragment.newInstance("未上传", "-1");
+
     static Fragment myinfoFragment = MyInfoFragment.newInstance();
 
     @Override
@@ -39,20 +41,20 @@ public class MainTaskListActivity extends BaseActivity {
                             .commit();
                 } else if (group.getCheckedRadioButtonId() == R.id.rb2) {
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.item_detail_container, taskWaitUpLoadedFragment)
+                            .replace(R.id.item_detail_container, taskBackFragment)
                             .commit();
                 } else if (group.getCheckedRadioButtonId() == R.id.rb3) {
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.item_detail_container, taskHasUpLoadedFragment)
+                            .replace(R.id.item_detail_container, taskLocalFragment)
                             .commit();
+
                 } else if (group.getCheckedRadioButtonId() == R.id.rb4) {
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.item_detail_container, myinfoFragment)
+                            .replace(R.id.item_detail_container, taskHasUpLoadedFragment)
                             .commit();
-                } else {
-                    TaskUnfindSampleFragment taskFragment = new TaskUnfindSampleFragment();
+                } else if (group.getCheckedRadioButtonId() == R.id.rb5) {
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.item_detail_container, taskFragment)
+                            .replace(R.id.item_detail_container, myinfoFragment)
                             .commit();
                 }
             }
