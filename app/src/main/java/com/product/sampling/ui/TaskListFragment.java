@@ -22,6 +22,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.product.sampling.R;
 import com.product.sampling.adapter.SpinnerSimpleAdapter;
@@ -396,13 +397,18 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
     }
 
     List<TaskEntity> findTaskInLocalFile() {
-        Gson gson = new Gson();
-        String taskListStr = (String) SPUtil.get(getActivity(), "tasklist", "");
-        if (!TextUtils.isEmpty(taskListStr)) {
-            Type listType = new TypeToken<List<TaskEntity>>() {
-            }.getType();
-            List<TaskEntity> listTask = gson.fromJson(taskListStr, listType);
-            return listTask;
+
+        try {
+            String taskListStr = (String) SPUtil.get(getActivity(), "tasklist", "");
+            if (!TextUtils.isEmpty(taskListStr)) {
+                Type listType = new TypeToken<List<TaskEntity>>() {
+                }.getType();
+                Gson gson = new Gson();
+                List<TaskEntity> listTask = gson.fromJson(taskListStr, listType);
+                return listTask;
+            }
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
         }
         return null;
     }

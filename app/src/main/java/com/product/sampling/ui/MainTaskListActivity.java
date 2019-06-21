@@ -18,7 +18,7 @@ public class MainTaskListActivity extends BaseActivity {
      * device.
      */
     private boolean mTwoPane;
-    static Fragment taskToDoFragment = TaskListFragment.newInstance("待办任务", "0");
+    static Fragment taskToDoFragment = TaskListFragment.newInstance("待办任务", "0");//0待办 1退回 2已上传
     static Fragment taskBackFragment = TaskListFragment.newInstance("退回", "1");
     static Fragment taskHasUpLoadedFragment = TaskListFragment.newInstance("已上传", "2");
     static Fragment taskLocalFragment = TaskListFragment.newInstance("未上传", "-1");
