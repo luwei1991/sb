@@ -564,37 +564,34 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         } else {
             multipartBodyBuilder.addFormDataPart("samplecount", "0");
         }
-
-        if (!hasData) {
-//            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "请先选择图片或者视频");
-            return;
-        }
         showLoadingDialog();
-        RetrofitService.createApiService(Request.class)
-                .uploadtaskinfo(multipartBodyBuilder.build())
-                .compose(RxSchedulersHelper.io_main())
-                .compose(RxSchedulersHelper.ObsHandHttpResult())
-                .subscribe(new ZBaseObserver<String>() {
-                    @Override
-                    public void onSuccess(String s) {
-                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加现场信息成功");
-                        postSampleData();
-                    }
+        if (hasData) {
+            RetrofitService.createApiService(Request.class)
+                    .uploadtaskinfo(multipartBodyBuilder.build())
+                    .compose(RxSchedulersHelper.io_main())
+                    .compose(RxSchedulersHelper.ObsHandHttpResult())
+                    .subscribe(new ZBaseObserver<String>() {
+                        @Override
+                        public void onSuccess(String s) {
+                            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加现场信息成功");
+                            postSampleData();
+                        }
 
-                    @Override
-                    public void onFailure(int code, String message) {
-                        super.onFailure(code, message);
-                        dismissLoadingDialog();
-                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), message);
-                    }
+                        @Override
+                        public void onFailure(int code, String message) {
+                            super.onFailure(code, message);
+                            dismissLoadingDialog();
+                            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), message);
+                        }
 
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        super.onSubscribe(d);
-                    }
-                });
-
-
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            super.onSubscribe(d);
+                        }
+                    });
+        } else {
+            postSampleData();
+        }
     }
 
     @Override
