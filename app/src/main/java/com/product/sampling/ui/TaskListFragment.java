@@ -264,7 +264,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<TaskEntity> task) {
 
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter((AppCompatActivity) getActivity(), task, false));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter((AppCompatActivity) getActivity(), task, !getArguments().getString(ARG_TASK_STATUS).equals("2")));
     }
 
     @Override
@@ -296,7 +296,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<TaskEntity> mValues;
-        private final boolean mTwoPane;
+        private boolean isCanEdit = true;//是否可以修改编辑
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -321,9 +321,9 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
 
         SimpleItemRecyclerViewAdapter(AppCompatActivity parent,
                                       List<TaskEntity> items,
-                                      boolean twoPane) {
+                                      boolean canEdit) {
             mValues = items;
-            mTwoPane = twoPane;
+            isCanEdit = canEdit;
         }
 
         @Override
@@ -358,7 +358,11 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
             holder.mTextViewException.setOnClickListener(mOnClickListener);
             holder.mTextViewException.setTag(task);
 
-
+            if (!isCanEdit) {
+                holder.mTextViewMap.setVisibility(View.INVISIBLE);
+                holder.mTextViewException.setVisibility(View.INVISIBLE);
+                holder.mTextViewFill.setVisibility(View.INVISIBLE);
+            }
         }
 
         @Override
