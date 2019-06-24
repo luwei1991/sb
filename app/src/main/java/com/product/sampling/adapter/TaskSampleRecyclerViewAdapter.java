@@ -45,7 +45,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                 MediaHelper.startGallery(fragment, PictureConfig.MULTIPLE, MediaHelper.REQUEST_IMAGE_CODE);
             } else if (R.id.iv_reduce == view.getId() || R.id.iv_reduce_video == view.getId()) {
                 int index = (int) view.getTag();
-                new AlertDialog.Builder(fragment.getContext()).setTitle("确认删除" + mData.get(index).getRemarks() + "的样品信息吗?")
+                new AlertDialog.Builder(fragment.getContext()).setTitle("确认删除" + mData.get(index).getSamplename() + "的样品信息吗?")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -88,7 +88,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
 
         int position = holder.getAdapterPosition() - 1 >= 0 ? holder.getAdapterPosition() - 1 : 0;
 
-        holder.mTextViewTitle.setText(TextUtils.isEmpty(task.getRemarks()) ? "" : task.getRemarks());
+        holder.mTextViewTitle.setText(TextUtils.isEmpty(task.getSamplename()) ? " " : task.getSamplename());
         if (task.isLocalData) {
             holder.mTextViewHandleSheet.setText(task.disposalfile + "");
             holder.mTextViewCheckSheet.setText(task.samplingfile + "");
@@ -101,12 +101,12 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             if (null == task.getAdvice()) {
                 holder.mTextViewHandleSheet.setText("");
             } else {
-                holder.mTextViewHandleSheet.setText(task.getAdvice().getId() + "");
+                holder.mTextViewHandleSheet.setText(task.getAdvice().getCreatTime() + "");
             }
             if (null == task.getSampling()) {
                 holder.mTextViewCheckSheet.setText("");
             } else {
-                holder.mTextViewCheckSheet.setText(task.getSampling().getId() + "");
+                holder.mTextViewCheckSheet.setText(task.getSampling().getCreateTime() + "");
             }
             holder.mImageViewAdd.setVisibility(View.INVISIBLE);
             holder.mBtnEditCheck.setVisibility(View.INVISIBLE);

@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="110dp"
         android:orientation="horizontal">
 
         <TextView
@@ -21,8 +21,8 @@
             android:drawableTop="@mipmap/task_navigation"
             android:drawablePadding="10dp"
             android:gravity="center"
-            android:paddingTop="10dp"
             android:paddingLeft="15dp"
+            android:paddingTop="10dp"
             android:paddingRight="15dp"
             android:text="导航" />
 
@@ -54,6 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/text_margin"
+                android:maxLines="2"
                 android:text="地址"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
@@ -89,9 +90,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="@dimen/text_margin"
-                android:text="结束时间:"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:text="结束时间:"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
             <TextView

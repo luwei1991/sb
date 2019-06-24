@@ -33,6 +33,7 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
     private TextView tvEndtime;
     private TextView tvCompanyname;
     private Button btnSubmit;
+    private TextView tv_goodscount;
 
     public TaskDetailFragment() {
     }
@@ -73,7 +74,7 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
         tvStarttime.setText(taskEntity.starttime);
         tvEndtime.setText(taskEntity.endtime);
         tvCompanyname.setText(taskEntity.companyname);
-
+        tv_goodscount.setText(taskEntity.goodscount);
     }
 
     private void initView(View view) {
@@ -86,7 +87,7 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
         tvEndtime = view.findViewById(R.id.tv_endtime);
         tvCompanyname = view.findViewById(R.id.tv_companyname);
         btnSubmit = view.findViewById(R.id.btn_submit);
-
+        tv_goodscount = view.findViewById(R.id.tv_goodscount);
         btnSubmit.setOnClickListener(this);
     }
 

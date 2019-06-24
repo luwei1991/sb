@@ -185,6 +185,7 @@
                     android:text="所需抽样批次" />
 
                 <TextView
+                    android:id="@+id/tv_goodscount"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:gravity="center"

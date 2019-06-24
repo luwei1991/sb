@@ -43,7 +43,7 @@ public class TaskSample {
 
     private String id;
     private boolean isNewRecord;
-    private String remarks = "";
+    private String remarks = " ";
     private String createDate;
     private String updateDate;
     private String samplename;
@@ -52,7 +52,7 @@ public class TaskSample {
     private String samplecode;
     private String samplebase;
     private String taskid;
-    private String remark = "";
+    private String remark = " ";
     private String projectdescription;
     private String facture;
     private String batchnum;

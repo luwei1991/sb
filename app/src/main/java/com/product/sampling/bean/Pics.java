@@ -46,7 +46,7 @@ public class Pics extends TaskImageEntity implements Parcelable, Serializable {
 
     private String id;
     private boolean isNewRecord;
-    private String remarks = "";
+    private String remarks = " ";
     private String createDate;
     private String updateDate;
     private String fileName;

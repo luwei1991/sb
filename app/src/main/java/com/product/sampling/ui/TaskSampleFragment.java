@@ -36,6 +36,7 @@ import com.product.sampling.R;
 import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
 import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.TaskEntity;
+import com.product.sampling.bean.TaskMessage;
 import com.product.sampling.bean.TaskSample;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
@@ -49,6 +50,7 @@ import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.SPUtil;
 import com.product.sampling.utils.ToastUtil;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -181,7 +183,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     void createNewSample(String text) {
         if (null != text && !text.isEmpty()) {
             TaskSample sample = new TaskSample();
-            sample.setRemarks(text);
+            sample.setSamplename(text);
             sample.list = new ArrayList<>();
             sample.isLocalData = true;
             taskDetailViewModel.taskEntity.taskSamples.add(sample);
@@ -231,6 +233,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             multipartBodyBuilder.addFormDataPart("userid", AccountManager.getInstance().getUserId())
                     .addFormDataPart("taskid", taskDetailViewModel.taskEntity.id);
             multipartBodyBuilder.addFormDataPart("id", sample.getId());
+            multipartBodyBuilder.addFormDataPart("samplename", sample.getRemarks());
 
             if (i == taskDetailViewModel.taskEntity.taskSamples.size() - 1) {
                 multipartBodyBuilder.addFormDataPart("islastone", "1");
@@ -332,6 +335,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                             dismissLoadingDialog();
                             if (finalI == taskDetailViewModel.taskEntity.taskSamples.size() - 1) {
                                 com.product.sampling.maputil.ToastUtil.show(getActivity(), "上传样品成功");
+                                EventBus.getDefault().post(TaskMessage.getInstance(taskDetailViewModel.taskEntity.id));
                                 saveTaskInLocalFile(true);
                             }
                         }
@@ -473,7 +477,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         if (!isRemove) {
             taskDetailViewModel.taskEntity.isLoadLocalData = true;
             listTask.add(taskDetailViewModel.taskEntity);
-            com.product.sampling.maputil.ToastUtil.show(getActivity(), "保存成功");
         }
         SPUtil.put(getActivity(), "tasklist", gson.toJson(listTask));
         if (isRemove) {

@@ -28,6 +28,7 @@ import com.product.sampling.R;
 import com.product.sampling.adapter.SpinnerSimpleAdapter;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskMenu;
+import com.product.sampling.bean.TaskMessage;
 import com.product.sampling.bean.TaskResultBean;
 import com.product.sampling.bean.UserInfoBean;
 import com.product.sampling.httpmoudle.RetrofitService;
@@ -45,6 +46,9 @@ import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.SPUtil;
 
 import org.devio.takephoto.model.TImage;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -87,6 +91,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getMenuData();
+        EventBus.getDefault().register(this);
         if (getArguments().getString(ARG_TASK_STATUS).equals("-1")) {
             assert recyclerView != null;
             String taskList = (String) SPUtil.get(getActivity(), "tasklist", "");
@@ -288,7 +293,6 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                 }
                 getData();
                 break;
-
         }
     }
 
@@ -416,4 +420,24 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         }
         return null;
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetMessage(TaskMessage message) {
+        SimpleItemRecyclerViewAdapter adapter = (SimpleItemRecyclerViewAdapter) recyclerView.getAdapter();
+        for (int i = adapter.mValues.size() - 1; i >= 0; i--) {
+            if (message.message.equals(adapter.mValues.get(i).id)) {
+                adapter.mValues.remove(i);
+                adapter.notifyDataSetChanged();
+                break;
+            }
+        }
+    }
+
 }
+
