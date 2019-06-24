@@ -7,6 +7,9 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.product.sampling.R;
+import com.product.sampling.bean.TaskArea;
+import com.product.sampling.bean.TaskCity;
+import com.product.sampling.bean.TaskProvince;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +20,7 @@ public class SpinnerSimpleAdapter<T> extends BaseAdapter {
     private Context ctx;
     private List<T> dataList = Collections.emptyList();
 
-    public SpinnerSimpleAdapter(Context ctx, ArrayList dataList) {
+    public SpinnerSimpleAdapter(Context ctx, ArrayList<T> dataList) {
         this.ctx = ctx;
         this.dataList = dataList;
     }
@@ -49,7 +52,15 @@ public class SpinnerSimpleAdapter<T> extends BaseAdapter {
         if (obj instanceof String) {
             String entity = (String) obj;
             holder.tv_title.setText(entity);
-
+        } else if (obj instanceof TaskProvince) {
+            TaskProvince entity = (TaskProvince) obj;
+            holder.tv_title.setText(entity.name);
+        }else if (obj instanceof TaskCity) {
+            TaskCity entity = (TaskCity) obj;
+            holder.tv_title.setText(entity.name);
+        }else if (obj instanceof TaskArea) {
+            TaskArea entity = (TaskArea) obj;
+            holder.tv_title.setText(entity.name);
         }
 
         return convertView;

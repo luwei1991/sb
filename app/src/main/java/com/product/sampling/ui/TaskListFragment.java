@@ -2,16 +2,12 @@ package com.product.sampling.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -19,45 +15,39 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.product.sampling.Constants;
 import com.product.sampling.R;
 import com.product.sampling.adapter.SpinnerSimpleAdapter;
+import com.product.sampling.bean.TaskCity;
 import com.product.sampling.bean.TaskEntity;
-import com.product.sampling.bean.TaskMenu;
 import com.product.sampling.bean.TaskMessage;
+import com.product.sampling.bean.TaskProvince;
 import com.product.sampling.bean.TaskResultBean;
-import com.product.sampling.bean.UserInfoBean;
 import com.product.sampling.httpmoudle.RetrofitService;
-import com.product.sampling.httpmoudle.error.ExecptionEngin;
 import com.product.sampling.manager.AccountManager;
-import com.product.sampling.maputil.ToastUtil;
-import com.product.sampling.net.Exception.ApiException;
-import com.product.sampling.net.NetWorkManager;
+import com.product.sampling.net.LoadDataModel;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
-import com.product.sampling.net.response.ResponseTransformer;
-import com.product.sampling.net.schedulers.SchedulerProvider;
-import com.product.sampling.utils.ActivityUtils;
+import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.SPUtil;
 
-import org.devio.takephoto.model.TImage;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 /**
  * 任务列表
@@ -72,11 +62,12 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
 
     Disposable disposable;
     RecyclerView recyclerView;
-    ImageView mIVdistance;
-    ImageView mIVTime;
-    boolean isTimeFromLowToHigh = true;
-    boolean isDistanceFromLowToHigh = true;
-
+    ImageView mIVDistance;
+    View mViewDistance;
+    boolean isDistanceFromLowToHigh = true;//    0时间倒叙1时间升序
+    TaskDetailViewModel taskDetailViewModel;
+    Spinner spinnerProvince;
+    Spinner spinnerCity;
 
     public static TaskListFragment newInstance(String title, String taskstatus) {
         Bundle args = new Bundle();
@@ -90,7 +81,15 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getMenuData();
+        taskDetailViewModel = ViewModelProviders.of(getActivity()).get(TaskDetailViewModel.class);
+        taskDetailViewModel.cityListLiveData.observe(this, new Observer<LoadDataModel<ArrayList<TaskProvince>>>() {
+            @Override
+            public void onChanged(LoadDataModel<ArrayList<TaskProvince>> listLoadDataModel) {
+                if (listLoadDataModel.isSuccess()) {
+                    setCity(listLoadDataModel.getData());
+                }
+            }
+        });
         EventBus.getDefault().register(this);
         if (getArguments().getString(ARG_TASK_STATUS).equals("-1")) {
             assert recyclerView != null;
@@ -121,87 +120,70 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
             toolbar.setTitle(getArguments().getString(ARG_TITLE));
         }
         recyclerView = rootView.findViewById(R.id.item_image_list);
-        mIVdistance = rootView.findViewById(R.id.iv_sort_distance);
-        mIVTime = rootView.findViewById(R.id.iv_sort_time);
-        rootView.findViewById(R.id.tv_range).setOnClickListener(this);
-        rootView.findViewById(R.id.tv_date).setOnClickListener(this);
-
-        ArrayList type = new ArrayList();
-        type.add("食品");
-        type.add("化工");
-        SpinnerSimpleAdapter coinSpinnerdapter = new SpinnerSimpleAdapter(getActivity(), type);
-        Spinner spinner = rootView.findViewById(R.id.spinner_type);
-        spinner.setAdapter(coinSpinnerdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                getData();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        Spinner spinnerArea = rootView.findViewById(R.id.spinner_area);
-        ArrayList area = new ArrayList();
-        area.add("北京");
-        area.add("海南");
-        SpinnerSimpleAdapter areaSpinnerdapter = new SpinnerSimpleAdapter(getActivity(), area);
-        spinnerArea.setAdapter(areaSpinnerdapter);
-        spinnerArea.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                getData();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-//        RadioGroup rb = rootView.findViewById(R.id.rg1);
-//        rb.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(RadioGroup group, int checkedId) {
-//
-//                if (group.getCheckedRadioButtonId() == R.id.rb1) {
-//                  getActivity().getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.item_detail_container, taskToDoFragment)
-//                            .commit();
-//                } else if (group.getCheckedRadioButtonId() == R.id.rb2) {
-//                    getActivity().getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.item_detail_container, taskBackFragment)
-//                            .commit();
-//                } else if (group.getCheckedRadioButtonId() == R.id.rb3) {
-//                    getActivity().getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.item_detail_container, taskHasUpLoadedFragment)
-//                            .commit();
-//                } else if (group.getCheckedRadioButtonId() == R.id.rb4) {
-//                    getActivity().getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.item_detail_container, myinfoFragment)
-//                            .commit();
-//                } else {
-//                    TaskUnfindSampleFragment taskFragment = new TaskUnfindSampleFragment();
-//                    getActivity().getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.item_detail_container, taskFragment)
-//                            .commit();
-//                }
-//            }
-//        });
-//        RadioButton radioButton = (RadioButton) rb.findViewById(R.id.rb1);
-//        radioButton.setChecked(true);
+        mIVDistance = rootView.findViewById(R.id.iv_sort_distance);
+        mViewDistance = rootView.findViewById(R.id.ll_range);
+        mViewDistance.setOnClickListener(this);
+        spinnerProvince = rootView.findViewById(R.id.spinner_type);
+        spinnerCity = rootView.findViewById(R.id.spinner_area);
         return rootView;
+    }
+
+    void setCity(ArrayList<TaskProvince> listCity) {
+        SpinnerSimpleAdapter coinSpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listCity);
+        SpinnerSimpleAdapter areaSpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listCity.get(0).shicitys);
+
+        spinnerProvince.setAdapter(coinSpinnerdapter);
+        spinnerProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                areaSpinnerdapter.setDataList(listCity.get(position).shicitys);
+                spinnerCity.setAdapter(areaSpinnerdapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // TODO 选择地区刷新列表
+                if (!Constants.DEBUG) {
+                    getData();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spinnerProvince.setSelection(0);
+        spinnerCity.setSelection(0);
     }
 
     private void getData() {
         Bundle b = getArguments();
         String status = b.getString(ARG_TASK_STATUS);
+        TaskProvince province = (TaskProvince) spinnerProvince.getSelectedItem();
+        TaskCity city = (TaskCity) spinnerCity.getSelectedItem();
+        String ordertype = isDistanceFromLowToHigh ? "1" : "0";
+        if (null == province) {
+            province = new TaskProvince();
+        }
+        if (null == city) {
+            city = new TaskCity();
+        }
+        // TODO 根据条件筛选任务
+        if (Constants.DEBUG) {
+            province = new TaskProvince();
+            city = new TaskCity();
+            ordertype = "";
+        }
 
         RetrofitService.createApiService(Request.class)
-                .taskList(AccountManager.getInstance().getUserId(), status, null)
+                .taskList(AccountManager.getInstance().getUserId(), status, ordertype, province.id, city.id)
                 .compose(RxSchedulersHelper.io_main())
                 .compose(RxSchedulersHelper.ObsHandHttpResult())
                 .subscribe(new ZBaseObserver<List<TaskEntity>>() {
@@ -240,33 +222,6 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                 });
     }
 
-    private void getMenuData() {
-        RetrofitService.createApiService(Request.class)
-                .getArea(null, null)
-                .compose(RxSchedulersHelper.io_main())
-                .compose(RxSchedulersHelper.ObsHandHttpResult())
-                .subscribe(new ZBaseObserver<List<TaskMenu>>() {
-
-                    @Override
-                    public void onFailure(int code, String message) {
-                        super.onFailure(code, message);
-                        if (isVisible()) {
-                            showToast(message);
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(List<TaskMenu> tasks) {
-                        Log.e("tasks", tasks.toString());
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        super.onSubscribe(d);
-                    }
-                });
-    }
-
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<TaskEntity> task) {
 
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter((AppCompatActivity) getActivity(), task, !getArguments().getString(ARG_TASK_STATUS).equals("2")));
@@ -275,21 +230,12 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_range:
+            case R.id.ll_range:
                 isDistanceFromLowToHigh = !isDistanceFromLowToHigh;
                 if (isDistanceFromLowToHigh) {
-                    mIVdistance.setImageResource(R.mipmap.task_triangle2);
+                    mIVDistance.setImageResource(R.mipmap.task_triangle2);
                 } else {
-                    mIVdistance.setImageResource(R.mipmap.task_triangle);
-                }
-                getData();
-                break;
-            case R.id.tv_date:
-                isTimeFromLowToHigh = !isTimeFromLowToHigh;
-                if (isTimeFromLowToHigh) {
-                    mIVTime.setImageResource(R.mipmap.task_triangle2);
-                } else {
-                    mIVTime.setImageResource(R.mipmap.task_triangle);
+                    mIVDistance.setImageResource(R.mipmap.task_triangle);
                 }
                 getData();
                 break;

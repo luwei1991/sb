@@ -4,7 +4,7 @@ import com.product.sampling.bean.New;
 import com.product.sampling.bean.SmsBean;
 import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskEntity;
-import com.product.sampling.bean.TaskMenu;
+import com.product.sampling.bean.TaskProvince;
 import com.product.sampling.bean.TaskResultBean;
 import com.product.sampling.bean.TaskSample;
 import com.product.sampling.bean.UserInfoBean;
@@ -66,10 +66,10 @@ public interface Request {
     Observable<BaseHttpResult> changepassword(@Query("userid") String userid, @Query("password") String password, @Query("newPassword") String newPassword);
 
     @GET("app/task/tasklist")
-    Observable<BaseHttpResult<List<TaskEntity>>> taskList(@Query("userid") String userid, @Query("taskstatus") String taskstatus, @Query("ordertype") String ordertype);
+    Observable<BaseHttpResult<List<TaskEntity>>> taskList(@Query("userid") String userid, @Query("taskstatus") String taskstatus, @Query("ordertype") String ordertype,@Query("areasheng") String areasheng,@Query("areashi") String areashi);
 
     @GET("app/task/getdict")
-    Observable<Response<TaskMenu>> taskMenu(@Query("type") String type, @Query("value") String value);
+    Observable<Response<TaskProvince>> taskMenu(@Query("type") String type, @Query("value") String value);
 
     /**
      * 获取省市接口
@@ -79,7 +79,7 @@ public interface Request {
      * @return
      */
     @GET("app/task/getarea")
-    Observable<BaseHttpResult<List<TaskMenu>>> getArea(@Query("areaid") String areaid, @Query("type") String type);
+    Observable<BaseHttpResult<List<TaskProvince>>> getArea();
 
     /**
      * 修改图像接口

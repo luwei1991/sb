@@ -5,8 +5,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.product.sampling.R;
+import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 
 /**
  * 任务列表
@@ -17,7 +19,6 @@ public class MainTaskListActivity extends BaseActivity {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    private boolean mTwoPane;
     static Fragment taskToDoFragment = TaskListFragment.newInstance("待办任务", "0");//0待办 1退回 2已上传
     static Fragment taskBackFragment = TaskListFragment.newInstance("退回", "1");
     static Fragment taskHasUpLoadedFragment = TaskListFragment.newInstance("已上传", "2");
@@ -29,7 +30,8 @@ public class MainTaskListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list);
-
+        TaskDetailViewModel taskDetailViewModel = ViewModelProviders.of(MainTaskListActivity.this).get(TaskDetailViewModel.class);
+        taskDetailViewModel.requestCityList();
         RadioGroup rb = findViewById(R.id.rg1);
         rb.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

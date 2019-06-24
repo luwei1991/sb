@@ -22,24 +22,29 @@
         android:layout_width="match_parent"
         android:layout_height="50dp">
 
-        <TextView
-            android:id="@+id/tv_range"
-            android:layout_width="40dp"
+        <LinearLayout
+            android:id="@+id/ll_range"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:orientation="horizontal"
             android:background="?selectableItemBackground"
-            android:clickable="true"
-            android:gravity="center"
-            android:text="距离"
-            android:textColor="#333333"
-            android:textSize="15sp" />
+            android:clickable="true">
 
-        <ImageView
-            android:id="@+id/iv_sort_distance"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/tv_range"
-            android:src="@mipmap/task_triangle" />
+            <TextView
+                android:id="@+id/tv_range"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="距离"
+                android:textColor="#333333"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/iv_sort_distance"
+                android:layout_width="10dp"
+                android:layout_height="match_parent"
+                android:src="@mipmap/task_triangle" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_date"
@@ -53,21 +58,14 @@
             android:gravity="center"
             android:text="日期"
             android:textColor="#333333"
-            android:textSize="15sp" />
-
-        <ImageView
-            android:id="@+id/iv_sort_time"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/tv_date"
-            android:src="@mipmap/task_triangle" />
+            android:textSize="15sp"
+            android:visibility="gone" />
 
         <Spinner
-            android:layout_marginLeft="50dp"
             android:id="@+id/spinner_type"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
+            android:layout_marginLeft="80dp"
             android:layout_toRightOf="@+id/tv_date"
             android:spinnerMode="dialog" />
 

@@ -5,15 +5,12 @@ import androidx.lifecycle.MutableLiveData;
 import com.product.sampling.bean.LocalMediaInfo;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskImageEntity;
-import com.product.sampling.bean.TaskMenu;
+import com.product.sampling.bean.TaskProvince;
 import com.product.sampling.bean.TaskSample;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.net.LoadDataModel;
-import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
-import com.product.sampling.net.response.ResponseTransformer;
-import com.product.sampling.net.schedulers.SchedulerProvider;
 import com.product.sampling.utils.RxSchedulersHelper;
 
 import java.util.ArrayList;
@@ -33,39 +30,38 @@ public class TaskExecptionViewModel extends AutoDisposViewModel {
     public ArrayList<TaskImageEntity> imageList = new ArrayList<>();
     public ArrayList<LocalMediaInfo> videoList = new ArrayList<>();
 
-    public MutableLiveData<LoadDataModel<String>> orderLoadLiveData = new MutableLiveData<>();
+    public MutableLiveData<LoadDataModel<String>> cityListLiveData = new MutableLiveData<>();
     public MutableLiveData<LoadDataModel<TaskEntity>> orderDetailLiveData = new MutableLiveData<>();
     public MutableLiveData<LoadDataModel<List<TaskSample>>> sampleDetailLiveData = new MutableLiveData<>();
 
-
-    public void requestOrderList(String symbol, String orderType, int page, boolean isRefrash) {
-
         //未登录判断
 
-        orderLoadLiveData.setValue(new LoadDataModel());
-        RetrofitService.createApiService(Request.class)
-                .getArea(null, null)
-                .compose(RxSchedulersHelper.io_main())
-                .compose(RxSchedulersHelper.ObsHandHttpResult())
-                .subscribe(new ZBaseObserver<List<TaskMenu>>() {
+        public void requestCityList(String symbol, String orderType, int page, boolean isRefrash) {
 
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        super.onSubscribe(d);
-                        addDispos(d);
-                    }
+            cityListLiveData.setValue(new LoadDataModel());
+            RetrofitService.createApiService(Request.class)
+                    .getArea()
+                    .compose(RxSchedulersHelper.io_main())
+                    .compose(RxSchedulersHelper.ObsHandHttpResult())
+                    .subscribe(new ZBaseObserver<List<TaskProvince>>() {
 
-                    @Override
-                    public void onFailure(int code, String message) {
-                        super.onFailure(code, message);
-                        orderLoadLiveData.postValue(new LoadDataModel<>(code, message));
-                    }
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            super.onSubscribe(d);
+                            addDispos(d);
+                        }
 
-                    @Override
-                    public void onSuccess(List<TaskMenu> taskMenus) {
-                        orderLoadLiveData.postValue(new LoadDataModel(taskMenus));
-                    }
-                });
+                        @Override
+                        public void onFailure(int code, String message) {
+                            super.onFailure(code, message);
+                            cityListLiveData.postValue(new LoadDataModel<>(code, message));
+                        }
+
+                        @Override
+                        public void onSuccess(List<TaskProvince> taskProvinces) {
+                            cityListLiveData.postValue(new LoadDataModel(taskProvinces));
+                        }
+                    });
     }
 
     public void requestOrderList(String userid, String id) {
