@@ -209,6 +209,13 @@ public abstract class BasePhotoFragment extends TakePhotoFragment {
 
     public void onRefreshTitle(boolean isImage, int index, String text) {
     }
+    public void onRefreshSampleImageTitle(int samplePos, int index, String text) {
+    }
+    public void onRemoveSampleImage(int samplePos, int index) {
+    }
+    public void onRemove(boolean isImage, int index) {
+    }
+
 
     public void shareBySystem(String path) {
         File doc = new File(path);

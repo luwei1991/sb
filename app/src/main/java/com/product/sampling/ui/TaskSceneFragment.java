@@ -136,9 +136,8 @@ public class TaskSceneFragment extends BasePhotoFragment {
     List<TaskEntity> listTask;
 
     private void saveData() {
-        if (!taskDetailViewModel.taskEntity.isLoadLocalData) return;
         boolean hasData = false;
-        if (taskDetailViewModel.taskEntity.isLoadLocalData && null != taskDetailViewModel.taskEntity.pics && !taskDetailViewModel.taskEntity.pics.isEmpty()) {
+        if (null != taskDetailViewModel.taskEntity.pics && !taskDetailViewModel.taskEntity.pics.isEmpty()) {
             for (int i = 0; i < taskDetailViewModel.taskEntity.pics.size(); i++) {
                 String path = taskDetailViewModel.taskEntity.pics.get(i).getOriginalPath();
                 if (TextUtils.isEmpty(path)) continue;
@@ -150,7 +149,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 hasData = true;
             }
         }
-        if (taskDetailViewModel.taskEntity.isLoadLocalData && null != taskDetailViewModel.taskEntity.voides && !taskDetailViewModel.taskEntity.voides.isEmpty()) {
+        if (null != taskDetailViewModel.taskEntity.voides && !taskDetailViewModel.taskEntity.voides.isEmpty()) {
 
             for (int i = 0; i < taskDetailViewModel.taskEntity.voides.size(); i++) {
                 if (!taskDetailViewModel.taskEntity.voides.get(i).isLocal) {
@@ -187,7 +186,6 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 }
             }
         }
-        taskDetailViewModel.taskEntity.isLoadLocalData = true;
         listTask.add(taskDetailViewModel.taskEntity);
         String data = gson.toJson(listTask);
         SPUtil.put(getActivity(), "tasklist", data);
@@ -203,7 +201,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
     }
 
     private void setupRecyclerViewFromServer(@NonNull RecyclerView recyclerView, List task) {
-        ImageServerRecyclerViewAdapter adapter = new ImageServerRecyclerViewAdapter(getActivity(), task, false);
+        ImageServerRecyclerViewAdapter adapter = new ImageServerRecyclerViewAdapter(getActivity(), task, this);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -289,12 +287,11 @@ public class TaskSceneFragment extends BasePhotoFragment {
                         mediaInfos.add(mediaInfo);
                     }
 
-                    for (int i = taskDetailViewModel.taskEntity.voides.size() - 1; i >= 0; i--) {
-                        if (!taskDetailViewModel.taskEntity.voides.get(i).isLocal) {
-                            taskDetailViewModel.taskEntity.voides.remove(i);
-                        }
-                    }
-                    taskDetailViewModel.taskEntity.isLoadLocalData = true;
+//                    for (int i = taskDetailViewModel.taskEntity.voides.size() - 1; i >= 0; i--) {
+//                        if (!taskDetailViewModel.taskEntity.voides.get(i).isLocal) {
+//                            taskDetailViewModel.taskEntity.voides.remove(i);
+//                        }
+//                    }
                     taskDetailViewModel.taskEntity.isEditedTaskScene = true;
                     taskDetailViewModel.taskEntity.voides.addAll(mediaInfos);
                     setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
@@ -320,14 +317,13 @@ public class TaskSceneFragment extends BasePhotoFragment {
                         mediaInfo.isLocal = true;
                         mediaInfos.add(mediaInfo);
                     }
-                    for (int i = taskDetailViewModel.taskEntity.pics.size() - 1; i >= 0; i--) {
-                        Pics pics1 = taskDetailViewModel.taskEntity.pics.get(i);
-                        if (!pics1.isLocal) {
-                            taskDetailViewModel.taskEntity.pics.remove(pics1);
-                        }
-                    }
+//                    for (int i = taskDetailViewModel.taskEntity.pics.size() - 1; i >= 0; i--) {
+//                        Pics pics1 = taskDetailViewModel.taskEntity.pics.get(i);
+//                        if (!pics1.isLocal) {
+//                            taskDetailViewModel.taskEntity.pics.remove(pics1);
+//                        }
+//                    }
                     taskDetailViewModel.taskEntity.pics.addAll(mediaInfos);
-                    taskDetailViewModel.taskEntity.isLoadLocalData = true;
                     taskDetailViewModel.taskEntity.isEditedTaskScene = true;
                     setupRecyclerView(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
                 }
@@ -406,16 +402,5 @@ public class TaskSceneFragment extends BasePhotoFragment {
                         // At least one permission is denied
                     }
                 });
-
-
-    }
-
-    @Override
-    public void onRefreshTitle(boolean isImage, int index, String text) {
-        if (isImage) {
-            taskDetailViewModel.taskEntity.pics.get(index).title = text;
-        } else {
-            taskDetailViewModel.taskEntity.voides.get(index).title = text;
-        }
     }
 }

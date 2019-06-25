@@ -52,7 +52,7 @@ public class Videos extends LocalMediaInfo implements Parcelable, Serializable {
 
     private String id;
     private boolean isNewRecord;
-    private String remarks = "";
+    private String remarks = " ";
     private String createDate;
     private String updateDate;
     private String fileName;

@@ -51,6 +51,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //按下确定键后的事件
                                 mData.remove(index);
+                                fragment.onRemove(true, index);
                                 notifyDataSetChanged();
                             }
                         }).setNegativeButton("取消", null).show();
@@ -108,7 +109,6 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             } else {
                 holder.mTextViewCheckSheet.setText(task.getSampling().getCreateTime() + "");
             }
-            holder.mImageViewAdd.setVisibility(View.INVISIBLE);
             holder.mBtnEditCheck.setVisibility(View.INVISIBLE);
             holder.mBtnEditHandle.setVisibility(View.INVISIBLE);
             holder.mBtnUploadHandle.setVisibility(View.INVISIBLE);
@@ -143,7 +143,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         holder.mRecyclerViewImage.setLayoutManager(linearLayoutManager);
 
-        holder.mRecyclerViewImage.setAdapter(new ImageSampleRecyclerViewAdapter(holder.itemView.getContext(), task.getPics(), task.isLocalData));
+        holder.mRecyclerViewImage.setAdapter(new ImageSampleRecyclerViewAdapter(fragment, task.getPics(), task.isLocalData,position));
 
         linearLayoutManager = new LinearLayoutManager(holder.itemView.getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);

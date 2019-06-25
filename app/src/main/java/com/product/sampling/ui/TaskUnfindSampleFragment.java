@@ -374,7 +374,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
      * @param task
      */
     private void setupRecyclerViewFromServer(@NonNull RecyclerView recyclerView, List task) {
-        ImageServerRecyclerViewAdapter adapter = new ImageServerRecyclerViewAdapter(getActivity(), task, false);
+        ImageServerRecyclerViewAdapter adapter = new ImageServerRecyclerViewAdapter(getActivity(), task, this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -458,7 +458,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                     continue;
                 }
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("picstrs", taskDetailViewModel.taskEntity.pics.get(i).title + "")
+                multipartBodyBuilder.addFormDataPart("picstrs", taskDetailViewModel.taskEntity.pics.get(i).getRemarks() + "")
                         .addFormDataPart("uploadpics", f.getName(), requestImage);
                 hasData = true;
             }
@@ -476,7 +476,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                     continue;
                 }
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("videostrs", taskDetailViewModel.taskEntity.voides.get(i).title + "")
+                multipartBodyBuilder.addFormDataPart("videostrs", taskDetailViewModel.taskEntity.voides.get(i).getRemarks() + "")
                         .addFormDataPart("uploadvideos", f.getName(), requestImage);
                 hasData = true;
             }

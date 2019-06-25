@@ -8,6 +8,7 @@ import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,9 @@ import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskImageEntity;
+import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.ui.TaskDetailActivity;
+import com.product.sampling.ui.TaskSampleFragment;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +39,7 @@ import static com.product.sampling.Constants.IMAGE_BASE_URL;
 public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageServerRecyclerViewAdapter.ViewHolder> {
 
     private final List<Pics> mValues;
-    private boolean isLocal;
+    private BasePhotoFragment fragment;
     private int taskPostion = -1;//当前图片列表所属样品id
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -44,7 +47,7 @@ public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageSe
             if (view.getId() == R.id.iv_task) {
                 view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task", (Task) view.getTag()));
             } else {
-//                showListDialog(view.getContext(), (int) view.getTag());
+                showListDialog(view.getContext(), (int) view.getTag());
             }
         }
     };
@@ -59,6 +62,19 @@ public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageSe
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
+                        EditText et = new EditText(context);
+                        et.setText(mValues.get(taskPostion).getRemarks() + "");
+                        new AlertDialog.Builder(context).setTitle("请输入图片描述")
+                                .setView(et)
+                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        //按下确定键后的事件
+                                        String text = et.getText().toString();
+                                        mValues.get(taskPostion).setRemarks(text);
+                                        notifyDataSetChanged();
+                                    }
+                                }).setNegativeButton("取消", null).show();
                         break;
                     case 1:
                         mValues.remove(taskPostion);
@@ -72,16 +88,9 @@ public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageSe
 
     public ImageServerRecyclerViewAdapter(Context parent,
                                           List<Pics> items,
-                                          boolean isLocal) {
+                                          BasePhotoFragment fragment) {
         mValues = items;
-        this.isLocal = isLocal;
-    }
-
-    public ImageServerRecyclerViewAdapter(Context parent,
-                                          List<Pics> items,
-                                          int pos) {
-        mValues = items;
-        taskPostion = pos;
+        this.fragment = fragment;
     }
 
     @Override
@@ -100,7 +109,11 @@ public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageSe
         }
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(mOnClickListener);
-        Glide.with(holder.itemView.getContext()).load(IMAGE_BASE_URL + task.getId()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);
+        if (TextUtils.isEmpty(task.getId())) {
+            Glide.with(holder.itemView.getContext()).load(task.getOriginalPath()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);
+        } else {
+            Glide.with(holder.itemView.getContext()).load(IMAGE_BASE_URL + task.getId()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);
+        }
     }
 
     @Override

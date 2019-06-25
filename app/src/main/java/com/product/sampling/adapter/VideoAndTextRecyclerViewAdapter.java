@@ -55,17 +55,7 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (isLocal) {
-                showListDialog(view.getContext(), (int) view.getTag());
-            } else {
-                Videos videos = mValues.get((int) view.getTag());
-                if (!TextUtils.isEmpty(videos.getPath())) {
-                    File file = new File(videos.getPath());
-                    if (file.exists()) {
-                        PictureSelector.create(fragment).externalPictureVideo(videos.getPath());
-                    }
-                }
-            }
+            showListDialog(view.getContext(), (int) view.getTag());
         }
     };
 
@@ -89,8 +79,8 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
         Videos task = mValues.get(position);
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(mOnClickListener);
-        if (task.isLocal) {
-            holder.mTextViewTitle.setText(task.title);
+        if (TextUtils.isEmpty(task.getId())) {
+            holder.mTextViewTitle.setText(task.getRemarks());
             Glide.with(holder.itemView.getContext()).load(task.getPath()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);
         } else {
             holder.mTextViewTitle.setText(task.getRemarks() + "");
@@ -132,7 +122,7 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
                 switch (which) {
                     case 0:
                         EditText et = new EditText(context);
-                        et.setText(mValues.get(taskPostion).title + "");
+                        et.setText(mValues.get(taskPostion).getRemarks());
                         new AlertDialog.Builder(context).setTitle("请输入视频描述")
                                 .setView(et)
                                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -140,15 +130,16 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         //按下确定键后的事件
                                         String text = et.getText().toString();
-                                        mValues.get(taskPostion).title = text + "";
+                                        mValues.get(taskPostion).setRemarks(text);
                                         notifyDataSetChanged();
-                                        fragment.onRefreshTitle(false,taskPostion,text+"");
+//                                        fragment.onRefreshTitle(false, taskPostion, text + "");
                                     }
                                 }).setNegativeButton("取消", null).show();
 
                         break;
                     case 1:
                         mValues.remove(taskPostion);
+//                        fragment.onRemove(false, taskPostion);
                         notifyDataSetChanged();
                         break;
                     case 2:

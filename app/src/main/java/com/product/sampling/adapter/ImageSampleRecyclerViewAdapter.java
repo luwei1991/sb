@@ -21,6 +21,7 @@ import com.product.sampling.R;
 import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskImageEntity;
+import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.ui.TaskDetailActivity;
 
 import java.util.List;
@@ -32,10 +33,10 @@ public class ImageSampleRecyclerViewAdapter extends RecyclerView.Adapter<ImageSa
     private final List<Pics> mValues;
     private boolean isLocalData;
     private int taskPostion = -1;//当前图片列表所属样品id
+    BasePhotoFragment fragment;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (!isLocalData) return;
             if (view.getId() == R.id.iv_task) {
                 view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task", (Task) view.getTag()));
             } else {
@@ -44,7 +45,7 @@ public class ImageSampleRecyclerViewAdapter extends RecyclerView.Adapter<ImageSa
         }
     };
 
-    private void showListDialog(Context context, int taskPostion) {
+    private void showListDialog(Context context, int postion) {
         final String[] items = {"编辑说明", "删除",};
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(context);
@@ -55,7 +56,7 @@ public class ImageSampleRecyclerViewAdapter extends RecyclerView.Adapter<ImageSa
                 switch (which) {
                     case 0:
                         EditText et = new EditText(context);
-                        et.setText(mValues.get(taskPostion).getRemarks() + "");
+                        et.setText(mValues.get(postion).getRemarks() + "");
                         new AlertDialog.Builder(context).setTitle("请输入图片描述")
                                 .setView(et)
                                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -63,14 +64,16 @@ public class ImageSampleRecyclerViewAdapter extends RecyclerView.Adapter<ImageSa
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         //按下确定键后的事件
                                         String text = et.getText().toString();
-                                        mValues.get(taskPostion).setRemarks(text + "");
+                                        mValues.get(postion).setRemarks(text + "");
+                                        fragment.onRefreshSampleImageTitle(taskPostion, postion, text);
                                         notifyDataSetChanged();
                                     }
                                 }).setNegativeButton("取消", null).show();
 
                         break;
                     case 1:
-                        mValues.remove(taskPostion);
+                        mValues.remove(postion);
+                        fragment.onRemoveSampleImage(taskPostion, postion);
                         notifyDataSetChanged();
                         break;
                 }
@@ -79,17 +82,12 @@ public class ImageSampleRecyclerViewAdapter extends RecyclerView.Adapter<ImageSa
         listDialog.show();
     }
 
-    public ImageSampleRecyclerViewAdapter(Context parent,
+    public ImageSampleRecyclerViewAdapter(BasePhotoFragment parent,
                                           List<Pics> items,
-                                          boolean isLocalData) {
+                                          boolean isLocalData, int pos) {
+        fragment = parent;
         mValues = items;
         this.isLocalData = isLocalData;
-    }
-
-    public ImageSampleRecyclerViewAdapter(Context parent,
-                                          List<Pics> items,
-                                          int pos) {
-        mValues = items;
         taskPostion = pos;
     }
 
@@ -104,12 +102,10 @@ public class ImageSampleRecyclerViewAdapter extends RecyclerView.Adapter<ImageSa
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Pics task = mValues.get(position);
         holder.mTextViewTitle.setText(TextUtils.isEmpty(task.getRemarks()) ? "" : task.getRemarks());
-        if (taskPostion != -1) {
-            holder.mImageView.setTag(taskPostion);
-        }
+
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(mOnClickListener);
-        if (isLocalData) {
+        if (TextUtils.isEmpty(task.getId())) {
             Glide.with(holder.itemView.getContext()).load(task.getOriginalPath()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);
         } else {
             Glide.with(holder.itemView.getContext()).load(IMAGE_BASE_URL + task.getId()).apply(RequestOptions.centerCropTransform()).into(holder.mImageView);

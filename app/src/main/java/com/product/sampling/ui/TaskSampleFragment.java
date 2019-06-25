@@ -38,6 +38,7 @@ import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskMessage;
 import com.product.sampling.bean.TaskSample;
+import com.product.sampling.bean.Videos;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.LoadDataModel;
@@ -55,9 +56,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -187,7 +186,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             sample.list = new ArrayList<>();
             sample.isLocalData = true;
             taskDetailViewModel.taskEntity.taskSamples.add(sample);
-            mRecyclerView.getAdapter().notifyDataSetChanged();
+            setupRecyclerView(mRecyclerView, taskDetailViewModel.taskEntity.taskSamples, true);
         }
     }
 
@@ -218,12 +217,13 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
 
         if (null == taskDetailViewModel.taskEntity.taskSamples || taskDetailViewModel.taskEntity.taskSamples.isEmpty()) {
-            ToastUtil.showToast(getActivity(), "请创建样品数据");
+            dismissLoadingDialog();
+            com.product.sampling.maputil.ToastUtil.show(getActivity(), "请创建样品数据");
             return;
         }
         for (int i = 0; i < taskDetailViewModel.taskEntity.taskSamples.size(); i++) {
             TaskSample sample = taskDetailViewModel.taskEntity.taskSamples.get(i);
-            if (!sample.isLocalData) continue;
+
             if (TextUtils.isEmpty(sample.getId())) {
                 sample.setId(System.currentTimeMillis() + "");
             }
@@ -233,7 +233,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             multipartBodyBuilder.addFormDataPart("userid", AccountManager.getInstance().getUserId())
                     .addFormDataPart("taskid", taskDetailViewModel.taskEntity.id);
             multipartBodyBuilder.addFormDataPart("id", sample.getId());
-            multipartBodyBuilder.addFormDataPart("samplename", sample.getRemarks());
+            multipartBodyBuilder.addFormDataPart("samplename", sample.getSamplename());
 
             if (i == taskDetailViewModel.taskEntity.taskSamples.size() - 1) {
                 multipartBodyBuilder.addFormDataPart("islastone", "1");
@@ -258,7 +258,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             {
                 HashMap<String, String> samplingInfoMap = sample.samplingInfoMap;
                 //没填的时候默认值
-                multipartBodyBuilder.addFormDataPart("sampling.taskfrom", "1");//抽样单
+
                 if (null != samplingInfoMap && !samplingInfoMap.isEmpty()) {
                     for (String s : samplingInfoMap.keySet()) {
                         if (!s.startsWith("sampling.")) continue;
@@ -293,7 +293,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             {
                 HashMap<String, String> adviceInfoMap = sample.adviceInfoMap;
                 //没填的时候默认值
-                multipartBodyBuilder.addFormDataPart("advice.companyname", "3");
                 if (null != adviceInfoMap && !adviceInfoMap.isEmpty()) {
                     for (String s : adviceInfoMap.keySet()) {
                         if (!s.startsWith("advice.")) continue;
@@ -314,16 +313,24 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 ToastUtil.showToast(getActivity(), "请选择图片");
                 continue;
             }
-            for (Pics entity : list) {
-                File f = new File(entity.getOriginalPath());
+            for (int j = 0; j < list.size(); j++) {
+                Pics pics = list.get(j);
+                if (!TextUtils.isEmpty(pics.getId())) {
+                    multipartBodyBuilder.addFormDataPart("uploadPic[" + j + "].fileid", pics.getId());
+                    multipartBodyBuilder.addFormDataPart("uploadPic[" + j + "].fileStr", pics.getRemarks());
+                    continue;
+                }
+                File f = new File(pics.getOriginalPath());
                 if (!f.exists()) {
                     Log.e("file", f.getAbsolutePath());
                     continue;
                 }
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("picstrs", entity.getRemarks() + "")
-                        .addFormDataPart("uploadpics", f.getName(), requestImage);
+                multipartBodyBuilder.addFormDataPart("uploadPic[" + j + "].fileStr", pics.getRemarks() + "")
+                        .addFormDataPart("uploadPic[" + j + "].fileStream", f.getName(), requestImage);
+
             }
+
             int finalI = i;
             RetrofitService.createApiService(Request.class)
                     .savesampleByBody(multipartBodyBuilder.build())
@@ -481,6 +488,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         SPUtil.put(getActivity(), "tasklist", gson.toJson(listTask));
         if (isRemove) {
             getActivity().finish();
+        } else {
+            com.product.sampling.maputil.ToastUtil.show(getActivity(), "保存成功");
         }
     }
 
@@ -512,15 +521,12 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     }
 
     private void postSceneData() {
-        if (!taskDetailViewModel.taskEntity.isLoadLocalData) return;
-
         MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder();
         multipartBodyBuilder.setType(MultipartBody.FORM);
 
         multipartBodyBuilder.addFormDataPart("userid", AccountManager.getInstance().getUserId())
                 .addFormDataPart("id", taskDetailViewModel.taskEntity.id)
-                .addFormDataPart("taskisok", "0")
-                .addFormDataPart("updateorsave", "0");
+                .addFormDataPart("taskisok", "0");
 
         if (null != MainApplication.INSTANCE.getMyLocation()) {
             multipartBodyBuilder.addFormDataPart("taskaddress", MainApplication.INSTANCE.getMyLocation().getAddress() + "")
@@ -529,8 +535,15 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         }
 
         boolean hasData = false;
-        if (taskDetailViewModel.taskEntity.isLoadLocalData && null != taskDetailViewModel.taskEntity.pics && !taskDetailViewModel.taskEntity.pics.isEmpty()) {
+        if (null != taskDetailViewModel.taskEntity.pics && !taskDetailViewModel.taskEntity.pics.isEmpty()) {
             for (int i = 0; i < taskDetailViewModel.taskEntity.pics.size(); i++) {
+                Pics pics = taskDetailViewModel.taskEntity.pics.get(i);
+                if (!TextUtils.isEmpty(pics.getId())) {
+                    multipartBodyBuilder.addFormDataPart("uploadPic[" + i + "].fileid", pics.getId());
+                    multipartBodyBuilder.addFormDataPart("uploadPic[" + i + "].fileStr", pics.getRemarks());
+
+                    continue;
+                }
                 String path = taskDetailViewModel.taskEntity.pics.get(i).getOriginalPath();
                 if (TextUtils.isEmpty(path)) continue;
                 File f = new File(path);
@@ -539,26 +552,30 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     continue;
                 }
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("picstrs", taskDetailViewModel.taskEntity.pics.get(i).title + "")
-                        .addFormDataPart("uploadpics", f.getName(), requestImage);
+                multipartBodyBuilder.addFormDataPart("uploadPic[" + i + "].fileStr", pics.getRemarks() + "")
+                        .addFormDataPart("uploadPic[" + i + "].fileStream", f.getName(), requestImage);
                 hasData = true;
             }
         }
-        if (taskDetailViewModel.taskEntity.isLoadLocalData && null != taskDetailViewModel.taskEntity.voides && !taskDetailViewModel.taskEntity.voides.isEmpty()) {
+        if (null != taskDetailViewModel.taskEntity.voides && !taskDetailViewModel.taskEntity.voides.isEmpty()) {
 
             for (int i = 0; i < taskDetailViewModel.taskEntity.voides.size(); i++) {
-                if (!taskDetailViewModel.taskEntity.voides.get(i).isLocal) {
+                Videos videos = taskDetailViewModel.taskEntity.voides.get(i);
+                if (!TextUtils.isEmpty(videos.getId())) {
+                    multipartBodyBuilder.addFormDataPart("uploadVedio[" + i + "].fileid", videos.getId());
+                    multipartBodyBuilder.addFormDataPart("uploadVedio[" + i + "].fileStr", videos.getRemarks());
+
                     continue;
                 }
-                File f = new File(taskDetailViewModel.taskEntity.voides.get(i).getPath());
+                File f = new File(videos.getPath());
                 if (!f.exists()) {
                     Log.e("视频", f.getAbsolutePath());
                     com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "无效视频");
                     continue;
                 }
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("videostrs", taskDetailViewModel.taskEntity.voides.get(i).title + "")
-                        .addFormDataPart("uploadvideos", f.getName(), requestImage);
+                multipartBodyBuilder.addFormDataPart("uploadVedio[" + i + "].fileStr", videos.getRemarks() + "")
+                        .addFormDataPart("uploadVedio[" + i + "].fileStream", f.getName(), requestImage);
                 hasData = true;
             }
         }
@@ -646,5 +663,4 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         }
         return pName.contains(packageName);//判断pName中是否有目标程序的包名，有TRUE，没有FALSE
     }
-
 }
