@@ -53,7 +53,6 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="50dp"
-            android:layout_toRightOf="@+id/iv_sort_distance"
             android:background="?selectableItemBackground"
             android:clickable="true"
             android:gravity="center"

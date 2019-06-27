@@ -81,7 +81,7 @@ table.tftable td.signtd{
   box-sizing: border-box;
 }
 .sign>div p{
-  height: 50px;
+  height: 35px;
 }
 .sign>div span{
   display: block;
@@ -98,4 +98,63 @@ table.tftable td.signtd{
     top: -20px;
     right: 10px;
     opacity: 0.8;
+}
+.sign_show{
+  width: 120px;
+  height: 44px;
+  border-bottom: 1px solid #000;
+  display: inline-block;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+#sign_bg{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.2);
+  z-index: 10;
+  display: none;
+}
+#sign_ban{
+  position: fixed;
+  top: 20%;
+  left: 0;
+  right: 0;
+  height: 400px;
+  background-color: #fff;
+  z-index: 100;
+  display: none;
+}
+#sign_ban .title{
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0;
+  border-bottom: 1px solid #CCC;
+}
+#sign_ban .sign_btn{
+  padding-right: 20px;
+  height: 54px;
+}
+#sign_ban .sign_btn div{
+  float: right;
+  height: 44px;
+  font-size: 16px;
+  color: #fff;
+  line-height: 44px;
+  width: 100px;
+  border-radius: 3px;
+  background-color: cornflowerblue;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+}
+#sign_ban .sign_btn div:active{
+  top: 4px;
 }
