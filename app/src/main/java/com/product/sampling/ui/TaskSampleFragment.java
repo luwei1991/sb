@@ -79,7 +79,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     public static final int Select_Handle = 102;
 
     public int selectId = -1;
-
+    public String deleteId = "";
 
     RecyclerView mRecyclerView;
     TaskDetailViewModel taskDetailViewModel;
@@ -524,9 +524,13 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder();
         multipartBodyBuilder.setType(MultipartBody.FORM);
 
+        if (!TextUtils.isEmpty(deleteId) && deleteId.endsWith(",")) {
+            deleteId = deleteId.substring(0, deleteId.length() - 1);
+        }
         multipartBodyBuilder.addFormDataPart("userid", AccountManager.getInstance().getUserId())
                 .addFormDataPart("id", taskDetailViewModel.taskEntity.id)
-                .addFormDataPart("taskisok", "0");
+                .addFormDataPart("taskisok", "0")
+                .addFormDataPart("sampleids", deleteId);
 
         if (null != MainApplication.INSTANCE.getMyLocation()) {
             multipartBodyBuilder.addFormDataPart("taskaddress", MainApplication.INSTANCE.getMyLocation().getAddress() + "")
@@ -541,7 +545,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 if (!TextUtils.isEmpty(pics.getId())) {
                     multipartBodyBuilder.addFormDataPart("uploadPic[" + i + "].fileid", pics.getId());
                     multipartBodyBuilder.addFormDataPart("uploadPic[" + i + "].fileStr", pics.getRemarks());
-
                     continue;
                 }
                 String path = taskDetailViewModel.taskEntity.pics.get(i).getOriginalPath();
@@ -650,7 +653,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     private boolean isAvilible(Context context, String packageName) {
         final PackageManager packageManager = context.getPackageManager();//获取packagemanager
         List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);//获取所有已安装程序的包信息
-        List<String> pName = new ArrayList<String>();//用于存储所有已安装程序的包名
+        List<String> pName = new ArrayList();//用于存储所有已安装程序的包名
         //从pinfo中将包名字逐一取出，压入pName list中
         if (pinfo != null) {
             for (int i = 0; i < pinfo.size(); i++) {

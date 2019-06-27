@@ -11,6 +11,9 @@ public class MediaHelper {
     public static final int REQUEST_IMAGE_CODE = 201;
     public static final int REQUEST_VIDEO_CODE = 202;
 
+
+    public static final int REQUEST_IMAGE_CODE_UNFIND = 203;
+    public static final int REQUEST_IMAGE_CODE_REFUSED = 204;
     /**
      * 取选择图片
      *

@@ -2,6 +2,7 @@ package com.product.sampling.adapter;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -51,7 +52,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //按下确定键后的事件
                                 mData.remove(index);
-                                fragment.onRemove(true, index);
+                                fragment.deleteId = index + ",";
                                 notifyDataSetChanged();
                             }
                         }).setNegativeButton("取消", null).show();
@@ -59,16 +60,25 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             } else if (R.id.btn_edit_check_sheet == view.getId()) {//检查单编辑
 
                 int index = (int) view.getTag();
-                fragment.startActivityForResult(new Intent(view.getContext(), WebViewActivity.class)
-                        .putExtra("task", index)
-                        .putExtra("map", (Serializable) mData.get(index).samplingInfoMap)
-                        .putExtra(Intent_Order, 1), RequestCodePdf);
+                Intent intent = new Intent(view.getContext(), WebViewActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Intent_Order, 1);
+                b.putInt("task", index);
+                b.putSerializable("map", mData.get(index).samplingInfoMap);
+                intent.putExtras(b);
+                fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+
             } else if (R.id.btn_edit_handling_sheet == view.getId()) {//处置单编辑
                 int index = (int) view.getTag();
-                fragment.startActivityForResult(new Intent(view.getContext(), WebViewActivity.class)
-                        .putExtra("task", (int) view.getTag())
-                        .putExtra("map", (Serializable) mData.get(index).adviceInfoMap)
-                        .putExtra(Intent_Order, 2), RequestCodePdf);
+
+                Intent intent = new Intent(view.getContext(), WebViewActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Intent_Order, 2);
+                b.putInt("task", index);
+                b.putSerializable("map", mData.get(index).adviceInfoMap);
+                intent.putExtras(b);
+                fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+
             } else if (R.id.btn_upload_check_sheet == view.getId()) {//检查单上传
                 fragment.selectId = (int) view.getTag();
                 fragment.startGalleryForPdf((int) view.getTag(), Select_Check);
@@ -90,30 +100,13 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         int position = holder.getAdapterPosition() - 1 >= 0 ? holder.getAdapterPosition() - 1 : 0;
 
         holder.mTextViewTitle.setText(TextUtils.isEmpty(task.getSamplename()) ? " " : task.getSamplename());
-        if (task.isLocalData) {
-            holder.mTextViewHandleSheet.setText(task.disposalfile + "");
-            holder.mTextViewCheckSheet.setText(task.samplingfile + "");
-            holder.mImageViewAdd.setVisibility(View.VISIBLE);
-            holder.mBtnEditCheck.setVisibility(View.VISIBLE);
-            holder.mBtnEditHandle.setVisibility(View.VISIBLE);
-            holder.mBtnUploadHandle.setVisibility(View.VISIBLE);
-            holder.mBtnUploadCheck.setVisibility(View.VISIBLE);
-        } else {
-            if (null == task.getAdvice()) {
-                holder.mTextViewHandleSheet.setText("");
-            } else {
-                holder.mTextViewHandleSheet.setText(task.getAdvice().getCreatTime() + "");
-            }
-            if (null == task.getSampling()) {
-                holder.mTextViewCheckSheet.setText("");
-            } else {
-                holder.mTextViewCheckSheet.setText(task.getSampling().getCreateTime() + "");
-            }
-            holder.mBtnEditCheck.setVisibility(View.INVISIBLE);
-            holder.mBtnEditHandle.setVisibility(View.INVISIBLE);
-            holder.mBtnUploadHandle.setVisibility(View.INVISIBLE);
-            holder.mBtnUploadCheck.setVisibility(View.INVISIBLE);
-        }
+        holder.mTextViewHandleSheet.setText(task.disposalfile + "");
+        holder.mTextViewCheckSheet.setText(task.samplingfile + "");
+        holder.mImageViewAdd.setVisibility(View.VISIBLE);
+        holder.mBtnEditCheck.setVisibility(View.VISIBLE);
+        holder.mBtnEditHandle.setVisibility(View.VISIBLE);
+        holder.mBtnUploadHandle.setVisibility(View.VISIBLE);
+        holder.mBtnUploadCheck.setVisibility(View.VISIBLE);
 
 
         holder.mImageViewAdd.setTag(position);
@@ -143,7 +136,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         holder.mRecyclerViewImage.setLayoutManager(linearLayoutManager);
 
-        holder.mRecyclerViewImage.setAdapter(new ImageSampleRecyclerViewAdapter(fragment, task.getPics(), task.isLocalData,position));
+        holder.mRecyclerViewImage.setAdapter(new ImageSampleRecyclerViewAdapter(fragment, task.getPics(), task.isLocalData, position));
 
         linearLayoutManager = new LinearLayoutManager(holder.itemView.getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);

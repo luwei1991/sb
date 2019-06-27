@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
@@ -29,6 +32,7 @@ import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
 import com.product.sampling.adapter.VideoAndTextRecyclerViewAdapter;
 import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.TaskEntity;
+import com.product.sampling.bean.TaskMessage;
 import com.product.sampling.bean.Videos;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
@@ -41,13 +45,16 @@ import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 import com.product.sampling.utils.FileDownloader;
 import com.product.sampling.utils.LogUtils;
 import com.product.sampling.utils.RxSchedulersHelper;
+import com.product.sampling.utils.SPUtil;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,6 +79,8 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
     RecyclerView mRecyclerViewVideoList;
     public static final int Unfind_Sample_Result = 103;
     TextView mTextViewCompanyname;
+    EditText etTips;
+    public TaskEntity taskRefusedEntity = new TaskEntity();
 
     public TaskCompanyRefusedFragment() {
 
@@ -115,12 +124,12 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
         mRecyclerViewVideoList.setLayoutManager(linearLayoutManager);
 
         mTextViewCompanyname = view.findViewById(R.id.tv_companyname);
-
+        etTips = view.findViewById(R.id.remark);
         // 现场照片选择
         view.findViewById(R.id.iv_choose).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MediaHelper.startGallery(fragment, PictureConfig.MULTIPLE, MediaHelper.REQUEST_IMAGE_CODE);
+                MediaHelper.startGallery(fragment, PictureConfig.MULTIPLE, MediaHelper.REQUEST_IMAGE_CODE_REFUSED);
             }
         });
 
@@ -159,10 +168,14 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
         view.findViewById(R.id.btn_edit_handling_sheet).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(view.getContext(), WebViewActivity.class)
-                        .putExtra("task", (Serializable) taskDetailViewModel.taskEntity)
-                        .putExtra("map", (Serializable) taskDetailViewModel.taskEntity.refuseInfoMap)
-                        .putExtra(Intent_Order, 3), TaskSampleRecyclerViewAdapter.RequestCodePdf);
+
+                Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Intent_Order, 3);
+                b.putSerializable("task", (Serializable) taskRefusedEntity);
+                b.putSerializable("map", (Serializable) taskRefusedEntity.refuseInfoMap);
+                intent.putExtras(b);
+                startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
             }
         });
 
@@ -185,24 +198,25 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        taskDetailViewModel = ViewModelProviders.of(getActivity()).get(TaskDetailViewModel.class);
-        mTextViewCompanyname.setText(taskDetailViewModel.taskEntity.companyname);
-        taskDetailViewModel.requestOrderList(AccountManager.getInstance().getUserId(), taskDetailViewModel.taskEntity.id);
+        taskRefusedEntity = (TaskEntity) getArguments().get("task");
+
+        taskDetailViewModel = ViewModelProviders.of(this).get(TaskDetailViewModel.class);
         taskDetailViewModel.orderDetailLiveData.observe(this, new Observer<LoadDataModel<TaskEntity>>() {
             @Override
-            public void onChanged(LoadDataModel<TaskEntity> taskEntityLoadDataModel) {
-                if (taskEntityLoadDataModel.isSuccess()) {
-                    taskDetailViewModel.taskEntity = taskEntityLoadDataModel.getData();
-                    taskDetailViewModel.taskEntity.isLoadLocalData = false;
-
-                    setupRecyclerViewFromServer(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
-                    setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
-                    if (null != taskDetailViewModel.taskEntity.voides && !taskDetailViewModel.taskEntity.voides.isEmpty()) {
+            public void onChanged(LoadDataModel<TaskEntity> taskRefusedEntityLoadDataModel) {
+                if (taskRefusedEntityLoadDataModel.isSuccess()) {
+                    taskRefusedEntity = taskRefusedEntityLoadDataModel.getData();
+                    mTextViewCompanyname.setText(taskRefusedEntity.companyname);
+                    etTips.setText(taskRefusedEntity.remark);
+                    setupRecyclerViewFromServer(mRecyclerViewImageList, taskRefusedEntity.pics);
+                    setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskRefusedEntity.voides);
+                    if (null != taskRefusedEntity.voides && !taskRefusedEntity.voides.isEmpty()) {
                         rxPermissionTest();
                     }
                 }
             }
         });
+        taskDetailViewModel.requestOrderList(AccountManager.getInstance().getUserId(), taskRefusedEntity.id);
     }
 
     @Override
@@ -241,18 +255,18 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                         mediaInfos.add(mediaInfo);
                     }
 
-                    for (int i = taskDetailViewModel.taskEntity.voides.size() - 1; i >= 0; i--) {
-                        if (!taskDetailViewModel.taskEntity.voides.get(i).isLocal) {
-                            taskDetailViewModel.taskEntity.voides.remove(i);
-                        }
-                    }
-                    taskDetailViewModel.taskEntity.isLoadLocalData = true;
-                    taskDetailViewModel.taskEntity.isEditedTaskScene = true;
-                    taskDetailViewModel.taskEntity.voides.addAll(mediaInfos);
-                    setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
+//                    for (int i = taskRefusedEntity.voides.size() - 1; i >= 0; i--) {
+//                        if (!taskRefusedEntity.voides.get(i).isLocal) {
+//                            taskRefusedEntity.voides.remove(i);
+//                        }
+//                    }
+                    taskRefusedEntity.isLoadLocalData = true;
+                    taskRefusedEntity.isEditedTaskScene = true;
+                    taskRefusedEntity.voides.addAll(mediaInfos);
+                    setupRecyclerViewVideo(mRecyclerViewVideoList, taskRefusedEntity.voides);
                 }
                 break;
-                case MediaHelper.REQUEST_IMAGE_CODE: {
+                case MediaHelper.REQUEST_IMAGE_CODE_REFUSED: {
 
 
                     // 图片、视频、音频选择结果回调
@@ -272,16 +286,16 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                         mediaInfo.isLocal = true;
                         mediaInfos.add(mediaInfo);
                     }
-                    for (int i = taskDetailViewModel.taskEntity.pics.size() - 1; i >= 0; i--) {
-                        Pics pics1 = taskDetailViewModel.taskEntity.pics.get(i);
-                        if (!pics1.isLocal) {
-                            taskDetailViewModel.taskEntity.pics.remove(pics1);
-                        }
-                    }
-                    taskDetailViewModel.taskEntity.pics.addAll(mediaInfos);
-                    taskDetailViewModel.taskEntity.isLoadLocalData = true;
-                    taskDetailViewModel.taskEntity.isEditedTaskScene = true;
-                    setupRecyclerView(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
+//                    for (int i = taskRefusedEntity.pics.size() - 1; i >= 0; i--) {
+//                        Pics pics1 = taskRefusedEntity.pics.get(i);
+//                        if (!pics1.isLocal) {
+//                            taskRefusedEntity.pics.remove(pics1);
+//                        }
+//                    }
+                    taskRefusedEntity.pics.addAll(mediaInfos);
+                    taskRefusedEntity.isLoadLocalData = true;
+                    taskRefusedEntity.isEditedTaskScene = true;
+                    setupRecyclerView(mRecyclerViewImageList, taskRefusedEntity.pics);
                 }
                 break;
                 case RequestCodePdf:
@@ -303,8 +317,8 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                                 }
                             }
                             int pos = data.getIntExtra(Intent_Order, 3);
-                            taskDetailViewModel.taskEntity.refusefile = data.getStringExtra("pdf");
-                            taskDetailViewModel.taskEntity.refuseInfoMap = map;
+                            taskRefusedEntity.refusefile = data.getStringExtra("pdf");
+                            taskRefusedEntity.refuseInfoMap = map;
                             shareBySystem(data.getStringExtra("pdf"));
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -315,7 +329,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                 case Unfind_Sample_Result:
                     if (data != null) {
                         List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
-                        taskDetailViewModel.taskEntity.refusepicfile = selectHandle.get(0).getPath();
+                        taskRefusedEntity.refusepicfile = selectHandle.get(0).getPath();
                         shareBySystem(selectHandle.get(0).getPath());
                     }
                     break;
@@ -377,7 +391,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
     }
 
     private void downLoadVideo() {
-        for (Videos videos : taskDetailViewModel.taskEntity.voides) {
+        for (Videos videos : taskRefusedEntity.voides) {
 
             FileDownloader.downloadFile(RetrofitService.createApiService(Request.class).downloadVideo(videos.getId()), Constants.getPath(), videos.getFileName(), new DownloadProgressHandler() {
 
@@ -390,7 +404,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                 @Override
                 public void onCompleted(File file) {
                     videos.setPath(file.getPath());
-                    setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
+                    setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskRefusedEntity.voides);
                     LogUtils.i("下载文件成功", file.getAbsolutePath() + "-" + file.getPath() + "-" + file.getName());
 //                                    FileDownloader.clear();
                 }
@@ -427,9 +441,9 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
         multipartBodyBuilder.setType(MultipartBody.FORM);
 
         multipartBodyBuilder.addFormDataPart("userid", AccountManager.getInstance().getUserId())
-                .addFormDataPart("id", taskDetailViewModel.taskEntity.id)
+                .addFormDataPart("id", taskRefusedEntity.id)
                 .addFormDataPart("taskisok", "1")//任务异常状态0正常1拒检2未抽样到单位
-                .addFormDataPart("updateorsave", "0");//批次数,就是样品种类数 必传 用来判断是否超了总批次,提交的时候请计算下这个任务有几种样品
+                .addFormDataPart("remark", etTips.getText().toString());
 
         if (null != MainApplication.INSTANCE.getMyLocation()) {
             multipartBodyBuilder.addFormDataPart("taskaddress", MainApplication.INSTANCE.getMyLocation().getAddress() + "")
@@ -438,9 +452,17 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
         }
 
         boolean hasData = false;
-        if (null != taskDetailViewModel.taskEntity.pics && !taskDetailViewModel.taskEntity.pics.isEmpty()) {
-            for (int i = 0; i < taskDetailViewModel.taskEntity.pics.size(); i++) {
-                String path = taskDetailViewModel.taskEntity.pics.get(i).getOriginalPath();
+        if (null != taskRefusedEntity.pics && !taskRefusedEntity.pics.isEmpty()) {
+
+            for (int i = 0; i < taskRefusedEntity.pics.size(); i++) {
+                Pics pics = taskRefusedEntity.pics.get(i);
+                if (!TextUtils.isEmpty(pics.getId())) {
+                    multipartBodyBuilder.addFormDataPart("uploadPic[" + i + "].fileStr", pics.getRemarks() + "");
+                    multipartBodyBuilder.addFormDataPart("uploadPic[" + i + "].fileid", pics.getId() + "");
+                    continue;
+
+                }
+                String path = pics.getOriginalPath();
                 if (TextUtils.isEmpty(path)) continue;
                 File f = new File(path);
                 if (!f.exists()) {
@@ -448,37 +470,40 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                     continue;
                 }
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("picstrs", taskDetailViewModel.taskEntity.pics.get(i).getRemarks() + "")
-                        .addFormDataPart("uploadpics", f.getName(), requestImage);
+                multipartBodyBuilder.addFormDataPart("uploadPic[" + i + "].fileStr", pics.getRemarks() + "")
+                        .addFormDataPart("uploadPic[" + i + "].fileStream", f.getName(), requestImage);
                 hasData = true;
             }
         }
-        if (null != taskDetailViewModel.taskEntity.voides && !taskDetailViewModel.taskEntity.voides.isEmpty()) {
+        if (null != taskRefusedEntity.voides && !taskRefusedEntity.voides.isEmpty()) {
 
-            for (int i = 0; i < taskDetailViewModel.taskEntity.voides.size(); i++) {
-                if (!taskDetailViewModel.taskEntity.voides.get(i).isLocal) {
+            for (int i = 0; i < taskRefusedEntity.voides.size(); i++) {
+                Videos videos = taskRefusedEntity.voides.get(i);
+                if (!TextUtils.isEmpty(videos.getId())) {
+                    multipartBodyBuilder.addFormDataPart("uploadVedio[" + i + "].fileStr", videos.getRemarks() + "");
+                    multipartBodyBuilder.addFormDataPart("uploadVedio[" + i + "].fileid", videos.getId() + "");
                     continue;
                 }
-                File f = new File(taskDetailViewModel.taskEntity.voides.get(i).getPath());
+                File f = new File(taskRefusedEntity.voides.get(i).getPath());
                 if (!f.exists()) {
                     Log.e("视频", f.getAbsolutePath());
                     com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "无效视频");
                     continue;
                 }
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("videostrs", taskDetailViewModel.taskEntity.voides.get(i).getRemarks() + "")
-                        .addFormDataPart("uploadvideos", f.getName(), requestImage);
+                multipartBodyBuilder.addFormDataPart("uploadVedio[" + i + "].fileStr", videos.getRemarks() + "")
+                        .addFormDataPart("uploadVedio[" + i + "].fileStream", f.getName(), requestImage);
                 hasData = true;
             }
         }
-        if (null != taskDetailViewModel.taskEntity.taskSamples && !taskDetailViewModel.taskEntity.taskSamples.isEmpty()) {
-            multipartBodyBuilder.addFormDataPart("samplecount", taskDetailViewModel.taskEntity.taskSamples.size() + "");
+        if (null != taskRefusedEntity.taskSamples && !taskRefusedEntity.taskSamples.isEmpty()) {
+            multipartBodyBuilder.addFormDataPart("samplecount", taskRefusedEntity.taskSamples.size() + "");
         } else {
             multipartBodyBuilder.addFormDataPart("samplecount", "0");
         }
 
         {
-            File refusefile = new File(taskDetailViewModel.taskEntity.refusefile);
+            File refusefile = new File(taskRefusedEntity.refusefile);
             if (refusefile.exists()) {
                 Log.e("file", refusefile.getAbsolutePath());
                 RequestBody requestFile = RequestBody.create(MultipartBody.FORM, refusefile);//把文件与类型放入请求体
@@ -487,25 +512,18 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
         }
 
         {
-            HashMap<String, String> refuseInfoMap = taskDetailViewModel.taskEntity.refuseInfoMap;
-            //没填的时候默认值
-            multipartBodyBuilder.addFormDataPart("refuse.taskfrom", "1");//抽样单
+            HashMap<String, String> refuseInfoMap = taskRefusedEntity.refuseInfoMap;
             if (null != refuseInfoMap && !refuseInfoMap.isEmpty()) {
                 for (String s : refuseInfoMap.keySet()) {
                     if (!s.startsWith("refuse.")) continue;
-                    try {
-                        String value = URLEncoder.encode(refuseInfoMap.get(s) + "", "Utf-8");
-                        multipartBodyBuilder.addFormDataPart(s, value);//抽样单
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
+                    multipartBodyBuilder.addFormDataPart(s, refuseInfoMap.get(s)+"");//抽样单
                 }
             }
         }
 
 
         {
-            File refusepicfile = new File(taskDetailViewModel.taskEntity.refusepicfile);
+            File refusepicfile = new File(taskRefusedEntity.refusepicfile);
             if (refusepicfile.exists()) {
                 Log.e("file", refusepicfile.getAbsolutePath());
                 RequestBody requestFile = RequestBody.create(MultipartBody.FORM, refusepicfile);//把文件与类型放入请求体
@@ -514,10 +532,10 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
         }
 
 
-        if (!hasData) {
+//        if (!hasData) {
 //            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "请先选择图片或者视频");
-            return;
-        }
+//            return;
+//        }
         showLoadingDialog();
         RetrofitService.createApiService(Request.class)
                 .uploadtaskinfo(multipartBodyBuilder.build())
@@ -527,7 +545,8 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                     @Override
                     public void onSuccess(String s) {
                         dismissLoadingDialog();
-                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加成功,现场id为" + s);
+                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加成功");
+                        EventBus.getDefault().post(TaskMessage.getInstance(taskRefusedEntity.id));
                     }
 
                     @Override
@@ -535,6 +554,8 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                         super.onFailure(code, message);
                         dismissLoadingDialog();
                         com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), message);
+                        saveTaskInLocalFile(true);
+                        EventBus.getDefault().post(TaskMessage.getInstance(taskRefusedEntity.id));
                     }
 
                     @Override
@@ -542,7 +563,32 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                         super.onSubscribe(d);
                     }
                 });
+    }
 
-
+    private void saveTaskInLocalFile(boolean isRemove) {
+        Gson gson = new Gson();
+        ArrayList<TaskEntity> listTask = new ArrayList<>();
+        String taskListStr = (String) SPUtil.get(getActivity(), "tasklist", "");
+        if (!TextUtils.isEmpty(taskListStr)) {
+            Type listType = new TypeToken<List<TaskEntity>>() {
+            }.getType();
+            listTask = gson.fromJson(taskListStr, listType);
+            if (null != listTask && !listTask.isEmpty()) {
+                for (int i = 0; i < listTask.size(); i++) {
+                    if (listTask.get(i).id.equals(taskRefusedEntity.id)) {
+                        listTask.remove(i);
+                    }
+                }
+            }
+        }
+        if (!isRemove) {
+            listTask.add(taskRefusedEntity);
+        }
+        SPUtil.put(getActivity(), "tasklist", gson.toJson(listTask));
+        if (isRemove) {
+            getActivity().finish();
+        } else {
+            com.product.sampling.maputil.ToastUtil.show(getActivity(), "保存成功");
+        }
     }
 }

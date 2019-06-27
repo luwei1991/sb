@@ -14,12 +14,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.product.sampling.R;
 import com.product.sampling.bean.ImageItem;
 import com.product.sampling.bean.TaskEntity;
+import com.product.sampling.manager.AccountManager;
+import com.product.sampling.net.LoadDataModel;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 import com.product.sampling.ui.viewmodel.TaskExecptionViewModel;
@@ -50,8 +53,6 @@ public class TaskExceptionActivity extends BaseActivity {
         task = (TaskEntity) bundle.getSerializable("task");//读出数据
 
         taskDetailViewModel = ViewModelProviders.of(this).get(TaskDetailViewModel.class);
-        taskDetailViewModel.taskEntity = task;
-
 //        View recyclerView = findViewById(R.id.item_image_list);
 //        assert recyclerView != null;
 //        List list = new ArrayList();
@@ -60,8 +61,6 @@ public class TaskExceptionActivity extends BaseActivity {
 //        }
         taskUnfindSampleFragment = TaskUnfindSampleFragment.newInstance(task);
         taskCompanyRefusedFragment = TaskCompanyRefusedFragment.newInstance(task);
-//        currentFragment = taskUnfindSampleFragment;
-
         RadioGroup rb = findViewById(R.id.rg1);
         rb.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

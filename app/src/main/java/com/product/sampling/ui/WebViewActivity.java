@@ -53,7 +53,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class WebViewActivity extends AppCompatActivity {
-    public static final String Intent_Order = "order";
+    public static final String Intent_Order = "order_pdf";
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private final int QualityMiddle = 1;
     private final int QualitySmall = 2;
@@ -65,7 +65,8 @@ public class WebViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
         webView = this.findViewById(R.id.webView);
-        int pos = getIntent().getIntExtra(Intent_Order, 1);
+        Bundle bundle = this.getIntent().getExtras(); //读取intent的数据给bundle对象
+        int pos = bundle.getInt(Intent_Order);
         if (1 == pos) {
             webView.loadUrl("file:///android_asset/1产品质量监督抽查-复查抽样单.html");
         } else if (2 == pos) {

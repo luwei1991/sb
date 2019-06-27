@@ -165,7 +165,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
             }
         }
         if (!hasData) {
-//            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "请先选择图片或者视频");
+            ((TaskDetailActivity) getActivity()).checkSelectMenu(3);
             return;
         }
 

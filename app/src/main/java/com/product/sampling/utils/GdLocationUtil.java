@@ -59,7 +59,8 @@ public class GdLocationUtil {
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         mLocationOption.setHttpTimeOut(20000);
         mLocationClient.setLocationOption(mLocationOption);
-        mLocationOption.setInterval(2000);
+        //设置定位间隔,单位毫秒,默认为2000ms
+        mLocationOption.setInterval(120000);
     }
 
 

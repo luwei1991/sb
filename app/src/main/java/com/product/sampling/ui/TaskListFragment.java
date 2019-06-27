@@ -92,6 +92,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         });
         EventBus.getDefault().register(this);
         if (getArguments().getString(ARG_TASK_STATUS).equals("-1")) {
+
             assert recyclerView != null;
             String taskList = (String) SPUtil.get(getActivity(), "tasklist", "");
             if (!TextUtils.isEmpty(taskList)) {
@@ -125,6 +126,9 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         mViewDistance.setOnClickListener(this);
         spinnerProvince = rootView.findViewById(R.id.spinner_type);
         spinnerCity = rootView.findViewById(R.id.spinner_area);
+        if (getArguments().getString(ARG_TASK_STATUS).equals("-1")) {
+            rootView.findViewById(R.id.rl_menu).setVisibility(View.GONE);
+        }
         return rootView;
     }
 
@@ -148,10 +152,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // TODO 选择地区刷新列表
-                if (!Constants.DEBUG) {
-                    getData();
-                }
+                getData();
             }
 
             @Override
@@ -166,24 +167,17 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
     private void getData() {
         Bundle b = getArguments();
         String status = b.getString(ARG_TASK_STATUS);
-        TaskProvince province = (TaskProvince) spinnerProvince.getSelectedItem();
         TaskCity city = (TaskCity) spinnerCity.getSelectedItem();
-        String ordertype = isDistanceFromLowToHigh ? "1" : "0";
-        if (null == province) {
-            province = new TaskProvince();
-        }
+        String ordertype = isDistanceFromLowToHigh ? 1+"" : 0+"";
         if (null == city) {
             city = new TaskCity();
         }
-        // TODO 根据条件筛选任务
-        if (Constants.DEBUG) {
-            province = new TaskProvince();
+        if(Constants.DEBUG){
             city = new TaskCity();
             ordertype = "";
         }
-
         RetrofitService.createApiService(Request.class)
-                .taskList(AccountManager.getInstance().getUserId(), status, ordertype, province.id, city.id)
+                .taskList(AccountManager.getInstance().getUserId(), status, ordertype, city.id)
                 .compose(RxSchedulersHelper.io_main())
                 .compose(RxSchedulersHelper.ObsHandHttpResult())
                 .subscribe(new ZBaseObserver<List<TaskEntity>>() {

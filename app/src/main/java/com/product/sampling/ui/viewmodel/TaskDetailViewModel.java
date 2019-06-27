@@ -86,4 +86,17 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
                 });
     }
 
+    public void uploadaddress(String userid, double latitude, double longitude) {
+        RetrofitService.createApiService(Request.class)
+                .uploadaddress(userid, longitude + "", latitude + "")
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+
+                    }
+                });
+    }
+
 }

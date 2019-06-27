@@ -127,7 +127,7 @@ public class BaseActivity extends AppCompatActivity implements EasyPermissions.P
     }
 
     private void initLocation() {
-        GdLocationUtil.getInstance().startOnceLocation(aMapLocationListener);
+        GdLocationUtil.getInstance().startContinueLocation(aMapLocationListener);
     }
 
     @Override
