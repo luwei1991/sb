@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskProvince;
 import com.product.sampling.bean.TaskSample;
+import com.product.sampling.httpmoudle.BaseHttpResult;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.net.LoadDataModel;
 import com.product.sampling.net.ZBaseObserver;
@@ -90,10 +91,15 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
         RetrofitService.createApiService(Request.class)
                 .uploadaddress(userid, longitude + "", latitude + "")
                 .compose(RxSchedulersHelper.io_main())
-                .compose(RxSchedulersHelper.ObsHandHttpResult())
-                .subscribe(new ZBaseObserver<String>() {
+//                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<BaseHttpResult>() {
                     @Override
-                    public void onSuccess(String s) {
+                    public void onError(Throwable t) {
+                        super.onError(t);
+                    }
+
+                    @Override
+                    public void onSuccess(BaseHttpResult result) {
 
                     }
                 });

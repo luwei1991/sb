@@ -60,7 +60,7 @@ public class GdLocationUtil {
         mLocationOption.setHttpTimeOut(20000);
         mLocationClient.setLocationOption(mLocationOption);
         //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(120000);
+        mLocationOption.setInterval(60 * 2000);
     }
 
 

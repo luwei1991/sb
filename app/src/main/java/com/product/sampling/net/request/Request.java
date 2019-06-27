@@ -104,10 +104,8 @@ public interface Request {
     @POST("app/task/savesample")
     Observable<BaseHttpResult<String>> savesampleByBody(@Body MultipartBody file);
 
-
-    @Multipart
-    @POST("app/task/uploadaddress")
-    Observable<BaseHttpResult<String>> uploadaddress(@Query("userid") String userid, @Query("longitude") String longitude,@Query("latitude") String latitude);
+    @GET("app/user/uploadaddress")
+    Observable<BaseHttpResult> uploadaddress(@Query("userid") String userid, @Query("longitude") String longitude,@Query("latitude") String latitude);
 
     @GET("app/task/taskdetail")
     Observable<BaseHttpResult<TaskEntity>> taskdetail(@Query("userid") String userid, @Query("id") String id);
