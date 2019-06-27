@@ -41,7 +41,6 @@ public class MainApplication extends Application {
     @Override
     public void onTerminate() {
         super.onTerminate();
-        Log.i("mzh", "onTerminate");
         //停止定位服务
         GdLocationUtil.getInstance().destoryLocationService();
     }
