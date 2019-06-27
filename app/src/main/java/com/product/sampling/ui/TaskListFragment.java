@@ -133,6 +133,13 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
     }
 
     void setCity(ArrayList<TaskProvince> listCity) {
+        TaskProvince taskProvince = new TaskProvince();
+        taskProvince.name = "全部";
+        taskProvince.shicitys = new ArrayList<>();
+        TaskCity taskCity = new TaskCity();
+        taskCity.name = "全部";
+        taskProvince.shicitys.add(taskCity);
+        listCity.add(0, taskProvince);
         SpinnerSimpleAdapter coinSpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listCity);
         SpinnerSimpleAdapter areaSpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listCity.get(0).shicitys);
 
@@ -160,22 +167,23 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
 
             }
         });
-        spinnerProvince.setSelection(0);
-        spinnerCity.setSelection(0);
+//        spinnerProvince.setSelection(0);
+//        spinnerCity.setSelection(0);
+        spinnerProvince.setPrompt("省");
+        spinnerCity.setPrompt("市");
+
     }
 
     private void getData() {
         Bundle b = getArguments();
         String status = b.getString(ARG_TASK_STATUS);
         TaskCity city = (TaskCity) spinnerCity.getSelectedItem();
-        String ordertype = isDistanceFromLowToHigh ? 1+"" : 0+"";
-        if (null == city) {
+        String ordertype = isDistanceFromLowToHigh ? 1 + "" : 0 + "";
+        TaskProvince province = (TaskProvince) spinnerProvince.getSelectedItem();
+        if (null == city || (null != province && "全部".equals(province.name))) {
             city = new TaskCity();
         }
-        if(Constants.DEBUG){
-            city = new TaskCity();
-            ordertype = "";
-        }
+        ordertype = "";
         RetrofitService.createApiService(Request.class)
                 .taskList(AccountManager.getInstance().getUserId(), status, ordertype, city.id)
                 .compose(RxSchedulersHelper.io_main())
