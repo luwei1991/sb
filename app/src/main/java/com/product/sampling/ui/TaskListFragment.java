@@ -133,13 +133,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
     }
 
     void setCity(ArrayList<TaskProvince> listCity) {
-        TaskProvince taskProvince = new TaskProvince();
-        taskProvince.name = "全部";
-        taskProvince.shicitys = new ArrayList<>();
-        TaskCity taskCity = new TaskCity();
-        taskCity.name = "全部";
-        taskProvince.shicitys.add(taskCity);
-        listCity.add(0, taskProvince);
+
         SpinnerSimpleAdapter coinSpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listCity);
         SpinnerSimpleAdapter areaSpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listCity.get(0).shicitys);
 
@@ -167,8 +161,8 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
 
             }
         });
-//        spinnerProvince.setSelection(0);
-//        spinnerCity.setSelection(0);
+        spinnerProvince.setSelection(0);
+        spinnerCity.setSelection(0);
         spinnerProvince.setPrompt("省");
         spinnerCity.setPrompt("市");
 

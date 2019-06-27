@@ -214,8 +214,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     }
 
     private void postSampleData() {
-
-
         if (null == taskDetailViewModel.taskEntity.taskSamples || taskDetailViewModel.taskEntity.taskSamples.isEmpty()) {
             dismissLoadingDialog();
             com.product.sampling.maputil.ToastUtil.show(getActivity(), "请创建样品数据");
@@ -332,6 +330,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             }
 
             int finalI = i;
+            setLoadingText("样品信息提交中");
             RetrofitService.createApiService(Request.class)
                     .savesampleByBody(multipartBodyBuilder.build())
                     .compose(RxSchedulersHelper.io_main())
@@ -588,33 +587,30 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             multipartBodyBuilder.addFormDataPart("samplecount", "0");
         }
         showLoadingDialog();
-        if (hasData) {
-            RetrofitService.createApiService(Request.class)
-                    .uploadtaskinfo(multipartBodyBuilder.build())
-                    .compose(RxSchedulersHelper.io_main())
-                    .compose(RxSchedulersHelper.ObsHandHttpResult())
-                    .subscribe(new ZBaseObserver<String>() {
-                        @Override
-                        public void onSuccess(String s) {
-                            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加现场信息成功");
-                            postSampleData();
-                        }
+        setLoadingText("现场信息提交中");
+        RetrofitService.createApiService(Request.class)
+                .uploadtaskinfo(multipartBodyBuilder.build())
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加现场信息成功");
+                        postSampleData();
+                    }
 
-                        @Override
-                        public void onFailure(int code, String message) {
-                            super.onFailure(code, message);
-                            dismissLoadingDialog();
-                            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), message);
-                        }
+                    @Override
+                    public void onFailure(int code, String message) {
+                        super.onFailure(code, message);
+                        dismissLoadingDialog();
+                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), message);
+                    }
 
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            super.onSubscribe(d);
-                        }
-                    });
-        } else {
-            postSampleData();
-        }
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        super.onSubscribe(d);
+                    }
+                });
     }
 
     @Override

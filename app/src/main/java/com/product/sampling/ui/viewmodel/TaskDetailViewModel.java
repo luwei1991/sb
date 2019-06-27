@@ -2,6 +2,7 @@ package com.product.sampling.ui.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.product.sampling.bean.TaskCity;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskProvince;
 import com.product.sampling.bean.TaskSample;
@@ -52,6 +53,13 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
 
                     @Override
                     public void onSuccess(List<TaskProvince> taskProvinces) {
+                        TaskProvince taskProvince = new TaskProvince();
+                        taskProvince.name = "全部";
+                        taskProvince.shicitys = new ArrayList<>();
+                        TaskCity taskCity = new TaskCity();
+                        taskCity.name = "全部";
+                        taskProvince.shicitys.add(taskCity);
+                        taskProvinces.add(0, taskProvince);
                         cityListLiveData.postValue(new LoadDataModel(taskProvinces));
                     }
                 });

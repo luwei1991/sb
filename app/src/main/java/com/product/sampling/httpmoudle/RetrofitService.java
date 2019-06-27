@@ -33,7 +33,7 @@ public class RetrofitService {
         loggingInterceptor.setLevel(Constants.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
 
         RetrofitHttpClient.getInstance()
-                .setConnectTimeout(10 * 1000)
+                .setConnectTimeout(60 * 1000)
                 .setRetryDelay(500)//每次延时500ms重试
                 .setRetryIncreaseDelay(500)//每次延时叠加500ms
                 .setCertificates()//信任所有证书

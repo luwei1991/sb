@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -547,6 +548,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                         dismissLoadingDialog();
                         com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加成功");
                         EventBus.getDefault().post(TaskMessage.getInstance(taskRefusedEntity.id));
+                        saveTaskInLocalFile(true);
                     }
 
                     @Override
@@ -554,7 +556,6 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                         super.onFailure(code, message);
                         dismissLoadingDialog();
                         com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), message);
-                        saveTaskInLocalFile(true);
                         EventBus.getDefault().post(TaskMessage.getInstance(taskRefusedEntity.id));
                     }
 
@@ -566,25 +567,29 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
     }
 
     private void saveTaskInLocalFile(boolean isRemove) {
-        Gson gson = new Gson();
-        ArrayList<TaskEntity> listTask = new ArrayList<>();
-        String taskListStr = (String) SPUtil.get(getActivity(), "tasklist", "");
-        if (!TextUtils.isEmpty(taskListStr)) {
-            Type listType = new TypeToken<List<TaskEntity>>() {
-            }.getType();
-            listTask = gson.fromJson(taskListStr, listType);
-            if (null != listTask && !listTask.isEmpty()) {
-                for (int i = 0; i < listTask.size(); i++) {
-                    if (listTask.get(i).id.equals(taskRefusedEntity.id)) {
-                        listTask.remove(i);
+        try {
+            Gson gson = new Gson();
+            ArrayList<TaskEntity> listTask = new ArrayList<>();
+            String taskListStr = (String) SPUtil.get(getActivity(), "tasklist", "");
+            if (!TextUtils.isEmpty(taskListStr)) {
+                Type listType = new TypeToken<List<TaskEntity>>() {
+                }.getType();
+                listTask = gson.fromJson(taskListStr, listType);
+                if (null != listTask && !listTask.isEmpty()) {
+                    for (int i = 0; i < listTask.size(); i++) {
+                        if (listTask.get(i).id.equals(taskRefusedEntity.id)) {
+                            listTask.remove(i);
+                        }
                     }
                 }
             }
+            if (!isRemove) {
+                listTask.add(taskRefusedEntity);
+            }
+            SPUtil.put(getActivity(), "tasklist", gson.toJson(listTask));
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
         }
-        if (!isRemove) {
-            listTask.add(taskRefusedEntity);
-        }
-        SPUtil.put(getActivity(), "tasklist", gson.toJson(listTask));
         if (isRemove) {
             getActivity().finish();
         } else {

@@ -187,6 +187,7 @@ public abstract class BasePhotoFragment extends TakePhotoFragment {
         }
         alertDialog = new AlertDialog.Builder(getActivity()).create();
         alertDialog.setCancelable(true);
+        alertDialog.setMessage("提交中");
         alertDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
             @Override
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
@@ -200,6 +201,12 @@ public abstract class BasePhotoFragment extends TakePhotoFragment {
         alertDialog.setCanceledOnTouchOutside(true);
     }
 
+    public void setLoadingText(String msg) {
+        if (null != alertDialog) {
+            alertDialog.setMessage(msg);
+        }
+    }
+
     public void dismissLoadingDialog() {
         if (null != alertDialog && alertDialog.isShowing()) {
             alertDialog.dismiss();
@@ -208,10 +215,13 @@ public abstract class BasePhotoFragment extends TakePhotoFragment {
 
     public void onRefreshTitle(boolean isImage, int index, String text) {
     }
+
     public void onRefreshSampleImageTitle(int samplePos, int index, String text) {
     }
+
     public void onRemoveSampleImage(int samplePos, int index) {
     }
+
     public void onRemove(boolean isImage, int index) {
     }
 

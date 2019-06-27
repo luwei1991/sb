@@ -51,8 +51,8 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //按下确定键后的事件
+                                fragment.deleteId = mData.get(index).getId() + ",";
                                 mData.remove(index);
-                                fragment.deleteId = index + ",";
                                 notifyDataSetChanged();
                             }
                         }).setNegativeButton("取消", null).show();
