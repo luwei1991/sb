@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.view.KeyEvent;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
@@ -24,6 +25,7 @@ import org.devio.takephoto.model.TImage;
 import org.devio.takephoto.model.TResult;
 import org.devio.takephoto.model.TakePhotoOptions;
 import org.devio.takephoto.permission.TakePhotoInvocationHandler;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -187,7 +189,6 @@ public abstract class BasePhotoFragment extends TakePhotoFragment {
         }
         alertDialog = new AlertDialog.Builder(getActivity()).create();
         alertDialog.setCancelable(true);
-        alertDialog.setMessage("提交中");
         alertDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
             @Override
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
@@ -203,7 +204,10 @@ public abstract class BasePhotoFragment extends TakePhotoFragment {
 
     public void setLoadingText(String msg) {
         if (null != alertDialog) {
-            alertDialog.setMessage(msg);
+            TextView textView = alertDialog.findViewById(R.id.tv_title);
+            if (null != textView) {
+                textView.setText(msg);
+            }
         }
     }
 
