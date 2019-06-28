@@ -20,6 +20,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
@@ -32,6 +35,8 @@ import com.product.sampling.adapter.ImageServerRecyclerViewAdapter;
 import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
 import com.product.sampling.adapter.VideoAndTextRecyclerViewAdapter;
 import com.product.sampling.bean.Pics;
+import com.product.sampling.bean.Refuse;
+import com.product.sampling.bean.Sampling;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskMessage;
 import com.product.sampling.bean.Videos;
@@ -60,6 +65,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.disposables.Disposable;
 import okhttp3.MultipartBody;
@@ -214,10 +220,23 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                     if (null != taskRefusedEntity.voides && !taskRefusedEntity.voides.isEmpty()) {
                         rxPermissionTest();
                     }
+                    if (null != taskRefusedEntity.refuse) {
+                        Gson gson = new Gson();
+                        String obj1 = gson.toJson(taskRefusedEntity.refuse);
+                        JsonObject object = new JsonParser().parse(obj1).getAsJsonObject();
+                        HashMap<String, String> map = new HashMap();
+                        for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                            map.put("refuse." + entry.getKey(), entry.getValue().getAsString());
+                        }
+                        taskRefusedEntity.refuseInfoMap = map;
+                    }
+
                 }
             }
         });
-        taskDetailViewModel.requestOrderList(AccountManager.getInstance().getUserId(), taskRefusedEntity.id);
+        taskDetailViewModel.requestOrderList(AccountManager.getInstance().
+
+                getUserId(), taskRefusedEntity.id);
     }
 
     @Override
@@ -517,7 +536,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
             if (null != refuseInfoMap && !refuseInfoMap.isEmpty()) {
                 for (String s : refuseInfoMap.keySet()) {
                     if (!s.startsWith("refuse.")) continue;
-                    multipartBodyBuilder.addFormDataPart(s, refuseInfoMap.get(s)+"");//抽样单
+                    multipartBodyBuilder.addFormDataPart(s, refuseInfoMap.get(s) + "");//抽样单
                 }
             }
         }

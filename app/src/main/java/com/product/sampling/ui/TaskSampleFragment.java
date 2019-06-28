@@ -214,6 +214,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 if (taskEntityLoadDataModel.isSuccess()) {
 
                     taskDetailViewModel.taskEntity.taskSamples = taskEntityLoadDataModel.getData();
+                    setupRecyclerView(mRecyclerView, taskDetailViewModel.taskEntity.taskSamples, false);
                     for (TaskSample taskSample : taskDetailViewModel.taskEntity.taskSamples) {
                         {
                             Sampling sampling = taskSample.sampling;
@@ -241,8 +242,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                         }
 
                     }
-
-                    setupRecyclerView(mRecyclerView, taskDetailViewModel.taskEntity.taskSamples, false);
                 }
             }
         });

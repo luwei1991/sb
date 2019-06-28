@@ -21,6 +21,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
@@ -61,6 +64,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.disposables.Disposable;
 import okhttp3.MultipartBody;
@@ -216,6 +220,16 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                     setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskUnFindEntity.voides);
                     if (null != taskUnFindEntity.voides && !taskUnFindEntity.voides.isEmpty()) {
                         rxPermissionTest();
+                    }
+                    if (null != taskUnFindEntity.unfind) {
+                        Gson gson = new Gson();
+                        String obj1 = gson.toJson(taskUnFindEntity.unfind);
+                        JsonObject object = new JsonParser().parse(obj1).getAsJsonObject();
+                        HashMap<String, String> map = new HashMap();
+                        for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                            map.put("unfind." + entry.getKey(), entry.getValue().getAsString());
+                        }
+                        taskUnFindEntity.unfindSampleInfoMap = map;
                     }
                 }
             }
