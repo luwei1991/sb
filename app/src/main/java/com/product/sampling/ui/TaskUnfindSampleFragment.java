@@ -468,7 +468,6 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                     .addFormDataPart("latitude", MainApplication.INSTANCE.getMyLocation().getLatitude() + "");
         }
 
-        boolean hasData = false;
         if (null != taskUnFindEntity.pics && !taskUnFindEntity.pics.isEmpty()) {
             for (int i = 0; i < taskUnFindEntity.pics.size(); i++) {
                 Pics pics = taskUnFindEntity.pics.get(i);
@@ -489,7 +488,6 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
 
                 multipartBodyBuilder.addFormDataPart("uploadPic[" + i + "].fileStr", pics.getRemarks() + "")
                         .addFormDataPart("uploadPic[" + i + "].fileStream", f.getName(), requestImage);
-                hasData = true;
             }
         }
         if (null != taskUnFindEntity.voides && !taskUnFindEntity.voides.isEmpty()) {
@@ -510,7 +508,6 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
                 multipartBodyBuilder.addFormDataPart("uploadVedio[" + i + "].fileStr", videos.getRemarks() + "")
                         .addFormDataPart("uploadVedio[" + i + "].fileStream", f.getName(), requestImage);
-                hasData = true;
             }
         }
         if (null != taskUnFindEntity.taskSamples && !taskUnFindEntity.taskSamples.isEmpty()) {
