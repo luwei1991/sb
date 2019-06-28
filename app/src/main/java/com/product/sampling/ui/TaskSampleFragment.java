@@ -28,13 +28,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.product.sampling.R;
 import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
+import com.product.sampling.bean.Advice;
 import com.product.sampling.bean.Pics;
+import com.product.sampling.bean.Sampling;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskMessage;
 import com.product.sampling.bean.TaskSample;
@@ -60,6 +65,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.disposables.Disposable;
 import okhttp3.MultipartBody;
@@ -206,7 +212,36 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             @Override
             public void onChanged(LoadDataModel<List<TaskSample>> taskEntityLoadDataModel) {
                 if (taskEntityLoadDataModel.isSuccess()) {
+
                     taskDetailViewModel.taskEntity.taskSamples = taskEntityLoadDataModel.getData();
+                    for (TaskSample taskSample : taskDetailViewModel.taskEntity.taskSamples) {
+                        {
+                            Sampling sampling = taskSample.sampling;
+                            if (null != sampling) {
+                                Gson gson = new Gson();
+                                String obj1 = gson.toJson(sampling);
+                                JsonObject object = new JsonParser().parse(obj1).getAsJsonObject();
+                                HashMap<String, String> map = new HashMap();
+                                for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                                    map.put("sampling." + entry.getKey(), entry.getValue().getAsString());
+                                }
+                                taskSample.samplingInfoMap = map;
+                            }
+                        }
+                        Advice advice = taskSample.advice;
+                        if (null != advice) {
+                            Gson gson = new Gson();
+                            String obj2 = gson.toJson(advice);
+                            JsonObject object = new JsonParser().parse(obj2).getAsJsonObject();
+                            HashMap<String, String> map = new HashMap();
+                            for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                                map.put("advice." + entry.getKey(), entry.getValue().getAsString());
+                            }
+                            taskSample.adviceInfoMap = map;
+                        }
+
+                    }
+
                     setupRecyclerView(mRecyclerView, taskDetailViewModel.taskEntity.taskSamples, false);
                 }
             }
@@ -537,7 +572,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     .addFormDataPart("latitude", MainApplication.INSTANCE.getMyLocation().getLatitude() + "");
         }
 
-        boolean hasData = false;
         if (null != taskDetailViewModel.taskEntity.pics && !taskDetailViewModel.taskEntity.pics.isEmpty()) {
             for (int i = 0; i < taskDetailViewModel.taskEntity.pics.size(); i++) {
                 Pics pics = taskDetailViewModel.taskEntity.pics.get(i);
@@ -556,7 +590,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
                 multipartBodyBuilder.addFormDataPart("uploadPic[" + i + "].fileStr", pics.getRemarks() + "")
                         .addFormDataPart("uploadPic[" + i + "].fileStream", f.getName(), requestImage);
-                hasData = true;
             }
         }
         if (null != taskDetailViewModel.taskEntity.voides && !taskDetailViewModel.taskEntity.voides.isEmpty()) {
@@ -578,7 +611,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
                 multipartBodyBuilder.addFormDataPart("uploadVedio[" + i + "].fileStr", videos.getRemarks() + "")
                         .addFormDataPart("uploadVedio[" + i + "].fileStream", f.getName(), requestImage);
-                hasData = true;
             }
         }
         if (null != taskDetailViewModel.taskEntity.taskSamples && !taskDetailViewModel.taskEntity.taskSamples.isEmpty()) {

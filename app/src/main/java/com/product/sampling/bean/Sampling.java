@@ -1,18 +1,20 @@
 package com.product.sampling.bean;
 
 public class Sampling {
-
     /**
-     * id : a9bbb11d66cb49cb8707b64c121b3e12
-     * isNewRecord : false
+     * id : null
+     * isNewRecord : true
      * remarks : null
      * createDate : null
      * updateDate : null
-     * taskfrom : 1
+     * taskfrom : null
      * tasktype : null
-     * addressandname : null
+     * inspectedname : null
+     * inspectedaddress : Hxhxh
+     * inspectedman : null
+     * inspectedtel : null
      * representative : null
-     * producename : null
+     * producename : Jxjx
      * produceaddress : null
      * producezipcode : null
      * prepresentative : null
@@ -34,7 +36,7 @@ public class Sampling {
      * productlevel : null
      * productpl : null
      * dostandard : null
-     * dotime : null
+     * dotime : 2019-01-26 16:02:16
      * encapsulationstate : null
      * rvandfc : null
      * sendaddress : null
@@ -54,21 +56,25 @@ public class Sampling {
      * reportcode : null
      * taskcode : null
      * createMan : d444d03c23ca4a75aae89c81dbcbcdf6
-     * createTime : 2019-05-28 13:34:41
-     * deleteFlag : 0
+     * createTime : 2019-01-26 16:02:16
+     * deleteFlag : null
      * producesamlltype : null
+     * fillInDate : null
      */
 
-    private String id = "";
+    private Object id;
     private boolean isNewRecord;
     private Object remarks;
     private Object createDate;
     private Object updateDate;
-    private String taskfrom;
+    private Object taskfrom;
     private Object tasktype;
-    private Object addressandname;
+    private Object inspectedname;
+    private String inspectedaddress;
+    private Object inspectedman;
+    private Object inspectedtel;
     private Object representative;
-    private Object producename;
+    private String producename;
     private Object produceaddress;
     private Object producezipcode;
     private Object prepresentative;
@@ -90,7 +96,7 @@ public class Sampling {
     private Object productlevel;
     private Object productpl;
     private Object dostandard;
-    private Object dotime;
+    private String dotime;
     private Object encapsulationstate;
     private Object rvandfc;
     private Object sendaddress;
@@ -111,14 +117,15 @@ public class Sampling {
     private Object taskcode;
     private String createMan;
     private String createTime;
-    private String deleteFlag;
+    private Object deleteFlag;
     private Object producesamlltype;
+    private Object fillInDate;
 
-    public String getId() {
+    public Object getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Object id) {
         this.id = id;
     }
 
@@ -154,11 +161,11 @@ public class Sampling {
         this.updateDate = updateDate;
     }
 
-    public String getTaskfrom() {
+    public Object getTaskfrom() {
         return taskfrom;
     }
 
-    public void setTaskfrom(String taskfrom) {
+    public void setTaskfrom(Object taskfrom) {
         this.taskfrom = taskfrom;
     }
 
@@ -170,12 +177,36 @@ public class Sampling {
         this.tasktype = tasktype;
     }
 
-    public Object getAddressandname() {
-        return addressandname;
+    public Object getInspectedname() {
+        return inspectedname;
     }
 
-    public void setAddressandname(Object addressandname) {
-        this.addressandname = addressandname;
+    public void setInspectedname(Object inspectedname) {
+        this.inspectedname = inspectedname;
+    }
+
+    public String getInspectedaddress() {
+        return inspectedaddress;
+    }
+
+    public void setInspectedaddress(String inspectedaddress) {
+        this.inspectedaddress = inspectedaddress;
+    }
+
+    public Object getInspectedman() {
+        return inspectedman;
+    }
+
+    public void setInspectedman(Object inspectedman) {
+        this.inspectedman = inspectedman;
+    }
+
+    public Object getInspectedtel() {
+        return inspectedtel;
+    }
+
+    public void setInspectedtel(Object inspectedtel) {
+        this.inspectedtel = inspectedtel;
     }
 
     public Object getRepresentative() {
@@ -186,11 +217,11 @@ public class Sampling {
         this.representative = representative;
     }
 
-    public Object getProducename() {
+    public String getProducename() {
         return producename;
     }
 
-    public void setProducename(Object producename) {
+    public void setProducename(String producename) {
         this.producename = producename;
     }
 
@@ -362,11 +393,11 @@ public class Sampling {
         this.dostandard = dostandard;
     }
 
-    public Object getDotime() {
+    public String getDotime() {
         return dotime;
     }
 
-    public void setDotime(Object dotime) {
+    public void setDotime(String dotime) {
         this.dotime = dotime;
     }
 
@@ -530,11 +561,11 @@ public class Sampling {
         this.createTime = createTime;
     }
 
-    public String getDeleteFlag() {
+    public Object getDeleteFlag() {
         return deleteFlag;
     }
 
-    public void setDeleteFlag(String deleteFlag) {
+    public void setDeleteFlag(Object deleteFlag) {
         this.deleteFlag = deleteFlag;
     }
 
@@ -545,4 +576,14 @@ public class Sampling {
     public void setProducesamlltype(Object producesamlltype) {
         this.producesamlltype = producesamlltype;
     }
+
+    public Object getFillInDate() {
+        return fillInDate;
+    }
+
+    public void setFillInDate(Object fillInDate) {
+        this.fillInDate = fillInDate;
+    }
+
+
 }
