@@ -91,6 +91,15 @@ public class AccountManager {
         SPUtil.put(MainApplication.INSTANCE, "account", account);
     }
 
+    public void setUserSaveAccount(boolean isSave) {
+        SPUtil.put(MainApplication.INSTANCE, "save", isSave);
+    }
+
+    public boolean getUserSaveAccount() {
+        boolean isSave = (boolean) SPUtil.get(MainApplication.INSTANCE, "save", false);
+        return isSave;
+    }
+
     public String getUserPassword() {
         String account = SPUtil.get(MainApplication.INSTANCE, "password", "").toString();
         if (TextUtils.isEmpty(account)) {

@@ -22,6 +22,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -63,6 +65,7 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    CheckBox checkBox;
 
     public static LoginByPasswordFragment newInstance() {
         return new LoginByPasswordFragment();
@@ -105,14 +108,19 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
         mLoginFormView = mRootView.findViewById(R.id.login_form);
         mProgressView = mRootView.findViewById(R.id.login_progress);
         KeyboardUtils.closeKeyboard(getActivity());
-
-        String account = AccountManager.getInstance().getUserAccount();
-        if (!TextUtils.isEmpty(account)) {
-            mAccountView.setText(account + "");
-        }
-        String password = AccountManager.getInstance().getUserPassword();
-        if (!TextUtils.isEmpty(password)) {
-            mPasswordView.setText(password + "");
+        checkBox = mRootView.findViewById(R.id.checkBox);
+        if (AccountManager.getInstance().getUserSaveAccount()) {
+            checkBox.setChecked(true);
+            String account = AccountManager.getInstance().getUserAccount();
+            if (!TextUtils.isEmpty(account)) {
+                mAccountView.setText(account + "");
+            }
+            String password = AccountManager.getInstance().getUserPassword();
+            if (!TextUtils.isEmpty(password)) {
+                mPasswordView.setText(password + "");
+            }
+        } else {
+            checkBox.setChecked(false);
         }
     }
 
@@ -238,8 +246,15 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
 
                     @Override
                     public void onSuccess(UserInfoBean userbean) {
-                        AccountManager.getInstance().setUserAccount(account);
-                        AccountManager.getInstance().setUserPassword(pwd);
+                        if (checkBox.isChecked()) {
+                            AccountManager.getInstance().setUserAccount(account);
+                            AccountManager.getInstance().setUserPassword(pwd);
+                            AccountManager.getInstance().setUserSaveAccount(true);
+                        } else {
+                            AccountManager.getInstance().setUserAccount("");
+                            AccountManager.getInstance().setUserPassword("");
+                            AccountManager.getInstance().setUserSaveAccount(false);
+                        }
                         AccountManager.getInstance().setUserInfoBean(userbean);
                         ActivityUtils.goMainTaskActivity(getActivity());
                         getActivity().finish();

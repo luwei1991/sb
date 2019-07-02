@@ -79,7 +79,7 @@
                     android:layout_width="200dp"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="抽样类型" />
+                    android:text="抽样产品" />
 
                 <TextView
                     android:id="@+id/tv_tasktypecount"
@@ -161,7 +161,7 @@
                     android:layout_width="200dp"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="产品种类" />
+                    android:text="企业名称" />
 
                 <TextView
                     android:id="@+id/tv_companyname"

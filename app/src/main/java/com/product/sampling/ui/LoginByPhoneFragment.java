@@ -157,7 +157,7 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
                     @Override
                     public void onSuccess(String code) {
                         showProgress(false);
-                        ToastUtils.showToast("验证码已发送"+code);
+                        ToastUtils.showToast("验证码已发送,请注意查收");
                         if (myCountDownTimer == null) {
                             myCountDownTimer = new MyCountDownTimer(90000, 1000);
                         }

@@ -285,7 +285,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
             holder.mTextViewNum.setText(task.taskCode);
             holder.mTextViewName.setText(task.companyname);
             holder.mTextViewAddress.setText(task.companyaddress);
-            holder.mTextViewType.setText("产品类型:" + task.tasktypecount);
+            holder.mTextViewType.setText("产品名:" + task.tasktypecount);
             holder.mTextViewStartTime.setText("开始时间：" + task.starttime);
             holder.mTextViewEndTime.setText("结束时间：" + task.endtime);
             if (task.leftday >= 0) {
