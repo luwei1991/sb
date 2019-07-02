@@ -27,6 +27,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amap.api.location.AMapLocation;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -565,10 +566,11 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 .addFormDataPart("taskisok", "0")
                 .addFormDataPart("sampleids", deleteId);
 
-        if (null != MainApplication.INSTANCE.getMyLocation()) {
-            multipartBodyBuilder.addFormDataPart("taskaddress", MainApplication.INSTANCE.getMyLocation().getAddress() + "")
-                    .addFormDataPart("longitude", MainApplication.INSTANCE.getMyLocation().getLongitude() + "")
-                    .addFormDataPart("latitude", MainApplication.INSTANCE.getMyLocation().getLatitude() + "");
+        AMapLocation location = MainApplication.INSTANCE.getMyLocation();
+        if (null != location) {
+            multipartBodyBuilder.addFormDataPart("taskaddress", location.getAddress() + "")
+                    .addFormDataPart("longitude", location.getLongitude() + "")
+                    .addFormDataPart("latitude", location.getLatitude() + "");
         }
 
         if (null != taskDetailViewModel.taskEntity.pics && !taskDetailViewModel.taskEntity.pics.isEmpty()) {
