@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amap.api.location.AMapLocation;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -216,20 +217,23 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                     taskUnFindEntity = taskRefusedEntityLoadDataModel.getData();
                     mTextViewCompanyname.setText(taskUnFindEntity.companyname);
                     etTips.setText(taskUnFindEntity.remark);
-                    setupRecyclerViewFromServer(mRecyclerViewImageList, taskUnFindEntity.pics);
-                    setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskUnFindEntity.voides);
-                    if (null != taskUnFindEntity.voides && !taskUnFindEntity.voides.isEmpty()) {
-                        rxPermissionTest();
-                    }
-                    if (null != taskUnFindEntity.unfind) {
-                        Gson gson = new Gson();
-                        String obj1 = gson.toJson(taskUnFindEntity.unfind);
-                        JsonObject object = new JsonParser().parse(obj1).getAsJsonObject();
-                        HashMap<String, String> map = new HashMap();
-                        for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-                            map.put("unfind." + entry.getKey(), entry.getValue().getAsString());
+                    if (taskUnFindEntity.taskisok.equals("2")) {
+
+                        setupRecyclerViewFromServer(mRecyclerViewImageList, taskUnFindEntity.pics);
+                        setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskUnFindEntity.voides);
+                        if (null != taskUnFindEntity.voides && !taskUnFindEntity.voides.isEmpty()) {
+                            rxPermissionTest();
                         }
-                        taskUnFindEntity.unfindSampleInfoMap = map;
+                        if (null != taskUnFindEntity.unfind) {
+                            Gson gson = new Gson();
+                            String obj1 = gson.toJson(taskUnFindEntity.unfind);
+                            JsonObject object = new JsonParser().parse(obj1).getAsJsonObject();
+                            HashMap<String, String> map = new HashMap();
+                            for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                                map.put("unfind." + entry.getKey(), entry.getValue().getAsString());
+                            }
+                            taskUnFindEntity.unfindSampleInfoMap = map;
+                        }
                     }
                 }
             }
@@ -462,10 +466,11 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                 .addFormDataPart("taskisok", "2")//任务异常状态0正常1拒检2未抽样到单位
                 .addFormDataPart("remark", etTips.getText().toString());
 
-        if (null != MainApplication.INSTANCE.getMyLocation()) {
-            multipartBodyBuilder.addFormDataPart("taskaddress", MainApplication.INSTANCE.getMyLocation().getAddress() + "")
-                    .addFormDataPart("longitude", MainApplication.INSTANCE.getMyLocation().getLongitude() + "")
-                    .addFormDataPart("latitude", MainApplication.INSTANCE.getMyLocation().getLatitude() + "");
+        AMapLocation location = MainApplication.INSTANCE.getMyLocation();
+        if (null != location) {
+            multipartBodyBuilder.addFormDataPart("taskaddress", location.getAddress() + "")
+                    .addFormDataPart("longitude", location.getLongitude() + "")
+                    .addFormDataPart("latitude", location.getLatitude() + "");
         }
 
         if (null != taskUnFindEntity.pics && !taskUnFindEntity.pics.isEmpty()) {

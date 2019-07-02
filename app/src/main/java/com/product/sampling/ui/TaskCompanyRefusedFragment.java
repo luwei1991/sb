@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amap.api.location.AMapLocation;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -215,22 +216,23 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                     taskRefusedEntity = taskRefusedEntityLoadDataModel.getData();
                     mTextViewCompanyname.setText(taskRefusedEntity.companyname);
                     etTips.setText(taskRefusedEntity.remark);
-                    setupRecyclerViewFromServer(mRecyclerViewImageList, taskRefusedEntity.pics);
-                    setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskRefusedEntity.voides);
-                    if (null != taskRefusedEntity.voides && !taskRefusedEntity.voides.isEmpty()) {
-                        rxPermissionTest();
-                    }
-                    if (null != taskRefusedEntity.refuse) {
-                        Gson gson = new Gson();
-                        String obj1 = gson.toJson(taskRefusedEntity.refuse);
-                        JsonObject object = new JsonParser().parse(obj1).getAsJsonObject();
-                        HashMap<String, String> map = new HashMap();
-                        for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-                            map.put("refuse." + entry.getKey(), entry.getValue().getAsString());
+                    if (taskRefusedEntity.taskisok.equals("1")) {
+                        setupRecyclerViewFromServer(mRecyclerViewImageList, taskRefusedEntity.pics);
+                        setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskRefusedEntity.voides);
+                        if (null != taskRefusedEntity.voides && !taskRefusedEntity.voides.isEmpty()) {
+                            rxPermissionTest();
                         }
-                        taskRefusedEntity.refuseInfoMap = map;
+                        if (null != taskRefusedEntity.refuse) {
+                            Gson gson = new Gson();
+                            String obj1 = gson.toJson(taskRefusedEntity.refuse);
+                            JsonObject object = new JsonParser().parse(obj1).getAsJsonObject();
+                            HashMap<String, String> map = new HashMap();
+                            for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                                map.put("refuse." + entry.getKey(), entry.getValue().getAsString());
+                            }
+                            taskRefusedEntity.refuseInfoMap = map;
+                        }
                     }
-
                 }
             }
         });
@@ -465,13 +467,12 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                 .addFormDataPart("taskisok", "1")//任务异常状态0正常1拒检2未抽样到单位
                 .addFormDataPart("remark", etTips.getText().toString());
 
-        if (null != MainApplication.INSTANCE.getMyLocation()) {
-            multipartBodyBuilder.addFormDataPart("taskaddress", MainApplication.INSTANCE.getMyLocation().getAddress() + "")
-                    .addFormDataPart("longitude", MainApplication.INSTANCE.getMyLocation().getLongitude() + "")
-                    .addFormDataPart("latitude", MainApplication.INSTANCE.getMyLocation().getLatitude() + "");
+        AMapLocation location = MainApplication.INSTANCE.getMyLocation();
+        if (null != location) {
+            multipartBodyBuilder.addFormDataPart("taskaddress", location.getAddress() + "")
+                    .addFormDataPart("longitude", location.getLongitude() + "")
+                    .addFormDataPart("latitude", location.getLatitude() + "");
         }
-
-        boolean hasData = false;
         if (null != taskRefusedEntity.pics && !taskRefusedEntity.pics.isEmpty()) {
 
             for (int i = 0; i < taskRefusedEntity.pics.size(); i++) {
@@ -492,7 +493,6 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
                 multipartBodyBuilder.addFormDataPart("uploadPic[" + i + "].fileStr", pics.getRemarks() + "")
                         .addFormDataPart("uploadPic[" + i + "].fileStream", f.getName(), requestImage);
-                hasData = true;
             }
         }
         if (null != taskRefusedEntity.voides && !taskRefusedEntity.voides.isEmpty()) {
@@ -513,7 +513,6 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                 RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
                 multipartBodyBuilder.addFormDataPart("uploadVedio[" + i + "].fileStr", videos.getRemarks() + "")
                         .addFormDataPart("uploadVedio[" + i + "].fileStream", f.getName(), requestImage);
-                hasData = true;
             }
         }
         if (null != taskRefusedEntity.taskSamples && !taskRefusedEntity.taskSamples.isEmpty()) {
