@@ -13,12 +13,12 @@
 <body>
 <div class="page">
   <form action="">
-    <p class="title">产品质量<input style="width:50px;font-size:16px;" class="tc" type="text" placeholder="省级">
+    <p class="title" style="padding-top: 20px">产品质量（<input style="width:50px;font-size:16px;" class="tc" type="text">）
     监督抽查企业拒检认定表</p>
     
     <table width="100%" class="tftable" cellpadding="10">
       <tr>
-        <td width="6%" rowspan="3" align="center" valign="middle">受检<br>单位</td>
+        <td width="6%" rowspan="3" align="center" valign="middle">受检<br>企业</td>
         <td width="16%" height="44" align="center">产品名称</td>
         <td height="44" colspan="2" align="center"><input name="refuse.producename" style="width:100%;text-indent: 2em" placeholder=""></td>
         <td width="13%" align="center">企业名称</td>
@@ -55,13 +55,13 @@
             事实认定（拒检过程描述）：
             <textarea name="refuse.progrss" rows="8" style="margin-top:5px;width: 100%;resize: none;border:0"></textarea>
             <div style="padding-left:55%">
-              <p>抽样人员签字：<input class="tc" name="samplingpersonnelsign" style="width:150px;border-bottom:1px solid #333; font-size: 16px;" type="text" placeholder=""></p>
+              <p>抽样人员签字：<input class="tc" name="samplingpersonnelsign" style="width:150px;font-size: 16px;" type="text" placeholder=""></p>
               <p style="padding-left: 20%;margin: 20px 0">
                   <input class="tc" style="width:40px" name="refuse.fillInDate" type="text" placeholder="">年
                   <input class="tc" style="width:20px" name="refuse.fillInDate" placeholder="">月
                   <input class="tc" style="width:30px" name="refuse.fillInDate" placeholder="">日
               </p>
-              <p>相关人员签字：<input class="tc" name="relatedpersonnelsign" style="width:150px;border-bottom:1px solid #333; font-size: 16px;" type="text" placeholder=""></p>
+              <p>相关人员签字：<input class="tc" name="relatedpersonnelsign" style="width:150px;font-size: 16px;" type="text" placeholder=""></p>
               <p style="padding-left: 20%;margin: 20px 0">
                   <input class="tc" style="width:40px" name="refuse.fillInDate" type="text" placeholder="">年
                   <input class="tc" style="width:20px" name="refuse.fillInDate" placeholder="">月
@@ -72,7 +72,7 @@
         </td>
       </tr>
       <tr>
-        <td height="200" colspan="3" align="center"><p style="width: 200px">相关单位印章</p></td>
+        <td height="200" colspan="3" align="center"><p style="width: 200px">（抽样单位印章）</p></td>
         <td colspan="4">
           <div style="padding: 10px 20px 10px 20px">
               企业所在地质量技术监督部门意见：
@@ -82,7 +82,7 @@
                   <input class="tc" style="width:40px" name="refuse.fillInDate" placeholder="">月
                   <input class="tc" style="width:40px" name="refuse.fillInDate" placeholder="">日
               </p>
-              <p style="text-align: right;padding-top: 10px;padding-bottom: 10px">单位印章</p>
+              <p style="text-align: right;padding-top: 10px;padding-bottom: 10px">（单位印章）</p>
           </div>
         </td>
       </tr>

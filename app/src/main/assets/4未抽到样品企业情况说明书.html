@@ -13,7 +13,7 @@
 <body>
 <div class="page">
   <form action="">
-    <p class="title">未抽到样品企业情况说明书</p>
+    <p class="title" style="padding-top: 20px">未抽到样品企业情况说明书</p>
     
     <table width="100%" class="tftable" cellpadding="10">
       <tr>
@@ -26,7 +26,11 @@
         <td height="44" align="center" valign="middle">抽查产品</td>
         <td height="44" colspan="2" align="center"><input name="unfind.producename" style="width:100%;text-indent: 2em" placeholder=""></td>
         <td align="center">抽查时间</td>
-        <td><input name="unfind.samplingtime" style="width:100%;text-indent: 2em" placeholder=""></td>
+        <td align="center">
+          <input class="tc" style="width:40px" name="" type="text" placeholder="">年
+          <input class="tc" style="width:40px" name="" type="text" placeholder="">月
+          <input class="tc" style="width:40px" name="" type="text" placeholder="">日
+        </td>
       </tr>
       <tr>
         <td height="40" align="center" valign="middle">企业名称</td>
@@ -43,7 +47,7 @@
         <td><input name="unfind.companytel" style="width:100%;text-indent: 2em" placeholder=""></td>
       </tr>
       <tr>
-        <td height="40" colspan="5" align="center">未抽查原因</td>
+        <td height="40" colspan="5" align="center">未  抽  查  原  因</td>
       </tr>
       <tr>
         <td height="41" colspan="5">&nbsp;&nbsp;&nbsp;&nbsp;企业：
@@ -58,8 +62,8 @@
       <tr>
         <td colspan="5">
             <div style="padding: 10px">
-                （过程简要描述）：
-                <textarea name="unfind.process" rows="8" style="margin-top:5px;width: 100%;resize: none;border:0"></textarea>
+                （过程简要描述）
+                <textarea name="unfind.process" rows="15" style="margin-top:5px;width: 100%;resize: none;border:0"></textarea>
             </div>    
         </td>
       </tr>
@@ -67,7 +71,7 @@
         <td colspan="6">
         <div class="sign">
           <div style="border-right: 1px solid #333;padding:10px">
-            <div>当地质检管理部门意见：</div>
+            <div>当地质量管理部门意见：</div>
             <textarea name="unfind.advice" rows="8" style="margin-top:5px;width: 100%;resize: none;border:0"></textarea>
             <div style="text-align: right;padding-bottom: 5px">（公章）</div>
             <span>
@@ -87,7 +91,7 @@
               </span>
             </div>
             <div style="padding:10px">
-                <div style="text-align: right;padding-bottom: 5px;padding-top: 145px">（被抽查单位公章）</div>
+                <div style="text-align: right;padding-bottom: 5px;padding-top: 145px">（被抽查企业公章）</div>
                 <span>
                   <input class="tc" style="width:40px" name="unfind.fillInDate" type="text" placeholder="">年
                   <input class="tc" style="width:40px" name="unfind.fillInDate.fillInDateh" type="text" placeholder="">月
@@ -99,7 +103,7 @@
       </tr>
     </table>
   </form>
-  <div class="footer">注：本表一式三份，第一联报送下达任务部门，第二联后处理部门，第三联抽样单位存档。</div>
+  <div class="footer">注：本表一式三份，第一联下达任务部门，第二联后处理部门，第三联抽样单位存档。</div>
 </div>
 
 <script>

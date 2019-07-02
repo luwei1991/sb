@@ -8,24 +8,29 @@
     <link rel="stylesheet" type="text/css" href="./style/css.css">
     <script src="./js/jquery.min.js"></script>
     <script src="./js/html2canvas.min.js"></script>
+    <style>
+    input.b{
+        border-bottom: 1px solid #000
+    }
+    </style>
 </head>
 <body>
     <div class="page">
         <form action="">
-        <p class="title">2018年第五批重点工业产品质量<input style="width:200px" name="advice.qualitytitle" type="text" placeholder="">监督抽查<br>样品封存和处置通知单</p>
-        <div class="ov bh">
-            <div class="left" style="padding-top: 10px;"><input style="width:200px" type="text" name="advice.companyname" placeholder="">：</div>
-            <div class="right" style="padding-bottom: 20px">编号：<input style="width:200px" name="advice.code" type="text" placeholder=""></div>
+        <p class="title" style="padding-top: 20px; line-height: 1.6;padding-bottom: 20px"><input style="width:150px" class="b tc" name="advice.qualitytitle" type="text" placeholder="">产品质量<input class="b tc" style="width:150px" name="advice.qualitytitle" type="text" placeholder="">监督抽查<br>样品封存和处置通知单</p>
+        <div class="ov bh" style="padding-bottom: 20px">
+            <div class="left" style="padding-top: 10px;"><input  class="b tc" style="width:150px" type="text" name="advice.companyname" placeholder="">：</div>
+            <div class="right" style="padding-bottom: 20px">编号：<input  class="b tc" style="width:150px" name="advice.code" type="text" placeholder=""></div>
         </div>
         <div class="text">
-                受<input class="tc" name="advice.entrust"  style="width:200px" type="text" placeholder="">委托，我单位于
-                <input class="tc" name="advice.fillInDate" style="width:50px" type="text" placeholder="">年
-                <input class="tc" name="advice.fillInDate" style="width:50px" placeholder="">月
-                <input class="tc" name="advice.fillInDate" style="width:50px" placeholder="">日
-                对贵单位生产的：<input name="advice.producename" class="tc" style="width:200px" placeholder="">
-                型号规格：<input name="advice.specifications" class="tc" style="width:200px" placeholder="">产品进行了
-                <input class="tc" name="advice.quality" style="width:70px" placeholder="">级质量监督抽查(产品详细信息见编号为<input class="tc" name="advice.code" type="text" style="width:150px" placeholder="">的抽样单)。
-                现将样品(备用样品)封存于贵单位,请妥善保管该样品(保持封样状态防潮、防火、防损),不得擅自更改、隐匿、处理已抽查封存的样品。
+                受<input class="tc b" name="advice.entrust"  style="width:200px" type="text" placeholder="">委托，我单位于
+                <input class="tc b" name="advice.fillInDate" style="width:50px" type="text" placeholder="">年
+                <input class="tc b" name="advice.fillInDate" style="width:50px" placeholder="">月
+                <input class="tc b" name="advice.fillInDate" style="width:50px" placeholder="">日
+                对贵单位生产的：<input name="advice.producename" class="tc b" style="width:200px" placeholder="">
+                型号规格：<input name="advice.specifications" class="tc b" style="width:200px" placeholder="">产品进行了
+                <input class="tc b" name="advice.quality" style="width:70px" placeholder="">级质量监督抽查（产品详细信息见编号为<input class="tc b" name="advice.code" type="text" style="width:150px" placeholder="">的抽样单）。
+                现将样品(备用样品)封存于贵单位,请妥善保管该样品（保持封样状态防潮、防火、防损）,不得擅自更改、隐匿、处理已抽查封存的样品。
         </div>
         <div class="text">
             若贵单位收到检验结果为合格且对检验结果无异议的，可自行处置样品；若贵单位收到检验结果为不合格的，应当保持封样状态至检验结果异议期满三个月，并按负责监督抽查后处理的质量技术监督部门意见处理样品。<br>特此通知。
@@ -46,8 +51,7 @@
             <div class="right seal-box">
                 <!-- <div class="seal" style="top: -80px;left: 10px"></div> -->
                 <p style="height: 100px">
-                承检单位签字盖章<br><br>
-                签字：<input class="tc" name="acceptancesign" style="width:150px;border-bottom:1px solid #333; font-size: 16px;" type="text" placeholder="">
+                承检单位签字（盖章）
                 </p>
                 <p>
                     <input class="tc year" name="acceptanceyear" style="width:40px" type="text" placeholder="">年
@@ -56,7 +60,7 @@
                 </p>
             </div>
         </div>
-        <div class="footer">(备注：此表单一式两份，被抽查企业和承检单位各存一份。)</div>
+        <div class="footer" style="padding-top:50px;">(备注：此表单一式两份，被抽查企业和承检单位各存一份。)</div>
     </form>
     <!--<button id="submit" style="width: 200px;height: 44px;margin-top: 100px">提交</button>-->
 </div>
