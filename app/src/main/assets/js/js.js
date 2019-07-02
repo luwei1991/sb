@@ -99,17 +99,16 @@ $(function(){
 
  
 
-    console.log(sign_box)
-    //显示当前时间
-    var date = new Date();
-    var dateParse = {
-        year: date.getFullYear(),
-        month: date.getMonth(),
-        day: date.getDate()
-    }
-    $('.year').val(dateParse.year)
-    $('.month').val(dateParse.month)
-    $('.day').val(dateParse.day)
+    // //显示当前时间
+    // var date = new Date();
+    // var dateParse = {
+    //     year: date.getFullYear(),
+    //     month: date.getMonth(),
+    //     day: date.getDate()
+    // }
+    // $('.year').val(dateParse.year)
+    // $('.month').val(dateParse.month)
+    // $('.day').val(dateParse.day)
 })
 
 

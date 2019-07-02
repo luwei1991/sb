@@ -13,7 +13,7 @@
 <body>
 <div class="page">
   <form action="">
-    <p class="title">产品质量监督抽查/复查抽样单</p>
+    <p class="title" style="padding-top: 20px">产品质量监督抽查/复查抽样单</p>
     <div class="ov bh">
         <div class="right">编号：<input name="sampling.taskcode" style="width:200px;font-family: '宋体';color: red" type="text" value=""></div>
         <!--<div class="right">报告编号：<input name="sampling.reportcode" style="width:200px" type="text" placeholder=""></div>-->
@@ -43,10 +43,10 @@
         <td colspan="3"><input type="text" name="sampling.inspectedtel" placeholder=""></td>
       </tr>
       <tr>
-        <td colspan="3" rowspan="11" align="center">生<br />产<br />单<br />位</td>
+        <td colspan="3" rowspan="10" align="center">生<br />产<br />单<br />位</td>
         <td>单位名称</td>
         <td colspan="2"><input type="text" name="sampling.producename" placeholder=""></td>
-        <td colspan="2" rowspan="11" class="tc">经<br>济<br>类<br>型</td>
+        <td colspan="2" rowspan="10" class="tc">经<br>济<br>类<br>型</td>
         <td width="3%" rowspan="4">内<br />资</td>
         <td width="12%"><div style="width:6em"><input id="aaa1" type="radio" value="1" name="sampling.producesamlltype"><label for="aaa1">国有</label></div></td>
         <td width="19%"><div style="widows: 7em"><input id="aaa2" type="radio" value="2" name="sampling.producesamlltype"><label for="aaa2">私营(含个体)</div></td>
@@ -87,26 +87,21 @@
         <td colspan="2"><input type="text" name="sampling.producelicense" placeholder=""></td>
       </tr>
       <tr>
-        <td>机构代码</td>
+        <td>统一社会<br>信用代码</td>
         <td colspan="2"><input type="text" name="sampling.producecode" placeholder=""></td>
-        <td rowspan="4">外<br />资</td>
+        <td rowspan="3">外<br />资</td>
         <td><input type="radio" id="aaa13" value="13" name="sampling.producesamlltype"><label for="aaa13">中外合资</label></td>
         <td><input type="radio" id="aaa14" value="14" name="sampling.producesamlltype"><label for="aaa14">中外合作</label></td>
       </tr>
       <tr>
-        <td rowspan="3">企业规模</td>
-        <td width="10%">人数</td>
-        <td><input type="text" name="sampling.producepcount" placeholder=""></td>
-        <td rowspan="3"><input id="aaa15" type="radio" value="15" name="sampling.producesamlltype"><label for="aaa15">外资企业</label></td>
-        <td rowspan="3"><input id="aaa16" type="radio" value="16" name="sampling.producesamlltype"><label for="aaa16">外商投资股份有限公司</label></td>
+        <td rowspan="1">从业人员数</td>
+        <td  colspan="2"><input type="text" name="" placeholder=""></td>
+        <td rowspan="2"><input id="aaa15" type="radio" value="15" name="sampling.producesamlltype"><label for="aaa15">外资企业</label></td>
+        <td rowspan="2"><input id="aaa16" type="radio" value="16" name="sampling.producesamlltype"><label for="aaa16">外商投资股份有限公司</label></td>
       </tr>
       <tr>
-        <td>产值</td>
-        <td><input type="text" name="sampling.produceoutput" placeholder=""></td>
-      </tr>
-      <tr>
-        <td>产量</td>
-        <td><input type="text" name="sampling.produceharvest" placeholder=""></td>
+        <td>营业收入</td>
+        <td colspan="2"><input type="text" name="" placeholder=""></td>
       </tr>
       <tr>
         <td colspan="3" rowspan="9" align="center">受<br />检<br />产<br />品<br />信<br />息</td>
@@ -121,7 +116,7 @@
         <td><input type="text" name="sampling.productmodel" placeholder=""></td>
       </tr>
       <tr>
-        <td colspan="2">生产日期/编号</td>
+        <td colspan="2">生产日期/批号</td>
         <td><input type="text" name="sampling.productbnum" placeholder=""></td>
         <td colspan="4">商标</td>
         <td><input type="text" name="sampling.productmark" placeholder=""></td>
@@ -153,7 +148,7 @@
       <tr>
         <td colspan="2">抽样日期</td>
         <td><input type="text" name="sampling.fillInDate" placeholder=""></td>
-          <td colspan="4">寄送样截至日期</td>
+          <td colspan="4">寄送样截止日期</td>
           <td><input type="text" name="sampling.endtime" placeholder=""></td>
         </tr>
       <tr>
@@ -164,25 +159,25 @@
       </tr>
       <tr>
         <td colspan="3" rowspan="3" align="center">抽<br />样<br />单<br />位</td>
-        <td width="17%">单位名称</td>
+        <td colspan="2">单位名称</td>
         <td colspan="3"><input type="text" name="sampling.samplingname" placeholder=""></td>
         <td colspan="2">联系人</td>
         <td colspan="2"><input type="text" name="sampling.samplingman" placeholder=""></td>
       </tr>
       <tr>
-        <td>单位地址</td>
+        <td colspan="2">单位地址</td>
         <td colspan="3"><input type="text" name="sampling.samplingaddress" placeholder=""></td>
         <td colspan="2">联系电话</td>
         <td colspan="2"><input type="text" name="sampling.samplingtel" placeholder=""></td>
       </tr>
       <tr>
-        <td>邮政编码</td>
+        <td colspan="2">邮政编码</td>
         <td colspan="3"><input type="text" name="sampling.samplingcode" placeholder=""></td>
-        <td colspan="2">传真</td>
+        <td colspan="2">E-Mail</td>
         <td colspan="2"><input type="text" name="sampling.samplingemail" placeholder=""></td>
       </tr>
       <tr>
-        <td colspan="11" rowspan="" onclick="document.getElementById('jiouhcnw89293').focus()">备注（需要说明的其他问题）<br>企业确认：所抽产品为境内生产、销售且企业自检合格的待销产品。<br><textarea style="width: 100%;" id="jiouhcnw89293" name="sampling.remark" rows="3"></textarea></td>
+        <td colspan="11" rowspan="" onclick="document.getElementById('jiouhcnw89293').focus()">备注（需要说明的其他问题）：<br>企业确认：所抽产品为境内生产、销售且企业自检合格的待销产品。<br><textarea style="width: 80%;padding: 10px" id="jiouhcnw89293" name="sampling.remark" rows="5"></textarea></td>
         <!--<td colspan="2" onclick="document.getElementById('xxxahi7ywassye').focus()">项目备案号：<input id="xxxahi7ywassye" type="text" name="sampling.recordnumber" placeholder=""></td>
         <td onclick="document.getElementById('xxxahi7ywyasase').focus()">单价:<input id="xxxahi7ywyasase"  type="text" name="sampling.unitprice" placeholder=""></td>-->
       </tr>
@@ -196,7 +191,7 @@
         <td height="100" colspan="11" class="signtd">
           <div class="sign">
           <div style="border-right: 1px solid #333">
-            <p>受检单位对上述内容无异议<br />受检单位签名(盖章)：</p>
+            <p>受检单位对上述内容无异议<br />受检单位签名（盖章）：</p>
             <span>
                 签字：<div class="sign_show"></div>
               </span>
@@ -207,7 +202,7 @@
             </span>
           </div>
           <div style="border-right: 1px solid #333">
-            <p>生产单位对上述内容无异议<br />生产单位签名(盖章)：
+            <p>生产单位对上述内容无异议<br />生产单位签名（盖章）：
             </p>
             <span>
               签字：<div class="sign_show"></div>
@@ -220,7 +215,7 @@
           </div>
           <div class="seal-box">
             <img class="seal" onclick="document.getElementById('uuahbaucgy9').focus()" src="./images/20190529142046.png" alt="">
-            <p>抽样人签名(盖章)：</p>
+            <p>抽样人签名（盖章）：</p>
             <span>
                 签字：<div class="sign_show"></div>
               </span>
@@ -235,7 +230,6 @@
       </tr>
     </table>
   </form>
-  <div class="footer">注：1、技术文件指执行标准外的图纸、技术合同、产品说明书等有关产品技术的文件。<br>2、选择许可证、QS、CCC等类别后，填写相应证书编号。</div>
 </div>
 
 <script type="text/javascript">
