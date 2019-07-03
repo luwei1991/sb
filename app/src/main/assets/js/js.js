@@ -48,8 +48,17 @@ function dataFillByType(els, data){
 function dataFill(data){
     data.split('&').forEach(item => {
         var d = item.match(/(.+)=(.+)/)
+        
         if(d && d[1] && d[2]){
-            dataFillByType($("[name='"+d[1]+"']"), d[2])
+            if(d[1].indexOf('ssiiggnn_')>-1){ // 签名回填
+                if(!$("[name="+d[1]+"]").length){
+                    $('form').append('<input type="hidden" name='+ d[1] +'>')
+                }
+                $("[name="+d[1]+"]").val(decodeURIComponent(d[2]));
+                $("[signname="+d[1]+"]").css('background-image','url('+decodeURIComponent(d[2])+')')
+            }else{
+                dataFillByType($("[name='"+d[1]+"']"), d[2])
+            }
         }
     });
 }
@@ -92,6 +101,14 @@ $(function(){
 
     $('.qsign').click(function(){
         $(signShow).css('background-image','url('+signaturePad.toDataURL()+')')
+
+        //按签名字段生成表单
+        var name = $(signShow).attr('signname');
+        if(!$("[name="+name+"]").length){
+            $('form').append('<input type="hidden" name='+ name +'>')
+        }
+        $("[name="+name+"]").val(signaturePad.toDataURL());
+
         sign_box.hide()
         sign_bg.hide()
         signaturePad.clear()

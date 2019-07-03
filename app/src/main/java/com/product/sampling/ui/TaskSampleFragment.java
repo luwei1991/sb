@@ -74,7 +74,7 @@ import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
 import static com.product.sampling.adapter.TaskSampleRecyclerViewAdapter.RequestCodePdf;
-import static com.product.sampling.ui.WebViewActivity.Intent_Order;
+import static com.product.sampling.ui.H5WebViewActivity.Intent_Order;
 
 /**
  * 样品信息

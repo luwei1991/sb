@@ -14,9 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -60,9 +58,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,7 +70,7 @@ import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
 import static com.product.sampling.adapter.TaskSampleRecyclerViewAdapter.RequestCodePdf;
-import static com.product.sampling.ui.WebViewActivity.Intent_Order;
+import static com.product.sampling.ui.H5WebViewActivity.Intent_Order;
 
 /**
  * 未抽到样品
@@ -180,7 +176,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
         view.findViewById(R.id.btn_edit_handling_sheet).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                Intent intent = new Intent(getActivity(), H5WebViewActivity.class);
                 Bundle b = new Bundle();
                 b.putInt(Intent_Order, 4);
                 b.putSerializable("task", (Serializable) taskUnFindEntity);

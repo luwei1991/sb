@@ -70,7 +70,7 @@ import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
 import static com.product.sampling.adapter.TaskSampleRecyclerViewAdapter.RequestCodePdf;
-import static com.product.sampling.ui.WebViewActivity.Intent_Order;
+import static com.product.sampling.ui.H5WebViewActivity.Intent_Order;
 
 /**
  * 未抽到样品
@@ -174,7 +174,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                Intent intent = new Intent(getActivity(), H5WebViewActivity.class);
                 Bundle b = new Bundle();
                 b.putInt(Intent_Order, 3);
                 b.putSerializable("task", (Serializable) taskRefusedEntity);

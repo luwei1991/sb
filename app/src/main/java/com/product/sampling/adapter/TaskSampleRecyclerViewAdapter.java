@@ -16,21 +16,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
-import com.luck.picture.lib.config.PictureMimeType;
 import com.product.sampling.R;
 import com.product.sampling.bean.TaskSample;
 import com.product.sampling.photo.MediaHelper;
 import com.product.sampling.ui.TaskSampleFragment;
-import com.product.sampling.ui.WebViewActivity;
+import com.product.sampling.ui.H5WebViewActivity;
 
-import java.io.Serializable;
 import java.util.List;
 
 import static com.product.sampling.ui.TaskSampleFragment.Select_Check;
 import static com.product.sampling.ui.TaskSampleFragment.Select_Handle;
-import static com.product.sampling.ui.WebViewActivity.Intent_Order;
+import static com.product.sampling.ui.H5WebViewActivity.Intent_Order;
 
 public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, TaskSampleRecyclerViewAdapter.ViewHolder> {
 
@@ -60,7 +57,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             } else if (R.id.btn_edit_check_sheet == view.getId()) {//检查单编辑
 
                 int index = (int) view.getTag();
-                Intent intent = new Intent(view.getContext(), WebViewActivity.class);
+                Intent intent = new Intent(view.getContext(), H5WebViewActivity.class);
                 Bundle b = new Bundle();
                 b.putInt(Intent_Order, 1);
                 b.putInt("task", index);
@@ -71,7 +68,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             } else if (R.id.btn_edit_handling_sheet == view.getId()) {//处置单编辑
                 int index = (int) view.getTag();
 
-                Intent intent = new Intent(view.getContext(), WebViewActivity.class);
+                Intent intent = new Intent(view.getContext(), H5WebViewActivity.class);
                 Bundle b = new Bundle();
                 b.putInt(Intent_Order, 2);
                 b.putInt("task", index);

@@ -46,7 +46,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
-public class WebViewActivity extends AppCompatActivity {
+public class H5WebViewActivity extends AppCompatActivity {
     public static final String Intent_Order = "order_pdf";
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private final int QualityMiddle = 1;
@@ -115,8 +115,8 @@ public class WebViewActivity extends AppCompatActivity {
                     public void onCallBack(String data) { //js回传的数据
                         para = data;
 
-                        KeyboardUtils.closeKeyboard(WebViewActivity.this);
-                        verifyStoragePermissions(WebViewActivity.this);
+                        KeyboardUtils.closeKeyboard(H5WebViewActivity.this);
+                        verifyStoragePermissions(H5WebViewActivity.this);
                     }
                 });
             }
@@ -235,10 +235,10 @@ public class WebViewActivity extends AppCompatActivity {
                         PdfDocument document = new PdfDocument();//1, 建立PdfDocument
                         BitmapFactory.Options options = new BitmapFactory.Options();
                         options.inPreferredConfig = Bitmap.Config.RGB_565;
-                        float scale = ScreenUtils.getScreenWidth(WebViewActivity.this) / pdfview.getMeasuredWidth();
+                        float scale = ScreenUtils.getScreenWidth(H5WebViewActivity.this) / pdfview.getMeasuredWidth();
 
-                        int screenW = (int) (ScreenUtils.getScreenWidth(WebViewActivity.this));
-                        int screenH = (int) (ScreenUtils.getScreenHeight(WebViewActivity.this));
+                        int screenW = (int) (ScreenUtils.getScreenWidth(H5WebViewActivity.this));
+                        int screenH = (int) (ScreenUtils.getScreenHeight(H5WebViewActivity.this));
 
                         if (isRotating) {
                             //当前是否翻转
@@ -320,7 +320,7 @@ public class WebViewActivity extends AppCompatActivity {
 
                     @Override
                     public void onComplete() {
-                        Toast.makeText(WebViewActivity.this, "生成table.pdf成功,请查看目录" + path, Toast.LENGTH_LONG).show();
+                        Toast.makeText(H5WebViewActivity.this, "生成table.pdf成功,请查看目录" + path, Toast.LENGTH_LONG).show();
                         if (null != getIntent()) {
                             setResult(RESULT_OK, getIntent().putExtra("pdf", path).putExtra("data", para));
                             finish();
@@ -336,7 +336,7 @@ public class WebViewActivity extends AppCompatActivity {
         @SuppressLint("JavascriptInterface")
         @JavascriptInterface
         public void send(String dataInfo) {
-            Toast.makeText(WebViewActivity.this, dataInfo, Toast.LENGTH_LONG).show();
+            Toast.makeText(H5WebViewActivity.this, dataInfo, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -346,8 +346,8 @@ public class WebViewActivity extends AppCompatActivity {
             @Override
             public void onCallBack(String data) { //js回传的数据
                 para = data;
-                KeyboardUtils.closeKeyboard(WebViewActivity.this);
-                verifyStoragePermissions(WebViewActivity.this);
+                KeyboardUtils.closeKeyboard(H5WebViewActivity.this);
+                verifyStoragePermissions(H5WebViewActivity.this);
             }
         });
     }
