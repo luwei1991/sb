@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -87,6 +88,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
     public static final int Unfind_Sample_Result = 103;
 
     TextView mTextViewCompanyname;
+    Button btnUploadUnfindPic;
 
     public TaskUnfindSampleFragment() {
 
@@ -188,15 +190,8 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             }
         });
 
-
-        //TODO 上传
-        // 上传
-        view.findViewById(R.id.btn_upload_handling_sheet).setOnClickListener(new View.OnClickListener() {
-            /**
-             * Called when a view has been clicked.
-             *
-             * @param v The view that was clicked.
-             */
+        btnUploadUnfindPic = view.findViewById(R.id.btn_upload_handling_sheet);
+        btnUploadUnfindPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MediaHelper.startGallery(fragment, PictureConfig.SINGLE, Unfind_Sample_Result);
@@ -235,6 +230,11 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                             map.put("unfind." + entry.getKey(), entry.getValue().getAsString());
                         }
                         taskUnFindEntity.unfindSampleInfoMap = map;
+                    }
+                    if (TextUtils.isEmpty(taskUnFindEntity.unfindpicfile)) {
+                        btnUploadUnfindPic.setText("(拍照)上传");
+                    } else {
+                        btnUploadUnfindPic.setText("已拍照");
                     }
                 }
             }
@@ -353,7 +353,9 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                     if (data != null) {
                         List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
                         taskUnFindEntity.unfindpicfile = selectHandle.get(0).getPath();
-                        shareBySystem(selectHandle.get(0).getPath());
+                        if (!TextUtils.isEmpty(taskUnFindEntity.unfindpicfile)) {
+                            btnUploadUnfindPic.setText("已拍照");
+                        }
                     }
                     break;
             }

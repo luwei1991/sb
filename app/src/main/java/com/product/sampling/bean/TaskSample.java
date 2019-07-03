@@ -10,8 +10,8 @@ public class TaskSample {
     public List<LocalMediaInfo> videoList = new ArrayList<>();
     public String samplingfile = "";
     public String disposalfile = "";
-    public String samplingpicfile = "";
-    public String disposalpicfile = "";
+    public String samplingpicfile = "";//抽样单生成图片的文件流
+    public String disposalpicfile = "";//抽样处置单图片的文件流
     public HashMap<String, String> samplingInfoMap = new HashMap<>();//检查单信息
     public HashMap<String, String> adviceInfoMap = new HashMap<>();//处置单信息
     public Advice advice = new Advice();

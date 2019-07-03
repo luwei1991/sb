@@ -102,6 +102,20 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         holder.mTextViewTitle.setText(TextUtils.isEmpty(task.getSamplename()) ? " " : task.getSamplename());
         holder.mTextViewHandleSheet.setText(task.disposalfile + "");
         holder.mTextViewCheckSheet.setText(task.samplingfile + "");
+
+        if (TextUtils.isEmpty(task.samplingpicfile)) {
+            holder.mBtnUploadCheck.setText("(拍照)上传");
+        } else {
+            holder.mBtnUploadCheck.setText("已拍照");
+        }
+
+        if (TextUtils.isEmpty(task.disposalpicfile)) {
+            holder.mBtnUploadHandle.setText("(拍照)上传");
+        } else {
+            holder.mBtnUploadHandle.setText("已拍照");
+        }
+
+
         holder.mImageViewAdd.setVisibility(View.VISIBLE);
         holder.mBtnEditCheck.setVisibility(View.VISIBLE);
         holder.mBtnEditHandle.setVisibility(View.VISIBLE);

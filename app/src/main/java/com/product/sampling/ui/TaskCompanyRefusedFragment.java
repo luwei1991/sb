@@ -8,12 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,8 +36,6 @@ import com.product.sampling.adapter.ImageServerRecyclerViewAdapter;
 import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
 import com.product.sampling.adapter.VideoAndTextRecyclerViewAdapter;
 import com.product.sampling.bean.Pics;
-import com.product.sampling.bean.Refuse;
-import com.product.sampling.bean.Sampling;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskMessage;
 import com.product.sampling.bean.Videos;
@@ -60,9 +58,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -89,6 +85,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
     TextView mTextViewCompanyname;
     EditText etTips;
     public TaskEntity taskRefusedEntity = new TaskEntity();
+    Button btnUploadRefusedPic;
 
     public TaskCompanyRefusedFragment() {
 
@@ -186,16 +183,8 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                 startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
             }
         });
-
-
-        //TODO 上传
-        // 上传
-        view.findViewById(R.id.btn_upload_handling_sheet).setOnClickListener(new View.OnClickListener() {
-            /**
-             * Called when a view has been clicked.
-             *
-             * @param v The view that was clicked.
-             */
+        btnUploadRefusedPic = view.findViewById(R.id.btn_upload_handling_sheet);
+        btnUploadRefusedPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MediaHelper.startGallery(fragment, PictureConfig.SINGLE, Unfind_Sample_Result);
@@ -234,6 +223,12 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                             map.put("refuse." + entry.getKey(), entry.getValue().getAsString());
                         }
                         taskRefusedEntity.refuseInfoMap = map;
+                    }
+
+                    if (TextUtils.isEmpty(taskRefusedEntity.refusefile)) {
+                        btnUploadRefusedPic.setText("(拍照)上传");
+                    } else {
+                        btnUploadRefusedPic.setText("已拍照");
                     }
                 }
 
@@ -355,7 +350,9 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                     if (data != null) {
                         List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
                         taskRefusedEntity.refusepicfile = selectHandle.get(0).getPath();
-                        shareBySystem(selectHandle.get(0).getPath());
+                        if (!TextUtils.isEmpty(taskRefusedEntity.refusepicfile)) {
+                            btnUploadRefusedPic.setText("已拍照");
+                        }
                     }
                     break;
             }
@@ -386,15 +383,6 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
     private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, List<Videos> videoList) {
         mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, true));
 
-    }
-
-    /**
-     * getPath
-     *
-     * @return
-     */
-    private String getPath() {
-        return "/storage/emulated/0/zip";
     }
 
 
