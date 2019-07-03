@@ -217,23 +217,24 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                     taskUnFindEntity = taskRefusedEntityLoadDataModel.getData();
                     mTextViewCompanyname.setText(taskUnFindEntity.companyname);
                     etTips.setText(taskUnFindEntity.remark);
-                    if (taskUnFindEntity.taskisok.equals("2")) {
-
-                        setupRecyclerViewFromServer(mRecyclerViewImageList, taskUnFindEntity.pics);
-                        setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskUnFindEntity.voides);
-                        if (null != taskUnFindEntity.voides && !taskUnFindEntity.voides.isEmpty()) {
-                            rxPermissionTest();
+                    if (!taskUnFindEntity.taskisok.equals("2")) {
+                        taskUnFindEntity.pics.clear();
+                        taskUnFindEntity.voides.clear();
+                    }
+                    setupRecyclerViewFromServer(mRecyclerViewImageList, taskUnFindEntity.pics);
+                    setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskUnFindEntity.voides);
+                    if (null != taskUnFindEntity.voides && !taskUnFindEntity.voides.isEmpty()) {
+                        rxPermissionTest();
+                    }
+                    if (null != taskUnFindEntity.unfind) {
+                        Gson gson = new Gson();
+                        String obj1 = gson.toJson(taskUnFindEntity.unfind);
+                        JsonObject object = new JsonParser().parse(obj1).getAsJsonObject();
+                        HashMap<String, String> map = new HashMap();
+                        for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                            map.put("unfind." + entry.getKey(), entry.getValue().getAsString());
                         }
-                        if (null != taskUnFindEntity.unfind) {
-                            Gson gson = new Gson();
-                            String obj1 = gson.toJson(taskUnFindEntity.unfind);
-                            JsonObject object = new JsonParser().parse(obj1).getAsJsonObject();
-                            HashMap<String, String> map = new HashMap();
-                            for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-                                map.put("unfind." + entry.getKey(), entry.getValue().getAsString());
-                            }
-                            taskUnFindEntity.unfindSampleInfoMap = map;
-                        }
+                        taskUnFindEntity.unfindSampleInfoMap = map;
                     }
                 }
             }

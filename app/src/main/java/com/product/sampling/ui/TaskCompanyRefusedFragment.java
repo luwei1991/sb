@@ -216,24 +216,27 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                     taskRefusedEntity = taskRefusedEntityLoadDataModel.getData();
                     mTextViewCompanyname.setText(taskRefusedEntity.companyname);
                     etTips.setText(taskRefusedEntity.remark);
-                    if (taskRefusedEntity.taskisok.equals("1")) {
-                        setupRecyclerViewFromServer(mRecyclerViewImageList, taskRefusedEntity.pics);
-                        setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskRefusedEntity.voides);
-                        if (null != taskRefusedEntity.voides && !taskRefusedEntity.voides.isEmpty()) {
-                            rxPermissionTest();
+                    if (!taskRefusedEntity.taskisok.equals("1")) {
+                        taskRefusedEntity.pics.clear();
+                        taskRefusedEntity.voides.clear();
+                    }
+                    setupRecyclerViewFromServer(mRecyclerViewImageList, taskRefusedEntity.pics);
+                    setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskRefusedEntity.voides);
+                    if (null != taskRefusedEntity.voides && !taskRefusedEntity.voides.isEmpty()) {
+                        rxPermissionTest();
+                    }
+                    if (null != taskRefusedEntity.refuse) {
+                        Gson gson = new Gson();
+                        String obj1 = gson.toJson(taskRefusedEntity.refuse);
+                        JsonObject object = new JsonParser().parse(obj1).getAsJsonObject();
+                        HashMap<String, String> map = new HashMap();
+                        for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                            map.put("refuse." + entry.getKey(), entry.getValue().getAsString());
                         }
-                        if (null != taskRefusedEntity.refuse) {
-                            Gson gson = new Gson();
-                            String obj1 = gson.toJson(taskRefusedEntity.refuse);
-                            JsonObject object = new JsonParser().parse(obj1).getAsJsonObject();
-                            HashMap<String, String> map = new HashMap();
-                            for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-                                map.put("refuse." + entry.getKey(), entry.getValue().getAsString());
-                            }
-                            taskRefusedEntity.refuseInfoMap = map;
-                        }
+                        taskRefusedEntity.refuseInfoMap = map;
                     }
                 }
+
             }
         });
         taskDetailViewModel.requestOrderList(AccountManager.getInstance().
