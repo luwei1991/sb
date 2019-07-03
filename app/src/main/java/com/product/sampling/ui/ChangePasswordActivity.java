@@ -16,10 +16,10 @@ import com.product.sampling.R;
 import com.product.sampling.httpmoudle.BaseHttpResult;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
+import com.product.sampling.maputil.ToastUtil;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
 import com.product.sampling.utils.RxSchedulersHelper;
-import com.product.sampling.utils.ToastUtils;
 
 import io.reactivex.disposables.Disposable;
 
@@ -159,13 +159,13 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
                     public void onFailure(int code, String message) {
                         super.onFailure(code, message);
                         showProgress(false);
-                        ToastUtils.showToast(message);
+                        ToastUtil.show(ChangePasswordActivity.this,message);
                     }
 
                     @Override
                     public void onSuccess(BaseHttpResult result) {
                         showProgress(false);
-                        ToastUtils.showToast(result.message);
+                        ToastUtil.show(ChangePasswordActivity.this,result.message);
                         finish();
                     }
 

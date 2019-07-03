@@ -94,17 +94,14 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         if (getArguments().getString(ARG_TASK_STATUS).equals("-1")) {
 
             assert recyclerView != null;
-            String taskList = (String) SPUtil.get(getActivity(), "tasklist", "");
-            if (!TextUtils.isEmpty(taskList)) {
-                Gson gson = new Gson();
-                Type listType = new TypeToken<List<TaskEntity>>() {
-                }.getType();
-                List<TaskEntity> list = gson.fromJson(taskList, listType);
-                if (null != list && !list.isEmpty()) {
-                    TaskResultBean bean = new TaskResultBean();
-                    bean.list = list;
-                    setupRecyclerView((RecyclerView) recyclerView, list);
+            List<TaskEntity> list = findTaskInLocalFile();
+            if (null != list && !list.isEmpty()) {
+                for (TaskEntity taskEntity : list) {
+                    taskEntity.isLoadLocalData = true;
                 }
+                TaskResultBean bean = new TaskResultBean();
+                bean.list = list;
+                setupRecyclerView((RecyclerView) recyclerView, list);
             }
         } else {
             getData();
@@ -355,12 +352,16 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                 }.getType();
                 Gson gson = new Gson();
                 List<TaskEntity> listTask = gson.fromJson(taskListStr, listType);
+                if (null == listTask || listTask.isEmpty()) return new ArrayList<>();
+                for (TaskEntity taskEntity : listTask) {
+                    taskEntity.isLoadLocalData = true;
+                }
                 return listTask;
             }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Override

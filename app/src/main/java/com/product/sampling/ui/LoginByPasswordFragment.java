@@ -3,60 +3,35 @@ package com.product.sampling.ui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.bumptech.glide.request.RequestOptions;
 import com.product.sampling.R;
 import com.product.sampling.bean.UserInfoBean;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.httpmoudle.error.ExecptionEngin;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.maputil.ToastUtil;
-import com.product.sampling.net.Exception.ApiException;
-import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
-import com.product.sampling.net.response.ResponseTransformer;
-import com.product.sampling.net.schedulers.SchedulerProvider;
 import com.product.sampling.utils.ActivityUtils;
 import com.product.sampling.utils.KeyboardUtils;
 import com.product.sampling.utils.RxSchedulersHelper;
-import com.product.sampling.utils.SPUtil;
-import com.product.sampling.utils.ToastUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import io.reactivex.disposables.Disposable;
-
-import static com.product.sampling.Constants.IMAGE_BASE_URL;
 
 public class LoginByPasswordFragment extends BaseFragment implements View.OnClickListener {
 

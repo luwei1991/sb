@@ -3,9 +3,8 @@ package com.product.sampling.net;
 
 import com.product.sampling.httpmoudle.error.ApiException;
 import com.product.sampling.httpmoudle.error.ExecptionEngin;
-import com.product.sampling.utils.ToastUtils;
-
-import java.net.UnknownHostException;
+import com.product.sampling.maputil.ToastUtil;
+import com.product.sampling.ui.MainApplication;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -85,7 +84,7 @@ public abstract class ZBaseObserver<T> implements Observer<T> {
 
             }
             if (isNeedShowtoast) {
-                ToastUtils.showToast(message);
+                ToastUtil.show(MainApplication.INSTANCE.getApplicationContext(), message);
             }
         }
 

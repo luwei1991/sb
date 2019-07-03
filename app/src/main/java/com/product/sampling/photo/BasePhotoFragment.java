@@ -2,7 +2,6 @@ package com.product.sampling.photo;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.view.KeyEvent;
@@ -12,8 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 
 import com.product.sampling.R;
-import com.product.sampling.ui.MainTaskListActivity;
-import com.product.sampling.utils.ToastUtil;
+import com.product.sampling.maputil.ToastUtil;
 
 import org.devio.takephoto.app.TakePhoto;
 import org.devio.takephoto.app.TakePhotoFragment;
@@ -25,7 +23,6 @@ import org.devio.takephoto.model.TImage;
 import org.devio.takephoto.model.TResult;
 import org.devio.takephoto.model.TakePhotoOptions;
 import org.devio.takephoto.permission.TakePhotoInvocationHandler;
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -170,7 +167,7 @@ public abstract class BasePhotoFragment extends TakePhotoFragment {
                 showResultImages(resultImages, imageListPostionInTask);
             }
         } else {
-            ToastUtil.showToast(getContext(), "还未选中图片");
+            ToastUtil.showShortToast(getContext(), "还未选中图片");
         }
     }
 

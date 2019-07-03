@@ -3,12 +3,10 @@ package com.product.sampling.ui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,19 +16,13 @@ import android.widget.TextView;
 import com.product.sampling.R;
 import com.product.sampling.bean.UserInfoBean;
 import com.product.sampling.httpmoudle.RetrofitService;
-import com.product.sampling.httpmoudle.error.ExecptionEngin;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.maputil.ToastUtil;
-import com.product.sampling.net.Exception.ApiException;
-import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
-import com.product.sampling.net.response.ResponseTransformer;
-import com.product.sampling.net.schedulers.SchedulerProvider;
 import com.product.sampling.utils.ActivityUtils;
 import com.product.sampling.utils.KeyboardUtils;
 import com.product.sampling.utils.RxSchedulersHelper;
-import com.product.sampling.utils.ToastUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -93,7 +85,7 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
                 if (validatePhoneNum()) {
                     getSmsCode();
                 } else {
-                    ToastUtils.showToast("请输入正确手机号");
+                    ToastUtil.show(getActivity(), "请输入正确手机号");
                 }
                 break;
             case R.id.sign_in_button:
@@ -116,7 +108,7 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
                     public void onFailure(int code, String message) {
                         super.onFailure(code, message);
                         showProgress(false);
-                        ToastUtils.showToast(message);
+                        ToastUtil.show(getActivity(), message);
                     }
 
                     @Override
@@ -146,7 +138,7 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
                     public void onFailure(int code, String message) {
                         super.onFailure(code, message);
                         showProgress(false);
-                        ToastUtils.showToast(message);
+                        ToastUtil.show(getActivity(), message);
                         if (myCountDownTimer != null) {
                             myCountDownTimer.cancel();
                         }
@@ -157,7 +149,8 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
                     @Override
                     public void onSuccess(String code) {
                         showProgress(false);
-                        ToastUtils.showToast("验证码已发送,请注意查收");
+                        ToastUtil.show(getActivity(), "验证码已发送,请注意查收");
+
                         if (myCountDownTimer == null) {
                             myCountDownTimer = new MyCountDownTimer(90000, 1000);
                         }
@@ -202,7 +195,7 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
         boolean result;
         String phoneNum = mEditTextPhone.getText().toString().trim();
         if (TextUtils.isEmpty(phoneNum) || phoneNum.length() != 11) {
-            ToastUtils.showToast("请输入正确手机号");
+            ToastUtil.show(getActivity(), "请输入正确手机号");
             result = false;
         } else {
             result = true;

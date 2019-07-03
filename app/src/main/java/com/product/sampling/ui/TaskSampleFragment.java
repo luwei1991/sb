@@ -47,6 +47,7 @@ import com.product.sampling.bean.TaskSample;
 import com.product.sampling.bean.Videos;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
+import com.product.sampling.maputil.ToastUtil;
 import com.product.sampling.net.LoadDataModel;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
@@ -55,7 +56,6 @@ import com.product.sampling.photo.MediaHelper;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.SPUtil;
-import com.product.sampling.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -343,7 +343,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             List<Pics> list = sample.getPics();
 
             if (null == list || list.isEmpty()) {
-                ToastUtil.showToast(getActivity(), "请选择图片");
+                dismissLoadingDialog();
+                ToastUtil.show(getActivity(), "请选择图片");
                 continue;
             }
             for (int j = 0; j < list.size(); j++) {

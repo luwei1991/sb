@@ -24,14 +24,13 @@ import com.product.sampling.R;
 import com.product.sampling.adapter.BannerViewPagerAdapter;
 import com.product.sampling.adapter.NewsListAdapter;
 import com.product.sampling.bean.New;
-import com.product.sampling.bean.UserInfoBean;
 import com.product.sampling.manager.AccountManager;
+import com.product.sampling.maputil.ToastUtil;
 import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.net.response.ResponseTransformer;
 import com.product.sampling.net.schedulers.SchedulerProvider;
 import com.product.sampling.utils.GdLocationUtil;
-import com.product.sampling.utils.ToastUtil;
 import com.product.sampling.view.CardTransformer;
 import com.product.sampling.view.MyViewPager;
 
@@ -122,7 +121,7 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
                     initView(news);
 
                 }, throwable -> {
-                    ToastUtil.showToast(this, ((ApiException) throwable).getDisplayMessage());
+                    ToastUtil.showShortToast(this, ((ApiException) throwable).getDisplayMessage());
                     Log.e("throwable", "" + ((ApiException) throwable).getDisplayMessage());
                 });
     }

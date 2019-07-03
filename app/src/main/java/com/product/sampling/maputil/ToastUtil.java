@@ -30,9 +30,8 @@ public class ToastUtil {
     public static void showShortToast(Context context, String message) {
         TextView text = new TextView(context);// 显示的提示文字
         text.setText(message);
-        text.setBackgroundColor(Color.WHITE);
+        text.setBackgroundColor(Color.GRAY);
         text.setPadding(10, 10, 10, 10);
-
         if (mToast != null) {//
             mHandler.postDelayed(r, 0);//隐藏toast
         } else {

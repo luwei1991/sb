@@ -355,6 +355,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
                         taskDetailViewModel.taskEntity = listTask.get(i);
                     }
                 }
+                taskDetailViewModel.taskEntity.isLoadLocalData = true;
             }
         }
 
