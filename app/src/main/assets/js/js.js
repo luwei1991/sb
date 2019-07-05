@@ -17,9 +17,38 @@ function connectWebViewJavascriptBridge(callback) {
 connectWebViewJavascriptBridge(function(bridge) {
     bridge.init(function(message, responseCallback) {
         var fromData = $("form").serialize();
+
+        //获取日期，拼成字符串
+        var fillInDateYear = [],fillInDateMonth=[], fillInDateDay=[];
+        fromData.split('&').forEach(item => {
+            var d = item.split('=');
+            if(d[0].indexOf('fillInDateYear')>-1){
+                fillInDateYear.push({
+                    k: d[0],
+                    v: d[1]
+                })
+            }
+            if(d[0].indexOf('fillInDateMonth')>-1){
+                fillInDateMonth.push({
+                    k: d[0],
+                    v: d[1]
+                })
+            }
+            if(d[0].indexOf('fillInDateDay')>-1){
+                fillInDateDay.push({
+                    k: d[0],
+                    v: d[1]
+                })
+            }
+        });
+        var str = '';
+        fillInDateYear.forEach((item, i) => {
+            str+= '&' + item.k.split('.')[0]+'.fillInDate'+'='+(fillInDateYear[i].v||'0000')+'-'+(fillInDateMonth[i].v||'00')+'-'+(fillInDateDay[i].v||'00')
+        })
+
         responseCallback(JSON.stringify({
             type: postType,
-            data: fromData
+            data: fromData+str
         }));
     });
 
@@ -50,6 +79,21 @@ function dataFill(data){
         var d = item.match(/(.+)=(.+)/)
         
         if(d && d[1] && d[2]){
+
+            if(d[1].split('.')[1] && d[1].split('.')[1]=="fillInDate"){ // 日期回填
+                var k = d[1].split('.');
+                var v = d[2].split('-');
+                $("[name='"+k[0]+".fillInDateYear']").each(function(){
+                    $(this).val(v[0])
+                })
+                $("[name='"+k[0]+".fillInDateMonth']").each(function(){
+                    $(this).val(v[1])
+                })
+                $("[name='"+k[0]+".fillInDateDay']").each(function(){
+                    $(this).val(v[2])
+                })
+            }
+            
             if(d[1].indexOf('ssiiggnn_')>-1){ // 签名回填
                 if(!$("[name="+d[1]+"]").length){
                     $('form').append('<input type="hidden" name='+ d[1] +'>')
@@ -172,11 +216,40 @@ function d(data){
 
 function c(){
     var fromData = $("form").serialize();
-    console.log({
-        type: postType,
-        data: fromData
+
+    //获取日期，拼成字符串
+    var fillInDateYear = [],fillInDateMonth=[], fillInDateDay=[];
+    fromData.split('&').forEach(item => {
+        var d = item.split('=');
+        if(d[0].indexOf('fillInDateYear')>-1){
+            fillInDateYear.push({
+                k: d[0],
+                v: d[1]
+            })
+        }
+        if(d[0].indexOf('fillInDateMonth')>-1){
+            fillInDateMonth.push({
+                k: d[0],
+                v: d[1]
+            })
+        }
+        if(d[0].indexOf('fillInDateDay')>-1){
+            fillInDateDay.push({
+                k: d[0],
+                v: d[1]
+            })
+        }
+    });
+    var str = ''
+    fillInDateYear.forEach((item, i) => {
+        str+= '&' + item.k.split('.')[0]+'.fillInDate'+'='+(fillInDateYear[i].v||'')+'-'+(fillInDateMonth[i].v||'')+'-'+(fillInDateDay[i].v||'')
     })
-    console.log(fromData)
+
+    // console.log({
+    //     type: postType,
+    //     data: fromData
+    // })
+    console.log(fromData+str)
 }
 
 
