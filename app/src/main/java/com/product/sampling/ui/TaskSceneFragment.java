@@ -214,6 +214,10 @@ public class TaskSceneFragment extends BasePhotoFragment {
         findTaskInLocalFile();
         //刷新本地图片和视频列表
         if (taskDetailViewModel.taskEntity.isLoadLocalData) {
+            if (!taskDetailViewModel.taskEntity.taskisok.equals("0")) {
+                taskDetailViewModel.taskEntity.pics.clear();
+                taskDetailViewModel.taskEntity.voides.clear();
+            }
             setupRecyclerView(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
             setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
         } else {
@@ -231,7 +235,10 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 if (taskEntityLoadDataModel.isSuccess()) {
                     taskDetailViewModel.taskEntity = taskEntityLoadDataModel.getData();
                     taskDetailViewModel.taskEntity.isLoadLocalData = false;
-
+                    if (!taskDetailViewModel.taskEntity.taskisok.equals("0")) {
+                        taskDetailViewModel.taskEntity.pics.clear();
+                        taskDetailViewModel.taskEntity.voides.clear();
+                    }
                     setupRecyclerViewFromServer(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
                     setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
                     if (null != taskDetailViewModel.taskEntity.voides && !taskDetailViewModel.taskEntity.voides.isEmpty()) {

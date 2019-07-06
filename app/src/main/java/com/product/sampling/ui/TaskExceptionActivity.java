@@ -1,6 +1,7 @@
 package com.product.sampling.ui;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.product.sampling.R;
 import com.product.sampling.bean.ImageItem;
 import com.product.sampling.bean.TaskEntity;
@@ -26,7 +29,9 @@ import com.product.sampling.net.LoadDataModel;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 import com.product.sampling.ui.viewmodel.TaskExecptionViewModel;
+import com.product.sampling.utils.SPUtil;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,14 +58,10 @@ public class TaskExceptionActivity extends BaseActivity {
         task = (TaskEntity) bundle.getSerializable("task");//读出数据
 
         taskDetailViewModel = ViewModelProviders.of(this).get(TaskDetailViewModel.class);
-//        View recyclerView = findViewById(R.id.item_image_list);
-//        assert recyclerView != null;
-//        List list = new ArrayList();
-//        for (int i = 0; i < 2; i++) {
-//            list.add(createItem(i));
-//        }
-        taskUnfindSampleFragment = TaskUnfindSampleFragment.newInstance(task);
-        taskCompanyRefusedFragment = TaskCompanyRefusedFragment.newInstance(task);
+        taskDetailViewModel.taskEntity = task;
+        findTaskInLocalFile();
+        taskUnfindSampleFragment = TaskUnfindSampleFragment.newInstance(taskDetailViewModel.taskEntity);
+        taskCompanyRefusedFragment = TaskCompanyRefusedFragment.newInstance(taskDetailViewModel.taskEntity);
         RadioGroup rb = findViewById(R.id.rg1);
         rb.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -117,4 +118,24 @@ public class TaskExceptionActivity extends BaseActivity {
         }
         return new ImageItem(text, res);
     }
+    List<TaskEntity> listTask;
+    void findTaskInLocalFile() {
+        Gson gson = new Gson();
+        String taskListStr = (String) SPUtil.get(this, "tasklist", "");
+        if (!TextUtils.isEmpty(taskListStr)) {
+            Type listType = new TypeToken<List<TaskEntity>>() {
+            }.getType();
+            listTask = gson.fromJson(taskListStr, listType);
+            if (null != listTask && !listTask.isEmpty()) {
+                for (int i = 0; i < listTask.size(); i++) {
+                    if (listTask.get(i).id.equals(taskDetailViewModel.taskEntity.id)) {
+                        taskDetailViewModel.taskEntity = listTask.get(i);
+                    }
+                }
+                taskDetailViewModel.taskEntity.isLoadLocalData = true;
+            }
+        }
+
+    }
+
 }

@@ -147,8 +147,6 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
             }
         });
 
-
-        // TODO 保存并提交
         // 保存并提交
         view.findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,13 +155,11 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
             }
         });
 
-
-        // TODO 保存
         // 保存
         view.findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                saveTaskInLocalFile(false);
             }
         });
 
@@ -203,40 +199,46 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
             public void onChanged(LoadDataModel<TaskEntity> taskRefusedEntityLoadDataModel) {
                 if (taskRefusedEntityLoadDataModel.isSuccess()) {
                     taskRefusedEntity = taskRefusedEntityLoadDataModel.getData();
-                    mTextViewCompanyname.setText(taskRefusedEntity.companyname);
-                    etTips.setText(taskRefusedEntity.remark);
-                    if (!taskRefusedEntity.taskisok.equals("1")) {
-                        taskRefusedEntity.pics.clear();
-                        taskRefusedEntity.voides.clear();
-                    }
-                    setupRecyclerViewFromServer(mRecyclerViewImageList, taskRefusedEntity.pics);
-                    setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskRefusedEntity.voides);
-                    if (null != taskRefusedEntity.voides && !taskRefusedEntity.voides.isEmpty()) {
-                        rxPermissionTest();
-                    }
-                    if (null != taskRefusedEntity.refuse) {
-                        Gson gson = new Gson();
-                        String obj1 = gson.toJson(taskRefusedEntity.refuse);
-                        JsonObject object = new JsonParser().parse(obj1).getAsJsonObject();
-                        HashMap<String, String> map = new HashMap();
-                        for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-                            map.put("refuse." + entry.getKey(), entry.getValue().getAsString());
-                        }
-                        taskRefusedEntity.refuseInfoMap = map;
-                    }
-
-                    if (TextUtils.isEmpty(taskRefusedEntity.refusefile)) {
-                        btnUploadRefusedPic.setText("(拍照)上传");
-                    } else {
-                        btnUploadRefusedPic.setText("已拍照");
-                    }
+                    initData();
                 }
 
             }
         });
-        taskDetailViewModel.requestOrderList(AccountManager.getInstance().
+        if (!taskRefusedEntity.isLoadLocalData) {
+            taskDetailViewModel.requestOrderList(AccountManager.getInstance().getUserId(), taskRefusedEntity.id);
+        } else {
+            initData();
+        }
+    }
 
-                getUserId(), taskRefusedEntity.id);
+    private void initData() {
+        mTextViewCompanyname.setText(taskRefusedEntity.companyname);
+        etTips.setText(taskRefusedEntity.remark);
+        if (!taskRefusedEntity.taskisok.equals("1")) {
+            taskRefusedEntity.pics.clear();
+            taskRefusedEntity.voides.clear();
+        }
+        setupRecyclerViewFromServer(mRecyclerViewImageList, taskRefusedEntity.pics);
+        setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskRefusedEntity.voides);
+        if (null != taskRefusedEntity.voides && !taskRefusedEntity.voides.isEmpty()) {
+            rxPermissionTest();
+        }
+        if (null != taskRefusedEntity.refuse) {
+            Gson gson = new Gson();
+            String obj1 = gson.toJson(taskRefusedEntity.refuse);
+            JsonObject object = new JsonParser().parse(obj1).getAsJsonObject();
+            HashMap<String, String> map = new HashMap();
+            for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                map.put("refuse." + entry.getKey(), entry.getValue().getAsString());
+            }
+            taskRefusedEntity.refuseInfoMap = map;
+        }
+
+        if (TextUtils.isEmpty(taskRefusedEntity.refusefile)) {
+            btnUploadRefusedPic.setText("(拍照)上传");
+        } else {
+            btnUploadRefusedPic.setText("已拍照");
+        }
     }
 
     @Override
@@ -593,6 +595,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                 }
             }
             if (!isRemove) {
+                taskRefusedEntity.taskisok = 1 + "";
                 listTask.add(taskRefusedEntity);
             }
             SPUtil.put(getActivity(), "tasklist", gson.toJson(listTask));

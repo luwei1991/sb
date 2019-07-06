@@ -153,8 +153,6 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             }
         });
 
-
-        // TODO 保存并提交
         // 保存并提交
         view.findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,13 +161,11 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             }
         });
 
-
-        // TODO 保存
         // 保存
         view.findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                saveTaskInLocalFile(false);
             }
         });
         // 编辑单据并打印
@@ -206,36 +202,44 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             public void onChanged(LoadDataModel<TaskEntity> taskRefusedEntityLoadDataModel) {
                 if (taskRefusedEntityLoadDataModel.isSuccess()) {
                     taskUnFindEntity = taskRefusedEntityLoadDataModel.getData();
-                    mTextViewCompanyname.setText(taskUnFindEntity.companyname);
-                    etTips.setText(taskUnFindEntity.remark);
-                    if (!taskUnFindEntity.taskisok.equals("2")) {
-                        taskUnFindEntity.pics.clear();
-                        taskUnFindEntity.voides.clear();
-                    }
-                    setupRecyclerViewFromServer(mRecyclerViewImageList, taskUnFindEntity.pics);
-                    setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskUnFindEntity.voides);
-                    if (null != taskUnFindEntity.voides && !taskUnFindEntity.voides.isEmpty()) {
-                        rxPermissionTest();
-                    }
-                    if (null != taskUnFindEntity.unfind) {
-                        Gson gson = new Gson();
-                        String obj1 = gson.toJson(taskUnFindEntity.unfind);
-                        JsonObject object = new JsonParser().parse(obj1).getAsJsonObject();
-                        HashMap<String, String> map = new HashMap();
-                        for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-                            map.put("unfind." + entry.getKey(), entry.getValue().getAsString());
-                        }
-                        taskUnFindEntity.unfindSampleInfoMap = map;
-                    }
-                    if (TextUtils.isEmpty(taskUnFindEntity.unfindpicfile)) {
-                        btnUploadUnfindPic.setText("(拍照)上传");
-                    } else {
-                        btnUploadUnfindPic.setText("已拍照");
-                    }
+                    initData();
                 }
             }
         });
-        taskDetailViewModel.requestOrderList(AccountManager.getInstance().getUserId(), taskUnFindEntity.id);
+        if (!taskUnFindEntity.isLoadLocalData) {
+            taskDetailViewModel.requestOrderList(AccountManager.getInstance().getUserId(), taskUnFindEntity.id);
+        } else {
+            initData();
+        }
+    }
+
+    private void initData() {
+        mTextViewCompanyname.setText(taskUnFindEntity.companyname);
+        etTips.setText(taskUnFindEntity.remark);
+        if (!taskUnFindEntity.taskisok.equals("2")) {
+            taskUnFindEntity.pics.clear();
+            taskUnFindEntity.voides.clear();
+        }
+        setupRecyclerViewFromServer(mRecyclerViewImageList, taskUnFindEntity.pics);
+        setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskUnFindEntity.voides);
+        if (null != taskUnFindEntity.voides && !taskUnFindEntity.voides.isEmpty()) {
+            rxPermissionTest();
+        }
+        if (null != taskUnFindEntity.unfind) {
+            Gson gson = new Gson();
+            String obj1 = gson.toJson(taskUnFindEntity.unfind);
+            JsonObject object = new JsonParser().parse(obj1).getAsJsonObject();
+            HashMap<String, String> map = new HashMap();
+            for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                map.put("unfind." + entry.getKey(), entry.getValue().getAsString());
+            }
+            taskUnFindEntity.unfindSampleInfoMap = map;
+        }
+        if (TextUtils.isEmpty(taskUnFindEntity.unfindpicfile)) {
+            btnUploadUnfindPic.setText("(拍照)上传");
+        } else {
+            btnUploadUnfindPic.setText("已拍照");
+        }
     }
 
     @Override
@@ -413,10 +417,9 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
 
     private void downLoadVideo() {
         for (Videos videos : taskUnFindEntity.voides) {
-
+            if (TextUtils.isEmpty(videos.getId())) continue;
             FileDownloader.downloadFile(RetrofitService.createApiService(Request.class).downloadVideo(videos.getId()), Constants.getPath(), videos.getFileName(), new DownloadProgressHandler() {
-
-
+                
                 @Override
                 public void onProgress(int progress, long total, long speed) {
                     LogUtils.i("下载文件中:" + progress / total);
@@ -602,6 +605,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                 }
             }
             if (!isRemove) {
+                taskUnFindEntity.taskisok = 2 + "";
                 listTask.add(taskUnFindEntity);
             }
             SPUtil.put(getActivity(), "tasklist", gson.toJson(listTask));
