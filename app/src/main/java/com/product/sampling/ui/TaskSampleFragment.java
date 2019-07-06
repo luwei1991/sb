@@ -58,6 +58,8 @@ import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.SPUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -246,6 +248,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 }
             }
         });
+        EventBus.getDefault().register(this);
     }
 
     private void postSampleData() {
@@ -693,5 +696,13 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             }
         }
         return pName.contains(packageName);//判断pName中是否有目标程序的包名，有TRUE，没有FALSE
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetMessage(Throwable throwable) {
+        if (null != throwable) {
+            dismissLoadingDialog();
+            com.product.sampling.maputil.ToastUtil.show(getActivity(), "视频太大,请重新选择上传");
+        }
     }
 }
