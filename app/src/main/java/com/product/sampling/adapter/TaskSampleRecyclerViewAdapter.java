@@ -48,7 +48,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //按下确定键后的事件
-                                fragment.deleteId = mData.get(index).getId() + ",";
+                                fragment.deleteId += mData.get(index).getId() + ",";
                                 mData.remove(index);
                                 notifyDataSetChanged();
                             }
@@ -194,9 +194,5 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             mRecyclerViewVideo = view.findViewById(R.id.item_video_list);
 
         }
-    }
-
-    private String getPath() {
-        return "/storage/emulated/0/zip";
     }
 }

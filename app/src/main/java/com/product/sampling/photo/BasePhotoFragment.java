@@ -4,6 +4,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.widget.TextView;
 
@@ -194,18 +196,19 @@ public abstract class BasePhotoFragment extends TakePhotoFragment {
                 return false;
             }
         });
+        if (alertDialog.isShowing()) {
+            alertDialog.dismiss();
+        }
         alertDialog.show();
         alertDialog.setContentView(R.layout.loading_alert);
         alertDialog.setCanceledOnTouchOutside(true);
     }
 
-    public void setLoadingText(String msg) {
-        if (null != alertDialog) {
-            TextView textView = alertDialog.findViewById(R.id.tv_title);
-            if (null != textView) {
-                textView.setText(msg);
-            }
-        }
+    public void showLoadingDialog(String msg) {
+        Message message = new Message();
+        message.what = 0;
+        message.obj = msg;
+        mHandler.sendMessageDelayed(message, 100);
     }
 
     public void dismissLoadingDialog() {
@@ -240,5 +243,28 @@ public abstract class BasePhotoFragment extends TakePhotoFragment {
 
         startActivity(Intent.createChooser(share, "分享文件"));
 
+    }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            int what = msg.what;
+            if (what == 0) {
+                if (null != alertDialog) {
+                    TextView tv = alertDialog.findViewById(R.id.tv_title);
+                    tv.setText(msg.obj.toString());
+                }
+            } else {
+                alertDialog.cancel();
+            }
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        if (alertDialog != null) {
+            alertDialog.dismiss();
+        }
+        super.onDestroy();
     }
 }

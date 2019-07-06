@@ -366,7 +366,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             }
 
             int finalI = i;
-            setLoadingText("样品信息提交中");
+            showLoadingDialog("样品信息提交中");
             RetrofitService.createApiService(Request.class)
                     .savesampleByBody(multipartBodyBuilder.build())
                     .compose(RxSchedulersHelper.io_main())
@@ -619,7 +619,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             multipartBodyBuilder.addFormDataPart("samplecount", "0");
         }
         showLoadingDialog();
-        setLoadingText("现场信息提交中");
+        showLoadingDialog("现场信息提交中");
         RetrofitService.createApiService(Request.class)
                 .uploadtaskinfo(multipartBodyBuilder.build())
                 .compose(RxSchedulersHelper.io_main())

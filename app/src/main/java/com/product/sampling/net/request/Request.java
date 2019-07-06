@@ -66,7 +66,7 @@ public interface Request {
     Observable<BaseHttpResult> changepassword(@Query("userid") String userid, @Query("password") String password, @Query("newPassword") String newPassword);
 
     @GET("app/task/tasklist")
-    Observable<BaseHttpResult<List<TaskEntity>>> taskList(@Query("userid") String userid, @Query("taskstatus") String taskstatus, @Query("ordertype") String ordertype,@Query("areashi") String areashi);
+    Observable<BaseHttpResult<List<TaskEntity>>> taskList(@Query("userid") String userid, @Query("taskstatus") String taskstatus, @Query("ordertype") String ordertype, @Query("areashi") String areashi);
 
     @GET("app/task/getdict")
     Observable<Response<TaskProvince>> taskMenu(@Query("type") String type, @Query("value") String value);
@@ -105,7 +105,7 @@ public interface Request {
     Observable<BaseHttpResult<String>> savesampleByBody(@Body MultipartBody file);
 
     @GET("app/user/uploadaddress")
-    Observable<BaseHttpResult> uploadaddress(@Query("userid") String userid, @Query("longitude") String longitude,@Query("latitude") String latitude);
+    Observable<BaseHttpResult> uploadaddress(@Query("userid") String userid, @Query("longitude") String longitude, @Query("latitude") String latitude);
 
     @GET("app/task/taskdetail")
     Observable<BaseHttpResult<TaskEntity>> taskdetail(@Query("userid") String userid, @Query("id") String id);
@@ -115,4 +115,9 @@ public interface Request {
 
     @GET("base/tBaFile/showImage")
     Observable<ResponseBody> downloadVideo(@Query("id") String id);
+
+    @POST("http://ip.taobao.com/service/getIpInfo2.php")
+    Observable<ResponseBody> getIPCountry(@Query("ip") String ip);
+
+
 }
