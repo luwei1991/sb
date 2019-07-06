@@ -407,7 +407,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
 
     private void downLoadVideo() {
         for (Videos videos : taskRefusedEntity.voides) {
-
+            if (TextUtils.isEmpty(videos.getId())) continue;
             FileDownloader.downloadFile(RetrofitService.createApiService(Request.class).downloadVideo(videos.getId()), Constants.getPath(), videos.getFileName(), new DownloadProgressHandler() {
 
 

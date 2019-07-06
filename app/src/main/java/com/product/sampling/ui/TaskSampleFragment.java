@@ -705,4 +705,10 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             com.product.sampling.maputil.ToastUtil.show(getActivity(), "视频太大,请重新选择上传");
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }
