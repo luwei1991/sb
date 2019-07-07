@@ -67,6 +67,10 @@ public class TaskEntity implements Parcelable, Serializable {
     public Refuse refuse;//企业拒检单 对象
     public Unfind unfind;//未找到样品单
 
+    public String feedfile = "";
+    public String feedpicfile = "";
+    public HashMap<String, String> feedInfoMap;
+
     public TaskEntity() {
 
     }

@@ -69,6 +69,12 @@ public class H5WebViewActivity extends AppCompatActivity {
             webView.loadUrl("file:///android_asset/3产品质量监督抽查企业拒检认定表.html");
         } else if (4 == pos) {
             webView.loadUrl("file:///android_asset/4未抽到样品企业情况说明书.html");
+        } else if (5 == pos) {
+            webView.loadUrl("file:///android_asset/5产品质量安全风险监测采样单.html");
+        } else if (6 == pos) {
+            webView.loadUrl("file:///android_asset/6流通领域商品质量抽查检验工作单.html");
+        } else if (7 == pos) {
+            webView.loadUrl("file:///android_asset/7企业对抽样人员工作反馈意见.html");
         }
         HashMap<String, String> map = (HashMap) getIntent().getSerializableExtra("map");
         if (null != map && !map.isEmpty()) {

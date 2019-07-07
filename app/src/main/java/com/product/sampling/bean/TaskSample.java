@@ -12,8 +12,18 @@ public class TaskSample {
     public String disposalfile = "";
     public String samplingpicfile = "";//抽样单生成图片的文件流
     public String disposalpicfile = "";//抽样处置单图片的文件流
+
+    public String workfile = "";
+    public String riskfile = "";
+    public String workpicfile = "";
+    public String riskpicfile = "";
+
     public HashMap<String, String> samplingInfoMap = new HashMap<>();//检查单信息
     public HashMap<String, String> adviceInfoMap = new HashMap<>();//处置单信息
+
+    public HashMap<String, String> riskInfoMap = new HashMap<>();
+    public HashMap<String, String> workInfoMap = new HashMap<>();
+
     public Advice advice = new Advice();
     public Sampling sampling = new Sampling();
     public List<Pics> pics = new ArrayList<>();

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -86,6 +87,9 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
     public static final int Select_Check = 101;
     public static final int Select_Handle = 102;
+    public static final int Select_Risk = 103;
+    public static final int Select_Work = 104;
+    public static final int Select_Feed = 105;
 
     public int selectId = -1;
     public String deleteId = "";
@@ -94,7 +98,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     TaskDetailViewModel taskDetailViewModel;
     private static TaskSampleFragment fragment;
     TaskSampleRecyclerViewAdapter adapter;
-
+    Button uploadFeed;
     public TaskSampleFragment() {
     }
 
@@ -129,7 +133,33 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         adapter = new TaskSampleRecyclerViewAdapter(R.layout.item_sample_list_content, list, this, isLocalData);
         adapter.addHeaderView(getHeaderView(), 0);
         adapter.addHeaderView(getAddView(), 1);
+        adapter.addFooterView(getFootView());
         recyclerView.setAdapter(adapter);
+    }
+
+    private View getFootView() {
+
+        View view = View.inflate(getContext(), R.layout.item_sample_list_footer, null);
+        Button edit = view.findViewById(R.id.btn_edit_feed_sheet);
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(view.getContext(), H5WebViewActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Intent_Order, 7);
+                b.putSerializable("map", taskDetailViewModel.taskEntity.feedInfoMap);
+                intent.putExtras(b);
+                startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+            }
+        });
+        uploadFeed = view.findViewById(R.id.btn_upload_feed_sheet);
+        uploadFeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startGalleryForPdf(0, Select_Feed);
+            }
+        });
+        return view;
     }
 
     private View getHeaderView() {
@@ -463,6 +493,21 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).disposalfile = data.getStringExtra("pdf");
                                     shareBySystem(data.getStringExtra("pdf"));
 //                                    findPrintShare(data.getStringExtra("pdf"));
+                                } else if (pos == 5) {
+                                    taskDetailViewModel.taskEntity.taskSamples.get(index).riskInfoMap = map;
+                                    taskDetailViewModel.taskEntity.taskSamples.get(index).riskfile = data.getStringExtra("pdf");
+                                    shareBySystem(data.getStringExtra("pdf"));
+//                                    findPrintShare(data.getStringExtra("pdf"));
+                                } else if (pos == 6) {
+                                    taskDetailViewModel.taskEntity.taskSamples.get(index).workInfoMap = map;
+                                    taskDetailViewModel.taskEntity.taskSamples.get(index).workfile = data.getStringExtra("pdf");
+                                    shareBySystem(data.getStringExtra("pdf"));
+//                                    findPrintShare(data.getStringExtra("pdf"));
+                                } else if (pos == 7) {
+                                    taskDetailViewModel.taskEntity.feedInfoMap = map;
+                                    taskDetailViewModel.taskEntity.feedfile = data.getStringExtra("pdf");
+                                    shareBySystem(data.getStringExtra("pdf"));
+//                                    findPrintShare(data.getStringExtra("pdf"));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -486,6 +531,27 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     }
                     break;
 
+                case Select_Work:
+                    if (data != null) {
+                        List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
+                        taskDetailViewModel.taskEntity.taskSamples.get(selectId).workpicfile = selectHandle.get(0).getPath();
+                        mRecyclerView.getAdapter().notifyDataSetChanged();
+                    }
+                    break;
+                case Select_Risk:
+                    if (data != null) {
+                        List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
+                        taskDetailViewModel.taskEntity.taskSamples.get(selectId).riskpicfile = selectHandle.get(0).getPath();
+                        mRecyclerView.getAdapter().notifyDataSetChanged();
+                    }
+                    break;
+                case Select_Feed:
+                    if (data != null) {
+                        List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
+                        taskDetailViewModel.taskEntity.feedpicfile = selectHandle.get(0).getPath();
+                        uploadFeed.setText("已拍照");
+                    }
+                    break;
 
             }
         }

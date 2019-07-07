@@ -28,6 +28,8 @@ import java.util.List;
 import static com.product.sampling.ui.TaskSampleFragment.Select_Check;
 import static com.product.sampling.ui.TaskSampleFragment.Select_Handle;
 import static com.product.sampling.ui.H5WebViewActivity.Intent_Order;
+import static com.product.sampling.ui.TaskSampleFragment.Select_Risk;
+import static com.product.sampling.ui.TaskSampleFragment.Select_Work;
 
 public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, TaskSampleRecyclerViewAdapter.ViewHolder> {
 
@@ -76,6 +78,28 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                 intent.putExtras(b);
                 fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
 
+            } else if (R.id.btn_edit_risk_sheet == view.getId()) {//处置单编辑
+                int index = (int) view.getTag();
+
+                Intent intent = new Intent(view.getContext(), H5WebViewActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Intent_Order, 5);
+                b.putInt("task", index);
+                b.putSerializable("map", mData.get(index).riskInfoMap);
+                intent.putExtras(b);
+                fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+
+            } else if (R.id.btn_edit_work_sheet == view.getId()) {//处置单编辑
+                int index = (int) view.getTag();
+
+                Intent intent = new Intent(view.getContext(), H5WebViewActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Intent_Order, 6);
+                b.putInt("task", index);
+                b.putSerializable("map", mData.get(index).workInfoMap);
+                intent.putExtras(b);
+                fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+
             } else if (R.id.btn_upload_check_sheet == view.getId()) {//检查单上传
                 fragment.selectId = (int) view.getTag();
                 fragment.startGalleryForPdf((int) view.getTag(), Select_Check);
@@ -83,6 +107,12 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             } else if (R.id.btn_upload_handling_sheet == view.getId()) {//处置单上传
                 fragment.selectId = (int) view.getTag();
                 fragment.startGalleryForPdf((int) view.getTag(), Select_Handle);
+            }else if (R.id.btn_upload_risk_sheet == view.getId()) {//处置单上传
+                fragment.selectId = (int) view.getTag();
+                fragment.startGalleryForPdf((int) view.getTag(), Select_Risk);
+            }else if (R.id.btn_upload_work_sheet == view.getId()) {//处置单上传
+                fragment.selectId = (int) view.getTag();
+                fragment.startGalleryForPdf((int) view.getTag(), Select_Work);
             } else if (R.id.iv_add_video == view.getId()) {
                 fragment.selectId = (int) view.getTag();
                 MediaHelper.startVideo(fragment, PictureConfig.CHOOSE_REQUEST);
@@ -112,6 +142,17 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             holder.mBtnUploadHandle.setText("已拍照");
         }
 
+        if (TextUtils.isEmpty(task.riskpicfile)) {
+            holder.mBtnUploadRisk.setText("(拍照)上传");
+        } else {
+            holder.mBtnUploadRisk.setText("已拍照");
+        }
+
+        if (TextUtils.isEmpty(task.workpicfile)) {
+            holder.mBtnUploadWork.setText("(拍照)上传");
+        } else {
+            holder.mBtnUploadWork.setText("已拍照");
+        }
 
         holder.mImageViewAdd.setVisibility(View.VISIBLE);
         holder.mBtnEditCheck.setVisibility(View.VISIBLE);
@@ -136,6 +177,18 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
 
         holder.mBtnUploadHandle.setTag(position);
         holder.mBtnUploadHandle.setOnClickListener(mOnClickListener);
+
+        holder.mBtnEditRisk.setTag(position);
+        holder.mBtnEditRisk.setOnClickListener(mOnClickListener);
+
+        holder.mBtnUploadRisk.setTag(position);
+        holder.mBtnUploadRisk.setOnClickListener(mOnClickListener);
+
+        holder.mBtnEditWork.setTag(position);
+        holder.mBtnEditWork.setOnClickListener(mOnClickListener);
+
+        holder.mBtnUploadWork.setTag(position);
+        holder.mBtnUploadWork.setOnClickListener(mOnClickListener);
 
         holder.mIVReduceVideo.setTag(position);
         holder.mIVReduceVideo.setOnClickListener(mOnClickListener);
@@ -172,6 +225,10 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         final Button mBtnUploadCheck;//检查单上传
         final Button mBtnEditHandle;//处置单编辑
         final Button mBtnUploadHandle;//处置单上传
+        final Button mBtnEditWork;//工作单编辑
+        final Button mBtnUploadWork;//工作单上传
+        final Button mBtnEditRisk;//风险单编辑
+        final Button mBtnUploadRisk;//风险单上传
         final TextView mTextViewHandleSheet;
         final TextView mTextViewCheckSheet;
         final ImageView mIVAddVideo;//添加视频
@@ -192,7 +249,10 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             mIVReduceVideo = view.findViewById(R.id.iv_reduce_video);
             mIVAddVideo = view.findViewById(R.id.iv_add_video);
             mRecyclerViewVideo = view.findViewById(R.id.item_video_list);
-
+            mBtnEditWork = view.findViewById(R.id.btn_edit_work_sheet);
+            mBtnUploadWork = view.findViewById(R.id.btn_upload_work_sheet);
+            mBtnEditRisk = view.findViewById(R.id.btn_edit_risk_sheet);
+            mBtnUploadRisk = view.findViewById(R.id.btn_upload_risk_sheet);
         }
     }
 }
