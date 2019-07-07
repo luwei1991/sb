@@ -106,8 +106,8 @@ table.tftable td.signtd{
     opacity: 0.8;
 }
 .sign_show{
-  width: 120px;
-  height: 44px;
+  width: 100%;
+  height: 50px;
   border-bottom: 1px solid #000;
   display: inline-block;
   cursor: pointer;

@@ -192,9 +192,9 @@
           <div class="sign">
           <div style="border-right: 1px solid #333">
             <p>受检单位对上述内容无异议<br />受检单位签名（盖章）：</p>
-            <!--<span>-->
-                <!--签字：<div class="sign_show" signname="ssiiggnn_shoujiandanwei"></div>-->
-              <!--</span>-->
+            <span>
+                <div class="sign_show" style="border:none" signname="ssiiggnn_shoujiandanwei"></div>
+            </span>
             <span>
               <input class="tc year" name="sampling.fillInDateYear" style="width:40px" type="text" placeholder="">年
               <input class="tc month" name="sampling.fillInDateMonth" style="width:20px" placeholder="">月
@@ -202,11 +202,10 @@
             </span>
           </div>
           <div style="border-right: 1px solid #333">
-            <p>生产单位对上述内容无异议<br />生产单位签名（盖章）：
-            </p>
-            <!--<span>-->
-              <!--签字：<div class="sign_show" signname="ssiiggnn_shengchandanwei"></div>-->
-            <!--</span>-->
+            <p>生产单位对上述内容无异议<br />生产单位签名（盖章）：</p>
+            <span>
+              <div class="sign_show" style="border:none" signname="ssiiggnn_shengchandanwei"></div>
+            </span>
             <span>
               <input class="tc year" name="sampling.fillInDateYear" style="width:40px" type="text" placeholder="">年
               <input class="tc month" name="sampling.fillInDateMonth" style="width:20px" placeholder="">月
@@ -216,8 +215,9 @@
           <div class="seal-box">
             <img class="seal" onclick="document.getElementById('uuahbaucgy9').focus()" src="./images/20190529142046.png" alt="">
             <p>抽样人签名（盖章）：</p>
+            <div class="sign_show" style="border:none" signname="ssiiggnn_chouyangren"></div>
             <span>
-                抽样单位（公章）：<div class="sign_show" signname="ssiiggnn_chouyangren"></div>
+                抽样单位（公章）
               </span>
             <span>
               <input class="tc year" name="sampling.fillInDateYear" style="width:40px" type="text" placeholder="">年
