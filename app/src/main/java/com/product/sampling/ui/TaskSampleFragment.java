@@ -584,6 +584,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                                     shareBySystem(data.getStringExtra("pdf"));
 //                                    findPrintShare(data.getStringExtra("pdf"));
                                 }
+                                mRecyclerView.getAdapter().notifyDataSetChanged();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
