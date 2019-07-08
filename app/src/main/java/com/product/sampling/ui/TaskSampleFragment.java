@@ -356,7 +356,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     multipartBodyBuilder.addFormDataPart("disposalpicfile", disposalpicfile.getName(), requestFile);//处置单
                 }
             }
-
             {
                 HashMap<String, String> adviceInfoMap = sample.adviceInfoMap;
                 //没填的时候默认值

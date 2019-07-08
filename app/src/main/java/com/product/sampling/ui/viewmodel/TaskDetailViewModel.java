@@ -1,5 +1,7 @@
 package com.product.sampling.ui.viewmodel;
 
+import android.text.TextUtils;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.product.sampling.bean.TaskCity;
@@ -66,7 +68,9 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
     }
 
     public void requestOrderList(String userid, String id) {
-
+        if (TextUtils.isEmpty(userid)) {
+            return;
+        }
         orderDetailLiveData.setValue(new LoadDataModel());
         RetrofitService.createApiService(Request.class)
                 .taskdetail(userid, id)
@@ -81,7 +85,9 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
     }
 
     public void requestTasksamples(String userid, String id) {
-
+        if (TextUtils.isEmpty(userid)) {
+            return;
+        }
         sampleDetailLiveData.setValue(new LoadDataModel());
         RetrofitService.createApiService(Request.class)
                 .tasksamples(userid, id)
@@ -96,6 +102,9 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
     }
 
     public void uploadaddress(String userid, double latitude, double longitude) {
+        if (TextUtils.isEmpty(userid)) {
+            return;
+        }
         RetrofitService.createApiService(Request.class)
                 .uploadaddress(userid, longitude + "", latitude + "")
                 .compose(RxSchedulersHelper.io_main())
