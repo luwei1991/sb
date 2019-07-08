@@ -751,6 +751,40 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                         .addFormDataPart("uploadVedio[" + i + "].fileStream", f.getName(), requestImage);
             }
         }
+        {
+            File feedfile = new File(taskDetailViewModel.taskEntity.feedfile);
+            if (feedfile.exists()) {
+                Log.e("file", feedfile.getAbsolutePath());
+                RequestBody requestFile = RequestBody.create(MultipartBody.FORM, feedfile);//把文件与类型放入请求体
+                multipartBodyBuilder.addFormDataPart("feedfile", feedfile.getName(), requestFile);//抽样单
+            }
+        }
+        {
+            File feedpicfile = new File(taskDetailViewModel.taskEntity.feedpicfile);
+            if (feedpicfile.exists()) {
+                Log.e("file", feedpicfile.getAbsolutePath());
+                RequestBody requestFile = RequestBody.create(MultipartBody.FORM, feedpicfile);//把文件与类型放入请求体
+                multipartBodyBuilder.addFormDataPart("feedpicfile", feedpicfile.getName(), requestFile);//抽样单
+            }
+        }
+
+        {
+            HashMap<String, String> feedInfoMap = taskDetailViewModel.taskEntity.feedInfoMap;
+            //没填的时候默认值
+
+            if (null != feedInfoMap && !feedInfoMap.isEmpty()) {
+                for (String s : feedInfoMap.keySet()) {
+                    if (!s.startsWith("feed.")) continue;
+                    try {
+                        String value = feedInfoMap.get(s);
+                        multipartBodyBuilder.addFormDataPart(s, value);//抽样单
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
         if (null != taskDetailViewModel.taskEntity.taskSamples && !taskDetailViewModel.taskEntity.taskSamples.isEmpty()) {
             multipartBodyBuilder.addFormDataPart("samplecount", taskDetailViewModel.taskEntity.taskSamples.size() + "");
         } else {
