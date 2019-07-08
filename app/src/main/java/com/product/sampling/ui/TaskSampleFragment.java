@@ -98,7 +98,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     TaskDetailViewModel taskDetailViewModel;
     private static TaskSampleFragment fragment;
     TaskSampleRecyclerViewAdapter adapter;
-    Button uploadFeed;
+    Button btnUploadFeed;
+    TextView tvUploadFeed;
 
     public TaskSampleFragment() {
     }
@@ -145,21 +146,29 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(view.getContext(), H5WebViewActivity.class);
+                Intent intent = new Intent(getActivity(), H5WebViewActivity.class);
                 Bundle b = new Bundle();
                 b.putInt(Intent_Order, 7);
                 b.putSerializable("map", taskDetailViewModel.taskEntity.feedInfoMap);
                 intent.putExtras(b);
-                startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+                TaskSampleFragment.this.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
             }
         });
-        uploadFeed = view.findViewById(R.id.btn_upload_feed_sheet);
-        uploadFeed.setOnClickListener(new View.OnClickListener() {
+        btnUploadFeed = view.findViewById(R.id.btn_upload_feed_sheet);
+        tvUploadFeed = view.findViewById(R.id.tv_feed_sheet);
+
+        btnUploadFeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startGalleryForPdf(0, Select_Feed);
+                TaskSampleFragment.this.startGalleryForPdf(0, Select_Feed);
             }
         });
+        if (!TextUtils.isEmpty(taskDetailViewModel.taskEntity.feedfile)) {
+            tvUploadFeed.setText(taskDetailViewModel.taskEntity.feedfile);
+        }
+        if (!TextUtils.isEmpty(taskDetailViewModel.taskEntity.feedpicfile)) {
+            btnUploadFeed.setText("已拍照");
+        }
         return view;
     }
 
@@ -535,8 +544,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                         if (index != -1) {
 
                             //把生成的pdf 赋值给列表
-
-                            mRecyclerView.getAdapter().notifyDataSetChanged();
                             HashMap map = new HashMap();
                             String para = data.getStringExtra("data");
                             JSONObject jsonObject;
@@ -548,7 +555,6 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                                     String[] value = sourceStrArray[i].split("=");
                                     if (value.length > 1) {
                                         map.put(value[0], value[1]);
-                                    } else {
                                     }
                                 }
                                 int pos = data.getIntExtra(Intent_Order, 1);
@@ -574,6 +580,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                                 } else if (pos == 7) {
                                     taskDetailViewModel.taskEntity.feedInfoMap = map;
                                     taskDetailViewModel.taskEntity.feedfile = data.getStringExtra("pdf");
+                                    tvUploadFeed.setText(taskDetailViewModel.taskEntity.feedfile);
                                     shareBySystem(data.getStringExtra("pdf"));
 //                                    findPrintShare(data.getStringExtra("pdf"));
                                 }
@@ -581,6 +588,31 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                                 e.printStackTrace();
                             }
                             Log.e("para", para);
+                        } else {
+                            HashMap map = new HashMap();
+                            String para = data.getStringExtra("data");
+                            JSONObject jsonObject;
+                            try {
+                                jsonObject = new JSONObject(para);
+                                String jsonData = jsonObject.get("data").toString();
+                                String[] sourceStrArray = jsonData.split("&");
+                                for (int i = 0; i < sourceStrArray.length; i++) {
+                                    String[] value = sourceStrArray[i].split("=");
+                                    if (value.length > 1) {
+                                        map.put(value[0], value[1]);
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            int pos = data.getIntExtra(Intent_Order, 1);
+                            if (pos == 7) {
+                                taskDetailViewModel.taskEntity.feedInfoMap = map;
+                                taskDetailViewModel.taskEntity.feedfile = data.getStringExtra("pdf");
+                                tvUploadFeed.setText(taskDetailViewModel.taskEntity.feedfile);
+                                shareBySystem(data.getStringExtra("pdf"));
+                            }
+
                         }
                     }
                     break;
@@ -617,7 +649,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     if (data != null) {
                         List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
                         taskDetailViewModel.taskEntity.feedpicfile = selectHandle.get(0).getPath();
-                        uploadFeed.setText("已拍照");
+                        btnUploadFeed.setText("已拍照");
                     }
                     break;
 

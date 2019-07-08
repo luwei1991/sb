@@ -1,26 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="10dp"
-    >
-
-    <TextView
-        android:layout_width="10dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text=" "
-        android:textColor="@color/main_text_red" />
+    android:layout_height="wrap_content">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
         android:gravity="center"
         android:text="附件7企业对抽样人员工作反馈意见单" />
 
     <TextView
-        android:id="@+id/tv_work_sheet"
+        android:id="@+id/tv_feed_sheet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -29,31 +21,28 @@
 
         />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right">
+    <Button
+        android:id="@+id/btn_edit_feed_sheet"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="编辑并打印"
+        android:textColor="@color/white" />
 
-        <Button
-            android:id="@+id/btn_edit_feed_sheet"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/colorPrimary"
-            android:gravity="center"
-            android:text="编辑并打印"
-            android:textColor="@color/white" />
+    <Button
+        android:id="@+id/btn_upload_feed_sheet"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="(签字)拍照"
+        android:textColor="@color/white" />
 
-        <Button
-            android:id="@+id/btn_upload_feed_sheet"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
-            android:background="@color/colorPrimary"
-            android:gravity="center"
-            android:text="(签字)拍照"
-            android:textColor="@color/white" />
-
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>

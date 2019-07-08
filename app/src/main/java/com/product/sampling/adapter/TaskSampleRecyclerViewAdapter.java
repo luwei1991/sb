@@ -107,10 +107,10 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             } else if (R.id.btn_upload_handling_sheet == view.getId()) {//处置单上传
                 fragment.selectId = (int) view.getTag();
                 fragment.startGalleryForPdf((int) view.getTag(), Select_Handle);
-            }else if (R.id.btn_upload_risk_sheet == view.getId()) {//处置单上传
+            } else if (R.id.btn_upload_risk_sheet == view.getId()) {//处置单上传
                 fragment.selectId = (int) view.getTag();
                 fragment.startGalleryForPdf((int) view.getTag(), Select_Risk);
-            }else if (R.id.btn_upload_work_sheet == view.getId()) {//处置单上传
+            } else if (R.id.btn_upload_work_sheet == view.getId()) {//处置单上传
                 fragment.selectId = (int) view.getTag();
                 fragment.startGalleryForPdf((int) view.getTag(), Select_Work);
             } else if (R.id.iv_add_video == view.getId()) {
@@ -129,6 +129,9 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         holder.mTextViewTitle.setText(TextUtils.isEmpty(task.getSamplename()) ? " " : task.getSamplename());
         holder.mTextViewHandleSheet.setText(task.disposalfile + "");
         holder.mTextViewCheckSheet.setText(task.samplingfile + "");
+
+        holder.mTextViewWorkSheet.setText(task.workfile + "");
+        holder.mTextViewRiskSheet.setText(task.riskfile + "");
 
         if (TextUtils.isEmpty(task.samplingpicfile)) {
             holder.mBtnUploadCheck.setText("(拍照)上传");
@@ -231,6 +234,9 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         final Button mBtnUploadRisk;//风险单上传
         final TextView mTextViewHandleSheet;
         final TextView mTextViewCheckSheet;
+        final TextView mTextViewWorkSheet;
+        final TextView mTextViewRiskSheet;
+
         final ImageView mIVAddVideo;//添加视频
         final ImageView mIVReduceVideo;//删除视频
 
@@ -246,6 +252,9 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             mBtnUploadHandle = view.findViewById(R.id.btn_upload_handling_sheet);
             mTextViewHandleSheet = view.findViewById(R.id.tv_handle_sheet);
             mTextViewCheckSheet = view.findViewById(R.id.tv_check_sheet);
+            mTextViewWorkSheet = view.findViewById(R.id.tv_work_sheet);
+            mTextViewRiskSheet = view.findViewById(R.id.tv_risk_sheet);
+
             mIVReduceVideo = view.findViewById(R.id.iv_reduce_video);
             mIVAddVideo = view.findViewById(R.id.iv_add_video);
             mRecyclerViewVideo = view.findViewById(R.id.item_video_list);
