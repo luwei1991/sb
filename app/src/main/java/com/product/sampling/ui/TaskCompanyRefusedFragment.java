@@ -166,7 +166,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
 
         // TODO 编辑单据并打印
         // 编辑单据并打印
-        view.findViewById(R.id.btn_edit_handling_sheet).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.btn_edit_spot_check_sheet).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

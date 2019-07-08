@@ -169,7 +169,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             }
         });
         // 编辑单据并打印
-        view.findViewById(R.id.btn_edit_handling_sheet).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.btn_edit_spot_check_sheet).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), H5WebViewActivity.class);
@@ -419,7 +419,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
         for (Videos videos : taskUnFindEntity.voides) {
             if (TextUtils.isEmpty(videos.getId())) continue;
             FileDownloader.downloadFile(RetrofitService.createApiService(Request.class).downloadVideo(videos.getId()), Constants.getPath(), videos.getFileName(), new DownloadProgressHandler() {
-                
+
                 @Override
                 public void onProgress(int progress, long total, long speed) {
                     LogUtils.i("下载文件中:" + progress / total);

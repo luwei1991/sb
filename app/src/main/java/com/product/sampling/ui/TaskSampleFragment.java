@@ -99,6 +99,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     private static TaskSampleFragment fragment;
     TaskSampleRecyclerViewAdapter adapter;
     Button uploadFeed;
+
     public TaskSampleFragment() {
     }
 
@@ -372,6 +373,74 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 }
 
             }
+            {
+                File riskfile = new File(sample.riskfile);
+                if (riskfile.exists()) {
+                    Log.e("file", riskfile.getAbsolutePath());
+                    RequestBody requestFile = RequestBody.create(MultipartBody.FORM, riskfile);//把文件与类型放入请求体
+                    multipartBodyBuilder.addFormDataPart("riskfile", riskfile.getName(), requestFile);//处置单
+                }
+            }
+            {
+                File riskpicfile = new File(sample.riskpicfile);
+                if (riskpicfile.exists()) {
+                    Log.e("file", riskpicfile.getAbsolutePath());
+                    RequestBody requestFile = RequestBody.create(MultipartBody.FORM, riskpicfile);//把文件与类型放入请求体
+                    multipartBodyBuilder.addFormDataPart("riskpicfile", riskpicfile.getName(), requestFile);//风险单
+                }
+            }
+
+            {
+                HashMap<String, String> adviceInfoMap = sample.riskInfoMap;
+                //没填的时候默认值
+                if (null != adviceInfoMap && !adviceInfoMap.isEmpty()) {
+                    for (String s : adviceInfoMap.keySet()) {
+                        if (!s.startsWith("risk.")) continue;
+                        try {
+                            String value = adviceInfoMap.get(s);
+                            multipartBodyBuilder.addFormDataPart(s, value);//抽样单
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+            }
+
+            {
+                File workfile = new File(sample.workfile);
+                if (workfile.exists()) {
+                    Log.e("file", workfile.getAbsolutePath());
+                    RequestBody requestFile = RequestBody.create(MultipartBody.FORM, workfile);//把文件与类型放入请求体
+                    multipartBodyBuilder.addFormDataPart("workfile", workfile.getName(), requestFile);//处置单
+                }
+            }
+            {
+                File riskpicfile = new File(sample.workpicfile);
+                if (riskpicfile.exists()) {
+                    Log.e("file", riskpicfile.getAbsolutePath());
+                    RequestBody requestFile = RequestBody.create(MultipartBody.FORM, riskpicfile);//把文件与类型放入请求体
+                    multipartBodyBuilder.addFormDataPart("workpicfile", riskpicfile.getName(), requestFile);//风险单
+                }
+            }
+
+            {
+                HashMap<String, String> adviceInfoMap = sample.workInfoMap;
+                //没填的时候默认值
+                if (null != adviceInfoMap && !adviceInfoMap.isEmpty()) {
+                    for (String s : adviceInfoMap.keySet()) {
+                        if (!s.startsWith("work.")) continue;
+                        try {
+                            String value = adviceInfoMap.get(s);
+                            multipartBodyBuilder.addFormDataPart(s, value);//抽样单
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+            }
+
 
             List<Pics> list = sample.getPics();
 
