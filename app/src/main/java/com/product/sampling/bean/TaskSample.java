@@ -27,6 +27,9 @@ public class TaskSample {
     public Advice advice = new Advice();
     public Sampling sampling = new Sampling();
     public List<Pics> pics = new ArrayList<>();
+    public Risk risk = new Risk();
+    public Work work = new Work();
+
     /**
      * id : 7777
      * isNewRecord : false

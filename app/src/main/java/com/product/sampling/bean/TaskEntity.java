@@ -70,6 +70,7 @@ public class TaskEntity implements Parcelable, Serializable {
     public String feedfile = "";
     public String feedpicfile = "";
     public HashMap<String, String> feedInfoMap;
+    public Feed feed = new Feed();
 
     public TaskEntity() {
 

@@ -40,12 +40,15 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.product.sampling.R;
 import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
 import com.product.sampling.bean.Advice;
+import com.product.sampling.bean.Feed;
 import com.product.sampling.bean.Pics;
+import com.product.sampling.bean.Risk;
 import com.product.sampling.bean.Sampling;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskMessage;
 import com.product.sampling.bean.TaskSample;
 import com.product.sampling.bean.Videos;
+import com.product.sampling.bean.Work;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.maputil.ToastUtil;
@@ -272,19 +275,60 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                                 taskSample.samplingInfoMap = map;
                             }
                         }
-                        Advice advice = taskSample.advice;
-                        if (null != advice) {
-                            Gson gson = new Gson();
-                            String obj2 = gson.toJson(advice);
-                            JsonObject object = new JsonParser().parse(obj2).getAsJsonObject();
-                            HashMap<String, String> map = new HashMap();
-                            for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-                                map.put("advice." + entry.getKey(), entry.getValue().getAsString());
+                        {
+                            Advice advice = taskSample.advice;
+                            if (null != advice) {
+                                Gson gson = new Gson();
+                                String obj2 = gson.toJson(advice);
+                                JsonObject object = new JsonParser().parse(obj2).getAsJsonObject();
+                                HashMap<String, String> map = new HashMap();
+                                for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                                    map.put("advice." + entry.getKey(), entry.getValue().getAsString());
+                                }
+                                taskSample.adviceInfoMap = map;
                             }
-                            taskSample.adviceInfoMap = map;
+                        }
+                        {
+                            Risk risk = taskSample.risk;
+                            if (null != risk) {
+                                Gson gson = new Gson();
+                                String obj2 = gson.toJson(risk);
+                                JsonObject object = new JsonParser().parse(obj2).getAsJsonObject();
+                                HashMap<String, String> map = new HashMap();
+                                for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                                    map.put("risk." + entry.getKey(), entry.getValue().getAsString());
+                                }
+                                taskSample.riskInfoMap = map;
+                            }
+                        }
+
+                        {
+                            Work work = taskSample.work;
+                            if (null != work) {
+                                Gson gson = new Gson();
+                                String obj2 = gson.toJson(work);
+                                JsonObject object = new JsonParser().parse(obj2).getAsJsonObject();
+                                HashMap<String, String> map = new HashMap();
+                                for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                                    map.put("work." + entry.getKey(), entry.getValue().getAsString());
+                                }
+                                taskSample.workInfoMap = map;
+                            }
                         }
 
                     }
+                    Feed feed = taskDetailViewModel.taskEntity.feed;
+                    if (null != feed) {
+                        Gson gson = new Gson();
+                        String obj1 = gson.toJson(feed);
+                        JsonObject object = new JsonParser().parse(obj1).getAsJsonObject();
+                        HashMap<String, String> map = new HashMap();
+                        for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                            map.put("feed." + entry.getKey(), entry.getValue().getAsString());
+                        }
+                        taskDetailViewModel.taskEntity.feedInfoMap = map;
+                    }
+
                 }
             }
         });
