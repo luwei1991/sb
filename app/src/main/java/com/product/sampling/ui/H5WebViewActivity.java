@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -81,7 +82,7 @@ public class H5WebViewActivity extends AppCompatActivity {
             StringBuilder builder = new StringBuilder();
             for (String s : map.keySet()) {
                 if (!TextUtils.isEmpty(s)) {
-                    builder.append(s).append('=').append(map.get(s) + "").append('&');
+                    builder.append(s).append('=').append(URLEncoder.encode(map.get(s) + "")).append('&');
                 }
             }
             if (builder.toString().endsWith("&")) {
