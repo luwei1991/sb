@@ -1,45 +1,46 @@
 package com.product.sampling.bean;
 
-import com.google.gson.annotations.SerializedName;
-
 public class Advice {
+
     /**
      * id : null
      * isNewRecord : true
      * remarks : null
      * createDate : null
      * updateDate : null
-     * companyname : null
-     * dotime : 2019-01-26 16:23:46
-     * producename : null
-     * code : null
-     * entrust : Cjjfj
-     * specifications : null
-     * quality : null
-     * qualitytitle : null
-     * creatTime : 2019-01-26 16:23:46
-     * creatId : d444d03c23ca4a75aae89c81dbcbcdf6
+     * companyname : hhh
+     * dotime : 2019-07-09 01:47:18
+     * producename : gggghh
+     * code : hhh
+     * entrust : hhhhhhhgh
+     * specifications : gggnnnn
+     * quality : nnnnnnn
+     * qualitytitle : ttt
+     * creatTime : 2019-07-09 01:47:18
+     * creatId : 8ad2b1727a3544bf845cdd2c83abaf5a
      * deleteFlag : null
-     * fillInDate : null
+     * fillInDate : 2019-7-9
+     * samplingcode : ggg
      */
 
     private String id;
     private boolean isNewRecord;
-    private Object remarks;
-    private Object createDate;
-    private Object updateDate;
-    private Object companyname;
+    private String remarks;
+    private String createDate;
+    private String updateDate;
+    private String companyname;
     private String dotime;
-    private Object producename;
-    private Object code;
+    private String producename;
+    private String code;
     private String entrust;
-    private Object specifications;
-    private Object quality;
-    private Object qualitytitle;
+    private String specifications;
+    private String quality;
+    private String qualitytitle;
     private String creatTime;
     private String creatId;
-    private Object deleteFlag;
-    private Object fillInDate;
+    private String deleteFlag;
+    private String fillInDate;
+    private String samplingcode;
 
     public String getId() {
         return id;
@@ -49,43 +50,43 @@ public class Advice {
         this.id = id;
     }
 
-    public boolean isIsNewRecord() {
+    public boolean isNewRecord() {
         return isNewRecord;
     }
 
-    public void setIsNewRecord(boolean isNewRecord) {
-        this.isNewRecord = isNewRecord;
+    public void setNewRecord(boolean newRecord) {
+        isNewRecord = newRecord;
     }
 
-    public Object getRemarks() {
+    public String getRemarks() {
         return remarks;
     }
 
-    public void setRemarks(Object remarks) {
+    public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
 
-    public Object getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Object createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 
-    public Object getUpdateDate() {
+    public String getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Object updateDate) {
+    public void setUpdateDate(String updateDate) {
         this.updateDate = updateDate;
     }
 
-    public Object getCompanyname() {
+    public String getCompanyname() {
         return companyname;
     }
 
-    public void setCompanyname(Object companyname) {
+    public void setCompanyname(String companyname) {
         this.companyname = companyname;
     }
 
@@ -97,19 +98,19 @@ public class Advice {
         this.dotime = dotime;
     }
 
-    public Object getProducename() {
+    public String getProducename() {
         return producename;
     }
 
-    public void setProducename(Object producename) {
+    public void setProducename(String producename) {
         this.producename = producename;
     }
 
-    public Object getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(Object code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
@@ -121,27 +122,27 @@ public class Advice {
         this.entrust = entrust;
     }
 
-    public Object getSpecifications() {
+    public String getSpecifications() {
         return specifications;
     }
 
-    public void setSpecifications(Object specifications) {
+    public void setSpecifications(String specifications) {
         this.specifications = specifications;
     }
 
-    public Object getQuality() {
+    public String getQuality() {
         return quality;
     }
 
-    public void setQuality(Object quality) {
+    public void setQuality(String quality) {
         this.quality = quality;
     }
 
-    public Object getQualitytitle() {
+    public String getQualitytitle() {
         return qualitytitle;
     }
 
-    public void setQualitytitle(Object qualitytitle) {
+    public void setQualitytitle(String qualitytitle) {
         this.qualitytitle = qualitytitle;
     }
 
@@ -161,19 +162,27 @@ public class Advice {
         this.creatId = creatId;
     }
 
-    public Object getDeleteFlag() {
+    public String getDeleteFlag() {
         return deleteFlag;
     }
 
-    public void setDeleteFlag(Object deleteFlag) {
+    public void setDeleteFlag(String deleteFlag) {
         this.deleteFlag = deleteFlag;
     }
 
-    public Object getFillInDate() {
+    public String getFillInDate() {
         return fillInDate;
     }
 
-    public void setFillInDate(Object fillInDate) {
+    public void setFillInDate(String fillInDate) {
         this.fillInDate = fillInDate;
+    }
+
+    public String getSamplingcode() {
+        return samplingcode;
+    }
+
+    public void setSamplingcode(String samplingcode) {
+        this.samplingcode = samplingcode;
     }
 }

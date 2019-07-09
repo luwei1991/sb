@@ -2,6 +2,7 @@ package com.product.sampling.bean;
 
 public class Risk {
 
+
     /**
      * id : null
      * isNewRecord : true
@@ -23,7 +24,7 @@ public class Risk {
      * productstcode : null
      * productstdate : null
      * productstcount : null
-     * sampletime : 2019-07-08 00:33:27
+     * sampletime : 2019-07-09 01:47:18
      * sameaddress : null
      * productionname : null
      * productionaddress : null
@@ -34,203 +35,204 @@ public class Risk {
      * samplingtel : null
      * samplingemail : null
      * remark : null
-     * createTime : 2019-07-08 00:33:27
-     * createMan : d444d03c23ca4a75aae89c81dbcbcdf6
-     * fillInDate : 2019-7-8
+     * createTime : 2019-07-09 01:47:18
+     * createMan : 8ad2b1727a3544bf845cdd2c83abaf5a
+     * fillInDate : 2019-7-9
      */
 
-    private Object id;
+    private String id;
     private boolean isNewRecord;
-    private Object remarks;
-    private Object createDate;
-    private Object updateDate;
-    private Object riskcode;
-    private Object samplingtype;
-    private Object doaddresstype;
-    private Object doaddressname;
-    private Object doaddress;
-    private Object phone;
-    private Object manname;
-    private Object productname;
-    private Object producttype;
-    private Object productlevel;
-    private Object productmark;
-    private Object productstandard;
-    private Object productstcode;
-    private Object productstdate;
-    private Object productstcount;
+    private String remarks;
+    private String createDate;
+    private String updateDate;
+    private String riskcode;
+    private String samplingtype;
+    private String doaddresstype;
+    private String doaddressname;
+    private String doaddress;
+    private String phone;
+    private String manname;
+    private String productname;
+    private String producttype;
+    private String productlevel;
+    private String productmark;
+    private String productstandard;
+    private String productstcode;
+    private String productstdate;
+    private String productstcount;
     private String sampletime;
-    private Object sameaddress;
-    private Object productionname;
-    private Object productionaddress;
-    private Object proman;
-    private Object prophone;
-    private Object samplingname;
-    private Object samplingman;
-    private Object samplingtel;
-    private Object samplingemail;
-    private Object remark;
+    private String sameaddress;
+    private String productionname;
+    private String productionaddress;
+    private String proman;
+    private String prophone;
+    private String samplingname;
+    private String samplingman;
+    private String samplingtel;
+    private String samplingemail;
+    private String remark;
     private String createTime;
     private String createMan;
     private String fillInDate;
+    private String releaseDate ;		// 保质期
 
-    public Object getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Object id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public boolean isIsNewRecord() {
+    public boolean isNewRecord() {
         return isNewRecord;
     }
 
-    public void setIsNewRecord(boolean isNewRecord) {
-        this.isNewRecord = isNewRecord;
+    public void setNewRecord(boolean newRecord) {
+        isNewRecord = newRecord;
     }
 
-    public Object getRemarks() {
+    public String getRemarks() {
         return remarks;
     }
 
-    public void setRemarks(Object remarks) {
+    public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
 
-    public Object getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Object createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 
-    public Object getUpdateDate() {
+    public String getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Object updateDate) {
+    public void setUpdateDate(String updateDate) {
         this.updateDate = updateDate;
     }
 
-    public Object getRiskcode() {
+    public String getRiskcode() {
         return riskcode;
     }
 
-    public void setRiskcode(Object riskcode) {
+    public void setRiskcode(String riskcode) {
         this.riskcode = riskcode;
     }
 
-    public Object getSamplingtype() {
+    public String getSamplingtype() {
         return samplingtype;
     }
 
-    public void setSamplingtype(Object samplingtype) {
+    public void setSamplingtype(String samplingtype) {
         this.samplingtype = samplingtype;
     }
 
-    public Object getDoaddresstype() {
+    public String getDoaddresstype() {
         return doaddresstype;
     }
 
-    public void setDoaddresstype(Object doaddresstype) {
+    public void setDoaddresstype(String doaddresstype) {
         this.doaddresstype = doaddresstype;
     }
 
-    public Object getDoaddressname() {
+    public String getDoaddressname() {
         return doaddressname;
     }
 
-    public void setDoaddressname(Object doaddressname) {
+    public void setDoaddressname(String doaddressname) {
         this.doaddressname = doaddressname;
     }
 
-    public Object getDoaddress() {
+    public String getDoaddress() {
         return doaddress;
     }
 
-    public void setDoaddress(Object doaddress) {
+    public void setDoaddress(String doaddress) {
         this.doaddress = doaddress;
     }
 
-    public Object getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(Object phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public Object getManname() {
+    public String getManname() {
         return manname;
     }
 
-    public void setManname(Object manname) {
+    public void setManname(String manname) {
         this.manname = manname;
     }
 
-    public Object getProductname() {
+    public String getProductname() {
         return productname;
     }
 
-    public void setProductname(Object productname) {
+    public void setProductname(String productname) {
         this.productname = productname;
     }
 
-    public Object getProducttype() {
+    public String getProducttype() {
         return producttype;
     }
 
-    public void setProducttype(Object producttype) {
+    public void setProducttype(String producttype) {
         this.producttype = producttype;
     }
 
-    public Object getProductlevel() {
+    public String getProductlevel() {
         return productlevel;
     }
 
-    public void setProductlevel(Object productlevel) {
+    public void setProductlevel(String productlevel) {
         this.productlevel = productlevel;
     }
 
-    public Object getProductmark() {
+    public String getProductmark() {
         return productmark;
     }
 
-    public void setProductmark(Object productmark) {
+    public void setProductmark(String productmark) {
         this.productmark = productmark;
     }
 
-    public Object getProductstandard() {
+    public String getProductstandard() {
         return productstandard;
     }
 
-    public void setProductstandard(Object productstandard) {
+    public void setProductstandard(String productstandard) {
         this.productstandard = productstandard;
     }
 
-    public Object getProductstcode() {
+    public String getProductstcode() {
         return productstcode;
     }
 
-    public void setProductstcode(Object productstcode) {
+    public void setProductstcode(String productstcode) {
         this.productstcode = productstcode;
     }
 
-    public Object getProductstdate() {
+    public String getProductstdate() {
         return productstdate;
     }
 
-    public void setProductstdate(Object productstdate) {
+    public void setProductstdate(String productstdate) {
         this.productstdate = productstdate;
     }
 
-    public Object getProductstcount() {
+    public String getProductstcount() {
         return productstcount;
     }
 
-    public void setProductstcount(Object productstcount) {
+    public void setProductstcount(String productstcount) {
         this.productstcount = productstcount;
     }
 
@@ -242,83 +244,83 @@ public class Risk {
         this.sampletime = sampletime;
     }
 
-    public Object getSameaddress() {
+    public String getSameaddress() {
         return sameaddress;
     }
 
-    public void setSameaddress(Object sameaddress) {
+    public void setSameaddress(String sameaddress) {
         this.sameaddress = sameaddress;
     }
 
-    public Object getProductionname() {
+    public String getProductionname() {
         return productionname;
     }
 
-    public void setProductionname(Object productionname) {
+    public void setProductionname(String productionname) {
         this.productionname = productionname;
     }
 
-    public Object getProductionaddress() {
+    public String getProductionaddress() {
         return productionaddress;
     }
 
-    public void setProductionaddress(Object productionaddress) {
+    public void setProductionaddress(String productionaddress) {
         this.productionaddress = productionaddress;
     }
 
-    public Object getProman() {
+    public String getProman() {
         return proman;
     }
 
-    public void setProman(Object proman) {
+    public void setProman(String proman) {
         this.proman = proman;
     }
 
-    public Object getProphone() {
+    public String getProphone() {
         return prophone;
     }
 
-    public void setProphone(Object prophone) {
+    public void setProphone(String prophone) {
         this.prophone = prophone;
     }
 
-    public Object getSamplingname() {
+    public String getSamplingname() {
         return samplingname;
     }
 
-    public void setSamplingname(Object samplingname) {
+    public void setSamplingname(String samplingname) {
         this.samplingname = samplingname;
     }
 
-    public Object getSamplingman() {
+    public String getSamplingman() {
         return samplingman;
     }
 
-    public void setSamplingman(Object samplingman) {
+    public void setSamplingman(String samplingman) {
         this.samplingman = samplingman;
     }
 
-    public Object getSamplingtel() {
+    public String getSamplingtel() {
         return samplingtel;
     }
 
-    public void setSamplingtel(Object samplingtel) {
+    public void setSamplingtel(String samplingtel) {
         this.samplingtel = samplingtel;
     }
 
-    public Object getSamplingemail() {
+    public String getSamplingemail() {
         return samplingemail;
     }
 
-    public void setSamplingemail(Object samplingemail) {
+    public void setSamplingemail(String samplingemail) {
         this.samplingemail = samplingemail;
     }
 
-    public Object getRemark() {
+    public String getRemark() {
         return remark;
     }
 
-    public void setRemark(Object remark) {
+    public void setRemark(String remark) {
         this.remark = remark;
     }
 
@@ -344,5 +346,13 @@ public class Risk {
 
     public void setFillInDate(String fillInDate) {
         this.fillInDate = fillInDate;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 }

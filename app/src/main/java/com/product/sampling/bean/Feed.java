@@ -1,91 +1,93 @@
 package com.product.sampling.bean;
 
 public class Feed {
+
+
     /**
      * id : null
      * isNewRecord : true
      * remarks : null
      * createDate : null
      * updateDate : null
-     * companyname : 益阳溢海玻璃有限公司
-     * checkman : 秦某某
-     * twoman : null
-     * showcertificates : null
-     * standardwork : null
-     * principlework : null
-     * makedifficulties : null
-     * collectfees : null
-     * playfees : null
-     * reimbursement : null
-     * abuse : null
-     * evaluate : null
-     * explain : null
-     * createMan : null
-     * createTime : null
+     * companyname : 洞口县湘南玻璃科技开发中心
+     * checkman : 李某某,王某某
+     * twoman : 1
+     * showcertificates : 1
+     * standardwork : 1
+     * principlework : 1
+     * makedifficulties : 1
+     * collectfees : 1
+     * playfees : 1
+     * reimbursement : 1
+     * abuse : 1
+     * evaluate : 1
+     * explain : cvvvvbbb
+     * createMan : 8ad2b1727a3544bf845cdd2c83abaf5a
+     * createTime : 2019-07-09 01:47:17
      * deleteFlag : null
      * fillInDate : null
      */
 
-    private Object id;
+    private String id;
     private boolean isNewRecord;
-    private Object remarks;
-    private Object createDate;
-    private Object updateDate;
+    private String remarks;
+    private String createDate;
+    private String updateDate;
     private String companyname;
     private String checkman;
-    private Object twoman;
-    private Object showcertificates;
-    private Object standardwork;
-    private Object principlework;
-    private Object makedifficulties;
-    private Object collectfees;
-    private Object playfees;
-    private Object reimbursement;
-    private Object abuse;
-    private Object evaluate;
-    private Object explain;
-    private Object createMan;
-    private Object createTime;
-    private Object deleteFlag;
-    private Object fillInDate;
+    private String twoman;
+    private String showcertificates;
+    private String standardwork;
+    private String principlework;
+    private String makedifficulties;
+    private String collectfees;
+    private String playfees;
+    private String reimbursement;
+    private String abuse;
+    private String evaluate;
+    private String explain;
+    private String createMan;
+    private String createTime;
+    private String deleteFlag;
+    private String fillInDate;
 
-    public Object getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Object id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public boolean isIsNewRecord() {
+    public boolean isNewRecord() {
         return isNewRecord;
     }
 
-    public void setIsNewRecord(boolean isNewRecord) {
-        this.isNewRecord = isNewRecord;
+    public void setNewRecord(boolean newRecord) {
+        isNewRecord = newRecord;
     }
 
-    public Object getRemarks() {
+    public String getRemarks() {
         return remarks;
     }
 
-    public void setRemarks(Object remarks) {
+    public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
 
-    public Object getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Object createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 
-    public Object getUpdateDate() {
+    public String getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Object updateDate) {
+    public void setUpdateDate(String updateDate) {
         this.updateDate = updateDate;
     }
 
@@ -105,150 +107,123 @@ public class Feed {
         this.checkman = checkman;
     }
 
-    public Object getTwoman() {
+    public String getTwoman() {
         return twoman;
     }
 
-    public void setTwoman(Object twoman) {
+    public void setTwoman(String twoman) {
         this.twoman = twoman;
     }
 
-    public Object getShowcertificates() {
+    public String getShowcertificates() {
         return showcertificates;
     }
 
-    public void setShowcertificates(Object showcertificates) {
+    public void setShowcertificates(String showcertificates) {
         this.showcertificates = showcertificates;
     }
 
-    public Object getStandardwork() {
+    public String getStandardwork() {
         return standardwork;
     }
 
-    public void setStandardwork(Object standardwork) {
+    public void setStandardwork(String standardwork) {
         this.standardwork = standardwork;
     }
 
-    public Object getPrinciplework() {
+    public String getPrinciplework() {
         return principlework;
     }
 
-    public void setPrinciplework(Object principlework) {
+    public void setPrinciplework(String principlework) {
         this.principlework = principlework;
     }
 
-    public Object getMakedifficulties() {
+    public String getMakedifficulties() {
         return makedifficulties;
     }
 
-    public void setMakedifficulties(Object makedifficulties) {
+    public void setMakedifficulties(String makedifficulties) {
         this.makedifficulties = makedifficulties;
     }
 
-    public Object getCollectfees() {
+    public String getCollectfees() {
         return collectfees;
     }
 
-    public void setCollectfees(Object collectfees) {
+    public void setCollectfees(String collectfees) {
         this.collectfees = collectfees;
     }
 
-    public Object getPlayfees() {
+    public String getPlayfees() {
         return playfees;
     }
 
-    public void setPlayfees(Object playfees) {
+    public void setPlayfees(String playfees) {
         this.playfees = playfees;
     }
 
-    public Object getReimbursement() {
+    public String getReimbursement() {
         return reimbursement;
     }
 
-    public void setReimbursement(Object reimbursement) {
+    public void setReimbursement(String reimbursement) {
         this.reimbursement = reimbursement;
     }
 
-    public Object getAbuse() {
+    public String getAbuse() {
         return abuse;
     }
 
-    public void setAbuse(Object abuse) {
+    public void setAbuse(String abuse) {
         this.abuse = abuse;
     }
 
-    public Object getEvaluate() {
+    public String getEvaluate() {
         return evaluate;
     }
 
-    public void setEvaluate(Object evaluate) {
+    public void setEvaluate(String evaluate) {
         this.evaluate = evaluate;
     }
 
-    public Object getExplain() {
+    public String getExplain() {
         return explain;
     }
 
-    public void setExplain(Object explain) {
+    public void setExplain(String explain) {
         this.explain = explain;
     }
 
-    public Object getCreateMan() {
+    public String getCreateMan() {
         return createMan;
     }
 
-    public void setCreateMan(Object createMan) {
+    public void setCreateMan(String createMan) {
         this.createMan = createMan;
     }
 
-    public Object getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Object createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Object getDeleteFlag() {
+    public String getDeleteFlag() {
         return deleteFlag;
     }
 
-    public void setDeleteFlag(Object deleteFlag) {
+    public void setDeleteFlag(String deleteFlag) {
         this.deleteFlag = deleteFlag;
     }
 
-    public Object getFillInDate() {
+    public String getFillInDate() {
         return fillInDate;
     }
 
-    public void setFillInDate(Object fillInDate) {
+    public void setFillInDate(String fillInDate) {
         this.fillInDate = fillInDate;
     }
-    /**
-     * "id": null,
-     * "isNewRecord": true,
-     * "remarks": null,
-     * "createDate": null,
-     * "updateDate": null,
-     * "companyname": "益阳溢海玻璃有限公司",
-     * "checkman": "秦某某",
-     * "twoman": null,
-     * "showcertificates": null,
-     * "standardwork": null,
-     * "principlework": null,
-     * "makedifficulties": null,
-     * "collectfees": null,
-     * "playfees": null,
-     * "reimbursement": null,
-     * "abuse": null,
-     * "evaluate": null,
-     * "explain": null,
-     * "createMan": null,
-     * "createTime": null,
-     * "deleteFlag": null,
-     * "fillInDate": null
-     */
-
-
-
 }

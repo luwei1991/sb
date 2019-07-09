@@ -1,369 +1,391 @@
 package com.product.sampling.bean;
 
 public class Work {
+
+
     /**
-     * productname : null
-     * trademark : null
-     * level : null
-     * specifications : null
-     * standard : null
-     * manufactureDate : null
-     * sampleCode : null
-     * price : null
-     * purchaseCount : null
-     * saleCount : null
-     * stockCount : null
-     * sampleCount : null
-     * backupsCount : null
-     * backupsAddress : null
-     * stockLocation : null
-     * operatorName : null
-     * operatorAddress : null
-     * unifiedCreditCode : null
-     * operatorZipcode : null
-     * representative : null
-     * operatortel : null
-     * operatorman : null
-     * operatormovetel : null
-     * operatorFax : null
-     * operatorEmail : null
-     * operatorPlace : null
+     * titleyear : null
+     * titlename : null
+     * productname : ggg
+     * trademark : mmm
+     * level : mmmm
+     * specifications : hgg
+     * standard : nn
+     * manufactureDate : hhhh
+     * sampleCode : mmnnmnnnnn
+     * price : hh
+     * purchaseCount : hhh
+     * saleCount : mnmm
+     * stockCount : nnn
+     * sampleCount : hhh
+     * backupsCount : hh
+     * backupsAddress : nn
+     * stockLocation : jnnn
+     * operatorName : hhh
+     * operatorAddress : hhh
+     * unifiedCreditCode : jjj
+     * operatorZipcode : mmm
+     * representative : hhh
+     * operatortel : hhhh
+     * operatorman : hhh
+     * operatormovetel : hhh
+     * operatorFax : mn
+     * operatorEmail : mn
+     * operatorPlace : 2
      * inspectionsite : null
-     * productionname : null
-     * productionAddress : null
-     * productionEmail : null
-     * productionMan : null
-     * productionTel : null
-     * productionFax : null
-     * samplingcode : null
+     * productionname : jj
+     * productionAddress : nn
+     * productionEmail : nn
+     * productionMan : nnn
+     * productionTel : nn
+     * productionFax : nn
+     * samplingcode : nnn
      * remark : null
-     * tasktime : 8
+     * tasktime : 9
      * taskman : null
      * lawEnforcers : null
-     * acceptanceremark : null
+     * acceptanceremark : hhhh
      * receiver : null
-     * fillInDate : 2019-7-8
+     * fillInDate : 2019-7-9
      */
 
-    private Object productname;
-    private Object trademark;
-    private Object level;
-    private Object specifications;
-    private Object standard;
-    private Object manufactureDate;
-    private Object sampleCode;
-    private Object price;
-    private Object purchaseCount;
-    private Object saleCount;
-    private Object stockCount;
-    private Object sampleCount;
-    private Object backupsCount;
-    private Object backupsAddress;
-    private Object stockLocation;
-    private Object operatorName;
-    private Object operatorAddress;
-    private Object unifiedCreditCode;
-    private Object operatorZipcode;
-    private Object representative;
-    private Object operatortel;
-    private Object operatorman;
-    private Object operatormovetel;
-    private Object operatorFax;
-    private Object operatorEmail;
-    private Object operatorPlace;
-    private Object inspectionsite;
-    private Object productionname;
-    private Object productionAddress;
-    private Object productionEmail;
-    private Object productionMan;
-    private Object productionTel;
-    private Object productionFax;
-    private Object samplingcode;
-    private Object remark;
+    private String titleyear;
+    private String titlename;
+    private String productname;
+    private String trademark;
+    private String level;
+    private String specifications;
+    private String standard;
+    private String manufactureDate;
+    private String sampleCode;
+    private String price;
+    private String purchaseCount;
+    private String saleCount;
+    private String stockCount;
+    private String sampleCount;
+    private String backupsCount;
+    private String backupsAddress;
+    private String stockLocation;
+    private String operatorName;
+    private String operatorAddress;
+    private String unifiedCreditCode;
+    private String operatorZipcode;
+    private String representative;
+    private String operatortel;
+    private String operatorman;
+    private String operatormovetel;
+    private String operatorFax;
+    private String operatorEmail;
+    private String operatorPlace;
+    private String inspectionsite;
+    private String productionname;
+    private String productionAddress;
+    private String productionEmail;
+    private String productionMan;
+    private String productionTel;
+    private String productionFax;
+    private String samplingcode;
+    private String remark;
     private String tasktime;
-    private Object taskman;
-    private Object lawEnforcers;
-    private Object acceptanceremark;
-    private Object receiver;
+    private String taskman;
+    private String lawEnforcers;
+    private String acceptanceremark;
+    private String receiver;
     private String fillInDate;
 
-    public Object getProductname() {
+    public String getTitleyear() {
+        return titleyear;
+    }
+
+    public void setTitleyear(String titleyear) {
+        this.titleyear = titleyear;
+    }
+
+    public String getTitlename() {
+        return titlename;
+    }
+
+    public void setTitlename(String titlename) {
+        this.titlename = titlename;
+    }
+
+    public String getProductname() {
         return productname;
     }
 
-    public void setProductname(Object productname) {
+    public void setProductname(String productname) {
         this.productname = productname;
     }
 
-    public Object getTrademark() {
+    public String getTrademark() {
         return trademark;
     }
 
-    public void setTrademark(Object trademark) {
+    public void setTrademark(String trademark) {
         this.trademark = trademark;
     }
 
-    public Object getLevel() {
+    public String getLevel() {
         return level;
     }
 
-    public void setLevel(Object level) {
+    public void setLevel(String level) {
         this.level = level;
     }
 
-    public Object getSpecifications() {
+    public String getSpecifications() {
         return specifications;
     }
 
-    public void setSpecifications(Object specifications) {
+    public void setSpecifications(String specifications) {
         this.specifications = specifications;
     }
 
-    public Object getStandard() {
+    public String getStandard() {
         return standard;
     }
 
-    public void setStandard(Object standard) {
+    public void setStandard(String standard) {
         this.standard = standard;
     }
 
-    public Object getManufactureDate() {
+    public String getManufactureDate() {
         return manufactureDate;
     }
 
-    public void setManufactureDate(Object manufactureDate) {
+    public void setManufactureDate(String manufactureDate) {
         this.manufactureDate = manufactureDate;
     }
 
-    public Object getSampleCode() {
+    public String getSampleCode() {
         return sampleCode;
     }
 
-    public void setSampleCode(Object sampleCode) {
+    public void setSampleCode(String sampleCode) {
         this.sampleCode = sampleCode;
     }
 
-    public Object getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(Object price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
-    public Object getPurchaseCount() {
+    public String getPurchaseCount() {
         return purchaseCount;
     }
 
-    public void setPurchaseCount(Object purchaseCount) {
+    public void setPurchaseCount(String purchaseCount) {
         this.purchaseCount = purchaseCount;
     }
 
-    public Object getSaleCount() {
+    public String getSaleCount() {
         return saleCount;
     }
 
-    public void setSaleCount(Object saleCount) {
+    public void setSaleCount(String saleCount) {
         this.saleCount = saleCount;
     }
 
-    public Object getStockCount() {
+    public String getStockCount() {
         return stockCount;
     }
 
-    public void setStockCount(Object stockCount) {
+    public void setStockCount(String stockCount) {
         this.stockCount = stockCount;
     }
 
-    public Object getSampleCount() {
+    public String getSampleCount() {
         return sampleCount;
     }
 
-    public void setSampleCount(Object sampleCount) {
+    public void setSampleCount(String sampleCount) {
         this.sampleCount = sampleCount;
     }
 
-    public Object getBackupsCount() {
+    public String getBackupsCount() {
         return backupsCount;
     }
 
-    public void setBackupsCount(Object backupsCount) {
+    public void setBackupsCount(String backupsCount) {
         this.backupsCount = backupsCount;
     }
 
-    public Object getBackupsAddress() {
+    public String getBackupsAddress() {
         return backupsAddress;
     }
 
-    public void setBackupsAddress(Object backupsAddress) {
+    public void setBackupsAddress(String backupsAddress) {
         this.backupsAddress = backupsAddress;
     }
 
-    public Object getStockLocation() {
+    public String getStockLocation() {
         return stockLocation;
     }
 
-    public void setStockLocation(Object stockLocation) {
+    public void setStockLocation(String stockLocation) {
         this.stockLocation = stockLocation;
     }
 
-    public Object getOperatorName() {
+    public String getOperatorName() {
         return operatorName;
     }
 
-    public void setOperatorName(Object operatorName) {
+    public void setOperatorName(String operatorName) {
         this.operatorName = operatorName;
     }
 
-    public Object getOperatorAddress() {
+    public String getOperatorAddress() {
         return operatorAddress;
     }
 
-    public void setOperatorAddress(Object operatorAddress) {
+    public void setOperatorAddress(String operatorAddress) {
         this.operatorAddress = operatorAddress;
     }
 
-    public Object getUnifiedCreditCode() {
+    public String getUnifiedCreditCode() {
         return unifiedCreditCode;
     }
 
-    public void setUnifiedCreditCode(Object unifiedCreditCode) {
+    public void setUnifiedCreditCode(String unifiedCreditCode) {
         this.unifiedCreditCode = unifiedCreditCode;
     }
 
-    public Object getOperatorZipcode() {
+    public String getOperatorZipcode() {
         return operatorZipcode;
     }
 
-    public void setOperatorZipcode(Object operatorZipcode) {
+    public void setOperatorZipcode(String operatorZipcode) {
         this.operatorZipcode = operatorZipcode;
     }
 
-    public Object getRepresentative() {
+    public String getRepresentative() {
         return representative;
     }
 
-    public void setRepresentative(Object representative) {
+    public void setRepresentative(String representative) {
         this.representative = representative;
     }
 
-    public Object getOperatortel() {
+    public String getOperatortel() {
         return operatortel;
     }
 
-    public void setOperatortel(Object operatortel) {
+    public void setOperatortel(String operatortel) {
         this.operatortel = operatortel;
     }
 
-    public Object getOperatorman() {
+    public String getOperatorman() {
         return operatorman;
     }
 
-    public void setOperatorman(Object operatorman) {
+    public void setOperatorman(String operatorman) {
         this.operatorman = operatorman;
     }
 
-    public Object getOperatormovetel() {
+    public String getOperatormovetel() {
         return operatormovetel;
     }
 
-    public void setOperatormovetel(Object operatormovetel) {
+    public void setOperatormovetel(String operatormovetel) {
         this.operatormovetel = operatormovetel;
     }
 
-    public Object getOperatorFax() {
+    public String getOperatorFax() {
         return operatorFax;
     }
 
-    public void setOperatorFax(Object operatorFax) {
+    public void setOperatorFax(String operatorFax) {
         this.operatorFax = operatorFax;
     }
 
-    public Object getOperatorEmail() {
+    public String getOperatorEmail() {
         return operatorEmail;
     }
 
-    public void setOperatorEmail(Object operatorEmail) {
+    public void setOperatorEmail(String operatorEmail) {
         this.operatorEmail = operatorEmail;
     }
 
-    public Object getOperatorPlace() {
+    public String getOperatorPlace() {
         return operatorPlace;
     }
 
-    public void setOperatorPlace(Object operatorPlace) {
+    public void setOperatorPlace(String operatorPlace) {
         this.operatorPlace = operatorPlace;
     }
 
-    public Object getInspectionsite() {
+    public String getInspectionsite() {
         return inspectionsite;
     }
 
-    public void setInspectionsite(Object inspectionsite) {
+    public void setInspectionsite(String inspectionsite) {
         this.inspectionsite = inspectionsite;
     }
 
-    public Object getProductionname() {
+    public String getProductionname() {
         return productionname;
     }
 
-    public void setProductionname(Object productionname) {
+    public void setProductionname(String productionname) {
         this.productionname = productionname;
     }
 
-    public Object getProductionAddress() {
+    public String getProductionAddress() {
         return productionAddress;
     }
 
-    public void setProductionAddress(Object productionAddress) {
+    public void setProductionAddress(String productionAddress) {
         this.productionAddress = productionAddress;
     }
 
-    public Object getProductionEmail() {
+    public String getProductionEmail() {
         return productionEmail;
     }
 
-    public void setProductionEmail(Object productionEmail) {
+    public void setProductionEmail(String productionEmail) {
         this.productionEmail = productionEmail;
     }
 
-    public Object getProductionMan() {
+    public String getProductionMan() {
         return productionMan;
     }
 
-    public void setProductionMan(Object productionMan) {
+    public void setProductionMan(String productionMan) {
         this.productionMan = productionMan;
     }
 
-    public Object getProductionTel() {
+    public String getProductionTel() {
         return productionTel;
     }
 
-    public void setProductionTel(Object productionTel) {
+    public void setProductionTel(String productionTel) {
         this.productionTel = productionTel;
     }
 
-    public Object getProductionFax() {
+    public String getProductionFax() {
         return productionFax;
     }
 
-    public void setProductionFax(Object productionFax) {
+    public void setProductionFax(String productionFax) {
         this.productionFax = productionFax;
     }
 
-    public Object getSamplingcode() {
+    public String getSamplingcode() {
         return samplingcode;
     }
 
-    public void setSamplingcode(Object samplingcode) {
+    public void setSamplingcode(String samplingcode) {
         this.samplingcode = samplingcode;
     }
 
-    public Object getRemark() {
+    public String getRemark() {
         return remark;
     }
 
-    public void setRemark(Object remark) {
+    public void setRemark(String remark) {
         this.remark = remark;
     }
 
@@ -375,35 +397,35 @@ public class Work {
         this.tasktime = tasktime;
     }
 
-    public Object getTaskman() {
+    public String getTaskman() {
         return taskman;
     }
 
-    public void setTaskman(Object taskman) {
+    public void setTaskman(String taskman) {
         this.taskman = taskman;
     }
 
-    public Object getLawEnforcers() {
+    public String getLawEnforcers() {
         return lawEnforcers;
     }
 
-    public void setLawEnforcers(Object lawEnforcers) {
+    public void setLawEnforcers(String lawEnforcers) {
         this.lawEnforcers = lawEnforcers;
     }
 
-    public Object getAcceptanceremark() {
+    public String getAcceptanceremark() {
         return acceptanceremark;
     }
 
-    public void setAcceptanceremark(Object acceptanceremark) {
+    public void setAcceptanceremark(String acceptanceremark) {
         this.acceptanceremark = acceptanceremark;
     }
 
-    public Object getReceiver() {
+    public String getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(Object receiver) {
+    public void setReceiver(String receiver) {
         this.receiver = receiver;
     }
 

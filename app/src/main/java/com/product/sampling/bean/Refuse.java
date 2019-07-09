@@ -8,39 +8,45 @@ public class Refuse {
      * remarks : null
      * createDate : null
      * updateDate : null
-     * producename : Hchf
-     * companyname : null
-     * representative : Jdjd
-     * companyaddress : null
-     * telandman : null
-     * taskfrom : 1
-     * samplingtel : null
-     * progrss : null
+     * producename : bb
+     * companyname : nn
+     * representative : hb
+     * companyaddress : nn
+     * telandman : nn
+     * taskfromyear : 2019
+     * taskfrompro : gg
+     * taskfromjd : hh
+     * samplingtel : bbbb
+     * progrss : bbbbb
      * advice : null
-     * createMan : d444d03c23ca4a75aae89c81dbcbcdf6
-     * createTime : 2019-01-27 03:37:25
+     * createMan : 8ad2b1727a3544bf845cdd2c83abaf5a
+     * createTime : 2019-07-09 02:06:20
      * deleteFlag : null
-     * fillInDate : null
+     * fillInDate : 2019-7-9
+     * refusetype : nn
      */
 
     private String id;
     private boolean isNewRecord;
-    private Object remarks;
-    private Object createDate;
-    private Object updateDate;
+    private String remarks;
+    private String createDate;
+    private String updateDate;
     private String producename;
-    private Object companyname;
+    private String companyname;
     private String representative;
-    private Object companyaddress;
-    private Object telandman;
-    private String taskfrom;
-    private Object samplingtel;
-    private Object progrss;
-    private Object advice;
+    private String companyaddress;
+    private String telandman;
+    private String taskfromyear;
+    private String taskfrompro;
+    private String taskfromjd;
+    private String samplingtel;
+    private String progrss;
+    private String advice;
     private String createMan;
     private String createTime;
-    private Object deleteFlag;
-    private Object fillInDate;
+    private String deleteFlag;
+    private String fillInDate;
+    private String refusetype;
 
     public String getId() {
         return id;
@@ -50,35 +56,35 @@ public class Refuse {
         this.id = id;
     }
 
-    public boolean isIsNewRecord() {
+    public boolean isNewRecord() {
         return isNewRecord;
     }
 
-    public void setIsNewRecord(boolean isNewRecord) {
-        this.isNewRecord = isNewRecord;
+    public void setNewRecord(boolean newRecord) {
+        isNewRecord = newRecord;
     }
 
-    public Object getRemarks() {
+    public String getRemarks() {
         return remarks;
     }
 
-    public void setRemarks(Object remarks) {
+    public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
 
-    public Object getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Object createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 
-    public Object getUpdateDate() {
+    public String getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Object updateDate) {
+    public void setUpdateDate(String updateDate) {
         this.updateDate = updateDate;
     }
 
@@ -90,11 +96,11 @@ public class Refuse {
         this.producename = producename;
     }
 
-    public Object getCompanyname() {
+    public String getCompanyname() {
         return companyname;
     }
 
-    public void setCompanyname(Object companyname) {
+    public void setCompanyname(String companyname) {
         this.companyname = companyname;
     }
 
@@ -106,51 +112,67 @@ public class Refuse {
         this.representative = representative;
     }
 
-    public Object getCompanyaddress() {
+    public String getCompanyaddress() {
         return companyaddress;
     }
 
-    public void setCompanyaddress(Object companyaddress) {
+    public void setCompanyaddress(String companyaddress) {
         this.companyaddress = companyaddress;
     }
 
-    public Object getTelandman() {
+    public String getTelandman() {
         return telandman;
     }
 
-    public void setTelandman(Object telandman) {
+    public void setTelandman(String telandman) {
         this.telandman = telandman;
     }
 
-    public String getTaskfrom() {
-        return taskfrom;
+    public String getTaskfromyear() {
+        return taskfromyear;
     }
 
-    public void setTaskfrom(String taskfrom) {
-        this.taskfrom = taskfrom;
+    public void setTaskfromyear(String taskfromyear) {
+        this.taskfromyear = taskfromyear;
     }
 
-    public Object getSamplingtel() {
+    public String getTaskfrompro() {
+        return taskfrompro;
+    }
+
+    public void setTaskfrompro(String taskfrompro) {
+        this.taskfrompro = taskfrompro;
+    }
+
+    public String getTaskfromjd() {
+        return taskfromjd;
+    }
+
+    public void setTaskfromjd(String taskfromjd) {
+        this.taskfromjd = taskfromjd;
+    }
+
+    public String getSamplingtel() {
         return samplingtel;
     }
 
-    public void setSamplingtel(Object samplingtel) {
+    public void setSamplingtel(String samplingtel) {
         this.samplingtel = samplingtel;
     }
 
-    public Object getProgrss() {
+    public String getProgrss() {
         return progrss;
     }
 
-    public void setProgrss(Object progrss) {
+    public void setProgrss(String progrss) {
         this.progrss = progrss;
     }
 
-    public Object getAdvice() {
+    public String getAdvice() {
         return advice;
     }
 
-    public void setAdvice(Object advice) {
+    public void setAdvice(String advice) {
         this.advice = advice;
     }
 
@@ -170,19 +192,27 @@ public class Refuse {
         this.createTime = createTime;
     }
 
-    public Object getDeleteFlag() {
+    public String getDeleteFlag() {
         return deleteFlag;
     }
 
-    public void setDeleteFlag(Object deleteFlag) {
+    public void setDeleteFlag(String deleteFlag) {
         this.deleteFlag = deleteFlag;
     }
 
-    public Object getFillInDate() {
+    public String getFillInDate() {
         return fillInDate;
     }
 
-    public void setFillInDate(Object fillInDate) {
+    public void setFillInDate(String fillInDate) {
         this.fillInDate = fillInDate;
+    }
+
+    public String getRefusetype() {
+        return refusetype;
+    }
+
+    public void setRefusetype(String refusetype) {
+        this.refusetype = refusetype;
     }
 }

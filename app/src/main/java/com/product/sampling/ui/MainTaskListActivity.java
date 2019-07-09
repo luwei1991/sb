@@ -36,7 +36,7 @@ public class MainTaskListActivity extends BaseActivity implements AMapLocationLi
      * device.
      */
     static Fragment taskToDoFragment = TaskListFragment.newInstance("待办任务", "0");//0待办 1退回 2已上传
-    static Fragment taskBackFragment = TaskListFragment.newInstance("退回", "1");
+    static Fragment taskBackFragment = TaskListFragment.newInstance("信息复核", "1");
     static Fragment taskHasUpLoadedFragment = TaskListFragment.newInstance("已上传", "2");
     static Fragment taskLocalFragment = TaskListFragment.newInstance("未上传", "-1");
 
@@ -134,7 +134,7 @@ public class MainTaskListActivity extends BaseActivity implements AMapLocationLi
 //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
 //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(60*2000);
+        mLocationOption.setInterval(60 * 2000);
 //设置定位参数
         mlocationClient.setLocationOption(mLocationOption);
 // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，

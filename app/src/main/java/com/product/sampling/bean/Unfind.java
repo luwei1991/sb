@@ -2,45 +2,50 @@ package com.product.sampling.bean;
 
 public class Unfind {
 
+
     /**
      * id : null
      * isNewRecord : true
      * remarks : null
      * createDate : null
      * updateDate : null
-     * producename : Hchf
-     * companyname : null
-     * representative : Jdjd
-     * companyaddress : null
-     * telandman : null
-     * taskfrom : 1
-     * samplingtel : null
-     * progrss : null
-     * advice : null
-     * createMan : d444d03c23ca4a75aae89c81dbcbcdf6
-     * createTime : 2019-01-27 03:37:25
+     * taskfrom : gg
+     * tasktype : bb
+     * producename : gvv
+     * samplingtime : 2019-07-09 02:00:31
+     * companyname : bbb
+     * companyaddress : bn
+     * companyman : nnn
+     * companytel : nnnn
+     * unfindreson : 4
+     * process : nnnn
+     * advice : nnnnnnnn
+     * createMan : 8ad2b1727a3544bf845cdd2c83abaf5a
+     * createTime : 2019-07-09 02:00:31
      * deleteFlag : null
-     * fillInDate : null
+     * fillInDate : 2019-7-9
      */
 
     private String id;
     private boolean isNewRecord;
-    private Object remarks;
-    private Object createDate;
-    private Object updateDate;
-    private String producename;
-    private Object companyname;
-    private String representative;
-    private Object companyaddress;
-    private Object telandman;
+    private String remarks;
+    private String createDate;
+    private String updateDate;
     private String taskfrom;
-    private Object samplingtel;
-    private Object progrss;
-    private Object advice;
+    private String tasktype;
+    private String producename;
+    private String samplingtime;
+    private String companyname;
+    private String companyaddress;
+    private String companyman;
+    private String companytel;
+    private String unfindreson;
+    private String process;
+    private String advice;
     private String createMan;
     private String createTime;
-    private Object deleteFlag;
-    private Object fillInDate;
+    private String deleteFlag;
+    private String fillInDate;
 
     public String getId() {
         return id;
@@ -50,76 +55,36 @@ public class Unfind {
         this.id = id;
     }
 
-    public boolean isIsNewRecord() {
+    public boolean isNewRecord() {
         return isNewRecord;
     }
 
-    public void setIsNewRecord(boolean isNewRecord) {
-        this.isNewRecord = isNewRecord;
+    public void setNewRecord(boolean newRecord) {
+        isNewRecord = newRecord;
     }
 
-    public Object getRemarks() {
+    public String getRemarks() {
         return remarks;
     }
 
-    public void setRemarks(Object remarks) {
+    public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
 
-    public Object getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Object createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 
-    public Object getUpdateDate() {
+    public String getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Object updateDate) {
+    public void setUpdateDate(String updateDate) {
         this.updateDate = updateDate;
-    }
-
-    public String getProducename() {
-        return producename;
-    }
-
-    public void setProducename(String producename) {
-        this.producename = producename;
-    }
-
-    public Object getCompanyname() {
-        return companyname;
-    }
-
-    public void setCompanyname(Object companyname) {
-        this.companyname = companyname;
-    }
-
-    public String getRepresentative() {
-        return representative;
-    }
-
-    public void setRepresentative(String representative) {
-        this.representative = representative;
-    }
-
-    public Object getCompanyaddress() {
-        return companyaddress;
-    }
-
-    public void setCompanyaddress(Object companyaddress) {
-        this.companyaddress = companyaddress;
-    }
-
-    public Object getTelandman() {
-        return telandman;
-    }
-
-    public void setTelandman(Object telandman) {
-        this.telandman = telandman;
     }
 
     public String getTaskfrom() {
@@ -130,27 +95,83 @@ public class Unfind {
         this.taskfrom = taskfrom;
     }
 
-    public Object getSamplingtel() {
-        return samplingtel;
+    public String getTasktype() {
+        return tasktype;
     }
 
-    public void setSamplingtel(Object samplingtel) {
-        this.samplingtel = samplingtel;
+    public void setTasktype(String tasktype) {
+        this.tasktype = tasktype;
     }
 
-    public Object getProgrss() {
-        return progrss;
+    public String getProducename() {
+        return producename;
     }
 
-    public void setProgrss(Object progrss) {
-        this.progrss = progrss;
+    public void setProducename(String producename) {
+        this.producename = producename;
     }
 
-    public Object getAdvice() {
+    public String getSamplingtime() {
+        return samplingtime;
+    }
+
+    public void setSamplingtime(String samplingtime) {
+        this.samplingtime = samplingtime;
+    }
+
+    public String getCompanyname() {
+        return companyname;
+    }
+
+    public void setCompanyname(String companyname) {
+        this.companyname = companyname;
+    }
+
+    public String getCompanyaddress() {
+        return companyaddress;
+    }
+
+    public void setCompanyaddress(String companyaddress) {
+        this.companyaddress = companyaddress;
+    }
+
+    public String getCompanyman() {
+        return companyman;
+    }
+
+    public void setCompanyman(String companyman) {
+        this.companyman = companyman;
+    }
+
+    public String getCompanytel() {
+        return companytel;
+    }
+
+    public void setCompanytel(String companytel) {
+        this.companytel = companytel;
+    }
+
+    public String getUnfindreson() {
+        return unfindreson;
+    }
+
+    public void setUnfindreson(String unfindreson) {
+        this.unfindreson = unfindreson;
+    }
+
+    public String getProcess() {
+        return process;
+    }
+
+    public void setProcess(String process) {
+        this.process = process;
+    }
+
+    public String getAdvice() {
         return advice;
     }
 
-    public void setAdvice(Object advice) {
+    public void setAdvice(String advice) {
         this.advice = advice;
     }
 
@@ -170,19 +191,19 @@ public class Unfind {
         this.createTime = createTime;
     }
 
-    public Object getDeleteFlag() {
+    public String getDeleteFlag() {
         return deleteFlag;
     }
 
-    public void setDeleteFlag(Object deleteFlag) {
+    public void setDeleteFlag(String deleteFlag) {
         this.deleteFlag = deleteFlag;
     }
 
-    public Object getFillInDate() {
+    public String getFillInDate() {
         return fillInDate;
     }
 
-    public void setFillInDate(Object fillInDate) {
+    public void setFillInDate(String fillInDate) {
         this.fillInDate = fillInDate;
     }
 }
