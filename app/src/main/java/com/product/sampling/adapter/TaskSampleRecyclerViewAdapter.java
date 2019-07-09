@@ -1,5 +1,6 @@
 package com.product.sampling.adapter;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -57,48 +58,17 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                         }).setNegativeButton("取消", null).show();
 
             } else if (R.id.btn_edit_check_sheet == view.getId()) {//检查单编辑
-
-                int index = (int) view.getTag();
-                Intent intent = new Intent(view.getContext(), H5WebViewActivity.class);
-                Bundle b = new Bundle();
-                b.putInt(Intent_Order, 1);
-                b.putInt("task", index);
-                b.putSerializable("map", mData.get(index).samplingInfoMap);
-                intent.putExtras(b);
-                fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+                showDialog(view.getContext(), 1, (int) view.getTag());
 
             } else if (R.id.btn_edit_handling_sheet == view.getId()) {//处置单编辑
-                int index = (int) view.getTag();
+                showDialog(view.getContext(), 2, (int) view.getTag());
 
-                Intent intent = new Intent(view.getContext(), H5WebViewActivity.class);
-                Bundle b = new Bundle();
-                b.putInt(Intent_Order, 2);
-                b.putInt("task", index);
-                b.putSerializable("map", mData.get(index).adviceInfoMap);
-                intent.putExtras(b);
-                fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
 
             } else if (R.id.btn_edit_risk_sheet == view.getId()) {//处置单编辑
-                int index = (int) view.getTag();
-
-                Intent intent = new Intent(view.getContext(), H5WebViewActivity.class);
-                Bundle b = new Bundle();
-                b.putInt(Intent_Order, 5);
-                b.putInt("task", index);
-                b.putSerializable("map", mData.get(index).riskInfoMap);
-                intent.putExtras(b);
-                fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+                showDialog(view.getContext(), 3, (int) view.getTag());
 
             } else if (R.id.btn_edit_work_sheet == view.getId()) {//处置单编辑
-                int index = (int) view.getTag();
-
-                Intent intent = new Intent(view.getContext(), H5WebViewActivity.class);
-                Bundle b = new Bundle();
-                b.putInt(Intent_Order, 6);
-                b.putInt("task", index);
-                b.putSerializable("map", mData.get(index).workInfoMap);
-                intent.putExtras(b);
-                fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+                showDialog(view.getContext(), 4, (int) view.getTag());
 
             } else if (R.id.btn_upload_check_sheet == view.getId()) {//检查单上传
                 fragment.selectId = (int) view.getTag();
@@ -263,5 +233,57 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             mBtnEditRisk = view.findViewById(R.id.btn_edit_risk_sheet);
             mBtnUploadRisk = view.findViewById(R.id.btn_upload_risk_sheet);
         }
+    }
+
+    private void showDialog(Context context, int buttonid, int postion) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("提示");
+        builder.setMessage("是否编辑表单?");
+        builder.setCancelable(true);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (buttonid == 1) {
+                    Intent intent = new Intent(context, H5WebViewActivity.class);
+                    Bundle b = new Bundle();
+                    b.putInt(Intent_Order, 1);
+                    b.putInt("task", postion);
+                    b.putSerializable("map", mData.get(postion).samplingInfoMap);
+                    intent.putExtras(b);
+                    fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+                } else if (buttonid == 2) {
+                    Intent intent = new Intent(context, H5WebViewActivity.class);
+                    Bundle b = new Bundle();
+                    b.putInt(Intent_Order, 2);
+                    b.putInt("task", postion);
+                    b.putSerializable("map", mData.get(postion).adviceInfoMap);
+                    intent.putExtras(b);
+                    fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+                } else if (buttonid == 3) {
+                    Intent intent = new Intent(context, H5WebViewActivity.class);
+                    Bundle b = new Bundle();
+                    b.putInt(Intent_Order, 5);
+                    b.putInt("task", postion);
+                    b.putSerializable("map", mData.get(postion).riskInfoMap);
+                    intent.putExtras(b);
+                    fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+                } else if (buttonid == 4) {
+                    Intent intent = new Intent(context, H5WebViewActivity.class);
+                    Bundle b = new Bundle();
+                    b.putInt(Intent_Order, 6);
+                    b.putInt("task", postion);
+                    b.putSerializable("map", mData.get(postion).workInfoMap);
+                    intent.putExtras(b);
+                    fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+                }
+            }
+        });
+
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.show();
     }
 }

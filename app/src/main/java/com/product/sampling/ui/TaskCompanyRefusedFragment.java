@@ -1,6 +1,7 @@
 package com.product.sampling.ui;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -152,7 +154,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
         view.findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                postUnfindData();
+                showDialog("确定提交所有信息吗？", 1);
             }
         });
 
@@ -170,14 +172,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
         view.findViewById(R.id.btn_edit_spot_check_sheet).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(getActivity(), H5WebViewActivity.class);
-                Bundle b = new Bundle();
-                b.putInt(Intent_Order, 3);
-                b.putSerializable("task", (Serializable) taskRefusedEntity);
-                b.putSerializable("map", (Serializable) taskRefusedEntity.refuseInfoMap);
-                intent.putExtras(b);
-                startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+                showDialog("确定打开表单吗？", 2);
             }
         });
         btnUploadRefusedPic = view.findViewById(R.id.btn_upload_handling_sheet);
@@ -617,4 +612,33 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
             com.product.sampling.maputil.ToastUtil.show(getActivity(), "保存成功");
         }
     }
+
+    private void showDialog(String msg, int index) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("提示");
+        builder.setMessage(msg);
+        builder.setCancelable(true);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (index == 1) {
+                    postUnfindData();
+                } else if (index == 2) {
+                    Intent intent = new Intent(getActivity(), H5WebViewActivity.class);
+                    Bundle b = new Bundle();
+                    b.putInt(Intent_Order, 3);
+                    b.putSerializable("task", (Serializable) taskRefusedEntity);
+                    b.putSerializable("map", (Serializable) taskRefusedEntity.refuseInfoMap);
+                    intent.putExtras(b);
+                    startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+                }
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.show();    }
 }

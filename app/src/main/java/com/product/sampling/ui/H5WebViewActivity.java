@@ -77,7 +77,7 @@ public class H5WebViewActivity extends AppCompatActivity {
             webView.loadUrl("file:///android_asset/7企业对抽样人员工作反馈意见.html");
         }
         HashMap<String, String> map = (HashMap) getIntent().getSerializableExtra("map");
-        if (null != map && !map.isEmpty()) {
+         if (null != map && !map.isEmpty()) {
             StringBuilder builder = new StringBuilder();
             for (String s : map.keySet()) {
                 if (!TextUtils.isEmpty(s)) {

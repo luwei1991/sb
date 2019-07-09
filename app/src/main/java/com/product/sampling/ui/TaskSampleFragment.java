@@ -1,5 +1,6 @@
 package com.product.sampling.ui;
 
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -149,12 +150,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), H5WebViewActivity.class);
-                Bundle b = new Bundle();
-                b.putInt(Intent_Order, 7);
-                b.putSerializable("map", taskDetailViewModel.taskEntity.feedInfoMap);
-                intent.putExtras(b);
-                TaskSampleFragment.this.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+                showDialog("是否打开表单?", 2);
+
             }
         });
         btnUploadFeed = view.findViewById(R.id.btn_upload_feed_sheet);
@@ -211,8 +208,37 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         } else if (v.getId() == R.id.btn_save) {
             saveSampleInFile();
         } else if (R.id.btn_save_upload == v.getId()) {
-            postSceneData();
+            showDialog("是否提交所有信息?", 1);
         }
+    }
+
+    private void showDialog(String msg, int index) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("提示");
+        builder.setMessage(msg);
+        builder.setCancelable(true);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (index == 1) {
+                    postSceneData();
+                } else if (index == 2) {
+                    Intent intent = new Intent(getActivity(), H5WebViewActivity.class);
+                    Bundle b = new Bundle();
+                    b.putInt(Intent_Order, 7);
+                    b.putSerializable("map", taskDetailViewModel.taskEntity.feedInfoMap);
+                    intent.putExtras(b);
+                    TaskSampleFragment.this.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+                }
+            }
+        });
+
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.show();
     }
 
     private void saveSampleInFile() {
