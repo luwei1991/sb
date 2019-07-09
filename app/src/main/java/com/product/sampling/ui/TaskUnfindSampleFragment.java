@@ -85,6 +85,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
 
     TextView mTextViewCompanyname;
     Button btnUploadUnfindPic;
+    TextView mTVSheet;
 
     public TaskUnfindSampleFragment() {
 
@@ -189,6 +190,10 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                 MediaHelper.startGallery(fragment, PictureConfig.SINGLE, Unfind_Sample_Result);
             }
         });
+        mTVSheet = view.findViewById(R.id.tv_handle_sheet);
+        if (!TextUtils.isEmpty(taskUnFindEntity.unfindfile)) {
+            mTVSheet.setText(taskUnFindEntity.unfindfile);
+        }
     }
 
     @Override
@@ -342,6 +347,9 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                             int pos = data.getIntExtra(Intent_Order, 3);
                             taskUnFindEntity.unfindfile = data.getStringExtra("pdf");
                             taskUnFindEntity.unfindSampleInfoMap = map;
+                            if (!TextUtils.isEmpty(taskUnFindEntity.unfindfile)){
+                                mTVSheet.setText(taskUnFindEntity.unfindfile);
+                            }
                             shareBySystem(data.getStringExtra("pdf"));
                         } catch (JSONException e) {
                             e.printStackTrace();

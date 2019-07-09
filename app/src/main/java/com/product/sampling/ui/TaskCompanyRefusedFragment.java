@@ -81,11 +81,12 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
 
     RecyclerView mRecyclerViewImageList;
     RecyclerView mRecyclerViewVideoList;
-    public static final int Unfind_Sample_Result = 103;
+    public static final int Refused_Sample_Result = 103;
     TextView mTextViewCompanyname;
     EditText etTips;
     public TaskEntity taskRefusedEntity = new TaskEntity();
     Button btnUploadRefusedPic;
+    TextView mTVSheet;
 
     public TaskCompanyRefusedFragment() {
 
@@ -183,9 +184,14 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
         btnUploadRefusedPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MediaHelper.startGallery(fragment, PictureConfig.SINGLE, Unfind_Sample_Result);
+                MediaHelper.startGallery(fragment, PictureConfig.SINGLE, Refused_Sample_Result);
             }
         });
+        mTVSheet = view.findViewById(R.id.tv_handle_sheet);
+        if (!TextUtils.isEmpty(taskRefusedEntity.refusefile)) {
+            mTVSheet.setText(taskRefusedEntity.refusefile);
+        }
+
     }
 
     @Override
@@ -341,6 +347,9 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                             int pos = data.getIntExtra(Intent_Order, 3);
                             taskRefusedEntity.refusefile = data.getStringExtra("pdf");
                             taskRefusedEntity.refuseInfoMap = map;
+                            if (!TextUtils.isEmpty(taskRefusedEntity.refusefile)) {
+                                mTVSheet.setText(taskRefusedEntity.refusefile);
+                            }
                             shareBySystem(data.getStringExtra("pdf"));
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -348,7 +357,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                         Log.e("para", para);
                     }
                     break;
-                case Unfind_Sample_Result:
+                case Refused_Sample_Result:
                     if (data != null) {
                         List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
                         taskRefusedEntity.refusepicfile = selectHandle.get(0).getPath();
