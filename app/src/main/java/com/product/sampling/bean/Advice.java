@@ -41,6 +41,7 @@ public class Advice {
     private String deleteFlag;
     private String fillInDate;
     private String samplingcode;
+    private String proname;
 
     public String getId() {
         return id;
@@ -64,6 +65,14 @@ public class Advice {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public String getProname() {
+        return proname;
+    }
+
+    public void setProname(String proname) {
+        this.proname = proname;
     }
 
     public String getCreateDate() {
