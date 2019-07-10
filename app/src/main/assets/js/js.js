@@ -64,7 +64,8 @@ function dataFillByType(els, data){
     var type = $(els[0]).attr('type');
     if(type == 'radio'){
         $(els).each(function(){
-            if($(this).val() == data){
+            if(encodeURIComponent($(this).val()) == data){
+            //if($(this).val() == data){
                 $(this).click()
             }
         })

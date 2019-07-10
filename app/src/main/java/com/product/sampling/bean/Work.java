@@ -92,6 +92,7 @@ public class Work {
     private String acceptanceremark;
     private String receiver;
     private String fillInDate;
+    private String inspectionsiteother;
 
     public String getTitleyear() {
         return titleyear;
@@ -283,6 +284,14 @@ public class Work {
 
     public void setOperatorman(String operatorman) {
         this.operatorman = operatorman;
+    }
+
+    public String getInspectionsiteother() {
+        return inspectionsiteother;
+    }
+
+    public void setInspectionsiteother(String inspectionsiteother) {
+        this.inspectionsiteother = inspectionsiteother;
     }
 
     public String getOperatormovetel() {

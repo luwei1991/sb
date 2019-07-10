@@ -75,6 +75,8 @@ public class Risk {
     private String createMan;
     private String fillInDate;
     private String releaseDate ;		// 保质期
+    private String samplingother;
+    private String doaddressother;
 
     public String getId() {
         return id;
@@ -122,6 +124,22 @@ public class Risk {
 
     public void setRiskcode(String riskcode) {
         this.riskcode = riskcode;
+    }
+
+    public String getSamplingother() {
+        return samplingother;
+    }
+
+    public void setSamplingother(String samplingother) {
+        this.samplingother = samplingother;
+    }
+
+    public String getDoaddressother() {
+        return doaddressother;
+    }
+
+    public void setDoaddressother(String doaddressother) {
+        this.doaddressother = doaddressother;
     }
 
     public String getSamplingtype() {
