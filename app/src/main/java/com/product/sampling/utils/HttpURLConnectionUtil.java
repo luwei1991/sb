@@ -1,5 +1,6 @@
 package com.product.sampling.utils;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.product.sampling.Constants;
@@ -8,9 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -22,6 +27,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+
+import okhttp3.MultipartBody;
 
 public class HttpURLConnectionUtil {
     private final static String requestURL = Constants.BASE_URL + "app/task/uploadtaskinfo";
@@ -63,7 +70,7 @@ public class HttpURLConnectionUtil {
             conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
             conn.setRequestProperty("Charset", "UTF-8");
             conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
-            conn.setChunkedStreamingMode(1024);//内部缓冲区---分段上传防止oom
+//            conn.setChunkedStreamingMode(1024 * 1024);//内部缓冲区---分段上传防止oom
             conn.connect();
 
             // 往服务器端写内容 也就是发起http请求需要带的参数
@@ -156,7 +163,6 @@ public class HttpURLConnectionUtil {
 
                 msg += requestParams.toString();
             }
-            LogUtils.e(msg);
         } catch (Exception e) {
             log.error("writeParams failed", e);
             throw new Exception(e);
@@ -177,17 +183,16 @@ public class HttpURLConnectionUtil {
                 msg += "空";
             } else {
                 StringBuilder requestParams = new StringBuilder();
-                Set<Map.Entry<String, File>> set = requestFile.entrySet();
-                Iterator<Map.Entry<String, File>> it = set.iterator();
-                while (it.hasNext()) {
-                    Map.Entry<String, File> entry = it.next();
+                File file;
+                for (String s : requestFile.keySet()) {
+                    file = requestFile.get(s);
                     requestParams.append(PREFIX).append(BOUNDARY).append(LINE_END);
                     requestParams.append("Content-Disposition: form-data; name=\"")
-                            .append(entry.getKey()).append("\"; filename=\"")
-                            .append(entry.getValue().getName()).append("\"")
+                            .append(file).append("\"; filename=\"")
+                            .append(file.getName()).append("\"")
                             .append(LINE_END);
                     requestParams.append("Content-Type:")
-                            .append(getContentType(entry.getValue()))
+                            .append(getContentType(file))
                             .append(LINE_END);
                     requestParams.append("Content-Transfer-Encoding: 8bit").append(
                             LINE_END);
@@ -195,19 +200,21 @@ public class HttpURLConnectionUtil {
 
                     os.write(requestParams.toString().getBytes());
 
-                    is = new FileInputStream(entry.getValue());
+                    is = new FileInputStream(file);
 
 
                     byte[] buffer = new byte[1024 * 1024];
-                    int len = 0;
+                    int len = -1;
                     while ((len = is.read(buffer)) != -1) {
+                        LogUtils.e(buffer.toString() + "len:" + len);
                         os.write(buffer, 0, len);
+                        LogUtils.e(os.toString());
                     }
+
                     os.write(LINE_END.getBytes());
                     os.flush();
-
-                    msg += requestParams.toString();
                 }
+                msg += requestParams.toString();
             }
             LogUtils.e(msg);
         } catch (Exception e) {
@@ -234,9 +241,104 @@ public class HttpURLConnectionUtil {
      * @Description:
      */
     public static String getContentType(File file) throws Exception {
-        LogUtils.e(file.getPath());
         String streamContentType = "application/octet-stream";
-        return streamContentType;
+        return "multipart/form-data";
+    }
+
+    public static String formUpload(Map<String, String> textMap, Map<String, String> fileMap) {
+        String res = "";
+        HttpURLConnection conn = null;
+        String BOUNDARY = "---------------------------123821742118716"; //boundary就是request头和上传文件内容的分隔符
+        try {
+            URL url = new URL(requestURL);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(600000);
+            conn.setReadTimeout(30000);
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setUseCaches(false);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; zh-CN; rv:1.9.2.6)");
+            conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
+            conn.setChunkedStreamingMode(1024 * 1024);//内部缓冲区---分段上传防止oom
+
+            OutputStream out = new DataOutputStream(conn.getOutputStream());
+            // text
+            if (textMap != null) {
+                StringBuffer strBuf = new StringBuffer();
+                Iterator<Map.Entry<String, String>> iter = textMap.entrySet().iterator();
+                while (iter.hasNext()) {
+                    Map.Entry<String, String> entry = iter.next();
+                    String inputName = (String) entry.getKey();
+                    String inputValue = (String) entry.getValue();
+                    if (TextUtils.isEmpty(inputValue)) {
+                        continue;
+                    }
+                    strBuf.append("\r\n").append("--").append(BOUNDARY).append("\r\n");
+                    strBuf.append("Content-Disposition: form-data; name=\"" + inputName + "\"\r\n\r\n");
+                    strBuf.append(inputValue);
+                }
+                out.write(strBuf.toString().getBytes());
+                LogUtils.e(strBuf.toString());
+            }
+
+            // file
+            if (fileMap != null) {
+                Iterator<Map.Entry<String, String>> iter = fileMap.entrySet().iterator();
+                while (iter.hasNext()) {
+                    Map.Entry<String, String> entry = iter.next();
+                    String inputName = (String) entry.getKey();
+                    String inputValue = (String) entry.getValue();
+                    if (inputValue == null) {
+                        continue;
+                    }
+                    File file = new File(inputValue);
+                    String filename = file.getName();
+                    //MagicMatch match = Magic.getMagicMatch(file, false, true);
+                    String contentType = getContentType(new File(inputValue));
+                    StringBuffer strBuf = new StringBuffer();
+                    strBuf.append("\r\n").append("--").append(BOUNDARY).append("\r\n");
+                    strBuf.append("Content-Disposition: form-data; name=\"" + inputName + "\"; filename=\"" + filename + "\"\r\n");
+                    strBuf.append("Content-Type:" + contentType + "\r\n\r\n");
+
+                    out.write(strBuf.toString().getBytes());
+
+                    DataInputStream in = new DataInputStream(new FileInputStream(file));
+                    int bytes = 0;
+                    byte[] bufferOut = new byte[1024 * 1024 * 5];
+                    while ((bytes = in.read(bufferOut)) != -1) {
+                        out.write(bufferOut, 0, bytes);
+                    }
+                    in.close();
+                }
+            }
+
+            byte[] endData = ("\r\n--" + BOUNDARY + "--\r\n").getBytes();
+            out.write(endData);
+            out.flush();
+            out.close();
+
+            // 读取返回数据
+            StringBuffer strBuf = new StringBuffer();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                strBuf.append(line).append("\n");
+            }
+            res = strBuf.toString();
+            reader.close();
+            reader = null;
+        } catch (Exception e) {
+            System.out.println("发送POST请求出错。" + requestURL);
+            e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+                conn = null;
+            }
+        }
+        return res;
     }
 
     public static void main(String[] args) throws Exception {

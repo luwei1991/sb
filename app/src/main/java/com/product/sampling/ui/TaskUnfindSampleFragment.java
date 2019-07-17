@@ -51,6 +51,7 @@ import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.photo.MediaHelper;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 import com.product.sampling.utils.FileDownloader;
+import com.product.sampling.utils.FileUtils;
 import com.product.sampling.utils.HttpURLConnectionUtil;
 import com.product.sampling.utils.LogUtils;
 import com.product.sampling.utils.RxSchedulersHelper;
@@ -468,7 +469,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
 
     private void postUnfindData() {
         Map<String, String> requestText = new HashMap<String, String>();
-        Map<String, File> requestFile = new HashMap<String, File>();
+        Map<String, String> requestFile = new HashMap<String, String>();
 
         requestText.put("userid", AccountManager.getInstance().getUserId());
         requestText.put("id", taskUnFindEntity.id);
@@ -503,7 +504,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                     continue;
                 }
                 requestText.put("uploadPic[" + i + "].fileStr", pics.getRemarks() + "");
-                requestFile.put("uploadPic[" + i + "].fileStream", f);
+                requestFile.put("uploadPic[" + i + "].fileStream", path);
             }
         }
         if (null != taskUnFindEntity.voides && !taskUnFindEntity.voides.isEmpty()) {
@@ -515,14 +516,14 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                     requestText.put("uploadVedio[" + i + "].fileid", videos.getId() + "");
                     continue;
                 }
-                File f = new File(taskUnFindEntity.voides.get(i).getPath());
+                File f = new File(videos.getPath());
                 if (!f.exists()) {
                     Log.e("视频", f.getAbsolutePath());
                     com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "无效视频");
                     continue;
                 }
                 requestText.put("uploadVedio[" + i + "].fileStr", videos.getRemarks() + "");
-                requestFile.put("uploadVedio[" + i + "].fileStream", f);
+                requestFile.put("uploadVedio[" + i + "].fileStream", videos.getPath());
             }
         }
 
@@ -531,7 +532,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             File unfindfile = new File(taskUnFindEntity.unfindfile);
             if (unfindfile.exists()) {
                 Log.e("file", unfindfile.getAbsolutePath());
-                requestFile.put("unfindfile", unfindfile);//未找到样品单file
+                requestFile.put("unfindfile", taskUnFindEntity.unfindfile);//未找到样品单file
             }
         }
 
@@ -550,7 +551,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             File unfindpicfile = new File(taskUnFindEntity.unfindpicfile);
             if (unfindpicfile.exists()) {
                 Log.e("file", unfindpicfile.getAbsolutePath());
-                requestFile.put("unfindpicfile", unfindpicfile);//样品单图片
+                requestFile.put("unfindpicfile", taskUnFindEntity.unfindpicfile);//样品单图片
             }
         }
 
@@ -574,7 +575,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             protected Object doInBackground(Object[] objects) {
                 String response = null;
                 try {
-                    response = httpReuqest.sendRequest(requestText, requestFile);
+                    response = httpReuqest.formUpload(requestText, requestFile);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -594,7 +595,8 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                         if (object.has("code") && object.optInt("code") == 200) {
                             dismissLoadingDialog();
                             EventBus.getDefault().post(TaskMessage.getInstance(taskUnFindEntity.id));
-//                            saveTaskInLocalFile(true);
+                            saveTaskInLocalFile(true);
+                            FileUtils.deletePdf(requestFile);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

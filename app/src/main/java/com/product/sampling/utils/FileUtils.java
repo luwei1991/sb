@@ -1,5 +1,7 @@
 package com.product.sampling.utils;
 
+import android.text.TextUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Map;
 
 /**
  * @author： wlj
@@ -424,5 +427,13 @@ public class FileUtils {
             e.printStackTrace();
         }
         return size;
+    }
+
+    public static void deletePdf(Map<String, String> map) {
+        for (String key : map.keySet()) {
+            if (!TextUtils.isEmpty(map.get(key)) && map.get(key).endsWith(".pdf")) {
+                deleteFile(map.get(key));
+            }
+        }
     }
 }

@@ -1022,7 +1022,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     void postScenceByNohttp() {
 
         Map<String, String> requestText = new HashMap<String, String>();
-        Map<String, File> requestFile = new HashMap<String, File>();
+        Map<String, String> requestFile = new HashMap<String, String>();
 
         if (!TextUtils.isEmpty(deleteId) && deleteId.endsWith(",")) {
             deleteId = deleteId.substring(0, deleteId.length() - 1);
@@ -1055,21 +1055,21 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 }
 
                 requestText.put("uploadVedio[" + i + "].fileStr", videos.getRemarks());
-                requestFile.put("uploadVedio[" + i + "].fileStream", f);
+                requestFile.put("uploadVedio[" + i + "].fileStream", videos.getPath());
             }
         }
         {
             File feedfile = new File(taskDetailViewModel.taskEntity.feedfile);
             if (feedfile.exists()) {
                 Log.e("file", feedfile.getAbsolutePath());
-                requestFile.put("feedfile", feedfile);//抽样单
+                requestFile.put("feedfile", taskDetailViewModel.taskEntity.feedfile);//抽样单
             }
         }
         {
             File feedpicfile = new File(taskDetailViewModel.taskEntity.feedpicfile);
             if (feedpicfile.exists()) {
                 Log.e("file", feedpicfile.getAbsolutePath());
-                requestFile.put("feedfile", feedpicfile);//抽样单
+                requestFile.put("feedfile", taskDetailViewModel.taskEntity.feedpicfile);//抽样单
             }
         }
 
@@ -1104,7 +1104,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             protected Object doInBackground(Object[] objects) {
                 String response = null;
                 try {
-                    response = httpReuqest.sendRequest(requestText, requestFile);
+                    response = httpReuqest.formUpload(requestText, requestFile);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

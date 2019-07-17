@@ -51,6 +51,7 @@ import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.photo.MediaHelper;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 import com.product.sampling.utils.FileDownloader;
+import com.product.sampling.utils.FileUtils;
 import com.product.sampling.utils.HttpURLConnectionUtil;
 import com.product.sampling.utils.LogUtils;
 import com.product.sampling.utils.RxSchedulersHelper;
@@ -459,7 +460,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
 
     private void postUnfindData() {
         Map<String, String> requestText = new HashMap<String, String>();
-        Map<String, File> requestFile = new HashMap<String, File>();
+        Map<String, String> requestFile = new HashMap<String, String>();
 
         requestText.put("userid", AccountManager.getInstance().getUserId());
         requestText.put("id", taskRefusedEntity.id);
@@ -494,7 +495,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                     continue;
                 }
                 requestText.put("uploadPic[" + i + "].fileStr", pics.getRemarks() + "");
-                requestFile.put("uploadPic[" + i + "].fileStream", f);
+                requestFile.put("uploadPic[" + i + "].fileStream", path);
             }
         }
         if (null != taskRefusedEntity.voides && !taskRefusedEntity.voides.isEmpty()) {
@@ -506,14 +507,14 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                     requestText.put("uploadVedio[" + i + "].fileid", videos.getId() + "");
                     continue;
                 }
-                File f = new File(taskRefusedEntity.voides.get(i).getPath());
+                File f = new File(videos.getPath());
                 if (!f.exists()) {
                     Log.e("视频", f.getAbsolutePath());
                     com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "无效视频");
                     continue;
                 }
                 requestText.put("uploadVedio[" + i + "].fileStr", videos.getRemarks() + "");
-                requestFile.put("uploadVedio[" + i + "].fileStream", f);
+                requestFile.put("uploadVedio[" + i + "].fileStream", videos.getPath());
             }
         }
 
@@ -522,7 +523,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
             File refusefile = new File(taskRefusedEntity.refusefile);
             if (refusefile.exists()) {
                 Log.e("file", refusefile.getAbsolutePath());
-                requestFile.put("refusefile", refusefile);//抽样单
+                requestFile.put("refusefile", taskRefusedEntity.refusefile);//抽样单
             }
         }
 
@@ -541,7 +542,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
             File refusepicfile = new File(taskRefusedEntity.refusepicfile);
             if (refusepicfile.exists()) {
                 Log.e("file", refusepicfile.getAbsolutePath());
-                requestFile.put("refusepicfile", refusepicfile);//处置单
+                requestFile.put("refusepicfile", taskRefusedEntity.refusepicfile);//处置单
             }
         }
 
@@ -564,7 +565,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
             protected Object doInBackground(Object[] objects) {
                 String response = null;
                 try {
-                    response = httpReuqest.sendRequest(requestText, requestFile);
+                    response = httpReuqest.formUpload(requestText, requestFile);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -584,7 +585,8 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                         if (object.has("code") && object.optInt("code") == 200) {
                             dismissLoadingDialog();
                             EventBus.getDefault().post(TaskMessage.getInstance(taskRefusedEntity.id));
-//                            saveTaskInLocalFile(true);
+                            saveTaskInLocalFile(true);
+                            FileUtils.deletePdf(requestFile);
                         } else {
                             EventBus.getDefault().post(TaskMessage.getInstance(taskRefusedEntity.id));
                         }
@@ -592,8 +594,6 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                         e.printStackTrace();
                     }
                 }
-
-
             }
         }.execute();
 
@@ -624,6 +624,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
 //                    }
 //                });
     }
+
 
     private void saveTaskInLocalFile(boolean isRemove) {
         try {
