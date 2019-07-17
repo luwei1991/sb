@@ -27,6 +27,7 @@ import com.luck.picture.lib.PictureSelector;
 import com.product.sampling.R;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.Videos;
+import com.product.sampling.maputil.ToastUtil;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.ui.MediaPlayerActivity;
 import com.product.sampling.ui.TaskSceneFragment;
@@ -138,12 +139,18 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
 
                         break;
                     case 1:
-                        mValues.remove(taskPostion);
+                        if (mValues.size() > taskPostion) {
+                            mValues.remove(taskPostion);
+                            notifyDataSetChanged();
+                        }
 //                        fragment.onRemove(false, taskPostion);
-                        notifyDataSetChanged();
                         break;
                     case 2:
-                        PictureSelector.create(fragment).externalPictureVideo(mValues.get(taskPostion).getPath());
+                        if (!TextUtils.isEmpty(mValues.get(taskPostion).getPath())) {
+                            PictureSelector.create(fragment).externalPictureVideo(mValues.get(taskPostion).getPath());
+                        } else if (!TextUtils.isEmpty(mValues.get(taskPostion).getId())) {
+                            ToastUtil.show(context,"视频加载中,请稍等");
+                        }
                         break;
                 }
             }

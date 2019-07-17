@@ -8,7 +8,10 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -18,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,6 +42,7 @@ import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.product.sampling.Constants;
 import com.product.sampling.R;
 import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
 import com.product.sampling.bean.Advice;
@@ -59,8 +64,15 @@ import com.product.sampling.net.request.Request;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.photo.MediaHelper;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
+import com.product.sampling.utils.HttpURLConnectionUtil;
+import com.product.sampling.utils.LogUtils;
 import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.SPUtil;
+import com.yanzhenjie.nohttp.Binary;
+import com.yanzhenjie.nohttp.FileBinary;
+import com.yanzhenjie.nohttp.OnUploadListener;
+import com.yanzhenjie.nohttp.RequestMethod;
+import com.yanzhenjie.nohttp.rest.StringRequest;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -68,8 +80,17 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -221,7 +242,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (index == 1) {
-                    postSceneData();
+//                    postSceneData();
+                    postScenceByNohttp();
                 } else if (index == 2) {
                     Intent intent = new Intent(getActivity(), H5WebViewActivity.class);
                     Bundle b = new Bundle();
@@ -848,7 +870,21 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "无效视频");
                     continue;
                 }
-                RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
+                byte[] fileBytes = null;
+                try {
+                    FileInputStream fis = new FileInputStream(f);
+
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    byte[] buf = new byte[1024];
+                    int count;
+                    while ((count = fis.read(buf)) != -1) {
+                        baos.write(buf, 0, count); //实际上，如果文件体积比较大的话，不用转码，在这一步就可能OOM了
+                    }
+                    fileBytes = baos.toByteArray();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                RequestBody requestImage = RequestBody.create(MultipartBody.FORM, fileBytes);//把文件与类型放入请求体
                 multipartBodyBuilder.addFormDataPart("uploadVedio[" + i + "].fileStr", videos.getRemarks() + "")
                         .addFormDataPart("uploadVedio[" + i + "].fileStream", f.getName(), requestImage);
             }
@@ -902,7 +938,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     @Override
                     public void onSuccess(String s) {
                         com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加现场信息成功");
-                        postSampleData();
+//                        postSampleData();
                     }
 
                     @Override
@@ -981,5 +1017,124 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    void postScenceByNohttp() {
+
+        Map<String, String> requestText = new HashMap<String, String>();
+        Map<String, File> requestFile = new HashMap<String, File>();
+
+        if (!TextUtils.isEmpty(deleteId) && deleteId.endsWith(",")) {
+            deleteId = deleteId.substring(0, deleteId.length() - 1);
+        }
+        requestText.put("userid", AccountManager.getInstance().getUserId());
+        requestText.put("id", taskDetailViewModel.taskEntity.id);
+        requestText.put("taskisok", "0");
+        requestText.put("sampleids", deleteId);
+        if (null != taskDetailViewModel.taskEntity.taskSamples && !taskDetailViewModel.taskEntity.taskSamples.isEmpty()) {
+            requestText.put("samplecount", taskDetailViewModel.taskEntity.taskSamples.size() + "");
+        } else {
+            requestText.put("samplecount", "0");
+        }
+
+        if (null != taskDetailViewModel.taskEntity.voides && !taskDetailViewModel.taskEntity.voides.isEmpty()) {
+
+            for (int i = 0; i < taskDetailViewModel.taskEntity.voides.size(); i++) {
+                Videos videos = taskDetailViewModel.taskEntity.voides.get(i);
+                if (!TextUtils.isEmpty(videos.getId())) {
+                    requestText.put("uploadVedio[" + i + "].fileid", videos.getId());
+                    requestText.put("uploadVedio[" + i + "].fileStr", videos.getRemarks());
+
+                    continue;
+                }
+                File f = new File(videos.getPath());
+                if (!f.exists()) {
+                    Log.e("视频", f.getAbsolutePath());
+                    com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "无效视频");
+                    continue;
+                }
+
+                requestText.put("uploadVedio[" + i + "].fileStr", videos.getRemarks());
+                requestFile.put("uploadVedio[" + i + "].fileStream", f);
+            }
+        }
+        {
+            File feedfile = new File(taskDetailViewModel.taskEntity.feedfile);
+            if (feedfile.exists()) {
+                Log.e("file", feedfile.getAbsolutePath());
+                requestFile.put("feedfile", feedfile);//抽样单
+            }
+        }
+        {
+            File feedpicfile = new File(taskDetailViewModel.taskEntity.feedpicfile);
+            if (feedpicfile.exists()) {
+                Log.e("file", feedpicfile.getAbsolutePath());
+                requestFile.put("feedfile", feedpicfile);//抽样单
+            }
+        }
+
+        {
+            HashMap<String, String> feedInfoMap = taskDetailViewModel.taskEntity.feedInfoMap;
+            //没填的时候默认值
+
+            if (null != feedInfoMap && !feedInfoMap.isEmpty()) {
+                for (String s : feedInfoMap.keySet()) {
+                    if (!s.startsWith("feed.")) continue;
+                    try {
+                        String value = feedInfoMap.get(s);
+                        requestText.put(s, value);//抽样单
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        HttpURLConnectionUtil httpReuqest = new HttpURLConnectionUtil();
+
+        new AsyncTask() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showLoadingDialog();
+                showLoadingDialog("现场信息提交中");
+            }
+
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                String response = null;
+                try {
+                    response = httpReuqest.sendRequest(requestText, requestFile);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return response;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+                if (null != o && !TextUtils.isEmpty(o.toString())) {
+                    try {
+                        JSONObject object = new JSONObject(o.toString());
+                        if (object.has("message") && !TextUtils.isEmpty(object.optString("message"))) {
+                            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), object.optString("message"));
+                        }
+                        if (object.has("code") && object.optInt("code") == 200) {
+                            postSampleData();
+                        } else {
+                            dismissLoadingDialog();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "提交失败,请稍后重试");
+                    dismissLoadingDialog();
+                }
+
+
+            }
+        }.execute();
     }
 }

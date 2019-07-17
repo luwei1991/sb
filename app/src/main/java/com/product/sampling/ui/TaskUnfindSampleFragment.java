@@ -3,6 +3,7 @@ package com.product.sampling.ui;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -50,6 +51,7 @@ import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.photo.MediaHelper;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 import com.product.sampling.utils.FileDownloader;
+import com.product.sampling.utils.HttpURLConnectionUtil;
 import com.product.sampling.utils.LogUtils;
 import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.SPUtil;
@@ -465,26 +467,31 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
     }
 
     private void postUnfindData() {
-        MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder();
-        multipartBodyBuilder.setType(MultipartBody.FORM);
-        multipartBodyBuilder.addFormDataPart("userid", AccountManager.getInstance().getUserId())
-                .addFormDataPart("id", taskUnFindEntity.id)
-                .addFormDataPart("taskisok", "2")//任务异常状态0正常1拒检2未抽样到单位
-                .addFormDataPart("remark", etTips.getText().toString());
+        Map<String, String> requestText = new HashMap<String, String>();
+        Map<String, File> requestFile = new HashMap<String, File>();
 
+        requestText.put("userid", AccountManager.getInstance().getUserId());
+        requestText.put("id", taskUnFindEntity.id);
+        requestText.put("taskisok", "2");//任务异常状态0正常1拒检2未抽样到单位
+        requestText.put("remark", etTips.getText().toString());
+        if (null != taskUnFindEntity.taskSamples && !taskUnFindEntity.taskSamples.isEmpty()) {
+            requestText.put("samplecount", taskUnFindEntity.taskSamples.size() + "");
+        } else {
+            requestText.put("samplecount", "0");
+        }
         AMapLocation location = MainApplication.INSTANCE.getMyLocation();
         if (null != location) {
-            multipartBodyBuilder.addFormDataPart("taskaddress", location.getAddress() + "")
-                    .addFormDataPart("longitude", location.getLongitude() + "")
-                    .addFormDataPart("latitude", location.getLatitude() + "");
+            requestText.put("taskaddress", location.getAddress() + "");
+            requestText.put("longitude", location.getLongitude() + "");
+            requestText.put("latitude", location.getLatitude() + "");
         }
 
         if (null != taskUnFindEntity.pics && !taskUnFindEntity.pics.isEmpty()) {
             for (int i = 0; i < taskUnFindEntity.pics.size(); i++) {
                 Pics pics = taskUnFindEntity.pics.get(i);
                 if (!TextUtils.isEmpty(pics.getId())) {
-                    multipartBodyBuilder.addFormDataPart("uploadPic[" + i + "].fileStr", pics.getRemarks() + "");
-                    multipartBodyBuilder.addFormDataPart("uploadPic[" + i + "].fileid", pics.getId() + "");
+                    requestText.put("uploadPic[" + i + "].fileStr", pics.getRemarks() + "");
+                    requestText.put("uploadPic[" + i + "].fileid", pics.getId() + "");
                     continue;
 
                 }
@@ -495,10 +502,8 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                     com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "无效图片");
                     continue;
                 }
-                RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-
-                multipartBodyBuilder.addFormDataPart("uploadPic[" + i + "].fileStr", pics.getRemarks() + "")
-                        .addFormDataPart("uploadPic[" + i + "].fileStream", f.getName(), requestImage);
+                requestText.put("uploadPic[" + i + "].fileStr", pics.getRemarks() + "");
+                requestFile.put("uploadPic[" + i + "].fileStream", f);
             }
         }
         if (null != taskUnFindEntity.voides && !taskUnFindEntity.voides.isEmpty()) {
@@ -506,8 +511,8 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             for (int i = 0; i < taskUnFindEntity.voides.size(); i++) {
                 Videos videos = taskUnFindEntity.voides.get(i);
                 if (!TextUtils.isEmpty(videos.getId())) {
-                    multipartBodyBuilder.addFormDataPart("uploadVedio[" + i + "].fileStr", videos.getRemarks() + "");
-                    multipartBodyBuilder.addFormDataPart("uploadVedio[" + i + "].fileid", videos.getId() + "");
+                    requestText.put("uploadVedio[" + i + "].fileStr", videos.getRemarks() + "");
+                    requestText.put("uploadVedio[" + i + "].fileid", videos.getId() + "");
                     continue;
                 }
                 File f = new File(taskUnFindEntity.voides.get(i).getPath());
@@ -516,23 +521,17 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                     com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "无效视频");
                     continue;
                 }
-                RequestBody requestImage = RequestBody.create(MultipartBody.FORM, f);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("uploadVedio[" + i + "].fileStr", videos.getRemarks() + "")
-                        .addFormDataPart("uploadVedio[" + i + "].fileStream", f.getName(), requestImage);
+                requestText.put("uploadVedio[" + i + "].fileStr", videos.getRemarks() + "");
+                requestFile.put("uploadVedio[" + i + "].fileStream", f);
             }
         }
-        if (null != taskUnFindEntity.taskSamples && !taskUnFindEntity.taskSamples.isEmpty()) {
-            multipartBodyBuilder.addFormDataPart("samplecount", taskUnFindEntity.taskSamples.size() + "");
-        } else {
-            multipartBodyBuilder.addFormDataPart("samplecount", "0");
-        }
+
 
         {
             File unfindfile = new File(taskUnFindEntity.unfindfile);
             if (unfindfile.exists()) {
                 Log.e("file", unfindfile.getAbsolutePath());
-                RequestBody requestFile = RequestBody.create(MultipartBody.FORM, unfindfile);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("unfindfile", unfindfile.getName(), requestFile);//未找到样品单file
+                requestFile.put("unfindfile", unfindfile);//未找到样品单file
             }
         }
 
@@ -541,7 +540,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             if (null != samplingInfoMap && !samplingInfoMap.isEmpty()) {
                 for (String s : samplingInfoMap.keySet()) {
                     if (!s.startsWith("unfind.")) continue;
-                    multipartBodyBuilder.addFormDataPart(s, samplingInfoMap.get(s));//未找到样品单字段
+                    requestText.put(s, samplingInfoMap.get(s));//未找到样品单字段
                 }
             }
         }
@@ -551,8 +550,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             File unfindpicfile = new File(taskUnFindEntity.unfindpicfile);
             if (unfindpicfile.exists()) {
                 Log.e("file", unfindpicfile.getAbsolutePath());
-                RequestBody requestFile = RequestBody.create(MultipartBody.FORM, unfindpicfile);//把文件与类型放入请求体
-                multipartBodyBuilder.addFormDataPart("unfindpicfile", unfindpicfile.getName(), requestFile);//样品单图片
+                requestFile.put("unfindpicfile", unfindpicfile);//样品单图片
             }
         }
 
@@ -561,32 +559,76 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
 //            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "请先选择图片或者视频");
 //            return;
 //        }
-        showLoadingDialog();
-        RetrofitService.createApiService(Request.class)
-                .uploadtaskinfo(multipartBodyBuilder.build())
-                .compose(RxSchedulersHelper.io_main())
-                .compose(RxSchedulersHelper.ObsHandHttpResult())
-                .subscribe(new ZBaseObserver<String>() {
-                    @Override
-                    public void onSuccess(String s) {
-                        dismissLoadingDialog();
-                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加成功");
-                        EventBus.getDefault().post(TaskMessage.getInstance(taskUnFindEntity.id));
-                        saveTaskInLocalFile(true);
-                    }
 
-                    @Override
-                    public void onFailure(int code, String message) {
-                        super.onFailure(code, message);
-                        dismissLoadingDialog();
-                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), message);
-                    }
+        HttpURLConnectionUtil httpReuqest = new HttpURLConnectionUtil();
 
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        super.onSubscribe(d);
+        new AsyncTask() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showLoadingDialog();
+                showLoadingDialog("异常信息提交中");
+            }
+
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                String response = null;
+                try {
+                    response = httpReuqest.sendRequest(requestText, requestFile);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return response;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+                if (!TextUtils.isEmpty(o.toString())) {
+                    try {
+                        JSONObject object = new JSONObject(o.toString());
+                        if (object.has("message") && !TextUtils.isEmpty(object.optString("message"))) {
+                            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), object.optString("message"));
+                        }
+                        dismissLoadingDialog();
+                        if (object.has("code") && object.optInt("code") == 200) {
+                            dismissLoadingDialog();
+                            EventBus.getDefault().post(TaskMessage.getInstance(taskUnFindEntity.id));
+//                            saveTaskInLocalFile(true);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                });
+                }
+
+
+            }
+        }.execute();
+//        RetrofitService.createApiService(Request.class)
+//                .uploadtaskinfo(multipartBodyBuilder.build())
+//                .compose(RxSchedulersHelper.io_main())
+//                .compose(RxSchedulersHelper.ObsHandHttpResult())
+//                .subscribe(new ZBaseObserver<String>() {
+//                    @Override
+//                    public void onSuccess(String s) {
+//                        dismissLoadingDialog();
+//                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加成功");
+//                        EventBus.getDefault().post(TaskMessage.getInstance(taskUnFindEntity.id));
+//                        saveTaskInLocalFile(true);
+//                    }
+//
+//                    @Override
+//                    public void onFailure(int code, String message) {
+//                        super.onFailure(code, message);
+//                        dismissLoadingDialog();
+//                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), message);
+//                    }
+//
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//                        super.onSubscribe(d);
+//                    }
+//                });
 
 
     }

@@ -3,6 +3,7 @@ package com.product.sampling.net.request;
 import com.product.sampling.bean.New;
 import com.product.sampling.bean.SmsBean;
 import com.product.sampling.bean.Task;
+import com.product.sampling.bean.TaskBean;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskProvince;
 import com.product.sampling.bean.TaskResultBean;
@@ -66,7 +67,7 @@ public interface Request {
     Observable<BaseHttpResult> changepassword(@Query("userid") String userid, @Query("password") String password, @Query("newPassword") String newPassword);
 
     @GET("app/task/tasklist")
-    Observable<BaseHttpResult<List<TaskEntity>>> taskList(@Query("userid") String userid, @Query("taskstatus") String taskstatus, @Query("ordertype") String ordertype, @Query("areashi") String areashi);
+    Observable<BaseHttpResult<TaskBean>> taskList(@Query("userid") String userid, @Query("taskstatus") String taskstatus, @Query("ordertype") String ordertype, @Query("areashi") String areashi);
 
     @GET("app/task/getdict")
     Observable<Response<TaskProvince>> taskMenu(@Query("type") String type, @Query("value") String value);

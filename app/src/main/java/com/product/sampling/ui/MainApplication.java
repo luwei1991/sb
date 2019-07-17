@@ -7,6 +7,9 @@ import com.amap.api.location.AMapLocation;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.utils.GdLocationUtil;
+import com.yanzhenjie.nohttp.Logger;
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.OkHttpNetworkExecutor;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -39,6 +42,15 @@ public class MainApplication extends Application {
 //        JPushInterface.init(this);
         RetrofitService.init();
         initRxJavaError();
+        NoHttp.initialize(this, new NoHttp.Config()
+                .setConnectTimeout(30 * 1000) // 全局连接超时时间，单位毫秒。
+                .setReadTimeout(30 * 1000) // 全局服务器响应超时时间，单位毫秒。
+                .setNetworkExecutor(new OkHttpNetworkExecutor())  // 使用OkHttp做网络层。
+        );
+
+        Logger.setDebug(true); // 开启NoHttp调试模式。
+        Logger.setTag("NoHttpRequest"); // 设置NoHttp打印Log的TAG。
+
     }
 
     private void initRxJavaError() {

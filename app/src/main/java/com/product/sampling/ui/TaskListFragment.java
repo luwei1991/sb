@@ -25,6 +25,7 @@ import com.google.gson.reflect.TypeToken;
 import com.product.sampling.Constants;
 import com.product.sampling.R;
 import com.product.sampling.adapter.SpinnerSimpleAdapter;
+import com.product.sampling.bean.TaskBean;
 import com.product.sampling.bean.TaskCity;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskMessage;
@@ -179,7 +180,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                 .taskList(AccountManager.getInstance().getUserId(), status, ordertype, city.id)
                 .compose(RxSchedulersHelper.io_main())
                 .compose(RxSchedulersHelper.ObsHandHttpResult())
-                .subscribe(new ZBaseObserver<List<TaskEntity>>() {
+                .subscribe(new ZBaseObserver<TaskBean>() {
 
                     @Override
                     public void onFailure(int code, String message) {
@@ -190,8 +191,8 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                     }
 
                     @Override
-                    public void onSuccess(List<TaskEntity> tasks) {
-                        assert recyclerView != null;
+                    public void onSuccess(TaskBean taskBean) {
+                        List<TaskEntity> tasks = taskBean.getList();
                         List<TaskEntity> localData = findTaskInLocalFile();
                         if (null != localData && !localData.isEmpty()) {
                             for (TaskEntity taskEntity : localData) {
