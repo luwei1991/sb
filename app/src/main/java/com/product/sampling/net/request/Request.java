@@ -1,36 +1,26 @@
 package com.product.sampling.net.request;
 
+import com.product.sampling.bean.UpdateEntity;
 import com.product.sampling.bean.New;
 import com.product.sampling.bean.SmsBean;
 import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskBean;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskProvince;
-import com.product.sampling.bean.TaskResultBean;
 import com.product.sampling.bean.TaskSample;
 import com.product.sampling.bean.UserInfoBean;
 import com.product.sampling.httpmoudle.BaseHttpResult;
 import com.product.sampling.net.response.Response;
 
-import java.io.File;
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
-import retrofit2.http.Multipart;
 import retrofit2.http.POST;
-import retrofit2.http.Part;
-import retrofit2.http.PartMap;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -74,10 +64,6 @@ public interface Request {
 
     /**
      * 获取省市接口
-     *
-     * @param areaid 省市唯一id 非必须
-     * @param type   获取类型2获取省3获取市4获取区和县 非必须 默认获取省获取市区县要带areaid
-     * @return
      */
     @GET("app/task/getarea")
     Observable<BaseHttpResult<List<TaskProvince>>> getArea();
@@ -86,9 +72,7 @@ public interface Request {
      * 修改图像接口
      * MultipartBody.Part
      *
-     * @param userid 用户唯一id 必传 @Part("userid") RequestBody userid,
-     * @param photo  头像图片流 必传
-     * @return
+     * @param file * @param userid 用户唯一id 必传 @Part("userid") RequestBody userid, * @param photo  头像图片流 必传
      */
     @POST("app/user/changephoto")
     Observable<BaseHttpResult<String>> setPhotoRequestBody(@Body RequestBody file);
@@ -120,5 +104,14 @@ public interface Request {
     @POST("http://ip.taobao.com/service/getIpInfo2.php")
     Observable<ResponseBody> getIPCountry(@Query("ip") String ip);
 
+
+    @POST("app/common/newversion")
+    Observable<BaseHttpResult<UpdateEntity>> getAppVersion(@Query("userid") String userid, @Query("versioncode") int versioncode);
+
+    @GET("/app/task/uploadaddress")
+    Observable<BaseHttpResult> updateCompanyAddress(@Query("userid") String userid, @Query("companyaddress") String companyaddress, @Query("taskid") String taskid, @Query("remark") String remark);
+
+    @GET("/app/task/samplefastmail")
+    Observable<BaseHttpResult> updateFastMail(@Query("userid") String userid, @Query("id") String id, @Query("taskid") String taskid, @Query("fastMailCode") String fastMailCode);
 
 }

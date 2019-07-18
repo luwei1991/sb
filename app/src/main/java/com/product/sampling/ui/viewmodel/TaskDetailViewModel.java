@@ -1,18 +1,24 @@
 package com.product.sampling.ui.viewmodel;
 
+import android.content.Context;
 import android.text.TextUtils;
 
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
 
+import com.product.sampling.bean.UpdateEntity;
 import com.product.sampling.bean.TaskCity;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskProvince;
 import com.product.sampling.bean.TaskSample;
 import com.product.sampling.httpmoudle.BaseHttpResult;
 import com.product.sampling.httpmoudle.RetrofitService;
+import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.LoadDataModel;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
+import com.product.sampling.ui.update.UpdateDialogFragment;
+import com.product.sampling.utils.AppUtils;
 import com.product.sampling.utils.RxSchedulersHelper;
 
 import java.util.ArrayList;
@@ -122,4 +128,29 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
                 });
     }
 
+    public void checkVersion(Context context, FragmentManager fragmentManager) {
+
+        String userid = AccountManager.getInstance().getUserId();
+        if (TextUtils.isEmpty(userid)) {
+            return;
+        }
+
+        RetrofitService.createApiService(Request.class)
+                .getAppVersion(userid, AppUtils.getVersionCode(context))
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<UpdateEntity>() {
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+                    }
+
+                    @Override
+                    public void onSuccess(UpdateEntity result) {
+                        if (null != result && "0".equals(result.getIsnew())) {
+                            UpdateDialogFragment.newInstance(result).show(fragmentManager, "update");
+                        }
+                    }
+                });
+    }
 }

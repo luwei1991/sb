@@ -1,6 +1,5 @@
 package com.product.sampling.ui;
 
-import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,8 +7,6 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,7 +38,6 @@ import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
-import com.product.sampling.Constants;
 import com.product.sampling.R;
 import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
 import com.product.sampling.bean.Advice;
@@ -65,14 +60,8 @@ import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.photo.MediaHelper;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 import com.product.sampling.utils.HttpURLConnectionUtil;
-import com.product.sampling.utils.LogUtils;
 import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.SPUtil;
-import com.yanzhenjie.nohttp.Binary;
-import com.yanzhenjie.nohttp.FileBinary;
-import com.yanzhenjie.nohttp.OnUploadListener;
-import com.yanzhenjie.nohttp.RequestMethod;
-import com.yanzhenjie.nohttp.rest.StringRequest;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -80,17 +69,11 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -243,7 +226,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             public void onClick(DialogInterface dialog, int which) {
                 if (index == 1) {
 //                    postSceneData();
-                    postScenceByNohttp();
+                    postScenceByHttpURLConnection();
                 } else if (index == 2) {
                     Intent intent = new Intent(getActivity(), H5WebViewActivity.class);
                     Bundle b = new Bundle();
@@ -1019,7 +1002,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         EventBus.getDefault().unregister(this);
     }
 
-    void postScenceByNohttp() {
+    void postScenceByHttpURLConnection() {
 
         Map<String, String> requestText = new HashMap<String, String>();
         Map<String, String> requestFile = new HashMap<String, String>();
@@ -1036,7 +1019,31 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         } else {
             requestText.put("samplecount", "0");
         }
-
+        AMapLocation location = MainApplication.INSTANCE.getMyLocation();
+        if (null != location) {
+            requestText.put("taskaddress", location.getAddress() + "");
+            requestText.put("longitude", location.getLongitude() + "");
+            requestText.put("latitude", location.getLatitude() + "");
+        }
+        if (null != taskDetailViewModel.taskEntity.pics && !taskDetailViewModel.taskEntity.pics.isEmpty()) {
+            for (int i = 0; i < taskDetailViewModel.taskEntity.pics.size(); i++) {
+                Pics pics = taskDetailViewModel.taskEntity.pics.get(i);
+                if (!TextUtils.isEmpty(pics.getId())) {
+                    requestText.put("uploadPic[" + i + "].fileid", pics.getId());
+                    requestText.put("uploadPic[" + i + "].fileStr", pics.getRemarks());
+                    continue;
+                }
+                String path = taskDetailViewModel.taskEntity.pics.get(i).getOriginalPath();
+                if (TextUtils.isEmpty(path)) continue;
+                File f = new File(path);
+                if (!f.exists()) {
+                    com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "无效图片");
+                    continue;
+                }
+                requestText.put("uploadPic[" + i + "].fileStr", pics.getRemarks() + "");
+                requestFile.put("uploadPic[" + i + "].fileStream", path);
+            }
+        }
         if (null != taskDetailViewModel.taskEntity.voides && !taskDetailViewModel.taskEntity.voides.isEmpty()) {
 
             for (int i = 0; i < taskDetailViewModel.taskEntity.voides.size(); i++) {

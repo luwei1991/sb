@@ -338,6 +338,7 @@ public class HttpURLConnectionUtil {
                 conn = null;
             }
         }
+        System.out.println("发送POST请求。" + res);
         return res;
     }
 
