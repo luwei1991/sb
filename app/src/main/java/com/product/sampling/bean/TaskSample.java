@@ -1,10 +1,11 @@
 package com.product.sampling.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class TaskSample {
+public class TaskSample implements Serializable {
 
     public List<TaskImageEntity> list = new ArrayList<>();
     public List<LocalMediaInfo> videoList = new ArrayList<>();

@@ -25,8 +25,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * @Author wangqiong
- * @create 2019-05-31 11:07
+ * @Author zhouhao
+ * @create 2019-06-31 11:07
  */
 public class UpdateDialogFragment extends DialogFragment {
 

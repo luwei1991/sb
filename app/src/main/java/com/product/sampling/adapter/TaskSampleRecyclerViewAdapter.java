@@ -23,6 +23,8 @@ import com.product.sampling.bean.TaskSample;
 import com.product.sampling.photo.MediaHelper;
 import com.product.sampling.ui.TaskSampleFragment;
 import com.product.sampling.ui.H5WebViewActivity;
+import com.product.sampling.ui.update.QRCDialogFragment;
+import com.product.sampling.ui.update.UpdateDialogFragment;
 
 import java.util.List;
 
@@ -86,6 +88,9 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             } else if (R.id.iv_add_video == view.getId()) {
                 fragment.selectId = (int) view.getTag();
                 MediaHelper.startVideo(fragment, PictureConfig.CHOOSE_REQUEST);
+            } else if (R.id.btn_qrc == view.getId()) {
+                int index = (int) view.getTag();
+                QRCDialogFragment.newInstance(mData.get(index)).show(fragment.getFragmentManager(), "update");
             }
         }
     };
@@ -169,6 +174,9 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         holder.mIVAddVideo.setTag(position);
         holder.mIVAddVideo.setOnClickListener(mOnClickListener);
 
+        holder.mBtnQRC.setTag(position);
+        holder.mBtnQRC.setOnClickListener(mOnClickListener);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(holder.itemView.getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         holder.mRecyclerViewImage.setLayoutManager(linearLayoutManager);
@@ -202,6 +210,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         final Button mBtnUploadWork;//工作单上传
         final Button mBtnEditRisk;//风险单编辑
         final Button mBtnUploadRisk;//风险单上传
+        final Button mBtnQRC;//二维码打印
         final TextView mTextViewHandleSheet;
         final TextView mTextViewCheckSheet;
         final TextView mTextViewWorkSheet;
@@ -232,6 +241,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             mBtnUploadWork = view.findViewById(R.id.btn_upload_work_sheet);
             mBtnEditRisk = view.findViewById(R.id.btn_edit_risk_sheet);
             mBtnUploadRisk = view.findViewById(R.id.btn_upload_risk_sheet);
+            mBtnQRC = view.findViewById(R.id.btn_qrc);
         }
     }
 
