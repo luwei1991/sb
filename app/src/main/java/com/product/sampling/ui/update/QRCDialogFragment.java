@@ -92,21 +92,23 @@ public class QRCDialogFragment extends DialogFragment {
         super.onActivityCreated(savedInstanceState);
         if (taskSample == null) dismiss();
         mTvTitle.setText("湖南省商品质量监督检查研究院");
-        mTvContent.setText("样品编码:" + taskSample.getId());
+//        mTvContent.setText("样品编码:" + taskSample.getId());
         if (null != taskSample.samplingInfoMap && taskSample.samplingInfoMap.size() > 0) {
             String value;
             for (String s : taskSample.samplingInfoMap.keySet()) {
                 if (!s.startsWith("sampling.")) continue;
                 value = taskSample.samplingInfoMap.get(s);
-                if (s.equals("sampling.name")) {
+                if (s.equals("sampling.productname")) {
                     mTvName.setText(null == value ? "" : ("样品名称:" + value));
-                } else if (s.equals("sampling.name")) {
+                } else if (s.equals("sampling.taskcode")) {
+                    mTvContent.setText(null == value ? "" : ("样品编码:" + value));
+                } else if (s.equals("sampling.productmodel")) {
                     mTvModel.setText(null == value ? "" : ("样品型号:" + value));
-                } else if (s.equals("sampling.name")) {
+                } else if (s.equals("sampling.samplingcount")) {
                     mTvCount.setText(null == value ? "" : ("抽样数量:" + value));
-                } else if (s.equals("sampling.name")) {
+                } else if (s.equals("sampling.fillInDate")) {
                     mTvDate.setText(null == value ? "" : ("抽样日期:" + value));
-                } else if (s.equals("sampling.name")) {
+                } else if (s.equals("sampling.productname")) {
                     mTvPersonName.setText(null == value ? "" : ("抽样人:" + value));
                 }
             }
