@@ -43,7 +43,7 @@
                 android:layout_marginRight="80dp"
                 android:layout_marginBottom="@dimen/dp_10"
                 android:layout_toLeftOf="@+id/tv_login_out"
-                android:text="欢迎"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="24sp" />
 
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_title"
                 android:layout_marginRight="80dp"
-                android:text="欢迎"
+                android:text=""
                 android:textColor="@color/white" />
         </RelativeLayout>
 
@@ -61,41 +61,52 @@
             android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_title"
-            android:layout_margin="16dp"
-            android:text="欢迎" />
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="" />
 
         <TextView
             android:id="@+id/tv_model"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_title"
-            android:layout_margin="16dp"
-            android:text="欢迎" />
+
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="" />
 
         <TextView
             android:id="@+id/tv_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_title"
-            android:layout_margin="16dp"
-            android:text="欢迎" />
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="" />
 
         <TextView
             android:id="@+id/tv_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_title"
-            android:layout_margin="16dp"
-            android:text="欢迎" />
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="" />
 
         <TextView
             android:id="@+id/tv_person_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_title"
-            android:layout_margin="16dp"
-            android:text="欢迎" />
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_submit"

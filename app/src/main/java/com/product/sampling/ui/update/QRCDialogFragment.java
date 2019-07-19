@@ -93,11 +93,25 @@ public class QRCDialogFragment extends DialogFragment {
         if (taskSample == null) dismiss();
         mTvTitle.setText("湖南省商品质量监督检查研究院");
         mTvContent.setText("样品编码:" + taskSample.getId());
-        mTvName.setText("样品名称:" + taskSample.getSamplename() + "");
-        mTvModel.setText("样品型号:" + taskSample.getTypeid() + "");
-        mTvCount.setText("抽样数量:" + taskSample.getSamplecount() + "");
-        mTvDate.setText("抽样日期:" + taskSample.getUpdateDate() + "");
-        mTvPersonName.setText("抽样人:" + taskSample.getRemarks() + "");
+        if (null != taskSample.samplingInfoMap && taskSample.samplingInfoMap.size() > 0) {
+            String value;
+            for (String s : taskSample.samplingInfoMap.keySet()) {
+                if (!s.startsWith("sampling.")) continue;
+                value = taskSample.samplingInfoMap.get(s);
+                if (s.equals("sampling.name")) {
+                    mTvName.setText(null == value ? "" : ("样品名称:" + value));
+                } else if (s.equals("sampling.name")) {
+                    mTvModel.setText(null == value ? "" : ("样品型号:" + value));
+                } else if (s.equals("sampling.name")) {
+                    mTvCount.setText(null == value ? "" : ("抽样数量:" + value));
+                } else if (s.equals("sampling.name")) {
+                    mTvDate.setText(null == value ? "" : ("抽样日期:" + value));
+                } else if (s.equals("sampling.name")) {
+                    mTvPersonName.setText(null == value ? "" : ("抽样人:" + value));
+                }
+            }
+        }
+
 
         Bitmap bitmap = ZXingUtils.createQRImage(taskSample.getId(), 100, 100);
         mIvQrc.setImageBitmap(bitmap);
