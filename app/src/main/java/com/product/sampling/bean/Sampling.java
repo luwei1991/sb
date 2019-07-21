@@ -91,6 +91,7 @@ public class Sampling {
     private String productnumtype;
     private String productnum;
     private String productname;
+    private String doman;
     private String productmodel;
     private String productbnum;
     private String productmark;
@@ -329,6 +330,14 @@ public class Sampling {
 
     public void setProductnum(String productnum) {
         this.productnum = productnum;
+    }
+
+    public String getDoman() {
+        return doman;
+    }
+
+    public void setDoman(String doman) {
+        this.doman = doman;
     }
 
     public String getProductname() {
