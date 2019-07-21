@@ -70,6 +70,7 @@ public class TaskSample implements Serializable {
     private String projectdescription;
     private String facture;
     private String batchnum;
+    private String doman;
     private String samplingreprotid;
     private String riskreprotid;
     private String disposalreportid;
@@ -321,6 +322,14 @@ public class TaskSample implements Serializable {
 
     public void setLocalData(boolean localData) {
         isLocalData = localData;
+    }
+
+    public String getDoman() {
+        return doman;
+    }
+
+    public void setDoman(String doman) {
+        this.doman = doman;
     }
 }
 

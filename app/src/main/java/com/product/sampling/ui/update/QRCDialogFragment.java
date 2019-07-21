@@ -93,6 +93,7 @@ public class QRCDialogFragment extends DialogFragment {
         if (taskSample == null) dismiss();
         mTvTitle.setText("湖南省商品质量监督检查研究院");
 //        mTvContent.setText("样品编码:" + taskSample.getId());
+        mTvContent.setText("抽样人:" + taskSample.getDoman());
         if (null != taskSample.samplingInfoMap && taskSample.samplingInfoMap.size() > 0) {
             String value;
             for (String s : taskSample.samplingInfoMap.keySet()) {
@@ -108,8 +109,8 @@ public class QRCDialogFragment extends DialogFragment {
                     mTvCount.setText(null == value ? "" : ("抽样数量:" + value));
                 } else if (s.equals("sampling.fillInDate")) {
                     mTvDate.setText(null == value ? "" : ("抽样日期:" + value));
-                } else if (s.equals("sampling.productname")) {
-                    mTvPersonName.setText(null == value ? "" : ("抽样人:" + value));
+//                } else if (s.equals("sampling.productname")) {
+//                    mTvPersonName.setText(null == value ? "" : ("抽样人:" + value));
                 }
             }
         }
