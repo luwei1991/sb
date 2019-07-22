@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.button.MaterialButton;
 import com.product.sampling.R;
 import com.product.sampling.bean.TaskSample;
 import com.product.sampling.maputil.ToastUtil;
+import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 import com.product.sampling.utils.LogUtils;
 import com.product.sampling.utils.ZXingUtils;
 
@@ -92,8 +95,13 @@ public class QRCDialogFragment extends DialogFragment {
         super.onActivityCreated(savedInstanceState);
         if (taskSample == null) dismiss();
         mTvTitle.setText("湖南省商品质量监督检查研究院");
-//        mTvContent.setText("样品编码:" + taskSample.getId());
-        mTvContent.setText("抽样人:" + taskSample.getDoman());
+        if (TextUtils.isEmpty(taskSample.getId())) {
+            taskSample.setId(System.currentTimeMillis() + "");
+        }
+        mTvContent.setText("样品编码:" + taskSample.getId());
+        TaskDetailViewModel taskDetailViewModel = ViewModelProviders.of(getActivity()).get(TaskDetailViewModel.class);
+
+        mTvPersonName.setText("抽样人:" + taskDetailViewModel.taskEntity.doman);
         if (null != taskSample.samplingInfoMap && taskSample.samplingInfoMap.size() > 0) {
             String value;
             for (String s : taskSample.samplingInfoMap.keySet()) {
@@ -128,6 +136,7 @@ public class QRCDialogFragment extends DialogFragment {
                             LogUtils.e("saveImage", path);
                             getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(path))));
                             shareBySystem(path);
+                            dismiss();
                         }, e -> ToastUtil.showShortToast(getActivity(), e != null ? e.getMessage() : "error"));
             }
         });

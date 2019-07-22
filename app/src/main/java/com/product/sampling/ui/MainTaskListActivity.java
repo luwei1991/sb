@@ -54,7 +54,7 @@ public class MainTaskListActivity extends BaseActivity implements AMapLocationLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list);
         taskDetailViewModel = ViewModelProviders.of(MainTaskListActivity.this).get(TaskDetailViewModel.class);
-        taskDetailViewModel.requestCityList();
+        taskDetailViewModel.requestCityList(true);
         RadioGroup rb = findViewById(R.id.rg1);
         rb.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

@@ -13,12 +13,15 @@ import com.product.sampling.httpmoudle.BaseHttpResult;
 import com.product.sampling.net.response.Response;
 
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -108,10 +111,11 @@ public interface Request {
     @POST("app/common/newversion")
     Observable<BaseHttpResult<UpdateEntity>> getAppVersion(@Query("userid") String userid, @Query("versioncode") int versioncode);
 
-    @GET("/app/task/uploadaddress")
+    @GET("app/task/uploadaddress")
     Observable<BaseHttpResult> updateCompanyAddress(@Query("userid") String userid, @Query("companyaddress") String companyaddress, @Query("taskid") String taskid, @Query("remark") String remark);
 
-    @GET("/app/task/samplefastmail")
-    Observable<BaseHttpResult> updateFastMail(@Query("userid") String userid, @Query("id") String id, @Query("taskid") String taskid, @Query("fastMailCode") String fastMailCode);
+    @FormUrlEncoded
+    @POST("app/task/samplefastmail")
+    Observable<BaseHttpResult> updateFastMail(@FieldMap Map<String,String> params);
 
 }

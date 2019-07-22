@@ -1,6 +1,8 @@
 package com.product.sampling.bean;
 
-public class Refuse {
+import java.io.Serializable;
+
+public class Refuse implements Serializable {
 
     /**
      * id : null

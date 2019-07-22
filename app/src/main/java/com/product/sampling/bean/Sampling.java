@@ -1,6 +1,8 @@
 package com.product.sampling.bean;
 
-public class Sampling {
+import java.io.Serializable;
+
+public class Sampling implements Serializable {
 
 
     /**

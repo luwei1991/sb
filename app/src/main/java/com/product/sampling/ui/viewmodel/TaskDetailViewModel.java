@@ -38,7 +38,7 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
     public MutableLiveData<LoadDataModel<List<TaskSample>>> sampleDetailLiveData = new MutableLiveData<>();
 
 
-    public void requestCityList() {
+    public void requestCityList(boolean isNeedAddAll) {
 
         cityListLiveData.setValue(new LoadDataModel());
         RetrofitService.createApiService(Request.class)
@@ -61,13 +61,15 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
 
                     @Override
                     public void onSuccess(List<TaskProvince> taskProvinces) {
-                        TaskProvince taskProvince = new TaskProvince();
-                        taskProvince.name = "全部";
-                        taskProvince.shicitys = new ArrayList<>();
-                        TaskCity taskCity = new TaskCity();
-                        taskCity.name = "全部";
-                        taskProvince.shicitys.add(taskCity);
-                        taskProvinces.add(0, taskProvince);
+                        if (isNeedAddAll){
+                            TaskProvince taskProvince = new TaskProvince();
+                            taskProvince.name = "全部";
+                            taskProvince.shicitys = new ArrayList<>();
+                            TaskCity taskCity = new TaskCity();
+                            taskCity.name = "全部";
+                            taskProvince.shicitys.add(taskCity);
+                            taskProvinces.add(0, taskProvince);
+                        }
                         cityListLiveData.postValue(new LoadDataModel(taskProvinces));
                     }
                 });

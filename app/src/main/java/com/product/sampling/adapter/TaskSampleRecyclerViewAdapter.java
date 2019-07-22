@@ -23,6 +23,7 @@ import com.product.sampling.bean.TaskSample;
 import com.product.sampling.photo.MediaHelper;
 import com.product.sampling.ui.TaskSampleFragment;
 import com.product.sampling.ui.H5WebViewActivity;
+import com.product.sampling.ui.update.FastMailDialogFragment;
 import com.product.sampling.ui.update.QRCDialogFragment;
 import com.product.sampling.ui.update.UpdateDialogFragment;
 
@@ -91,6 +92,9 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             } else if (R.id.btn_qrc == view.getId()) {
                 int index = (int) view.getTag();
                 QRCDialogFragment.newInstance(mData.get(index)).show(fragment.getFragmentManager(), "update");
+            } else if (R.id.btn_fastmail == view.getId()) {
+                int index = (int) view.getTag();
+                FastMailDialogFragment.newInstance(mData.get(index)).show(fragment.getFragmentManager(), "update");
             }
         }
     };
@@ -177,6 +181,11 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         holder.mBtnQRC.setTag(position);
         holder.mBtnQRC.setOnClickListener(mOnClickListener);
 
+        holder.mBtnFastMail.setTag(position);
+        holder.mBtnFastMail.setOnClickListener(mOnClickListener);
+
+
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(holder.itemView.getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         holder.mRecyclerViewImage.setLayoutManager(linearLayoutManager);
@@ -211,6 +220,9 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         final Button mBtnEditRisk;//风险单编辑
         final Button mBtnUploadRisk;//风险单上传
         final Button mBtnQRC;//二维码打印
+        final Button mBtnFastMail;//快递单号
+
+
         final TextView mTextViewHandleSheet;
         final TextView mTextViewCheckSheet;
         final TextView mTextViewWorkSheet;
@@ -242,6 +254,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             mBtnEditRisk = view.findViewById(R.id.btn_edit_risk_sheet);
             mBtnUploadRisk = view.findViewById(R.id.btn_upload_risk_sheet);
             mBtnQRC = view.findViewById(R.id.btn_qrc);
+            mBtnFastMail = view.findViewById(R.id.btn_fastmail);
         }
     }
 

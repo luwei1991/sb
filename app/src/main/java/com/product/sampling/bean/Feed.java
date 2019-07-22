@@ -1,6 +1,8 @@
 package com.product.sampling.bean;
 
-public class Feed {
+import java.io.Serializable;
+
+public class Feed implements Serializable {
 
 
     /**

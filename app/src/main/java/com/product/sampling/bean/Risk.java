@@ -1,6 +1,8 @@
 package com.product.sampling.bean;
 
-public class Risk {
+import java.io.Serializable;
+
+public class Risk implements Serializable {
 
 
     /**

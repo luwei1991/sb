@@ -83,6 +83,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.TaskDetailActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

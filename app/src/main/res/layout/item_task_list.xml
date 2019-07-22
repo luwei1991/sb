@@ -63,7 +63,7 @@
             android:visibility="gone" />
 
         <Spinner
-            android:id="@+id/spinner_type"
+            android:id="@+id/spinner_province"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_marginLeft="20dp"
@@ -74,7 +74,7 @@
             android:id="@+id/spinner_area"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:layout_toRightOf="@+id/spinner_type"
+            android:layout_toRightOf="@+id/spinner_province"
             android:spinnerMode="dialog" />
     </RelativeLayout>
     <!--

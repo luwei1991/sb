@@ -1,6 +1,8 @@
 package com.product.sampling.bean;
 
-public class Advice {
+import java.io.Serializable;
+
+public class Advice implements Serializable {
 
     /**
      * id : null

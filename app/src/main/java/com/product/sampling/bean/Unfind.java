@@ -1,6 +1,8 @@
 package com.product.sampling.bean;
 
-public class Unfind {
+import java.io.Serializable;
+
+public class Unfind implements Serializable {
 
 
     /**

@@ -35,7 +35,6 @@ public class TaskDetailActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
         taskDetailViewModel = ViewModelProviders.of(this).get(TaskDetailViewModel.class);
-
         Bundle bundle = getIntent().getExtras();    //得到传过来的bundle
         task = (TaskEntity) bundle.getSerializable("task");//读出数据
         taskDetailViewModel.taskEntity = task;
@@ -63,7 +62,7 @@ public class TaskDetailActivity extends BaseActivity {
         });
         RadioButton radioButton = rb.findViewById(R.id.rb1);
         radioButton.setChecked(true);
-
+        taskDetailViewModel.requestCityList(false);
     }
 
     public void switchContent(Fragment from, Fragment to) {

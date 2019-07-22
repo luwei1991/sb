@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.product.sampling.Constants;
 import com.product.sampling.R;
 import com.product.sampling.adapter.SpinnerSimpleAdapter;
 import com.product.sampling.bean.TaskBean;
@@ -122,7 +121,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         mIVDistance = rootView.findViewById(R.id.iv_sort_distance);
         mViewDistance = rootView.findViewById(R.id.ll_range);
         mViewDistance.setOnClickListener(this);
-        spinnerProvince = rootView.findViewById(R.id.spinner_type);
+        spinnerProvince = rootView.findViewById(R.id.spinner_province);
         spinnerCity = rootView.findViewById(R.id.spinner_area);
         if (getArguments().getString(ARG_TASK_STATUS).equals("-1")) {
             rootView.findViewById(R.id.rl_menu).setVisibility(View.GONE);

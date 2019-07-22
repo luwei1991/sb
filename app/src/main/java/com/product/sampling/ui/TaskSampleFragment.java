@@ -268,6 +268,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             sample.setSamplename(text);
             sample.list = new ArrayList<>();
             sample.isLocalData = true;
+            sample.setId(System.currentTimeMillis() + "");
             taskDetailViewModel.taskEntity.taskSamples.add(sample);
             setupRecyclerView(mRecyclerView, taskDetailViewModel.taskEntity.taskSamples, true);
         }
