@@ -72,6 +72,8 @@ public class TaskEntity implements Parcelable, Serializable {
     public HashMap<String, String> feedInfoMap;
     public Feed feed = new Feed();
 
+    public String plantype;//1生产领域不可以修改 2流通领域可以修改
+
     public TaskEntity() {
 
     }
@@ -114,6 +116,7 @@ public class TaskEntity implements Parcelable, Serializable {
 
         //        in.readTypedList(pics, Pics.CREATOR);
         in.readTypedList(voides, Videos.CREATOR);
+        plantype = in.readString();
 
     }
 
@@ -169,6 +172,7 @@ public class TaskEntity implements Parcelable, Serializable {
         dest.writeByte((byte) (isLoadLocalData ? 1 : 0));
         dest.writeTypedList(pics);
         dest.writeTypedList(voides);
+        dest.writeString(plantype);
 
 //        if (pics != null)
 //            dest.writeParcelableArray(

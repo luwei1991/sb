@@ -1,11 +1,8 @@
 package com.product.sampling.ui;
 
 import android.Manifest;
-import android.app.DownloadManager;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -87,16 +84,16 @@ public class TaskSceneFragment extends BasePhotoFragment {
         View rootView = inflater.inflate(R.layout.fragment_scene_detail, container, false);
 
         companyname = rootView.findViewById(R.id.companyname);
-        setCanNotEdit(companyname);
+        setEditTextEnable(companyname, false);
 
         companyaddress = rootView.findViewById(R.id.companyaddress);
-        setCanNotEdit(companyaddress);
+        setEditTextEnable(companyaddress, false);
 
         companytel = rootView.findViewById(R.id.companytel);
-        setCanNotEdit(companytel);
+        setEditTextEnable(companytel, false);
 
         remark = rootView.findViewById(R.id.remark);
-        setCanNotEdit(remark);
+        setEditTextEnable(remark, false);
 
         TextView tv = rootView.findViewById(R.id.tv_step_2);
         tv.setBackgroundResource(R.drawable.bg_circle_blue);
@@ -244,9 +241,17 @@ public class TaskSceneFragment extends BasePhotoFragment {
                     if (null != taskDetailViewModel.taskEntity.voides && !taskDetailViewModel.taskEntity.voides.isEmpty()) {
                         rxPermissionTest();
                     }
+                    if ("2".equals(taskDetailViewModel.taskEntity.plantype)) {
+                        setEditTextEnable(companyname, true);
+                        setEditTextEnable(companyaddress, true);
+                        setEditTextEnable(companytel, true);
+                        setEditTextEnable(remark, true);
+                    }
+
                 }
             }
         });
+
     }
 
 
@@ -343,10 +348,12 @@ public class TaskSceneFragment extends BasePhotoFragment {
 
     // help method
 
-    private void setCanNotEdit(EditText mEditText) {
-        mEditText.setFocusable(false);
-        mEditText.setFocusableInTouchMode(false);
-        mEditText.setOnClickListener(null);
+    private void setEditTextEnable(EditText mEditText, boolean canEdit) {
+        mEditText.setFocusable(canEdit);
+        mEditText.setFocusableInTouchMode(canEdit);
+        if (!canEdit) {
+            mEditText.setOnClickListener(null);
+        }
     }
 
     void findTaskInLocalFile() {
