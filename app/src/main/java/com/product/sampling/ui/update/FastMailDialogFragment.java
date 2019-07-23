@@ -257,71 +257,75 @@ public class FastMailDialogFragment extends androidx.fragment.app.DialogFragment
 
     void setCity(ArrayList<TaskProvince> listCity) {
 
-        SpinnerSimpleAdapter privoceSpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listCity);
-        SpinnerSimpleAdapter citySpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listCity.get(0).shicitys);
-        SpinnerSimpleAdapter areaSpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listCity.get(0).shicitys.get(0).qucitys);
+        {
+            SpinnerSimpleAdapter privoceSpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listCity);
+            SpinnerSimpleAdapter citySpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listCity.get(0).shicitys);
+            SpinnerSimpleAdapter areaSpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listCity.get(0).shicitys.get(0).qucitys);
 
-        mSendsheng.setAdapter(privoceSpinnerdapter);
-        mSendsheng.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                citySpinnerdapter.setDataList(listCity.get(position).shicitys);
-                mSendshi.setAdapter(citySpinnerdapter);
-            }
+            mSendsheng.setAdapter(privoceSpinnerdapter);
+            mSendsheng.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    citySpinnerdapter.setDataList(listCity.get(position).shicitys);
+                    mSendshi.setAdapter(citySpinnerdapter);
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
-        mSendshi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                areaSpinnerdapter.setDataList(listCity.get(mSendsheng.getSelectedItemPosition()).shicitys.get(position).qucitys);
-                mSendqu.setAdapter(areaSpinnerdapter);
-            }
+                }
+            });
+            mSendshi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    areaSpinnerdapter.setDataList(listCity.get(mSendsheng.getSelectedItemPosition()).shicitys.get(position).qucitys);
+                    mSendqu.setAdapter(areaSpinnerdapter);
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
-        mSendsheng.setSelection(0);
-        mSendshi.setSelection(0);
-        mSendqu.setSelection(0);
+                }
+            });
+            mSendsheng.setSelection(0);
+            mSendshi.setSelection(0);
+            mSendqu.setSelection(0);
+        }
 
-        SpinnerSimpleAdapter privoceSpinnerdapter1 = new SpinnerSimpleAdapter(getActivity(), listCity);
-        SpinnerSimpleAdapter citySpinnerdapter1 = new SpinnerSimpleAdapter(getActivity(), listCity.get(0).shicitys);
-        SpinnerSimpleAdapter areaSpinnerdapter1 = new SpinnerSimpleAdapter(getActivity(), listCity.get(0).shicitys.get(0).qucitys);
+        {
+            SpinnerSimpleAdapter privoceSpinnerdapter1 = new SpinnerSimpleAdapter(getActivity(), listCity);
+            SpinnerSimpleAdapter citySpinnerdapter1 = new SpinnerSimpleAdapter(getActivity(), listCity.get(0).shicitys);
+            SpinnerSimpleAdapter areaSpinnerdapter1 = new SpinnerSimpleAdapter(getActivity(), listCity.get(0).shicitys.get(0).qucitys);
 
-        mReceivedsheng.setAdapter(privoceSpinnerdapter1);
-        mReceivedsheng.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                citySpinnerdapter1.setDataList(listCity.get(position).shicitys);
-                mReceivedshi.setAdapter(citySpinnerdapter1);
-            }
+            mReceivedsheng.setAdapter(privoceSpinnerdapter1);
+            mReceivedsheng.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    citySpinnerdapter1.setDataList(listCity.get(position).shicitys);
+                    mReceivedshi.setAdapter(citySpinnerdapter1);
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
-        mReceivedshi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                areaSpinnerdapter1.setDataList(listCity.get(mSendsheng.getSelectedItemPosition()).shicitys.get(position).qucitys);
-                mReceivedqu.setAdapter(areaSpinnerdapter1);
-            }
+                }
+            });
+            mReceivedshi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    areaSpinnerdapter1.setDataList(listCity.get(mReceivedsheng.getSelectedItemPosition()).shicitys.get(position).qucitys);
+                    mReceivedqu.setAdapter(areaSpinnerdapter1);
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
-        mReceivedsheng.setSelection(0);
-        mReceivedshi.setSelection(0);
-        mReceivedqu.setSelection(0);
+                }
+            });
+            mReceivedsheng.setSelection(0);
+            mReceivedshi.setSelection(0);
+            mReceivedqu.setSelection(0);
+        }
     }
 
     private AlertDialog alertDialog;
