@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
 
+import com.product.sampling.bean.FastMail;
 import com.product.sampling.bean.UpdateEntity;
 import com.product.sampling.bean.TaskCity;
 import com.product.sampling.bean.TaskEntity;
@@ -36,6 +37,7 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
     public MutableLiveData<LoadDataModel<ArrayList<TaskProvince>>> cityListLiveData = new MutableLiveData<>();
     public MutableLiveData<LoadDataModel<TaskEntity>> orderDetailLiveData = new MutableLiveData<>();
     public MutableLiveData<LoadDataModel<List<TaskSample>>> sampleDetailLiveData = new MutableLiveData<>();
+    public MutableLiveData<LoadDataModel<FastMail>> fastMailLiveData = new MutableLiveData<>();
 
 
     public void requestCityList(boolean isNeedAddAll) {
@@ -61,7 +63,7 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
 
                     @Override
                     public void onSuccess(List<TaskProvince> taskProvinces) {
-                        if (isNeedAddAll){
+                        if (isNeedAddAll) {
                             TaskProvince taskProvince = new TaskProvince();
                             taskProvince.name = "全部";
                             taskProvince.shicitys = new ArrayList<>();
@@ -152,6 +154,31 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
                         if (null != result && "0".equals(result.getIsnew())) {
                             UpdateDialogFragment.newInstance(result).show(fragmentManager, "update");
                         }
+                    }
+                });
+    }
+
+    public void getFastMail(String taskId, String sampleId) {
+
+        String userid = AccountManager.getInstance().getUserId();
+        if (TextUtils.isEmpty(userid)) {
+            return;
+        }
+        fastMailLiveData.setValue(new LoadDataModel());
+        RetrofitService.createApiService(Request.class)
+                .getFastMail(userid, sampleId, taskId)
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<FastMail>() {
+                    @Override
+                    public void onFailure(int code, String message) {
+//                        super.onFailure(code, message);
+                        fastMailLiveData.postValue(new LoadDataModel<>(code, message));
+                    }
+
+                    @Override
+                    public void onSuccess(FastMail result) {
+                        fastMailLiveData.setValue(new LoadDataModel(result));
                     }
                 });
     }

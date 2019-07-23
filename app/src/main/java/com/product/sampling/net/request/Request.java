@@ -1,5 +1,6 @@
 package com.product.sampling.net.request;
 
+import com.product.sampling.bean.FastMail;
 import com.product.sampling.bean.UpdateEntity;
 import com.product.sampling.bean.New;
 import com.product.sampling.bean.SmsBean;
@@ -118,4 +119,6 @@ public interface Request {
     @POST("app/task/samplefastmail")
     Observable<BaseHttpResult> updateFastMail(@FieldMap Map<String,String> params);
 
+    @GET("app/task/getsamplefastmail")
+    Observable<BaseHttpResult<FastMail>> getFastMail(@Query("userid") String userid, @Query("sampleid") String sampleid, @Query("taskid") String taskid);
 }

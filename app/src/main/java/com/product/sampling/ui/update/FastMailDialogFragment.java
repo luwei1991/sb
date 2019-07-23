@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +22,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.button.MaterialButton;
 import com.product.sampling.R;
 import com.product.sampling.adapter.SpinnerSimpleAdapter;
+import com.product.sampling.bean.FastMail;
+import com.product.sampling.bean.Task;
+import com.product.sampling.bean.TaskArea;
+import com.product.sampling.bean.TaskCity;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskProvince;
 import com.product.sampling.bean.TaskSample;
@@ -35,6 +41,7 @@ import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.httpmoudle.error.ExecptionEngin;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.maputil.ToastUtil;
+import com.product.sampling.net.LoadDataModel;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
@@ -79,7 +86,7 @@ public class FastMailDialogFragment extends androidx.fragment.app.DialogFragment
     private Spinner mReceivedqu;
     private EditText mReceivedaddress;
     private MaterialButton mBtnSubmit;
-    TaskEntity taskEntity;
+    TaskDetailViewModel taskDetailViewModel;
 
     public static FastMailDialogFragment newInstance(TaskSample taskSample) {
 
@@ -95,7 +102,6 @@ public class FastMailDialogFragment extends androidx.fragment.app.DialogFragment
     public void onAttach(Context context) {
         super.onAttach(context);
         taskSample = (TaskSample) getArguments().getSerializable("taskSample");
-
     }
 
 
@@ -119,6 +125,7 @@ public class FastMailDialogFragment extends androidx.fragment.app.DialogFragment
         mReceivedshi = view.findViewById(R.id.receivedshi);
         mReceivedqu = view.findViewById(R.id.receivedqu);
         mReceivedaddress = view.findViewById(R.id.receivedaddress);
+
         mBtnSubmit = view.findViewById(R.id.btn_submit);
         mBtnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,7 +140,7 @@ public class FastMailDialogFragment extends androidx.fragment.app.DialogFragment
         showLoadingDialog();
         HashMap<String, String> map = new HashMap();
         map.put("userid", AccountManager.getInstance().getUserId());
-        map.put("taskid", taskEntity.id);
+        map.put("taskid", taskDetailViewModel.taskEntity.id);
         map.put("sampleid", taskSample.getId());
 
 
@@ -141,18 +148,29 @@ public class FastMailDialogFragment extends androidx.fragment.app.DialogFragment
         map.put("sendman", mSendman.getText().toString());
         map.put("sendtel", mSendtel.getText().toString());
         map.put("sendcity", mSendcity.getText().toString());
-        map.put("sendsheng", mSendsheng.getSelectedItem().toString());
-        map.put("sendshi", mSendshi.getSelectedItem().toString());
-        map.put("sendqu", mSendqu.getSelectedItem().toString());
         map.put("sendaddress", mSendaddress.getText().toString());
+        {
+            TaskProvince province = (TaskProvince) mSendsheng.getSelectedItem();
+            map.put("sendsheng", province.name);
+            TaskCity city = (TaskCity) mSendshi.getSelectedItem();
+            map.put("sendshi", city.name);
+            TaskArea area = (TaskArea) mSendqu.getSelectedItem();
+            map.put("sendqu", area.name);
+        }
 
         map.put("receivedman", mReceivedman.getText().toString());
         map.put("receivedtel", mReceivedtel.getText().toString());
         map.put("receivedcity", mReceivedcity.getText().toString());
-        map.put("receivedsheng", mReceivedsheng.getSelectedItem().toString());
-        map.put("receivedshi", mReceivedshi.getSelectedItem().toString());
-        map.put("receivedqu", mReceivedqu.getSelectedItem().toString());
+
         map.put("receivedaddress", mReceivedaddress.getText().toString());
+        {
+            TaskProvince province = (TaskProvince) mReceivedsheng.getSelectedItem();
+            map.put("receivedsheng", province.name);
+            TaskCity city = (TaskCity) mReceivedshi.getSelectedItem();
+            map.put("receivedshi", city.name);
+            TaskArea area = (TaskArea) mReceivedqu.getSelectedItem();
+            map.put("receivedqu", area.name);
+        }
 
         RetrofitService.createApiService(Request.class)
                 .updateFastMail(map)
@@ -187,11 +205,35 @@ public class FastMailDialogFragment extends androidx.fragment.app.DialogFragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (taskSample == null) dismiss();
-        TaskDetailViewModel taskDetailViewModel = ViewModelProviders.of(getActivity()).get(TaskDetailViewModel.class);
-        taskEntity = taskDetailViewModel.taskEntity;
-        if (null != taskDetailViewModel.cityListLiveData.getValue() && null != taskDetailViewModel.cityListLiveData.getValue().getData()) {
-            setCity(taskDetailViewModel.cityListLiveData.getValue().getData());
-        }
+        taskDetailViewModel = ViewModelProviders.of(getActivity()).get(TaskDetailViewModel.class);
+
+        taskDetailViewModel.fastMailLiveData.observe(this, new Observer<LoadDataModel<FastMail>>() {
+            @Override
+            public void onChanged(LoadDataModel<FastMail> fastMailLoadDataModel) {
+                if (fastMailLoadDataModel.isSuccess()) {
+                    setTextValue(fastMailLoadDataModel.getData());
+                    setCity(taskDetailViewModel.cityListLiveData.getValue().getData(), fastMailLoadDataModel.getData());
+                } else if (fastMailLoadDataModel.isError()) {
+                    setCity(taskDetailViewModel.cityListLiveData.getValue().getData(), new FastMail());
+                }
+            }
+        });
+
+        taskDetailViewModel.getFastMail(taskDetailViewModel.taskEntity.id, taskSample.getId());
+    }
+
+    private void setTextValue(FastMail data) {
+        if (null == data) return;
+        mMailcode.setText(data.getMailcode());
+        mSendman.setText(data.getSendman());
+        mSendtel.setText(data.getSendtel());
+        mSendcity.setText(data.getSendcity());
+        mSendaddress.setText(data.getSendaddress());
+
+        mReceivedman.setText(data.getReceivedman());
+        mReceivedtel.setText(data.getReceivedtel());
+        mReceivedcity.setText(data.getReceivedcity());
+        mReceivedaddress.setText(data.getReceivedaddress());
     }
 
     @Override
@@ -255,18 +297,49 @@ public class FastMailDialogFragment extends androidx.fragment.app.DialogFragment
 
     }
 
-    void setCity(ArrayList<TaskProvince> listCity) {
+    void setCity(ArrayList<TaskProvince> listProvince, FastMail mail) {
 
         {
-            SpinnerSimpleAdapter privoceSpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listCity);
-            SpinnerSimpleAdapter citySpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listCity.get(0).shicitys);
-            SpinnerSimpleAdapter areaSpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listCity.get(0).shicitys.get(0).qucitys);
-
+            SpinnerSimpleAdapter privoceSpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listProvince);
             mSendsheng.setAdapter(privoceSpinnerdapter);
+            ArrayList<TaskCity> listCity = listProvince.get(0).shicitys;
+            mSendsheng.setSelection(0,true);
+            if (!TextUtils.isEmpty(mail.getSendsheng()))
+                for (int i = 0; i < listProvince.size(); i++) {
+                    if (listProvince.get(i).name.equals(mail.getSendsheng())) {
+                        mSendsheng.setSelection(i,true);
+                        listCity = listProvince.get(i).shicitys;
+                        break;
+                    }
+                }
+            SpinnerSimpleAdapter citySpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listCity);
+            mSendshi.setAdapter(citySpinnerdapter);
+
+            ArrayList<TaskArea> listArea = listCity.get(0).qucitys;
+            mSendshi.setSelection(0,true);
+            if (!TextUtils.isEmpty(mail.getSendshi()))
+                for (int i = 0; i < listCity.size(); i++) {
+                    if (listCity.get(i).name.equals(mail.getSendshi())) {
+                        mSendshi.setSelection(i,true);
+                        listArea = listCity.get(i).qucitys;
+                        break;
+                    }
+                }
+            SpinnerSimpleAdapter areaSpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listArea);
+            mSendqu.setAdapter(areaSpinnerdapter);
+            mSendqu.setSelection(0,true);
+            if (!TextUtils.isEmpty(mail.getSendqu()))
+                for (int i = 0; i < listArea.size(); i++) {
+                    if (listArea.get(i).name.equals(mail.getSendqu())) {
+                        mSendqu.setSelection(i,true);
+                        break;
+                    }
+                }
+
             mSendsheng.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    citySpinnerdapter.setDataList(listCity.get(position).shicitys);
+                    citySpinnerdapter.setDataList(listProvince.get(position).shicitys);
                     mSendshi.setAdapter(citySpinnerdapter);
                 }
 
@@ -278,7 +351,7 @@ public class FastMailDialogFragment extends androidx.fragment.app.DialogFragment
             mSendshi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    areaSpinnerdapter.setDataList(listCity.get(mSendsheng.getSelectedItemPosition()).shicitys.get(position).qucitys);
+                    areaSpinnerdapter.setDataList(listProvince.get(mSendsheng.getSelectedItemPosition()).shicitys.get(position).qucitys);
                     mSendqu.setAdapter(areaSpinnerdapter);
                 }
 
@@ -287,22 +360,50 @@ public class FastMailDialogFragment extends androidx.fragment.app.DialogFragment
 
                 }
             });
-            mSendsheng.setSelection(0);
-            mSendshi.setSelection(0);
-            mSendqu.setSelection(0);
         }
 
         {
-            SpinnerSimpleAdapter privoceSpinnerdapter1 = new SpinnerSimpleAdapter(getActivity(), listCity);
-            SpinnerSimpleAdapter citySpinnerdapter1 = new SpinnerSimpleAdapter(getActivity(), listCity.get(0).shicitys);
-            SpinnerSimpleAdapter areaSpinnerdapter1 = new SpinnerSimpleAdapter(getActivity(), listCity.get(0).shicitys.get(0).qucitys);
+            SpinnerSimpleAdapter privoceSpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listProvince);
+            mReceivedsheng.setAdapter(privoceSpinnerdapter);
+            mReceivedsheng.setSelection(0,true);
+            ArrayList<TaskCity> listCity = listProvince.get(0).shicitys;
+            if (!TextUtils.isEmpty(mail.getReceivedsheng()))
+                for (int i = 0; i < listProvince.size(); i++) {
+                    if (listProvince.get(i).name.equals(mail.getReceivedsheng())) {
+                        mReceivedsheng.setSelection(i,true);
+                        listCity = listProvince.get(i).shicitys;
+                        break;
+                    }
+                }
+            SpinnerSimpleAdapter citySpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listCity);
+            mReceivedshi.setAdapter(citySpinnerdapter);
 
-            mReceivedsheng.setAdapter(privoceSpinnerdapter1);
+            ArrayList<TaskArea> listArea = listCity.get(0).qucitys;
+            mReceivedshi.setSelection(0,true);
+            if (!TextUtils.isEmpty(mail.getReceivedshi()))
+                for (int i = 0; i < listCity.size(); i++) {
+                    if (listCity.get(i).name.equals(mail.getReceivedshi())) {
+                        mReceivedshi.setSelection(i,true);
+                        listArea = listCity.get(i).qucitys;
+                        break;
+                    }
+                }
+            SpinnerSimpleAdapter areaSpinnerdapter = new SpinnerSimpleAdapter(getActivity(), listArea);
+            mReceivedqu.setAdapter(areaSpinnerdapter);
+            mReceivedqu.setSelection(0,true);
+            if (!TextUtils.isEmpty(mail.getReceivedqu()))
+                for (int i = 0; i < listArea.size(); i++) {
+                    if (listArea.get(i).name.equals(mail.getReceivedqu())) {
+                        mReceivedqu.setSelection(i,true);
+                        break;
+                    }
+                }
+
             mReceivedsheng.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    citySpinnerdapter1.setDataList(listCity.get(position).shicitys);
-                    mReceivedshi.setAdapter(citySpinnerdapter1);
+                    citySpinnerdapter.setDataList(listProvince.get(position).shicitys);
+                    mReceivedshi.setAdapter(citySpinnerdapter);
                 }
 
                 @Override
@@ -313,8 +414,8 @@ public class FastMailDialogFragment extends androidx.fragment.app.DialogFragment
             mReceivedshi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    areaSpinnerdapter1.setDataList(listCity.get(mReceivedsheng.getSelectedItemPosition()).shicitys.get(position).qucitys);
-                    mReceivedqu.setAdapter(areaSpinnerdapter1);
+                    areaSpinnerdapter.setDataList(listProvince.get(mReceivedsheng.getSelectedItemPosition()).shicitys.get(position).qucitys);
+                    mReceivedqu.setAdapter(areaSpinnerdapter);
                 }
 
                 @Override
@@ -322,9 +423,6 @@ public class FastMailDialogFragment extends androidx.fragment.app.DialogFragment
 
                 }
             });
-            mReceivedsheng.setSelection(0);
-            mReceivedshi.setSelection(0);
-            mReceivedqu.setSelection(0);
         }
     }
 
