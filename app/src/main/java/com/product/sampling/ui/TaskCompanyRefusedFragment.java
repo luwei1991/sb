@@ -231,6 +231,8 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
             }
             taskRefusedEntity.refuseInfoMap = map;
         }
+        if (null == taskRefusedEntity.refuseInfoMap)
+            taskRefusedEntity.refuseInfoMap = new HashMap<>();
         taskRefusedEntity.refuseInfoMap.put("companyname", taskDetailViewModel.taskEntity.companyname);
         taskRefusedEntity.refuseInfoMap.put("companyaddress", taskDetailViewModel.taskEntity.companyaddress);
 
@@ -345,7 +347,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                                 mTVSheet.setText(taskRefusedEntity.refusefile);
                             }
                             shareBySystem(data.getStringExtra("pdf"));
-                            taskDetailViewModel.sendReportRecord(taskDetailViewModel.taskEntity.id, "", "refuse");
+                            taskDetailViewModel.sendReportRecord(taskRefusedEntity.id, "", "refuse");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

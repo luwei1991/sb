@@ -140,9 +140,9 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         if (mPage == 1) {
             listData.clear();
         }
-        if (tasks.isEmpty() || tasks.size() < data.getCount()) {
-            if (mPage == 1) refreshLayout.finishRefresh(true);
-            else refreshLayout.finishLoadMore(true);
+        if (data.isLastPage()) {
+            refreshLayout.finishLoadMore(true);
+            refreshLayout.setEnableLoadMore(false);
         } else {
             mPage++;
         }
@@ -186,10 +186,12 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         if (getArguments().getString(ARG_TASK_STATUS).equals("-1")) {
             rootView.findViewById(R.id.rl_menu).setVisibility(View.GONE);
         } else {
+            refreshLayout.setEnableLoadMore(true);
             refreshLayout.setOnRefreshListener(new OnRefreshListener() {
                 @Override
                 public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                     mPage = 1;
+                    refreshLayout.setEnableLoadMore(true);
                     getDataListByPage();
                     refreshLayout.finishRefresh(2000);
                 }

@@ -294,17 +294,17 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
                     taskDetailViewModel.taskEntity.taskSamples = taskEntityLoadDataModel.getData();
                     for (TaskSample taskSample : taskDetailViewModel.taskEntity.taskSamples) {
-                        taskSample.workInfoMap.put("companyname",taskDetailViewModel.taskEntity.companyname);
-                        taskSample.workInfoMap.put("companyaddress",taskDetailViewModel.taskEntity.companyaddress);
+                        taskSample.workInfoMap.put("companyname", taskDetailViewModel.taskEntity.companyname);
+                        taskSample.workInfoMap.put("companyaddress", taskDetailViewModel.taskEntity.companyaddress);
 
-                        taskSample.riskInfoMap.put("companyname",taskDetailViewModel.taskEntity.companyname);
-                        taskSample.riskInfoMap.put("companyaddress",taskDetailViewModel.taskEntity.companyaddress);
+                        taskSample.riskInfoMap.put("companyname", taskDetailViewModel.taskEntity.companyname);
+                        taskSample.riskInfoMap.put("companyaddress", taskDetailViewModel.taskEntity.companyaddress);
 
-                        taskSample.adviceInfoMap.put("companyname",taskDetailViewModel.taskEntity.companyname);
-                        taskSample.adviceInfoMap.put("companyaddress",taskDetailViewModel.taskEntity.companyaddress);
+                        taskSample.adviceInfoMap.put("companyname", taskDetailViewModel.taskEntity.companyname);
+                        taskSample.adviceInfoMap.put("companyaddress", taskDetailViewModel.taskEntity.companyaddress);
 
-                        taskSample.samplingInfoMap.put("companyname",taskDetailViewModel.taskEntity.companyname);
-                        taskSample.samplingInfoMap.put("companyaddress",taskDetailViewModel.taskEntity.companyaddress);
+                        taskSample.samplingInfoMap.put("companyname", taskDetailViewModel.taskEntity.companyname);
+                        taskSample.samplingInfoMap.put("companyaddress", taskDetailViewModel.taskEntity.companyaddress);
                     }
                     setupRecyclerView(mRecyclerView, taskDetailViewModel.taskEntity.taskSamples, false);
                     for (TaskSample taskSample : taskDetailViewModel.taskEntity.taskSamples) {
@@ -680,7 +680,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                                 if (pos == 7) {
                                     taskDetailViewModel.sendReportRecord(taskDetailViewModel.taskEntity.id, null, reporttype);
                                 } else {
-                                    taskDetailViewModel.sendReportRecord(taskDetailViewModel.taskEntity.id, taskDetailViewModel.taskEntity.taskSamples.get(selectId).getId(), reporttype);
+                                    taskDetailViewModel.sendReportRecord(taskDetailViewModel.taskEntity.id, taskDetailViewModel.taskEntity.taskSamples.get(index).getId(), reporttype);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -709,6 +709,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                                 taskDetailViewModel.taskEntity.feedfile = data.getStringExtra("pdf");
                                 tvUploadFeed.setText(taskDetailViewModel.taskEntity.feedfile);
                                 shareBySystem(data.getStringExtra("pdf"));
+                                taskDetailViewModel.sendReportRecord(taskDetailViewModel.taskEntity.id, null, "feed");
                             }
 
                         }

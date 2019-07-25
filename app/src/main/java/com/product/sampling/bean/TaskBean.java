@@ -10,6 +10,24 @@ public class TaskBean {
     private String html;
     private int firstResult = 15;
     private int maxResults = 1;
+    private boolean lastPage = false;
+    private boolean firstPage = false;
+
+    public boolean isLastPage() {
+        return lastPage;
+    }
+
+    public void setLastPage(boolean lastPage) {
+        this.lastPage = lastPage;
+    }
+
+    public boolean isFirstPage() {
+        return firstPage;
+    }
+
+    public void setFirstPage(boolean firstPage) {
+        this.firstPage = firstPage;
+    }
 
     public int getPageNo() {
         return pageNo;

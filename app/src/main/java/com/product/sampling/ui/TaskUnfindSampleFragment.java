@@ -233,6 +233,8 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             }
             taskUnFindEntity.unfindSampleInfoMap = map;
         }
+        if (null == taskUnFindEntity.unfindSampleInfoMap)
+            taskUnFindEntity.unfindSampleInfoMap = new HashMap<>();
         taskUnFindEntity.unfindSampleInfoMap.put("companyname", taskDetailViewModel.taskEntity.companyname);
         taskUnFindEntity.unfindSampleInfoMap.put("companyaddress", taskDetailViewModel.taskEntity.companyaddress);
 
@@ -347,7 +349,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                                 mTVSheet.setText(taskUnFindEntity.unfindfile);
                             }
                             shareBySystem(data.getStringExtra("pdf"));
-                            taskDetailViewModel.sendReportRecord(taskDetailViewModel.taskEntity.id, "", "unfind");
+                            taskDetailViewModel.sendReportRecord(taskUnFindEntity.id, "", "unfind");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
