@@ -18,7 +18,7 @@ public class ActivityUtils {
      * @param context
      */
     public static void goMainTaskActivity(Context context) {
-        Intent intent = new Intent(context, MainTaskListActivity.class);
+        Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
     }
 
