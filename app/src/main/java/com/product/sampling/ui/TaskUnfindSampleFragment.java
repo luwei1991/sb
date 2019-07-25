@@ -45,7 +45,6 @@ import com.product.sampling.bean.Videos;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.LoadDataModel;
-import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.photo.MediaHelper;
@@ -54,7 +53,6 @@ import com.product.sampling.utils.FileDownloader;
 import com.product.sampling.utils.FileUtils;
 import com.product.sampling.utils.HttpURLConnectionUtil;
 import com.product.sampling.utils.LogUtils;
-import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.SPUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -68,10 +66,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.reactivex.disposables.Disposable;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
 import static com.product.sampling.adapter.TaskSampleRecyclerViewAdapter.RequestCodePdf;
@@ -211,7 +205,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             }
         });
         if (!taskUnFindEntity.isLoadLocalData) {
-            taskDetailViewModel.requestOrderList(AccountManager.getInstance().getUserId(), taskUnFindEntity.id);
+            taskDetailViewModel.requestDetailList(AccountManager.getInstance().getUserId(), taskUnFindEntity.id);
         } else {
             initData();
         }
@@ -239,6 +233,9 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             }
             taskUnFindEntity.unfindSampleInfoMap = map;
         }
+        taskUnFindEntity.unfindSampleInfoMap.put("companyname", taskDetailViewModel.taskEntity.companyname);
+        taskUnFindEntity.unfindSampleInfoMap.put("companyaddress", taskDetailViewModel.taskEntity.companyaddress);
+
         if (TextUtils.isEmpty(taskUnFindEntity.unfindpicfile)) {
             btnUploadUnfindPic.setText("(拍照)上传");
         } else {
@@ -350,6 +347,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                                 mTVSheet.setText(taskUnFindEntity.unfindfile);
                             }
                             shareBySystem(data.getStringExtra("pdf"));
+                            taskDetailViewModel.sendReportRecord(taskDetailViewModel.taskEntity.id, "", "unfind");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

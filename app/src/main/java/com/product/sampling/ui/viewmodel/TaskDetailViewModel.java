@@ -5,8 +5,10 @@ import android.text.TextUtils;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
+import androidx.paging.PagedList;
 
 import com.product.sampling.bean.FastMail;
+import com.product.sampling.bean.TaskBean;
 import com.product.sampling.bean.UpdateEntity;
 import com.product.sampling.bean.TaskCity;
 import com.product.sampling.bean.TaskEntity;
@@ -16,6 +18,7 @@ import com.product.sampling.httpmoudle.BaseHttpResult;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.LoadDataModel;
+import com.product.sampling.net.LoadListDataModel;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
 import com.product.sampling.ui.update.UpdateDialogFragment;
@@ -38,6 +41,7 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
     public MutableLiveData<LoadDataModel<TaskEntity>> orderDetailLiveData = new MutableLiveData<>();
     public MutableLiveData<LoadDataModel<List<TaskSample>>> sampleDetailLiveData = new MutableLiveData<>();
     public MutableLiveData<LoadDataModel<FastMail>> fastMailLiveData = new MutableLiveData<>();
+    public MutableLiveData<LoadDataModel<TaskBean>> dataListLiveData = new MutableLiveData<>();
 
 
     public void requestCityList(boolean isNeedAddAll) {
@@ -77,7 +81,7 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
                 });
     }
 
-    public void requestOrderList(String userid, String id) {
+    public void requestDetailList(String userid, String id) {
         if (TextUtils.isEmpty(userid)) {
             return;
         }
@@ -181,5 +185,56 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
                         fastMailLiveData.setValue(new LoadDataModel(result));
                     }
                 });
+    }
+
+    public void sendReportRecord(String taskId, String sampleId, String reporttype) {
+
+        String userid = AccountManager.getInstance().getUserId();
+        if (TextUtils.isEmpty(userid)) {
+            return;
+        }
+        fastMailLiveData.setValue(new LoadDataModel());
+        RetrofitService.createApiService(Request.class)
+                .sendReportRecord(userid, sampleId, taskId, reporttype)
+                .compose(RxSchedulersHelper.io_main())
+//                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<BaseHttpResult>() {
+                    @Override
+                    public void onFailure(int code, String message) {
+//                        super.onFailure(code, message);
+                    }
+
+                    @Override
+                    public void onSuccess(BaseHttpResult result) {
+
+                    }
+                });
+    }
+
+    public void getDataByPage(Context context, int pageNo, String status, String ordertype, String cityid) {
+        dataListLiveData.setValue(new LoadDataModel());
+        RetrofitService.createApiService(Request.class)
+                .taskList(AccountManager.getInstance().getUserId(), status, ordertype, cityid, pageNo)
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<TaskBean>() {
+
+                    @Override
+                    public void onFailure(int code, String message) {
+                        super.onFailure(code, message);
+                        dataListLiveData.setValue(new LoadDataModel(code, message));
+                    }
+
+                    @Override
+                    public void onSuccess(TaskBean taskBean) {
+                        dataListLiveData.setValue(new LoadDataModel(taskBean));
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        super.onSubscribe(d);
+                    }
+                });
+
     }
 }

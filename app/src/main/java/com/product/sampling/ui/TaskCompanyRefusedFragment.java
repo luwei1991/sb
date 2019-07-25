@@ -45,7 +45,6 @@ import com.product.sampling.bean.Videos;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.LoadDataModel;
-import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.photo.MediaHelper;
@@ -54,7 +53,6 @@ import com.product.sampling.utils.FileDownloader;
 import com.product.sampling.utils.FileUtils;
 import com.product.sampling.utils.HttpURLConnectionUtil;
 import com.product.sampling.utils.LogUtils;
-import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.SPUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -68,10 +66,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.reactivex.disposables.Disposable;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
 import static com.product.sampling.adapter.TaskSampleRecyclerViewAdapter.RequestCodePdf;
@@ -209,7 +203,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
             }
         });
         if (!taskRefusedEntity.isLoadLocalData) {
-            taskDetailViewModel.requestOrderList(AccountManager.getInstance().getUserId(), taskRefusedEntity.id);
+            taskDetailViewModel.requestDetailList(AccountManager.getInstance().getUserId(), taskRefusedEntity.id);
         } else {
             initData();
         }
@@ -237,6 +231,8 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
             }
             taskRefusedEntity.refuseInfoMap = map;
         }
+        taskRefusedEntity.refuseInfoMap.put("companyname", taskDetailViewModel.taskEntity.companyname);
+        taskRefusedEntity.refuseInfoMap.put("companyaddress", taskDetailViewModel.taskEntity.companyaddress);
 
         if (TextUtils.isEmpty(taskRefusedEntity.refusefile)) {
             btnUploadRefusedPic.setText("(拍照)上传");
@@ -349,6 +345,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                                 mTVSheet.setText(taskRefusedEntity.refusefile);
                             }
                             shareBySystem(data.getStringExtra("pdf"));
+                            taskDetailViewModel.sendReportRecord(taskDetailViewModel.taskEntity.id, "", "refuse");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

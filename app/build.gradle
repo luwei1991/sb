@@ -128,5 +128,11 @@ dependencies {
 
     implementation 'com.google.zxing:android-core:3.3.0'
     implementation 'com.google.zxing:core:3.3.2'
+    implementation 'android.arch.paging:runtime:1.0.0'
+
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-andx-14'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-andx-14'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
 
 }

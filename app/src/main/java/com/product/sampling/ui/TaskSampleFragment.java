@@ -109,6 +109,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     Button btnUploadFeed;
     TextView tvUploadFeed;
 
+
     public TaskSampleFragment() {
     }
 
@@ -292,6 +293,19 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 if (taskEntityLoadDataModel.isSuccess()) {
 
                     taskDetailViewModel.taskEntity.taskSamples = taskEntityLoadDataModel.getData();
+                    for (TaskSample taskSample : taskDetailViewModel.taskEntity.taskSamples) {
+                        taskSample.workInfoMap.put("companyname",taskDetailViewModel.taskEntity.companyname);
+                        taskSample.workInfoMap.put("companyaddress",taskDetailViewModel.taskEntity.companyaddress);
+
+                        taskSample.riskInfoMap.put("companyname",taskDetailViewModel.taskEntity.companyname);
+                        taskSample.riskInfoMap.put("companyaddress",taskDetailViewModel.taskEntity.companyaddress);
+
+                        taskSample.adviceInfoMap.put("companyname",taskDetailViewModel.taskEntity.companyname);
+                        taskSample.adviceInfoMap.put("companyaddress",taskDetailViewModel.taskEntity.companyaddress);
+
+                        taskSample.samplingInfoMap.put("companyname",taskDetailViewModel.taskEntity.companyname);
+                        taskSample.samplingInfoMap.put("companyaddress",taskDetailViewModel.taskEntity.companyaddress);
+                    }
                     setupRecyclerView(mRecyclerView, taskDetailViewModel.taskEntity.taskSamples, false);
                     for (TaskSample taskSample : taskDetailViewModel.taskEntity.taskSamples) {
                         {
@@ -634,33 +648,40 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                                     }
                                 }
                                 int pos = data.getIntExtra(Intent_Order, 1);
+                                String reporttype = "";
                                 if (pos == 1) {
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).samplingfile = data.getStringExtra("pdf");
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).samplingInfoMap = map;
                                     shareBySystem(data.getStringExtra("pdf"));
+                                    reporttype = "sampling";
                                 } else if (pos == 2) {
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).adviceInfoMap = map;
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).disposalfile = data.getStringExtra("pdf");
                                     shareBySystem(data.getStringExtra("pdf"));
-//                                    findPrintShare(data.getStringExtra("pdf"));
+                                    reporttype = "advice";
                                 } else if (pos == 5) {
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).riskInfoMap = map;
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).riskfile = data.getStringExtra("pdf");
                                     shareBySystem(data.getStringExtra("pdf"));
-//                                    findPrintShare(data.getStringExtra("pdf"));
+                                    reporttype = "risk";
                                 } else if (pos == 6) {
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).workInfoMap = map;
                                     taskDetailViewModel.taskEntity.taskSamples.get(index).workfile = data.getStringExtra("pdf");
                                     shareBySystem(data.getStringExtra("pdf"));
-//                                    findPrintShare(data.getStringExtra("pdf"));
+                                    reporttype = "work";
                                 } else if (pos == 7) {
                                     taskDetailViewModel.taskEntity.feedInfoMap = map;
                                     taskDetailViewModel.taskEntity.feedfile = data.getStringExtra("pdf");
                                     tvUploadFeed.setText(taskDetailViewModel.taskEntity.feedfile);
                                     shareBySystem(data.getStringExtra("pdf"));
-//                                    findPrintShare(data.getStringExtra("pdf"));
+                                    reporttype = "feed";
                                 }
                                 mRecyclerView.getAdapter().notifyDataSetChanged();
+                                if (pos == 7) {
+                                    taskDetailViewModel.sendReportRecord(taskDetailViewModel.taskEntity.id, null, reporttype);
+                                } else {
+                                    taskDetailViewModel.sendReportRecord(taskDetailViewModel.taskEntity.id, taskDetailViewModel.taskEntity.taskSamples.get(selectId).getId(), reporttype);
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

@@ -1,6 +1,9 @@
 package com.product.sampling.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -10,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,13 +21,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.paging.PagedList;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amap.api.maps2d.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.product.sampling.R;
+import com.product.sampling.adapter.AdapterPaging;
+import com.product.sampling.adapter.MyDataSource;
 import com.product.sampling.adapter.SpinnerSimpleAdapter;
+import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskBean;
 import com.product.sampling.bean.TaskCity;
 import com.product.sampling.bean.TaskEntity;
@@ -38,6 +48,9 @@ import com.product.sampling.net.request.Request;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.SPUtil;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -46,6 +59,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import io.reactivex.disposables.Disposable;
 
@@ -68,6 +83,9 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
     TaskDetailViewModel taskDetailViewModel;
     Spinner spinnerProvince;
     Spinner spinnerCity;
+    RefreshLayout refreshLayout;
+    int mPage = 1;
+    List<TaskEntity> listData = new ArrayList<>();
 
     public static TaskListFragment newInstance(String title, String taskstatus) {
         Bundle args = new Bundle();
@@ -101,10 +119,50 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                 }
                 TaskResultBean bean = new TaskResultBean();
                 bean.list = list;
-                setupRecyclerView((RecyclerView) recyclerView, list);
+                setupRecyclerView(recyclerView, list);
             }
         } else {
-            getData();
+            getDataListByPage();
+            taskDetailViewModel.dataListLiveData.observe(this, new Observer<LoadDataModel<TaskBean>>() {
+                @Override
+                public void onChanged(LoadDataModel<TaskBean> taskBeanLoadDataModel) {
+                    if (taskBeanLoadDataModel.isSuccess()) {
+                        setData(taskBeanLoadDataModel.getData());
+                    }
+                }
+            });
+        }
+
+    }
+
+    private void setData(TaskBean data) {
+        List<TaskEntity> tasks = data.getList();
+        if (mPage == 1) {
+            listData.clear();
+        }
+        if (tasks.isEmpty() || tasks.size() < data.getCount()) {
+            if (mPage == 1) refreshLayout.finishRefresh(true);
+            else refreshLayout.finishLoadMore(true);
+        } else {
+            mPage++;
+        }
+        List<TaskEntity> localData = findTaskInLocalFile();
+        if (null != localData && !localData.isEmpty()) {
+            for (TaskEntity taskEntity : localData) {
+                for (int i = 0; i < tasks.size(); i++) {
+                    if (tasks.get(i).id.equals(taskEntity.id)) {
+                        tasks.remove(i);
+                        break;
+                    }
+                }
+
+            }
+        }
+        listData.addAll(tasks);
+        if (null == recyclerView.getAdapter()) {
+            setupRecyclerView(recyclerView, listData);
+        } else {
+            recyclerView.getAdapter().notifyDataSetChanged();
         }
     }
 
@@ -118,6 +176,8 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
             toolbar.setTitle(getArguments().getString(ARG_TITLE));
         }
         recyclerView = rootView.findViewById(R.id.item_image_list);
+        refreshLayout = rootView.findViewById(R.id.refreshLayout);
+
         mIVDistance = rootView.findViewById(R.id.iv_sort_distance);
         mViewDistance = rootView.findViewById(R.id.ll_range);
         mViewDistance.setOnClickListener(this);
@@ -125,7 +185,24 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         spinnerCity = rootView.findViewById(R.id.spinner_area);
         if (getArguments().getString(ARG_TASK_STATUS).equals("-1")) {
             rootView.findViewById(R.id.rl_menu).setVisibility(View.GONE);
+        } else {
+            refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+                @Override
+                public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                    mPage = 1;
+                    getDataListByPage();
+                    refreshLayout.finishRefresh(2000);
+                }
+            });
+            refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+                @Override
+                public void onLoadMore(RefreshLayout refreshlayout) {
+                    getDataListByPage();
+                    refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
+                }
+            });
         }
+
         return rootView;
     }
 
@@ -150,7 +227,8 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                getData();
+                mPage = 1;
+                getDataListByPage();
             }
 
             @Override
@@ -165,59 +243,10 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
 
     }
 
-    private void getData() {
-        Bundle b = getArguments();
-        String status = b.getString(ARG_TASK_STATUS);
-        TaskCity city = (TaskCity) spinnerCity.getSelectedItem();
-        String ordertype = isDistanceFromLowToHigh ? 1 + "" : 0 + "";
-        TaskProvince province = (TaskProvince) spinnerProvince.getSelectedItem();
-        if (null == city || (null != province && "全部".equals(province.name))) {
-            city = new TaskCity();
-        }
-        ordertype = "";
-        RetrofitService.createApiService(Request.class)
-                .taskList(AccountManager.getInstance().getUserId(), status, ordertype, city.id)
-                .compose(RxSchedulersHelper.io_main())
-                .compose(RxSchedulersHelper.ObsHandHttpResult())
-                .subscribe(new ZBaseObserver<TaskBean>() {
-
-                    @Override
-                    public void onFailure(int code, String message) {
-                        super.onFailure(code, message);
-                        if (isVisible()) {
-                            showToast(message);
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(TaskBean taskBean) {
-                        List<TaskEntity> tasks = taskBean.getList();
-                        List<TaskEntity> localData = findTaskInLocalFile();
-                        if (null != localData && !localData.isEmpty()) {
-                            for (TaskEntity taskEntity : localData) {
-                                for (int i = 0; i < tasks.size(); i++) {
-                                    if (tasks.get(i).id.equals(taskEntity.id)) {
-                                        tasks.remove(i);
-                                        break;
-                                    }
-                                }
-
-                            }
-
-                        }
-                        setupRecyclerView(recyclerView, tasks);
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        super.onSubscribe(d);
-                    }
-                });
-    }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<TaskEntity> task) {
 
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter((AppCompatActivity) getActivity(), task, !getArguments().getString(ARG_TASK_STATUS).equals("2")));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter((AppCompatActivity) getActivity(), listData, !getArguments().getString(ARG_TASK_STATUS).equals("2")));
     }
 
     @Override
@@ -230,7 +259,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                 } else {
                     mIVDistance.setImageResource(R.mipmap.task_triangle);
                 }
-                getData();
+                getDataListByPage();
                 break;
         }
     }
@@ -247,7 +276,8 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                     TaskEntity taskEntity = (TaskEntity) view.getTag();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("task", taskEntity);
-                    view.getContext().startActivity(new Intent(view.getContext(), BasicMapActivity.class).putExtras(bundle));
+//                    view.getContext().startActivity(new Intent(view.getContext(), BasicMapActivity.class).putExtras(bundle));
+                    startGaoDeNavi(view.getContext(), new LatLng(taskEntity.latitude, taskEntity.longitude), taskEntity.companyaddress);
                 } else if (view.getId() == R.id.tv_fill_info) {
                     TaskEntity taskEntity = (TaskEntity) view.getTag();
                     Bundle bundle = new Bundle();
@@ -382,5 +412,49 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
+    public static void startGaoDeNavi(final Context context, LatLng endPoint, String endName) {
+        if (!isInstalled(context, "com.autonavi.minimap")) {
+            Toast.makeText(context, "请先下载安装高德地图客户端", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        StringBuffer stringBuffer = new StringBuffer("androidamap://route?sourceApplication=").append("amap");
+
+        stringBuffer.append("&dlat=").append(endPoint.latitude) //终点纬度
+                .append("&dlon=").append(endPoint.longitude) //终点经度
+                .append("&dname=").append(endName) //终点地址
+                .append("&dev=").append(0)  //起终点是否偏移(0:lat 和 lon 是已经加密后的,不需要国测加密; 1:需要国测加密)
+                .append("&t=").append(0);  //t = 0（驾车）= 1（公交）= 2（步行）= 3（骑行）= 4（火车）= 5（长途客车）
+
+        Intent intent = new Intent("android.intent.action.VIEW", android.net.Uri.parse(stringBuffer.toString()));
+        intent.setPackage("com.autonavi.minimap");
+        context.startActivity(intent);
+    }
+
+    public static boolean isInstalled(Context context, String packageName) {
+        final PackageManager packageManager = context.getPackageManager();//获取packagemanager
+        final List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);//获取所有已安装程序的包信息
+        if (pinfo != null) {
+            for (PackageInfo info : pinfo) {
+                if (info.packageName.equals(packageName)) {
+                    return true;
+                }
+                //pName.add(pn);
+            }
+        }
+        return false;
+    }
+
+    private void getDataListByPage() {
+        Bundle b = getArguments();
+        String status = b.getString(ARG_TASK_STATUS);
+        TaskCity city = (TaskCity) spinnerCity.getSelectedItem();
+        String ordertype = isDistanceFromLowToHigh ? 1 + "" : 0 + "";
+        TaskProvince province = (TaskProvince) spinnerProvince.getSelectedItem();
+        if (null == city || (null != province && "全部".equals(province.name))) {
+            city = new TaskCity();
+        }
+        ordertype = "";
+        taskDetailViewModel.getDataByPage(getActivity(), mPage, status, ordertype, city.id);
+    }
 }
 

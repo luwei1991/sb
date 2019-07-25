@@ -43,8 +43,8 @@ public class TaskEntity implements Parcelable, Serializable {
     public String taskAddress;//任务提交时的地址
     public String taskTime;//任务提交时间
 
-    public String longitude;//任务提交时的经度
-    public String latitude;//任务提交时的维度
+    public double longitude;//任务提交时的经度
+    public double latitude;//任务提交时的维度
     public int leftday;//任务剩余天数
 
     public List<Pics> pics = new ArrayList<Pics>();
@@ -105,8 +105,8 @@ public class TaskEntity implements Parcelable, Serializable {
         areaqu = in.readString();
         taskAddress = in.readString();
         taskTime = in.readString();
-        longitude = in.readString();
-        latitude = in.readString();
+        longitude = in.readDouble();
+        latitude = in.readDouble();
         leftday = in.readInt();
 
         isNewRecord = in.readByte() != 0;
@@ -165,8 +165,8 @@ public class TaskEntity implements Parcelable, Serializable {
         dest.writeString(areaqu);
         dest.writeString(taskAddress);
         dest.writeString(taskTime);
-        dest.writeString(longitude);
-        dest.writeString(latitude);
+        dest.writeDouble(longitude);
+        dest.writeDouble(latitude);
         dest.writeInt(leftday);
         dest.writeByte((byte) (isNewRecord ? 1 : 0));
         dest.writeByte((byte) (isLoadLocalData ? 1 : 0));

@@ -218,7 +218,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
             setupRecyclerView(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
             setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
         } else {
-            taskDetailViewModel.requestOrderList(AccountManager.getInstance().getUserId(), taskDetailViewModel.taskEntity.id);
+            taskDetailViewModel.requestDetailList(AccountManager.getInstance().getUserId(), taskDetailViewModel.taskEntity.id);
         }
         companyname.setText(taskDetailViewModel.taskEntity.companyname);
         companyaddress.setText(taskDetailViewModel.taskEntity.companyaddress);

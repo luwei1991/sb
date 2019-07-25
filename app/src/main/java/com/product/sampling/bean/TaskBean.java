@@ -3,9 +3,9 @@ package com.product.sampling.bean;
 import java.util.List;
 
 public class TaskBean {
-    private int pageNo = 1;
-    private int pageSize = 15;
-    private int count = 1;
+    private int pageNo = 0;
+    private int pageSize = 10;
+    private int count = 10;
     List<TaskEntity> list;
     private String html;
     private int firstResult = 15;
