@@ -185,6 +185,8 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         spinnerCity = rootView.findViewById(R.id.spinner_area);
         if (getArguments().getString(ARG_TASK_STATUS).equals("-1")) {
             rootView.findViewById(R.id.rl_menu).setVisibility(View.GONE);
+            refreshLayout.setEnableLoadMore(false);
+            refreshLayout.setEnableRefresh(false);
         } else {
             refreshLayout.setEnableLoadMore(true);
             refreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -248,7 +250,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<TaskEntity> task) {
 
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter((AppCompatActivity) getActivity(), listData, !getArguments().getString(ARG_TASK_STATUS).equals("2")));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter((AppCompatActivity) getActivity(), task, !getArguments().getString(ARG_TASK_STATUS).equals("2")));
     }
 
     @Override
