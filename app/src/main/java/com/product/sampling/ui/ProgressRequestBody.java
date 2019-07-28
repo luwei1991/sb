@@ -37,7 +37,7 @@ public class ProgressRequestBody extends RequestBody {
 
     @Override
     public MediaType contentType() {
-        // i want to upload only images
+        // i want to btnUpload only images
         return mMediaType;
     }
 

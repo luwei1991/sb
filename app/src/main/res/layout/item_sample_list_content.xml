@@ -186,67 +186,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="20dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
-
-        <TextView
-            android:layout_width="10dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text=" "
-            android:textColor="@color/main_text_red" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:text="附件2抽样封存处置单" />
-
-        <TextView
-            android:id="@+id/tv_handle_sheet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:gravity="center"
-            android:text=""
-
-            />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right">
-
-            <Button
-                android:id="@+id/btn_edit_handling_sheet"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_marginRight="10dp"
-                android:background="@color/colorPrimary"
-                android:gravity="center"
-                android:text="编辑并打印"
-                android:textColor="@color/white" />
-
-            <Button
-                android:id="@+id/btn_upload_handling_sheet"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="10dp"
-                android:background="@color/colorPrimary"
-                android:gravity="center"
-                android:text="(签字)拍照"
-                android:textColor="@color/white" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"

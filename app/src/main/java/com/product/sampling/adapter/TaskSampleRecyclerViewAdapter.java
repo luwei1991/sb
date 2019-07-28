@@ -63,10 +63,6 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             } else if (R.id.btn_edit_check_sheet == view.getId()) {//检查单编辑
                 showDialog(view.getContext(), 1, (int) view.getTag());
 
-            } else if (R.id.btn_edit_handling_sheet == view.getId()) {//处置单编辑
-                showDialog(view.getContext(), 2, (int) view.getTag());
-
-
             } else if (R.id.btn_edit_risk_sheet == view.getId()) {//处置单编辑
                 showDialog(view.getContext(), 3, (int) view.getTag());
 
@@ -91,7 +87,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                 MediaHelper.startVideo(fragment, PictureConfig.CHOOSE_REQUEST);
             } else if (R.id.btn_qrc == view.getId()) {
                 int index = (int) view.getTag();
-                QRCDialogFragment.newInstance(mData.get(index)).show(fragment.getFragmentManager(), "update");
+                QRCDialogFragment.newInstance(mData.get(index),index).show(fragment.getFragmentManager(), "update");
             } else if (R.id.btn_fastmail == view.getId()) {
                 int index = (int) view.getTag();
                 FastMailDialogFragment.newInstance(mData.get(index)).show(fragment.getFragmentManager(), "update");
@@ -106,7 +102,6 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         int position = holder.getAdapterPosition() - 1 >= 0 ? holder.getAdapterPosition() - 1 : 0;
 
         holder.mTextViewTitle.setText(TextUtils.isEmpty(task.getSamplename()) ? " " : task.getSamplename());
-        holder.mTextViewHandleSheet.setText(task.disposalfile + "");
         holder.mTextViewCheckSheet.setText(task.samplingfile + "");
 
         holder.mTextViewWorkSheet.setText(task.workfile + "");
@@ -116,12 +111,6 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             holder.mBtnUploadCheck.setText("(拍照)上传");
         } else {
             holder.mBtnUploadCheck.setText("已拍照");
-        }
-
-        if (TextUtils.isEmpty(task.disposalpicfile)) {
-            holder.mBtnUploadHandle.setText("(拍照)上传");
-        } else {
-            holder.mBtnUploadHandle.setText("已拍照");
         }
 
         if (TextUtils.isEmpty(task.riskpicfile)) {
@@ -138,8 +127,6 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
 
         holder.mImageViewAdd.setVisibility(View.VISIBLE);
         holder.mBtnEditCheck.setVisibility(View.VISIBLE);
-        holder.mBtnEditHandle.setVisibility(View.VISIBLE);
-        holder.mBtnUploadHandle.setVisibility(View.VISIBLE);
         holder.mBtnUploadCheck.setVisibility(View.VISIBLE);
 
 
@@ -153,12 +140,6 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
 
         holder.mBtnUploadCheck.setTag(position);
         holder.mBtnUploadCheck.setOnClickListener(mOnClickListener);
-
-        holder.mBtnEditHandle.setTag(position);
-        holder.mBtnEditHandle.setOnClickListener(mOnClickListener);
-
-        holder.mBtnUploadHandle.setTag(position);
-        holder.mBtnUploadHandle.setOnClickListener(mOnClickListener);
 
         holder.mBtnEditRisk.setTag(position);
         holder.mBtnEditRisk.setOnClickListener(mOnClickListener);
@@ -183,7 +164,6 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
 
         holder.mBtnFastMail.setTag(position);
         holder.mBtnFastMail.setOnClickListener(mOnClickListener);
-
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(holder.itemView.getContext());
@@ -213,8 +193,6 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         final ImageView mImageViewReduce;
         final Button mBtnEditCheck;//检查单编辑
         final Button mBtnUploadCheck;//检查单上传
-        final Button mBtnEditHandle;//处置单编辑
-        final Button mBtnUploadHandle;//处置单上传
         final Button mBtnEditWork;//工作单编辑
         final Button mBtnUploadWork;//工作单上传
         final Button mBtnEditRisk;//风险单编辑
@@ -222,12 +200,9 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         final Button mBtnQRC;//二维码打印
         final Button mBtnFastMail;//快递单号
 
-
-        final TextView mTextViewHandleSheet;
         final TextView mTextViewCheckSheet;
         final TextView mTextViewWorkSheet;
         final TextView mTextViewRiskSheet;
-
         final ImageView mIVAddVideo;//添加视频
         final ImageView mIVReduceVideo;//删除视频
 
@@ -239,9 +214,6 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             mImageViewReduce = view.findViewById(R.id.iv_reduce);
             mBtnUploadCheck = view.findViewById(R.id.btn_upload_check_sheet);
             mBtnEditCheck = view.findViewById(R.id.btn_edit_check_sheet);
-            mBtnEditHandle = view.findViewById(R.id.btn_edit_handling_sheet);
-            mBtnUploadHandle = view.findViewById(R.id.btn_upload_handling_sheet);
-            mTextViewHandleSheet = view.findViewById(R.id.tv_handle_sheet);
             mTextViewCheckSheet = view.findViewById(R.id.tv_check_sheet);
             mTextViewWorkSheet = view.findViewById(R.id.tv_work_sheet);
             mTextViewRiskSheet = view.findViewById(R.id.tv_risk_sheet);

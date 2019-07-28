@@ -83,11 +83,8 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
     private void initView(List<New> aNews) {
         viewPager = findViewById(R.id.viewPager);
         ArrayList list = new ArrayList();
-        list.add("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1911150647,1930869014&fm=27&gp=0.jpg");
-        list.add("https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1690699292,1481547313&fm=27&gp=0.jpg");
-        list.add("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3207781657,3460758070&fm=27&gp=0.jpg");
-        list.add("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=144388917,3393541021&fm=27&gp=0.jpg");
-        adapter = new BannerViewPagerAdapter(this, list);
+
+        adapter = new BannerViewPagerAdapter(this, aNews);
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(2);//预加载2个
         viewPager.setPageMargin(30);//设置viewpage之间的间距

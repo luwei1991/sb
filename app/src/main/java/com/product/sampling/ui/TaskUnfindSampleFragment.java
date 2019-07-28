@@ -86,6 +86,9 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
     Button btnUploadUnfindPic;
     TextView mTVSheet;
 
+    Button btnSave;
+    Button btnSubmit;
+
     public TaskUnfindSampleFragment() {
 
     }
@@ -153,8 +156,9 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             }
         });
 
-        // 保存并提交
-        view.findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener() {
+        // 提交
+        btnSubmit = view.findViewById(R.id.btn_submit);
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialog("确定提交所有信息吗？", 1);
@@ -162,12 +166,16 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
         });
 
         // 保存
-        view.findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
+        btnSave = view.findViewById(R.id.btn_save);
+        btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveTaskInLocalFile(false);
             }
         });
+        btnSubmit.setVisibility(View.GONE);
+        btnSave.setVisibility(View.GONE);
+
         // 编辑单据并打印
         view.findViewById(R.id.btn_edit_spot_check_sheet).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,6 +250,11 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             btnUploadUnfindPic.setText("(拍照)上传");
         } else {
             btnUploadUnfindPic.setText("已拍照");
+        }
+
+        if (!"2".equals(taskUnFindEntity.taskstatus)) {
+            btnSave.setVisibility(View.VISIBLE);
+            btnSubmit.setVisibility(View.VISIBLE);
         }
     }
 

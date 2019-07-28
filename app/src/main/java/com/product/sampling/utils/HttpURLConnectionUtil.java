@@ -62,8 +62,8 @@ public class HttpURLConnectionUtil {
             conn.setDoOutput(true);
             conn.setDoInput(true);
             conn.setUseCaches(false);
-            conn.setConnectTimeout(1000 * 60 * 10);
-            conn.setReadTimeout(1000 * 60 * 10);
+            conn.setConnectTimeout(1000 * 60 * 30);
+            conn.setReadTimeout(1000 * 60 * 30);
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Accept", "*/*");
             conn.setRequestProperty("Connection", "keep-alive");

@@ -73,8 +73,6 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
 
     public static final String ARG_TITLE = "title";
 
-    int ordertype = 1;//    0时间倒叙1时间升序
-
     Disposable disposable;
     RecyclerView recyclerView;
     ImageView mIVDistance;
@@ -337,8 +335,6 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
 
             if (!isCanEdit) {
                 holder.mTextViewMap.setVisibility(View.INVISIBLE);
-                holder.mTextViewException.setVisibility(View.INVISIBLE);
-                holder.mTextViewFill.setVisibility(View.INVISIBLE);
             }
         }
 

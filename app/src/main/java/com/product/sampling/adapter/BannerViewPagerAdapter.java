@@ -8,12 +8,15 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.product.sampling.Constants;
 import com.product.sampling.R;
+import com.product.sampling.bean.New;
 import com.product.sampling.utils.DensityUtil;
 
 import java.util.List;
 
 import androidx.viewpager.widget.PagerAdapter;
+
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
@@ -21,10 +24,10 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
  * 描述：
  */
 public class BannerViewPagerAdapter extends PagerAdapter {
-    private List<String> images;
+    private List<New> images;
     private Context context;
 
-    public BannerViewPagerAdapter(Context context, List<String> images) {
+    public BannerViewPagerAdapter(Context context, List<New> images) {
         this.context = context;
         this.images = images;
     }
@@ -44,7 +47,7 @@ public class BannerViewPagerAdapter extends PagerAdapter {
         View view = LayoutInflater.from(context).inflate(R.layout.item_banner_viewpager, null);
         ImageView imageView = view.findViewById(R.id.imageView);
         Glide.with(context)
-                .load(images.get(position))
+                .load(Constants.IMAGE_BASE_URL + images.get(position).imgurl)
                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(DensityUtil.dip2px(context, 5), 0, RoundedCornersTransformation.CornerType.ALL)).error(R.mipmap.ic_launcher))
                 .into(imageView);
         container.addView(view);

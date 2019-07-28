@@ -19,6 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -28,6 +31,7 @@ import com.product.sampling.R;
 import com.product.sampling.adapter.ImageAndTextRecyclerViewAdapter;
 import com.product.sampling.adapter.ImageServerRecyclerViewAdapter;
 import com.product.sampling.adapter.VideoAndTextRecyclerViewAdapter;
+import com.product.sampling.bean.Advice;
 import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.Videos;
@@ -45,7 +49,9 @@ import com.product.sampling.utils.SPUtil;
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -187,7 +193,10 @@ public class TaskSceneFragment extends BasePhotoFragment {
         String data = gson.toJson(listTask);
         SPUtil.put(getActivity(), "tasklist", data);
         com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "保存本地成功");
-
+        if ("2".equals(taskDetailViewModel.taskEntity.plantype)) {
+            taskDetailViewModel.taskEntity.companyaddress = companyaddress.getText().toString();
+            taskDetailViewModel.taskEntity.companyname = companyname.getText().toString();
+        }
         ((TaskDetailActivity) getActivity()).checkSelectMenu(3);
     }
 
@@ -246,6 +255,17 @@ public class TaskSceneFragment extends BasePhotoFragment {
                         setEditTextEnable(companyaddress, true);
                         setEditTextEnable(companytel, true);
                         setEditTextEnable(remark, true);
+                    }
+                    Advice advice = taskDetailViewModel.taskEntity.advice;
+                    if (null != advice) {
+                        Gson gson = new Gson();
+                        String obj2 = gson.toJson(advice);
+                        JsonObject object = new JsonParser().parse(obj2).getAsJsonObject();
+                        HashMap<String, String> map = new HashMap();
+                        for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                            map.put("advice." + entry.getKey(), entry.getValue().getAsString());
+                        }
+                        taskDetailViewModel.taskEntity.adviceInfoMap = map;
                     }
 
                 }

@@ -87,6 +87,10 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
     Button btnUploadRefusedPic;
     TextView mTVSheet;
 
+    Button btnSubmit;
+    Button btnSave;
+
+
     public TaskCompanyRefusedFragment() {
 
     }
@@ -146,25 +150,28 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                 MediaHelper.startVideo(fragment, MediaHelper.REQUEST_VIDEO_CODE);
             }
         });
+        btnSubmit = view.findViewById(R.id.btn_submit);
 
-        // 保存并提交
-        view.findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener() {
+        // 并提交
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialog("确定提交所有信息吗？", 1);
             }
         });
 
+        btnSave = view.findViewById(R.id.btn_save);
         // 保存
-        view.findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
+        btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveTaskInLocalFile(false);
             }
         });
 
+        btnSave.setVisibility(View.GONE);
+        btnSubmit.setVisibility(View.GONE);
 
-        // TODO 编辑单据并打印
         // 编辑单据并打印
         view.findViewById(R.id.btn_edit_spot_check_sheet).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -241,6 +248,11 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
         } else {
             btnUploadRefusedPic.setText("已拍照");
         }
+        if (!"2".equals(taskRefusedEntity.taskstatus)) {
+            btnSave.setVisibility(View.VISIBLE);
+            btnSubmit.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override

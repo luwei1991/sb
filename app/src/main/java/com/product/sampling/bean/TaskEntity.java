@@ -70,9 +70,15 @@ public class TaskEntity implements Parcelable, Serializable {
     public String feedfile = "";
     public String feedpicfile = "";
     public HashMap<String, String> feedInfoMap;
+
+    public String disposalfile = "";//处置单
+    public String disposalpicfile = "";
+    public HashMap<String, String> adviceInfoMap;
+
     public Feed feed = new Feed();
 
     public String plantype;//1生产领域不可以修改 2流通领域可以修改
+    public Advice advice = new Advice();
 
     public TaskEntity() {
 

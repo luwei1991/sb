@@ -10,9 +10,7 @@ public class TaskSample implements Serializable {
     public List<TaskImageEntity> list = new ArrayList<>();
     public List<LocalMediaInfo> videoList = new ArrayList<>();
     public String samplingfile = "";
-    public String disposalfile = "";
     public String samplingpicfile = "";//抽样单生成图片的文件流
-    public String disposalpicfile = "";//抽样处置单图片的文件流
 
     public String workfile = "";
     public String riskfile = "";
@@ -25,12 +23,12 @@ public class TaskSample implements Serializable {
     public HashMap<String, String> riskInfoMap = new HashMap<>();
     public HashMap<String, String> workInfoMap = new HashMap<>();
 
-    public Advice advice = new Advice();
     public Sampling sampling = new Sampling();
     public List<Pics> pics = new ArrayList<>();
     public Risk risk = new Risk();
     public Work work = new Work();
 
+    public String qRCodeReportfile = "";//二维码文件流
     /**
      * id : 7777
      * isNewRecord : false
@@ -108,28 +106,12 @@ public class TaskSample implements Serializable {
         this.samplingfile = samplingfile;
     }
 
-    public String getDisposalfile() {
-        return disposalfile;
-    }
-
-    public void setDisposalfile(String disposalfile) {
-        this.disposalfile = disposalfile;
-    }
-
     public HashMap<String, String> getAdviceInfoMap() {
         return adviceInfoMap;
     }
 
     public void setAdviceInfoMap(HashMap<String, String> adviceInfoMap) {
         this.adviceInfoMap = adviceInfoMap;
-    }
-
-    public Advice getAdvice() {
-        return advice;
-    }
-
-    public void setAdvice(Advice advice) {
-        this.advice = advice;
     }
 
     public Sampling getSampling() {

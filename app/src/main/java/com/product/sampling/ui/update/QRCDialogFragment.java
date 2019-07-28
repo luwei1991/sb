@@ -54,12 +54,13 @@ public class QRCDialogFragment extends DialogFragment {
 
 
     private TaskSample taskSample;
+    int postion = -1;
 
-
-    public static QRCDialogFragment newInstance(TaskSample taskSample) {
+    public static QRCDialogFragment newInstance(TaskSample taskSample, int postion) {
 
         Bundle args = new Bundle();
         args.putSerializable("taskSample", taskSample);
+        args.putInt("postion", postion);
         QRCDialogFragment fragment = new QRCDialogFragment();
         fragment.setArguments(args);
         return fragment;
@@ -70,7 +71,7 @@ public class QRCDialogFragment extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         taskSample = (TaskSample) getArguments().getSerializable("taskSample");
-
+        postion = getArguments().getInt("postion");
     }
 
 
@@ -93,30 +94,35 @@ public class QRCDialogFragment extends DialogFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        TaskDetailViewModel taskDetailViewModel = ViewModelProviders.of(getActivity()).get(TaskDetailViewModel.class);
         if (taskSample == null) dismiss();
         mTvTitle.setText("湖南省商品质量监督检查研究院");
         if (TextUtils.isEmpty(taskSample.getId())) {
             taskSample.setId(System.currentTimeMillis() + "");
         }
         mTvContent.setText("样品编码:" + taskSample.getId());
-        TaskDetailViewModel taskDetailViewModel = ViewModelProviders.of(getActivity()).get(TaskDetailViewModel.class);
-
         mTvPersonName.setText("抽样人:" + taskDetailViewModel.taskEntity.doman);
+        mTvName.setText(("样品名称:"));
+        mTvContent.setText(("样品编码:"));
+        mTvModel.setText(("样品型号:"));
+        mTvCount.setText(("抽样数量:"));
+        mTvDate.setText(("抽样日期:"));
+
         if (null != taskSample.samplingInfoMap && taskSample.samplingInfoMap.size() > 0) {
             String value;
             for (String s : taskSample.samplingInfoMap.keySet()) {
                 if (!s.startsWith("sampling.")) continue;
                 value = taskSample.samplingInfoMap.get(s);
                 if (s.equals("sampling.productname")) {
-                    mTvName.setText(null == value ? "" : ("样品名称:" + value));
+                    mTvName.setText(("样品名称:" + value));
                 } else if (s.equals("sampling.taskcode")) {
-                    mTvContent.setText(null == value ? "" : ("样品编码:" + value));
+                    mTvContent.setText(("样品编码:" + value));
                 } else if (s.equals("sampling.productmodel")) {
-                    mTvModel.setText(null == value ? "" : ("样品型号:" + value));
+                    mTvModel.setText(("样品型号:" + value));
                 } else if (s.equals("sampling.samplingcount")) {
-                    mTvCount.setText(null == value ? "" : ("抽样数量:" + value));
+                    mTvCount.setText(("抽样数量:" + value));
                 } else if (s.equals("sampling.fillInDate")) {
-                    mTvDate.setText(null == value ? "" : ("抽样日期:" + value));
+                    mTvDate.setText(("抽样日期:" + value));
 //                } else if (s.equals("sampling.productname")) {
 //                    mTvPersonName.setText(null == value ? "" : ("抽样人:" + value));
                 }
@@ -136,6 +142,7 @@ public class QRCDialogFragment extends DialogFragment {
                             LogUtils.e("saveImage", path);
                             getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(path))));
                             shareBySystem(path);
+                            taskDetailViewModel.taskEntity.taskSamples.get(postion).qRCodeReportfile = path;
                             dismiss();
                         }, e -> ToastUtil.showShortToast(getActivity(), e != null ? e.getMessage() : "error"));
             }
