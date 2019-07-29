@@ -1,5 +1,6 @@
 package com.product.sampling.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,9 +22,11 @@ import com.amap.api.services.weather.LocalWeatherLive;
 import com.amap.api.services.weather.LocalWeatherLiveResult;
 import com.amap.api.services.weather.WeatherSearch;
 import com.amap.api.services.weather.WeatherSearchQuery;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.product.sampling.R;
 import com.product.sampling.adapter.BannerViewPagerAdapter;
 import com.product.sampling.adapter.NewsListAdapter;
+import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
 import com.product.sampling.bean.New;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.maputil.ToastUtil;
@@ -40,6 +44,8 @@ import java.util.Date;
 import java.util.List;
 
 import io.reactivex.disposables.Disposable;
+
+import static com.product.sampling.ui.H5WebViewActivity.Intent_Order;
 
 public class MainActivity extends BaseActivity implements AMapLocationListener, WeatherSearch.OnWeatherSearchListener {
 
@@ -82,8 +88,6 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
 
     private void initView(List<New> aNews) {
         viewPager = findViewById(R.id.viewPager);
-        ArrayList list = new ArrayList();
-
         adapter = new BannerViewPagerAdapter(this, aNews);
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(2);//预加载2个
@@ -98,14 +102,27 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.color.blue_color_30));
         mRecyclerView.addItemDecoration(dividerItemDecoration);
-        mRecyclerView.setAdapter(new NewsListAdapter(R.layout.item_news, aNews));
 
         tvTemperature = findViewById(R.id.tv_temperature);
         ivWeather = findViewById(R.id.iv_weather);
-//        tvLoginOut = findViewById(R.id.tv_login_out);
-//        tvUserName = findViewById(R.id.tv_user_name);
-//        tvUserName.setText(AccountManager.getInstance().getUserInfoBean().getName());
-//        tvLoginOut.setOnClickListener(this);
+        NewsListAdapter adapter = new NewsListAdapter(R.layout.item_news, aNews);
+        mRecyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                New news = aNews.get(position);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle(news.getTitle());
+                builder.setMessage(news.getConent());
+                builder.setCancelable(true);
+                builder.setNegativeButton("知道了", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                builder.show();
+            }
+        });
     }
 
     private void getData() {
