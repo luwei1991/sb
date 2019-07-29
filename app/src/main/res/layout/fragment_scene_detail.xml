@@ -96,7 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center"
-                android:hint="省" />
+                android:hint="" />
 
         </LinearLayout>
 

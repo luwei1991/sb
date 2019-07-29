@@ -193,10 +193,8 @@ public class TaskSceneFragment extends BasePhotoFragment {
         String data = gson.toJson(listTask);
         SPUtil.put(getActivity(), "tasklist", data);
         com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "保存本地成功");
-        if ("2".equals(taskDetailViewModel.taskEntity.plantype)) {
-            taskDetailViewModel.taskEntity.companyaddress = companyaddress.getText().toString();
-            taskDetailViewModel.taskEntity.companyname = companyname.getText().toString();
-        }
+        taskDetailViewModel.taskEntity.companyaddress = companyaddress.getText().toString();
+        taskDetailViewModel.taskEntity.companyname = companyname.getText().toString();
         ((TaskDetailActivity) getActivity()).checkSelectMenu(3);
     }
 
@@ -226,13 +224,13 @@ public class TaskSceneFragment extends BasePhotoFragment {
             }
             setupRecyclerView(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
             setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
+            companyname.setText(taskDetailViewModel.taskEntity.companyname);
+            companyaddress.setText(taskDetailViewModel.taskEntity.companyaddress);
+            companytel.setText(taskDetailViewModel.taskEntity.companytel);
+            remark.setText(taskDetailViewModel.taskEntity.remark);
         } else {
             taskDetailViewModel.requestDetailList(AccountManager.getInstance().getUserId(), taskDetailViewModel.taskEntity.id);
         }
-        companyname.setText(taskDetailViewModel.taskEntity.companyname);
-        companyaddress.setText(taskDetailViewModel.taskEntity.companyaddress);
-        companytel.setText(taskDetailViewModel.taskEntity.companytel);
-        remark.setText(taskDetailViewModel.taskEntity.remark);
 
 
         taskDetailViewModel.orderDetailLiveData.observe(this, new Observer<LoadDataModel<TaskEntity>>() {
@@ -256,6 +254,11 @@ public class TaskSceneFragment extends BasePhotoFragment {
                         setEditTextEnable(companytel, true);
                         setEditTextEnable(remark, true);
                     }
+                    companyname.setText(taskDetailViewModel.taskEntity.companyname);
+                    companyaddress.setText(taskDetailViewModel.taskEntity.companyaddress);
+                    companytel.setText(taskDetailViewModel.taskEntity.companytel);
+                    remark.setText(taskDetailViewModel.taskEntity.remark);
+
                     Advice advice = taskDetailViewModel.taskEntity.advice;
                     if (null != advice) {
                         Gson gson = new Gson();
@@ -387,9 +390,9 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 for (int i = 0; i < listTask.size(); i++) {
                     if (listTask.get(i).id.equals(taskDetailViewModel.taskEntity.id)) {
                         taskDetailViewModel.taskEntity = listTask.get(i);
+                        taskDetailViewModel.taskEntity.isLoadLocalData = true;
                     }
                 }
-                taskDetailViewModel.taskEntity.isLoadLocalData = true;
             }
         }
 
@@ -427,9 +430,8 @@ public class TaskSceneFragment extends BasePhotoFragment {
     private void rxPermissionTest() {
 
         com.tbruyelle.rxpermissions2.RxPermissions rxPermissions = new com.tbruyelle.rxpermissions2.RxPermissions(getActivity());
-        rxPermissions
-                .request(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE)
+        rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
                 .subscribe(granted -> {
                     if (granted) {
                         downLoadVideo();

@@ -324,8 +324,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             sample.isLocalData = true;
             sample.setId(System.currentTimeMillis() + "");
             sample.samplingInfoMap = new HashMap<>();
-            sample.samplingInfoMap.put("sampling.inspectedname", taskDetailViewModel.taskEntity.companyname);
-            sample.samplingInfoMap.put("sampling.inspectedaddress", taskDetailViewModel.taskEntity.companyaddress);
+            sample.samplingInfoMap.put("sampling.inspectedname",TextUtils.isEmpty(taskDetailViewModel.taskEntity.companyname)?"":taskDetailViewModel.taskEntity.companyname);
+            sample.samplingInfoMap.put("sampling.inspectedaddress", TextUtils.isEmpty(taskDetailViewModel.taskEntity.companyaddress)?"":taskDetailViewModel.taskEntity.companyaddress);
             taskDetailViewModel.taskEntity.taskSamples.add(sample);
             setupRecyclerView(mRecyclerView, taskDetailViewModel.taskEntity.taskSamples, true);
         }
@@ -349,7 +349,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                 if (taskEntityLoadDataModel.isSuccess()) {
 
                     taskDetailViewModel.taskEntity.taskSamples = taskEntityLoadDataModel.getData();
-//                    for (TaskSample taskSample : taskDetailViewModel.taskEntity.taskSamples) {
+                    for (TaskSample taskSample : taskDetailViewModel.taskEntity.taskSamples) {
 //                        taskSample.workInfoMap.put("companyname", taskDetailViewModel.taskEntity.companyname);
 //                        taskSample.workInfoMap.put("companyaddress", taskDetailViewModel.taskEntity.companyaddress);
 //
@@ -359,9 +359,9 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 //                        taskSample.adviceInfoMap.put("companyname", taskDetailViewModel.taskEntity.companyname);
 //                        taskSample.adviceInfoMap.put("companyaddress", taskDetailViewModel.taskEntity.companyaddress);
 //
-//                        taskSample.samplingInfoMap.put("sampling.inspectedname", taskDetailViewModel.taskEntity.companyname);
-//                        taskSample.samplingInfoMap.put("sampling.inspectedaddress", taskDetailViewModel.taskEntity.companyaddress);
-//                    }
+                        taskSample.samplingInfoMap.put("sampling.inspectedname",TextUtils.isEmpty(taskDetailViewModel.taskEntity.companyname)?"":taskDetailViewModel.taskEntity.companyname);
+                        taskSample.samplingInfoMap.put("sampling.inspectedaddress", TextUtils.isEmpty(taskDetailViewModel.taskEntity.companyaddress)?"":taskDetailViewModel.taskEntity.companyaddress);
+                    }
                     setupRecyclerView(mRecyclerView, taskDetailViewModel.taskEntity.taskSamples, false);
                     for (TaskSample taskSample : taskDetailViewModel.taskEntity.taskSamples) {
                         {
