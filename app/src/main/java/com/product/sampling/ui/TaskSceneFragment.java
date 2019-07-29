@@ -167,6 +167,8 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 hasData = true;
             }
         }
+        taskDetailViewModel.taskEntity.companyaddress = companyaddress.getText().toString();
+        taskDetailViewModel.taskEntity.companyname = companyname.getText().toString();
         if (!hasData) {
             ((TaskDetailActivity) getActivity()).checkSelectMenu(3);
             return;
@@ -193,8 +195,6 @@ public class TaskSceneFragment extends BasePhotoFragment {
         String data = gson.toJson(listTask);
         SPUtil.put(getActivity(), "tasklist", data);
         com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "保存本地成功");
-        taskDetailViewModel.taskEntity.companyaddress = companyaddress.getText().toString();
-        taskDetailViewModel.taskEntity.companyname = companyname.getText().toString();
         ((TaskDetailActivity) getActivity()).checkSelectMenu(3);
     }
 
