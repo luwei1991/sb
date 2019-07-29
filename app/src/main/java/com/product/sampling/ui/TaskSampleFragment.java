@@ -143,8 +143,17 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         btnUpload = rootView.findViewById(R.id.btn_save_upload);
         btnUpload.setOnClickListener(this);
 
-        btnSave.setVisibility(View.GONE);
-        btnUpload.setVisibility(View.GONE);
+        if (null != getArguments() && null != getArguments().getParcelable("task")) {
+            TaskEntity task = getArguments().getParcelable("task");
+            if ("2".equals(task.taskstatus)) {
+                btnSave.setVisibility(View.GONE);
+                btnUpload.setVisibility(View.GONE);
+            } else {
+                btnSave.setVisibility(View.VISIBLE);
+                btnUpload.setVisibility(View.VISIBLE);
+            }
+        }
+
 
         return rootView;
     }
