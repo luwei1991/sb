@@ -204,8 +204,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
             }
         });
-        btnUploadAdvice = view.findViewById(R.id.btn_upload_feed_sheet);
-        tvUploadAdvice = view.findViewById(R.id.tv_feed_sheet);
+        btnUploadAdvice = view.findViewById(R.id.btn_upload_disposal);
+        tvUploadAdvice = view.findViewById(R.id.tv_disposal);
 
         btnUploadAdvice.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -324,8 +324,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             sample.isLocalData = true;
             sample.setId(System.currentTimeMillis() + "");
             sample.samplingInfoMap = new HashMap<>();
-            sample.samplingInfoMap.put("sampling.inspectedname",TextUtils.isEmpty(taskDetailViewModel.taskEntity.companyname)?"":taskDetailViewModel.taskEntity.companyname);
-            sample.samplingInfoMap.put("sampling.inspectedaddress", TextUtils.isEmpty(taskDetailViewModel.taskEntity.companyaddress)?"":taskDetailViewModel.taskEntity.companyaddress);
+            sample.samplingInfoMap.put("sampling.inspectedname", TextUtils.isEmpty(taskDetailViewModel.taskEntity.companyname) ? "" : taskDetailViewModel.taskEntity.companyname);
+            sample.samplingInfoMap.put("sampling.inspectedaddress", TextUtils.isEmpty(taskDetailViewModel.taskEntity.companyaddress) ? "" : taskDetailViewModel.taskEntity.companyaddress);
             taskDetailViewModel.taskEntity.taskSamples.add(sample);
             setupRecyclerView(mRecyclerView, taskDetailViewModel.taskEntity.taskSamples, true);
         }
@@ -359,8 +359,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 //                        taskSample.adviceInfoMap.put("companyname", taskDetailViewModel.taskEntity.companyname);
 //                        taskSample.adviceInfoMap.put("companyaddress", taskDetailViewModel.taskEntity.companyaddress);
 //
-                        taskSample.samplingInfoMap.put("sampling.inspectedname",TextUtils.isEmpty(taskDetailViewModel.taskEntity.companyname)?"":taskDetailViewModel.taskEntity.companyname);
-                        taskSample.samplingInfoMap.put("sampling.inspectedaddress", TextUtils.isEmpty(taskDetailViewModel.taskEntity.companyaddress)?"":taskDetailViewModel.taskEntity.companyaddress);
+                        taskSample.samplingInfoMap.put("sampling.inspectedname", TextUtils.isEmpty(taskDetailViewModel.taskEntity.companyname) ? "" : taskDetailViewModel.taskEntity.companyname);
+                        taskSample.samplingInfoMap.put("sampling.inspectedaddress", TextUtils.isEmpty(taskDetailViewModel.taskEntity.companyaddress) ? "" : taskDetailViewModel.taskEntity.companyaddress);
                     }
                     setupRecyclerView(mRecyclerView, taskDetailViewModel.taskEntity.taskSamples, false);
                     for (TaskSample taskSample : taskDetailViewModel.taskEntity.taskSamples) {
@@ -735,6 +735,12 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                                 tvUploadFeed.setText(taskDetailViewModel.taskEntity.feedfile);
                                 shareBySystem(data.getStringExtra("pdf"));
                                 taskDetailViewModel.sendReportRecord(taskDetailViewModel.taskEntity.id, null, "feed");
+                            } else if (pos == 2) {
+                                taskDetailViewModel.taskEntity.adviceInfoMap = map;
+                                taskDetailViewModel.taskEntity.disposalfile = data.getStringExtra("pdf");
+                                tvUploadAdvice.setText(taskDetailViewModel.taskEntity.disposalfile);
+                                shareBySystem(data.getStringExtra("pdf"));
+                                taskDetailViewModel.sendReportRecord(taskDetailViewModel.taskEntity.id, null, "advice");
                             }
 
                         }
@@ -745,6 +751,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                         List<LocalMedia> selectHandle = PictureSelector.obtainMultipleResult(data);
                         taskDetailViewModel.taskEntity.disposalpicfile = selectHandle.get(0).getPath();
                         mRecyclerView.getAdapter().notifyDataSetChanged();
+                        btnUploadAdvice.setText("已拍照");
                     }
                     break;
                 case Select_Check:

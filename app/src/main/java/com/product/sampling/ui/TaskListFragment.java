@@ -278,8 +278,11 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                     TaskEntity taskEntity = (TaskEntity) view.getTag();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("task", taskEntity);
-//                    view.getContext().startActivity(new Intent(view.getContext(), BasicMapActivity.class).putExtras(bundle));
-                    startGaoDeNavi(view.getContext(), new LatLng(taskEntity.latitude, taskEntity.longitude), taskEntity.companyaddress);
+                    if (taskEntity.companyLatitude != 0 && taskEntity.companyLatitude != 0) {
+                        startGaoDeNavi(view.getContext(), new LatLng(taskEntity.companyLatitude, taskEntity.companyLongitude), taskEntity.companyaddress);
+                    } else if (taskEntity.plantype.equals("2")) {
+                        Toast.makeText(view.getContext(), "流通领域无法导航", Toast.LENGTH_SHORT).show();
+                    }
                 } else if (view.getId() == R.id.tv_fill_info) {
                     TaskEntity taskEntity = (TaskEntity) view.getTag();
                     Bundle bundle = new Bundle();
@@ -312,8 +315,24 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             TaskEntity task = mValues.get(position);
             holder.mTextViewNum.setText(task.taskCode);
-            holder.mTextViewName.setText(task.companyname);
             holder.mTextViewAddress.setText(task.companyaddress);
+
+            holder.mTextViewName.setVisibility(View.VISIBLE);
+            if (!TextUtils.isEmpty(task.companyname)) {
+                holder.mTextViewName.setText(task.companyname);
+            } else if (task.plantype.equals("2")) {
+                holder.mTextViewName.setText("流通领域任务");
+            } else {
+                holder.mTextViewName.setVisibility(View.GONE);
+            }
+
+            holder.mTextViewAddress.setVisibility(View.VISIBLE);
+            if (!TextUtils.isEmpty(task.companyaddress)) {
+                holder.mTextViewAddress.setText(task.companyaddress);
+            } else {
+                holder.mTextViewAddress.setVisibility(View.GONE);
+            }
+
             holder.mTextViewType.setText("产品名:" + task.tasktypecount);
             holder.mTextViewStartTime.setText("开始时间：" + task.starttime);
             holder.mTextViewEndTime.setText("结束时间：" + task.endtime);

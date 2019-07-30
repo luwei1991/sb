@@ -103,7 +103,6 @@ public class QRCDialogFragment extends DialogFragment {
         mTvContent.setText("样品编码:" + taskSample.getId());
         mTvPersonName.setText("抽样人:" + taskDetailViewModel.taskEntity.doman);
         mTvName.setText(("样品名称:"));
-        mTvContent.setText(("样品编码:"));
         mTvModel.setText(("样品型号:"));
         mTvCount.setText(("抽样数量:"));
         mTvDate.setText(("抽样日期:"));
@@ -115,8 +114,6 @@ public class QRCDialogFragment extends DialogFragment {
                 value = taskSample.samplingInfoMap.get(s);
                 if (s.equals("sampling.productname")) {
                     mTvName.setText(("样品名称:" + value));
-                } else if (s.equals("sampling.taskcode")) {
-                    mTvContent.setText(("样品编码:" + value));
                 } else if (s.equals("sampling.productmodel")) {
                     mTvModel.setText(("样品型号:" + value));
                 } else if (s.equals("sampling.samplingcount")) {

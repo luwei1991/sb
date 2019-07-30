@@ -3,8 +3,10 @@ package com.product.sampling.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -111,16 +113,7 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 New news = aNews.get(position);
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle(news.getTitle());
-                builder.setMessage(news.getConent());
-                builder.setCancelable(true);
-                builder.setNegativeButton("知道了", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                builder.show();
+                WebViewActivity.startWebView(MainActivity.this, news.conent, news.title);
             }
         });
     }
