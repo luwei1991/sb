@@ -31,7 +31,7 @@ import static com.product.sampling.Constants.IMAGE_BASE_URL;
 public class ImageSampleRecyclerViewAdapter extends RecyclerView.Adapter<ImageSampleRecyclerViewAdapter.ViewHolder> {
 
     private final List<Pics> mValues;
-    private boolean isLocalData;
+    private boolean isUploadTask;
     private int taskPostion = -1;//当前图片列表所属样品id
     BasePhotoFragment fragment;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -40,7 +40,9 @@ public class ImageSampleRecyclerViewAdapter extends RecyclerView.Adapter<ImageSa
             if (view.getId() == R.id.iv_task) {
                 view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task", (Task) view.getTag()));
             } else {
-                showListDialog(view.getContext(), (int) view.getTag());
+                if (!isUploadTask) {
+                    showListDialog(view.getContext(), (int) view.getTag());
+                }
             }
         }
     };
@@ -84,10 +86,10 @@ public class ImageSampleRecyclerViewAdapter extends RecyclerView.Adapter<ImageSa
 
     public ImageSampleRecyclerViewAdapter(BasePhotoFragment parent,
                                           List<Pics> items,
-                                          boolean isLocalData, int pos) {
+                                          boolean isUploadTask, int pos) {
         fragment = parent;
         mValues = items;
-        this.isLocalData = isLocalData;
+        this.isUploadTask = isUploadTask;
         taskPostion = pos;
     }
 

@@ -14,6 +14,7 @@ import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -49,11 +50,13 @@ import io.reactivex.schedulers.Schedulers;
 
 public class H5WebViewActivity extends AppCompatActivity {
     public static final String Intent_Order = "order_pdf";
+    public static final String Intent_Edit = "order_edit";
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private final int QualityMiddle = 1;
     private final int QualitySmall = 2;
     BridgeWebView webView;
     public static String para;
+    public boolean isUploadTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class H5WebViewActivity extends AppCompatActivity {
         webView = this.findViewById(R.id.webView);
         Bundle bundle = this.getIntent().getExtras(); //读取intent的数据给bundle对象
         int pos = bundle.getInt(Intent_Order);
+        isUploadTask = bundle.getBoolean(Intent_Edit);
         if (1 == pos) {
             webView.loadUrl("file:///android_asset/1产品质量监督抽查-复查抽样单.html");
         } else if (2 == pos) {
@@ -78,7 +82,7 @@ public class H5WebViewActivity extends AppCompatActivity {
             webView.loadUrl("file:///android_asset/7企业对抽样人员工作反馈意见.html");
         }
         HashMap<String, String> map = (HashMap) getIntent().getSerializableExtra("map");
-         if (null != map && !map.isEmpty()) {
+        if (null != map && !map.isEmpty()) {
             StringBuilder builder = new StringBuilder();
             for (String s : map.keySet()) {
                 if (!TextUtils.isEmpty(s)) {
@@ -111,9 +115,13 @@ public class H5WebViewActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webView.getSettings().setLoadWithOverviewMode(true);
-
-
-        findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
+        Button button = findViewById(R.id.btn);
+        if (isUploadTask) {
+            button.setVisibility(View.GONE);
+        } else {
+            button.setVisibility(View.VISIBLE);
+        }
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -349,13 +357,17 @@ public class H5WebViewActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        webView.send("requestform", new CallBackFunction() {
-            @Override
-            public void onCallBack(String data) { //js回传的数据
-                para = data;
-                KeyboardUtils.closeKeyboard(H5WebViewActivity.this);
-                verifyStoragePermissions(H5WebViewActivity.this);
-            }
-        });
+        if (isUploadTask) {
+            finish();
+        } else {
+            webView.send("requestform", new CallBackFunction() {
+                @Override
+                public void onCallBack(String data) { //js回传的数据
+                    para = data;
+                    KeyboardUtils.closeKeyboard(H5WebViewActivity.this);
+                    verifyStoragePermissions(H5WebViewActivity.this);
+                }
+            });
+        }
     }
 }

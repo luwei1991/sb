@@ -51,21 +51,30 @@ import static com.product.sampling.Constants.IMAGE_BASE_URL;
 public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoAndTextRecyclerViewAdapter.ViewHolder> {
 
     private List<Videos> mValues = new ArrayList<>();
-    private boolean isLocal;
+    private boolean isUploadTask;
     private BasePhotoFragment fragment;//当前图片列表所属样品id
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            showListDialog(view.getContext(), (int) view.getTag());
+            if (isUploadTask) {
+                int pos = (int) view.getTag();
+                if (!TextUtils.isEmpty(mValues.get(pos).getPath())) {
+                    PictureSelector.create(fragment).externalPictureVideo(mValues.get(pos).getPath());
+                } else if (!TextUtils.isEmpty(mValues.get(pos).getId())) {
+                    ToastUtil.show(view.getContext(), "视频加载中,请稍等");
+                }
+            } else {
+                showListDialog(view.getContext(), (int) view.getTag());
+            }
         }
     };
 
     public VideoAndTextRecyclerViewAdapter(Context parent,
                                            List<Videos> items,
-                                           BasePhotoFragment pos, boolean isLocal) {
+                                           BasePhotoFragment pos, boolean isUploadTask) {
         mValues = items;
         fragment = pos;
-        this.isLocal = isLocal;
+        this.isUploadTask = isUploadTask;
     }
 
     @Override
@@ -149,7 +158,7 @@ public class VideoAndTextRecyclerViewAdapter extends RecyclerView.Adapter<VideoA
                         if (!TextUtils.isEmpty(mValues.get(taskPostion).getPath())) {
                             PictureSelector.create(fragment).externalPictureVideo(mValues.get(taskPostion).getPath());
                         } else if (!TextUtils.isEmpty(mValues.get(taskPostion).getId())) {
-                            ToastUtil.show(context,"视频加载中,请稍等");
+                            ToastUtil.show(context, "视频加载中,请稍等");
                         }
                         break;
                 }
