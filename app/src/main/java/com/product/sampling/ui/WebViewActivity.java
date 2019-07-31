@@ -2,6 +2,8 @@ package com.product.sampling.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.webkit.WebSettings;
@@ -14,6 +16,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
 import com.product.sampling.R;
+import com.product.sampling.view.JWebView;
+
+//import org.sufficientlysecure.htmltextview.HtmlResImageGetter;
+//import org.sufficientlysecure.htmltextview.HtmlTextView;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
