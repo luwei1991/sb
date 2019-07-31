@@ -2,6 +2,7 @@ package com.product.sampling.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.util.SparseArray;
 
 import java.io.Serializable;
@@ -188,5 +189,12 @@ public class TaskEntity implements Parcelable, Serializable {
 //                    pics.toArray(new Pics[pics.size()]), flags);
     }
 
+    public boolean isUploadedTask() {
+        return "2".equals(taskstatus);//是否是已上传状态
+    }
+
+    public boolean isCirculationDomain() {
+        return "2".equals(plantype);//是否是流通领域
+    }
 }
 

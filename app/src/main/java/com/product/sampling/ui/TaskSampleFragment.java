@@ -84,6 +84,7 @@ import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
 import static com.product.sampling.adapter.TaskSampleRecyclerViewAdapter.RequestCodePdf;
+import static com.product.sampling.ui.H5WebViewActivity.Intent_Edit;
 import static com.product.sampling.ui.H5WebViewActivity.Intent_Order;
 
 /**
@@ -111,6 +112,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     TextView tvUploadAdvice;
     Button btnSave;
     Button btnUpload;
+    TextView tvCreateSample;
+
 
     public TaskSampleFragment() {
     }
@@ -145,7 +148,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
         if (null != getArguments() && null != getArguments().getParcelable("task")) {
             TaskEntity task = getArguments().getParcelable("task");
-            if ("2".equals(task.taskstatus)) {
+            if (task.isUploadedTask()) {
                 btnSave.setVisibility(View.GONE);
                 btnUpload.setVisibility(View.GONE);
             } else {
@@ -159,7 +162,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List list, boolean isLocalData) {
-        adapter = new TaskSampleRecyclerViewAdapter(R.layout.item_sample_list_content, list, this, isLocalData);
+        adapter = new TaskSampleRecyclerViewAdapter(R.layout.item_sample_list_content, list, this, isLocalData, taskDetailViewModel.taskEntity.isUploadedTask());
         adapter.addHeaderView(getHeaderView(), 0);
         adapter.addHeaderView(getAddView(), 1);
         adapter.addFooterView(getFootView());
@@ -236,7 +239,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
     private View getAddView() {
         View view = View.inflate(getContext(), R.layout.layout_task_add, null);
-        view.findViewById(R.id.tv_create).setOnClickListener(this);
+        tvCreateSample = view.findViewById(R.id.tv_create);
+        tvCreateSample.setOnClickListener(this);
         return view;
     }
 
@@ -278,6 +282,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     Intent intent = new Intent(getActivity(), H5WebViewActivity.class);
                     Bundle b = new Bundle();
                     b.putInt(Intent_Order, 7);
+                    b.putBoolean(Intent_Edit, taskDetailViewModel.taskEntity.isUploadedTask());
                     b.putSerializable("map", taskDetailViewModel.taskEntity.feedInfoMap);
                     intent.putExtras(b);
                     TaskSampleFragment.this.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
@@ -285,6 +290,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     Intent intent = new Intent(getActivity(), H5WebViewActivity.class);
                     Bundle b = new Bundle();
                     b.putInt(Intent_Order, 2);
+                    b.putBoolean(Intent_Edit, taskDetailViewModel.taskEntity.isUploadedTask());
                     b.putSerializable("map", taskDetailViewModel.taskEntity.adviceInfoMap);
                     intent.putExtras(b);
                     TaskSampleFragment.this.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
@@ -418,12 +424,26 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                         }
                         taskDetailViewModel.taskEntity.feedInfoMap = map;
                     }
-                    if ("2".equals(taskDetailViewModel.taskEntity.taskstatus)) {
+                    if (taskDetailViewModel.taskEntity.isCirculationDomain()) {
                         btnSave.setVisibility(View.GONE);
                         btnUpload.setVisibility(View.GONE);
                     } else {
                         btnSave.setVisibility(View.VISIBLE);
                         btnUpload.setVisibility(View.VISIBLE);
+                    }
+
+                    if (taskDetailViewModel.taskEntity.isUploadedTask()) {
+                        tvCreateSample.setVisibility(View.GONE);
+                        btnSave.setVisibility(View.GONE);
+                        btnUpload.setVisibility(View.GONE);
+                        btnUploadFeed.setVisibility(View.GONE);
+                        btnUploadAdvice.setVisibility(View.GONE);
+                    } else {
+                        tvCreateSample.setVisibility(View.VISIBLE);
+                        btnSave.setVisibility(View.VISIBLE);
+                        btnUpload.setVisibility(View.VISIBLE);
+                        btnUploadFeed.setVisibility(View.VISIBLE);
+                        btnUploadAdvice.setVisibility(View.VISIBLE);
                     }
                 }
             }

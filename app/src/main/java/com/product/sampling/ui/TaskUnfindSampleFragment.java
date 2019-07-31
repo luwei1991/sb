@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -69,6 +70,7 @@ import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 import static com.product.sampling.adapter.TaskSampleRecyclerViewAdapter.RequestCodePdf;
+import static com.product.sampling.ui.H5WebViewActivity.Intent_Edit;
 import static com.product.sampling.ui.H5WebViewActivity.Intent_Order;
 
 /**
@@ -88,6 +90,10 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
 
     Button btnSave;
     Button btnSubmit;
+
+    ImageView ivChooseVideo;
+    ImageView ivChooseImage;
+
 
     public TaskUnfindSampleFragment() {
 
@@ -140,7 +146,8 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
         mTextViewCompanyname = view.findViewById(R.id.tv_companyname);
         etTips = view.findViewById(R.id.remark);
         // 现场照片选择
-        view.findViewById(R.id.iv_choose).setOnClickListener(new View.OnClickListener() {
+        ivChooseImage = view.findViewById(R.id.iv_choose);
+        ivChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MediaHelper.startGallery(fragment, PictureConfig.MULTIPLE, MediaHelper.REQUEST_IMAGE_CODE);
@@ -149,7 +156,8 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
 
 
         // 现场视频选择
-        view.findViewById(R.id.iv_choose_video).setOnClickListener(new View.OnClickListener() {
+        ivChooseVideo = view.findViewById(R.id.iv_choose_video);
+        ivChooseVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MediaHelper.startVideo(fragment, MediaHelper.REQUEST_VIDEO_CODE);
@@ -255,6 +263,16 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
         if (!"2".equals(taskUnFindEntity.taskstatus)) {
             btnSave.setVisibility(View.VISIBLE);
             btnSubmit.setVisibility(View.VISIBLE);
+        }
+        if (!taskUnFindEntity.isUploadedTask()) {
+            btnSave.setVisibility(View.VISIBLE);
+            btnSubmit.setVisibility(View.VISIBLE);
+            ivChooseVideo.setVisibility(View.VISIBLE);
+            ivChooseImage.setVisibility(View.VISIBLE);
+        } else {
+            btnUploadUnfindPic.setVisibility(View.GONE);
+            ivChooseVideo.setVisibility(View.GONE);
+            ivChooseImage.setVisibility(View.GONE);
         }
     }
 
@@ -423,7 +441,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
      * @param task
      */
     private void setupRecyclerViewFromServer(@NonNull RecyclerView recyclerView, List task) {
-        ImageServerRecyclerViewAdapter adapter = new ImageServerRecyclerViewAdapter(getActivity(), task, this);
+        ImageServerRecyclerViewAdapter adapter = new ImageServerRecyclerViewAdapter(getActivity(), task, taskUnFindEntity.isUploadedTask());
         recyclerView.setAdapter(adapter);
     }
 
@@ -696,6 +714,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                     b.putInt(Intent_Order, 4);
                     b.putSerializable("task", (Serializable) taskUnFindEntity);
                     b.putSerializable("map", (Serializable) taskUnFindEntity.unfindSampleInfoMap);
+                    b.putBoolean(Intent_Edit, taskUnFindEntity.isUploadedTask());
                     intent.putExtras(b);
                     startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
                 }

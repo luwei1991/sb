@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -69,6 +70,7 @@ import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 import static com.product.sampling.adapter.TaskSampleRecyclerViewAdapter.RequestCodePdf;
+import static com.product.sampling.ui.H5WebViewActivity.Intent_Edit;
 import static com.product.sampling.ui.H5WebViewActivity.Intent_Order;
 
 /**
@@ -89,7 +91,8 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
 
     Button btnSubmit;
     Button btnSave;
-
+    ImageView ivChooseImage;
+    ImageView ivChooseVideo;
 
     public TaskCompanyRefusedFragment() {
 
@@ -135,16 +138,17 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
         mTextViewCompanyname = view.findViewById(R.id.tv_companyname);
         etTips = view.findViewById(R.id.remark);
         // 现场照片选择
-        view.findViewById(R.id.iv_choose).setOnClickListener(new View.OnClickListener() {
+        ivChooseImage = view.findViewById(R.id.iv_choose);
+        ivChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MediaHelper.startGallery(fragment, PictureConfig.MULTIPLE, MediaHelper.REQUEST_IMAGE_CODE_REFUSED);
             }
         });
 
-
+        ivChooseVideo = view.findViewById(R.id.iv_choose_video);
         // 现场视频选择
-        view.findViewById(R.id.iv_choose_video).setOnClickListener(new View.OnClickListener() {
+        ivChooseVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MediaHelper.startVideo(fragment, MediaHelper.REQUEST_VIDEO_CODE);
@@ -248,9 +252,16 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
         } else {
             btnUploadRefusedPic.setText("已拍照");
         }
-        if (!"2".equals(taskRefusedEntity.taskstatus)) {
+
+        if (!taskRefusedEntity.isUploadedTask()) {
             btnSave.setVisibility(View.VISIBLE);
             btnSubmit.setVisibility(View.VISIBLE);
+            ivChooseVideo.setVisibility(View.VISIBLE);
+            ivChooseImage.setVisibility(View.VISIBLE);
+        } else {
+            btnUploadRefusedPic.setVisibility(View.GONE);
+            ivChooseVideo.setVisibility(View.GONE);
+            ivChooseImage.setVisibility(View.GONE);
         }
 
     }
@@ -401,7 +412,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
      * @param videoList
      */
     private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, List<Videos> videoList) {
-        mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, true));
+        mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, taskRefusedEntity.isUploadedTask()));
 
     }
 
@@ -411,7 +422,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
      * @param task
      */
     private void setupRecyclerViewFromServer(@NonNull RecyclerView recyclerView, List task) {
-        ImageServerRecyclerViewAdapter adapter = new ImageServerRecyclerViewAdapter(getActivity(), task, this);
+        ImageServerRecyclerViewAdapter adapter = new ImageServerRecyclerViewAdapter(getActivity(), task, taskRefusedEntity.isUploadedTask());
         recyclerView.setAdapter(adapter);
     }
 
@@ -684,6 +695,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                     Intent intent = new Intent(getActivity(), H5WebViewActivity.class);
                     Bundle b = new Bundle();
                     b.putInt(Intent_Order, 3);
+                    b.putBoolean(Intent_Edit, taskRefusedEntity.isUploadedTask());
                     b.putSerializable("task", (Serializable) taskRefusedEntity);
                     b.putSerializable("map", (Serializable) taskRefusedEntity.refuseInfoMap);
                     intent.putExtras(b);

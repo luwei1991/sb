@@ -39,7 +39,7 @@ import static com.product.sampling.Constants.IMAGE_BASE_URL;
 public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageServerRecyclerViewAdapter.ViewHolder> {
 
     private final List<Pics> mValues;
-    private BasePhotoFragment fragment;
+    private boolean isUploadTask;
     private int taskPostion = -1;//当前图片列表所属样品id
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -47,7 +47,9 @@ public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageSe
             if (view.getId() == R.id.iv_task) {
                 view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtra("task", (Task) view.getTag()));
             } else {
-                showListDialog(view.getContext(), (int) view.getTag());
+                if (!isUploadTask) {
+                    showListDialog(view.getContext(), (int) view.getTag());
+                }
             }
         }
     };
@@ -88,9 +90,9 @@ public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageSe
 
     public ImageServerRecyclerViewAdapter(Context parent,
                                           List<Pics> items,
-                                          BasePhotoFragment fragment) {
+                                          boolean isUploadTask) {
         mValues = items;
-        this.fragment = fragment;
+        this.isUploadTask = isUploadTask;
     }
 
     @Override

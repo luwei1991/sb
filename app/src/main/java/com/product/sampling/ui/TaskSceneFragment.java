@@ -8,7 +8,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -68,7 +70,9 @@ public class TaskSceneFragment extends BasePhotoFragment {
     EditText companyaddress;
     EditText companytel;
     EditText remark;
-
+    ImageView ivChooseVideo;
+    ImageView ivChooseImage;
+    Button btnSubmit;
 
     public TaskSceneFragment() {
     }
@@ -111,21 +115,23 @@ public class TaskSceneFragment extends BasePhotoFragment {
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         mRecyclerViewVideoList = rootView.findViewById(R.id.item_video_list);
         mRecyclerViewVideoList.setLayoutManager(linearLayoutManager);
-        rootView.findViewById(R.id.iv_choose).setOnClickListener(new View.OnClickListener() {
+        ivChooseImage = rootView.findViewById(R.id.iv_choose);
+        ivChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MediaHelper.startGallery(TaskSceneFragment.this, PictureConfig.MULTIPLE, MediaHelper.REQUEST_IMAGE_CODE);
             }
         });
-        rootView.findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener() {
+        btnSubmit = rootView.findViewById(R.id.btn_submit);
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //              postData();
                 saveData();
             }
         });
-
-        rootView.findViewById(R.id.iv_choose_video).setOnClickListener(new View.OnClickListener() {
+        ivChooseVideo = rootView.findViewById(R.id.iv_choose_video);
+        ivChooseVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MediaHelper.startVideo(TaskSceneFragment.this, MediaHelper.REQUEST_VIDEO_CODE);
@@ -194,7 +200,9 @@ public class TaskSceneFragment extends BasePhotoFragment {
         listTask.add(taskDetailViewModel.taskEntity);
         String data = gson.toJson(listTask);
         SPUtil.put(getActivity(), "tasklist", data);
-        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "保存本地成功");
+        if (!taskDetailViewModel.taskEntity.isUploadedTask()) {
+            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "保存本地成功");
+        }
         ((TaskDetailActivity) getActivity()).checkSelectMenu(3);
     }
 
@@ -205,7 +213,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
     }
 
     private void setupRecyclerViewFromServer(@NonNull RecyclerView recyclerView, List task) {
-        ImageServerRecyclerViewAdapter adapter = new ImageServerRecyclerViewAdapter(getActivity(), task, this);
+        ImageServerRecyclerViewAdapter adapter = new ImageServerRecyclerViewAdapter(getActivity(), task, taskDetailViewModel.taskEntity.isUploadedTask());
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -244,15 +252,16 @@ public class TaskSceneFragment extends BasePhotoFragment {
                         taskDetailViewModel.taskEntity.voides.clear();
                     }
                     setupRecyclerViewFromServer(mRecyclerViewImageList, taskDetailViewModel.taskEntity.pics);
-                    setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
+                    setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
                     if (null != taskDetailViewModel.taskEntity.voides && !taskDetailViewModel.taskEntity.voides.isEmpty()) {
                         rxPermissionTest();
                     }
-                    if ("2".equals(taskDetailViewModel.taskEntity.plantype)) {
-                        setEditTextEnable(companyname, true);
-                        setEditTextEnable(companyaddress, true);
-                        setEditTextEnable(companytel, true);
-                        setEditTextEnable(remark, true);
+                    if (taskDetailViewModel.taskEntity.isCirculationDomain()) {
+                        boolean canEdit = !taskDetailViewModel.taskEntity.isUploadedTask();
+                        setEditTextEnable(companyname, true && canEdit);
+                        setEditTextEnable(companyaddress, true && canEdit);
+                        setEditTextEnable(companytel, true && canEdit);
+                        setEditTextEnable(remark, true && canEdit);
                     }
                     companyname.setText(taskDetailViewModel.taskEntity.companyname);
                     companyaddress.setText(taskDetailViewModel.taskEntity.companyaddress);
@@ -270,6 +279,10 @@ public class TaskSceneFragment extends BasePhotoFragment {
                         }
                         taskDetailViewModel.taskEntity.adviceInfoMap = map;
                     }
+                    if (taskDetailViewModel.taskEntity.isUploadedTask()){
+                        ivChooseImage.setVisibility(View.GONE);
+                        ivChooseVideo.setVisibility(View.GONE);
+                    }
 
                 }
             }
@@ -279,13 +292,8 @@ public class TaskSceneFragment extends BasePhotoFragment {
 
 
     private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, List<Videos> videoList) {
-        mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, true));
+        mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, taskDetailViewModel.taskEntity.isUploadedTask()));
     }
-
-    private void setupRecyclerViewVideoFromServer(RecyclerView mRecyclerViewVideoList, List<Videos> videoList) {
-        mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, false));
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -412,7 +420,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
                 @Override
                 public void onCompleted(File file) {
                     videos.setPath(file.getPath());
-                    setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
+                    setupRecyclerViewVideo(mRecyclerViewVideoList, taskDetailViewModel.taskEntity.voides);
                     LogUtils.i("下载文件成功", file.getAbsolutePath() + "-" + file.getPath() + "-" + file.getName());
 //                                    FileDownloader.clear();
                 }

@@ -29,6 +29,7 @@ import com.product.sampling.ui.update.UpdateDialogFragment;
 
 import java.util.List;
 
+import static com.product.sampling.ui.H5WebViewActivity.Intent_Edit;
 import static com.product.sampling.ui.TaskSampleFragment.Select_Check;
 import static com.product.sampling.ui.TaskSampleFragment.Select_Handle;
 import static com.product.sampling.ui.H5WebViewActivity.Intent_Order;
@@ -40,6 +41,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
     public static final int RequestCodePdf = 99;
     private TaskSampleFragment fragment;
     boolean isLocalData;
+    boolean isUploadTask;
 
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -87,7 +89,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                 MediaHelper.startVideo(fragment, PictureConfig.CHOOSE_REQUEST);
             } else if (R.id.btn_qrc == view.getId()) {
                 int index = (int) view.getTag();
-                QRCDialogFragment.newInstance(mData.get(index),index).show(fragment.getFragmentManager(), "update");
+                QRCDialogFragment.newInstance(mData.get(index), index).show(fragment.getFragmentManager(), "update");
             } else if (R.id.btn_fastmail == view.getId()) {
                 int index = (int) view.getTag();
                 FastMailDialogFragment.newInstance(mData.get(index)).show(fragment.getFragmentManager(), "update");
@@ -165,12 +167,26 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
         holder.mBtnFastMail.setTag(position);
         holder.mBtnFastMail.setOnClickListener(mOnClickListener);
 
+        if (isUploadTask) {
+            holder.mImageViewAdd.setVisibility(View.GONE);
+            holder.mImageViewReduce.setVisibility(View.GONE);
+            holder.mBtnUploadCheck.setVisibility(View.GONE);
+            holder.mBtnUploadRisk.setVisibility(View.GONE);
+            holder.mBtnUploadWork.setVisibility(View.GONE);
+
+        } else {
+            holder.mIVAddVideo.setVisibility(View.VISIBLE);
+            holder.mIVReduceVideo.setVisibility(View.VISIBLE);
+            holder.mBtnUploadCheck.setVisibility(View.VISIBLE);
+            holder.mBtnUploadRisk.setVisibility(View.VISIBLE);
+            holder.mBtnUploadWork.setVisibility(View.VISIBLE);
+        }
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(holder.itemView.getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         holder.mRecyclerViewImage.setLayoutManager(linearLayoutManager);
 
-        holder.mRecyclerViewImage.setAdapter(new ImageSampleRecyclerViewAdapter(fragment, task.getPics(), task.isLocalData, position));
+        holder.mRecyclerViewImage.setAdapter(new ImageSampleRecyclerViewAdapter(fragment, task.getPics(), isUploadTask, position));
 
         linearLayoutManager = new LinearLayoutManager(holder.itemView.getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -179,10 +195,11 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
 
     }
 
-    public TaskSampleRecyclerViewAdapter(int layoutResId, @Nullable List<TaskSample> data, TaskSampleFragment fragment, boolean isLocalData) {
+    public TaskSampleRecyclerViewAdapter(int layoutResId, @Nullable List<TaskSample> data, TaskSampleFragment fragment, boolean isLocalData, boolean isUploadTask) {
         super(layoutResId, data);
         this.fragment = fragment;
         this.isLocalData = isLocalData;
+        this.isUploadTask = isUploadTask;
     }
 
     class ViewHolder extends BaseViewHolder {
@@ -244,6 +261,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                     b.putInt(Intent_Order, 1);
                     b.putInt("task", postion);
                     b.putSerializable("map", mData.get(postion).samplingInfoMap);
+                    b.putBoolean(Intent_Edit, isUploadTask);
                     intent.putExtras(b);
                     fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
                 } else if (buttonid == 2) {
@@ -252,6 +270,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                     b.putInt(Intent_Order, 2);
                     b.putInt("task", postion);
                     b.putSerializable("map", mData.get(postion).adviceInfoMap);
+                    b.putBoolean(Intent_Edit, isUploadTask);
                     intent.putExtras(b);
                     fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
                 } else if (buttonid == 3) {
@@ -260,6 +279,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                     b.putInt(Intent_Order, 5);
                     b.putInt("task", postion);
                     b.putSerializable("map", mData.get(postion).riskInfoMap);
+                    b.putBoolean(Intent_Edit, isUploadTask);
                     intent.putExtras(b);
                     fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
                 } else if (buttonid == 4) {
@@ -268,6 +288,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                     b.putInt(Intent_Order, 6);
                     b.putInt("task", postion);
                     b.putSerializable("map", mData.get(postion).workInfoMap);
+                    b.putBoolean(Intent_Edit, isUploadTask);
                     intent.putExtras(b);
                     fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
                 }
