@@ -278,8 +278,8 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                     TaskEntity taskEntity = (TaskEntity) view.getTag();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("task", taskEntity);
-                    if (taskEntity.companyLatitude != 0 && taskEntity.companyLatitude != 0) {
-                        startGaoDeNavi(view.getContext(), new LatLng(taskEntity.companyLatitude, taskEntity.companyLongitude), taskEntity.companyaddress);
+                    if (taskEntity.companylatitude != 0 && taskEntity.companylongitude != 0) {
+                        startGaoDeNavi(view.getContext(), new LatLng(taskEntity.companylatitude, taskEntity.companylongitude), taskEntity.companyaddress);
                     } else if (taskEntity.plantype.equals("2")) {
                         Toast.makeText(view.getContext(), "流通领域无法导航", Toast.LENGTH_SHORT).show();
                     }

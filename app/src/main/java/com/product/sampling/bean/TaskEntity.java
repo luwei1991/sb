@@ -80,8 +80,8 @@ public class TaskEntity implements Parcelable, Serializable {
     public String plantype;//1生产领域不可以修改 2流通领域可以修改
     public Advice advice = new Advice();
 
-    public double companyLongitude;
-    public double companyLatitude;
+    public double companylongitude;
+    public double companylatitude;
 
     public TaskEntity() {
 
