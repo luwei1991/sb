@@ -260,7 +260,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             btnUploadUnfindPic.setText("已拍照");
         }
 
-        if (!"2".equals(taskUnFindEntity.taskstatus)) {
+        if (!taskUnFindEntity.isUploadedTask()) {
             btnSave.setVisibility(View.VISIBLE);
             btnSubmit.setVisibility(View.VISIBLE);
         }

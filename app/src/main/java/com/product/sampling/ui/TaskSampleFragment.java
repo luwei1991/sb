@@ -471,6 +471,13 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             multipartBodyBuilder.addFormDataPart("id", sample.getId());
             multipartBodyBuilder.addFormDataPart("samplename", sample.getSamplename());
 
+            AMapLocation location = MainApplication.INSTANCE.getMyLocation();
+            if (null != location) {
+                multipartBodyBuilder.addFormDataPart("taskaddress", location.getAddress() + "")
+                        .addFormDataPart("longitude", location.getLongitude() + "")
+                        .addFormDataPart("latitude", location.getLatitude() + "");
+            }
+
             if (i == taskDetailViewModel.taskEntity.taskSamples.size() - 1) {
                 multipartBodyBuilder.addFormDataPart("islastone", "1");
             }

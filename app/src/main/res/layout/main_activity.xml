@@ -128,14 +128,14 @@
             android:layout_gravity="center_vertical"
             android:gravity="center"
             android:paddingRight="20dp"
-            android:text="18~20摄氏度  晴" />
+            tools:text="18~20摄氏度  晴" />
 
         <ImageView
             android:id="@+id/iv_weather"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/index_weather1" />
+            tools:src="@mipmap/index_weather1" />
 
     </LinearLayout>
 

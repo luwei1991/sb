@@ -24,6 +24,7 @@ import com.product.sampling.R;
 import com.product.sampling.bean.UserInfoBean;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.utils.GdLocationUtil;
+import com.product.sampling.utils.SPUtil;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
@@ -210,6 +211,7 @@ public class BaseActivity extends AppCompatActivity implements EasyPermissions.P
                             AccountManager.getInstance().clearUserInfo();
                             startActivity(new Intent(BaseActivity.this, LoginActivity.class));
                             popAllActivity();
+                            SPUtil.clear(v.getContext());
                         }
                     });
                 }
