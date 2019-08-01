@@ -205,7 +205,7 @@ public class BaseActivity extends AppCompatActivity implements EasyPermissions.P
             tvLoginOut.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showSimpleDialog("确定退出登录吗", new DialogInterface.OnClickListener() {
+                    showSimpleDialog("确定退出登录吗,退出将会清除本地未上传数据!!", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             AccountManager.getInstance().clearUserInfo();
