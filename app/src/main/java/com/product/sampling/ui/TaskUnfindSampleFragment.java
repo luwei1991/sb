@@ -63,6 +63,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -260,7 +261,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             btnUploadUnfindPic.setText("已拍照");
         }
 
-        if (!"2".equals(taskUnFindEntity.taskstatus)) {
+        if (!taskUnFindEntity.isUploadedTask()) {
             btnSave.setVisibility(View.VISIBLE);
             btnSubmit.setVisibility(View.VISIBLE);
         }
@@ -606,7 +607,16 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             protected Object doInBackground(Object[] objects) {
                 String response = null;
                 try {
-                    response = httpReuqest.formUpload(requestText, requestFile);
+                    response = httpReuqest.formUpload(requestText, requestFile, new HttpURLConnectionUtil.PostCallback() {
+                        @Override
+                        public void progressUpdate(int total, int prgress) {
+                            NumberFormat numberFormat = NumberFormat.getInstance();
+                            // 设置精确到小数点位
+                            numberFormat.setMaximumFractionDigits(0);
+                            String result = numberFormat.format((float) prgress / (float) total * 100);
+                            showLoadingDialog("当前进度 " + result + "%");
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

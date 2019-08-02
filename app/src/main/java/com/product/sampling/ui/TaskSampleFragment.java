@@ -59,6 +59,7 @@ import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.photo.MediaHelper;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 import com.product.sampling.utils.HttpURLConnectionUtil;
+import com.product.sampling.utils.LogUtils;
 import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.SPUtil;
 
@@ -73,6 +74,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -470,6 +472,13 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                     .addFormDataPart("taskid", taskDetailViewModel.taskEntity.id);
             multipartBodyBuilder.addFormDataPart("id", sample.getId());
             multipartBodyBuilder.addFormDataPart("samplename", sample.getSamplename());
+
+            AMapLocation location = MainApplication.INSTANCE.getMyLocation();
+            if (null != location) {
+                multipartBodyBuilder.addFormDataPart("taskaddress", location.getAddress() + "")
+                        .addFormDataPart("longitude", location.getLongitude() + "")
+                        .addFormDataPart("latitude", location.getLatitude() + "");
+            }
 
             if (i == taskDetailViewModel.taskEntity.taskSamples.size() - 1) {
                 multipartBodyBuilder.addFormDataPart("islastone", "1");
@@ -1220,7 +1229,16 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             protected Object doInBackground(Object[] objects) {
                 String response = null;
                 try {
-                    response = httpReuqest.formUpload(requestText, requestFile);
+                    response = httpReuqest.formUpload(requestText, requestFile, new HttpURLConnectionUtil.PostCallback() {
+                        @Override
+                        public void progressUpdate(int total, int prgress) {
+                            NumberFormat numberFormat = NumberFormat.getInstance();
+                            // 设置精确到小数点位
+                            numberFormat.setMaximumFractionDigits(0);
+                            String result = numberFormat.format((float) prgress / (float) total * 100);
+                            showLoadingDialog("当前进度 " + result + "%");
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

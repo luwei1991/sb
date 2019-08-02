@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import okhttp3.Callback;
 import okhttp3.MultipartBody;
 
 public class HttpURLConnectionUtil {
@@ -241,11 +242,11 @@ public class HttpURLConnectionUtil {
      * @Description:
      */
     public static String getContentType(File file) throws Exception {
-        String streamContentType = "application/octet-stream";
+//        String streamContentType = "application/octet-stream";
         return "multipart/form-data";
     }
 
-    public static String formUpload(Map<String, String> textMap, Map<String, String> fileMap) {
+    public static String formUpload(Map<String, String> textMap, Map<String, String> fileMap, PostCallback callback) {
         String res = "";
         HttpURLConnection conn = null;
         String BOUNDARY = "---------------------------123821742118716"; //boundary就是request头和上传文件内容的分隔符
@@ -286,6 +287,7 @@ public class HttpURLConnectionUtil {
             // file
             if (fileMap != null) {
                 Iterator<Map.Entry<String, String>> iter = fileMap.entrySet().iterator();
+                int progress = 0;
                 while (iter.hasNext()) {
                     Map.Entry<String, String> entry = iter.next();
                     String inputName = (String) entry.getKey();
@@ -311,6 +313,8 @@ public class HttpURLConnectionUtil {
                         out.write(bufferOut, 0, bytes);
                     }
                     in.close();
+                    callback.progressUpdate(fileMap.size(), progress);
+                    progress++;
                 }
             }
 
@@ -352,5 +356,9 @@ public class HttpURLConnectionUtil {
         Map<String, File> requestFile = new HashMap<String, File>();
         requestFile.put("image", new File("C:\\Users\\Administrator\\Desktop\\pic\\face.JPG"));
         httpReuqest.sendRequest(requestText, requestFile);
+    }
+
+    public interface PostCallback {
+        void progressUpdate(int total, int prgress);
     }
 }

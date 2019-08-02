@@ -201,7 +201,7 @@ public abstract class BasePhotoFragment extends TakePhotoFragment {
         }
         alertDialog.show();
         alertDialog.setContentView(R.layout.loading_alert);
-        alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.setCanceledOnTouchOutside(false);
     }
 
     public void showLoadingDialog(String msg) {

@@ -175,6 +175,8 @@ public class TaskSceneFragment extends BasePhotoFragment {
         }
         taskDetailViewModel.taskEntity.companyaddress = companyaddress.getText().toString();
         taskDetailViewModel.taskEntity.companyname = companyname.getText().toString();
+        taskDetailViewModel.taskEntity.companytel = companytel.getText().toString();
+        taskDetailViewModel.taskEntity.remark = remark.getText().toString();
         if (!hasData) {
             ((TaskDetailActivity) getActivity()).checkSelectMenu(3);
             return;
@@ -236,6 +238,13 @@ public class TaskSceneFragment extends BasePhotoFragment {
             companyaddress.setText(taskDetailViewModel.taskEntity.companyaddress);
             companytel.setText(taskDetailViewModel.taskEntity.companytel);
             remark.setText(taskDetailViewModel.taskEntity.remark);
+            if (taskDetailViewModel.taskEntity.isCirculationDomain()) {
+                boolean canEdit = !taskDetailViewModel.taskEntity.isUploadedTask();
+                setEditTextEnable(companyname, true && canEdit);
+                setEditTextEnable(companyaddress, true && canEdit);
+                setEditTextEnable(companytel, true && canEdit);
+                setEditTextEnable(remark, true && canEdit);
+            }
         } else {
             taskDetailViewModel.requestDetailList(AccountManager.getInstance().getUserId(), taskDetailViewModel.taskEntity.id);
         }
@@ -279,7 +288,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
                         }
                         taskDetailViewModel.taskEntity.adviceInfoMap = map;
                     }
-                    if (taskDetailViewModel.taskEntity.isUploadedTask()){
+                    if (taskDetailViewModel.taskEntity.isUploadedTask()) {
                         ivChooseImage.setVisibility(View.GONE);
                         ivChooseVideo.setVisibility(View.GONE);
                     }
@@ -294,6 +303,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
     private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, List<Videos> videoList) {
         mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, taskDetailViewModel.taskEntity.isUploadedTask()));
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
