@@ -218,7 +218,7 @@ public class BaseActivity extends AppCompatActivity implements EasyPermissions.P
             tvLoginOut.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String text = "确定退出登录吗,退出将会清除本地未上传数据!!";
+                    String text = "确定退出登录吗,退出将会清除本地未上传数据，请谨慎操作!";
                     TextView textView = new TextView(v.getContext());
                     textView.setText(text);
                     textView.setTextColor(Color.RED);
