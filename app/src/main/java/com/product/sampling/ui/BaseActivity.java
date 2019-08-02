@@ -1,15 +1,23 @@
 package com.product.sampling.ui;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -177,6 +185,11 @@ public class BaseActivity extends AppCompatActivity implements EasyPermissions.P
                 .setPositiveButton("确定", listener).setNegativeButton("取消", null).show();
     }
 
+    public void showSimpleDialog(View title, DialogInterface.OnClickListener listener) {
+        new AlertDialog.Builder(this).setCustomTitle(title)
+                .setPositiveButton("确定", listener).setNegativeButton("取消", null).show();
+    }
+
     public void showToast(String toast) {
         com.product.sampling.maputil.ToastUtil.show(this, toast);
     }
@@ -205,7 +218,15 @@ public class BaseActivity extends AppCompatActivity implements EasyPermissions.P
             tvLoginOut.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showSimpleDialog("确定退出登录吗,退出将会清除本地未上传数据!!", new DialogInterface.OnClickListener() {
+                    String text = "确定退出登录吗,退出将会清除本地未上传数据!!";
+                    TextView textView = new TextView(v.getContext());
+                    textView.setText(text);
+                    textView.setTextColor(Color.RED);
+                    textView.setTextSize(18);
+                    ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    textView.setLayoutParams(lp);
+                    textView.setPadding(50, 50, 50, 50);
+                    showSimpleDialog(textView, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             AccountManager.getInstance().clearUserInfo();
