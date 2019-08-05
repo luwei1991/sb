@@ -106,6 +106,33 @@ function dataFill(data){
             }
         }
     });
+
+     if($("#adviceCode").val().length>1){
+             var index=0;
+             var adviceCodes=$("#adviceCode").val().split(",");
+             $(".adviceCode").each(function(){
+                   $(this).val(adviceCodes[index]);
+                   index++;
+              });
+         }
+
+         if($("#adviceProname").val().length>1){
+              var index=0;
+              var advicePronames=$("#adviceProname").val().split(",");
+              $(".adviceProname").each(function(){
+                    $(this).val(advicePronames[index]);
+                    index++;
+               });
+         }
+
+          if($("#adviceSpecifications").val().length>1){
+            var index=0;
+            var adviceSpecifications=$("#adviceSpecifications").val().split(",");
+            $(".adviceSpecifications").each(function(){
+                  $(this).val(adviceSpecifications[index]);
+                  index++;
+             });
+          }
 }
 
 //canvas_sign
@@ -159,6 +186,14 @@ $(function(){
         signaturePad.clear()
     })
 
+
+    $(".maintextarea").keyup(function(){
+    var L=$(this).val().length;
+    if(L>32){//100为设定的字数
+    $(this).val($(this).val().substring(0,32));
+    }
+    });
+
  
 
      //显示当前时间
@@ -171,6 +206,47 @@ $(function(){
      $('.year').val(dateParse.year)
      $('.month').val(dateParse.month)
      $('.day').val(dateParse.day)
+
+
+
+
+
+
+     $(".adviceCode").keyup(function(){
+        var adviceCode="";
+        $(".adviceCode").each(function(){
+            adviceCode+=$(this).val()+",";
+        });
+
+        adviceCode=adviceCode.substring(0,adviceCode.length-1);
+        console.log(adviceCode)
+        $("#adviceCode").val(adviceCode);
+     })
+
+
+     $(".adviceProname").keyup(function(){
+         var adviceProname="";
+         $(".adviceProname").each(function(){
+             adviceProname+=$(this).val()+",";
+         });
+
+         adviceProname=adviceProname.substring(0,adviceProname.length-1);
+         console.log(adviceProname)
+         $("#adviceProname").val(adviceProname);
+     })
+
+      $(".adviceSpecifications").keyup(function(){
+              var adviceSpecifications="";
+              $(".adviceSpecifications").each(function(){
+                  adviceSpecifications+=$(this).val()+",";
+              });
+
+              adviceSpecifications=adviceSpecifications.substring(0,adviceSpecifications.length-1);
+              console.log(adviceSpecifications)
+              $("#adviceSpecifications").val(adviceSpecifications);
+          })
+
+
 })
 
 
