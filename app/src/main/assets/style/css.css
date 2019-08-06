@@ -10,6 +10,14 @@ input{
     font-size: 12px;
     line-height: 1.4;
 }
+textarea.maintextarea{
+ border: none;
+    font-size: 12px;
+    line-height: 1.4;
+    resize: none;
+    overflow:hidden;
+    width:100%
+}
 label {
   vertical-align: middle;
 }
@@ -31,8 +39,9 @@ body{
 }
 .page{
     margin: 0 auto;
-    width: 96%;
-    padding: 0px 10px;
+    width: 100%;
+    padding: 0px 0
+    ;
     background-color: #fff;
 }
 .ov{
