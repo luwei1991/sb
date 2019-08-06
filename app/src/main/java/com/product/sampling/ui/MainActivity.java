@@ -59,6 +59,7 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
     private ImageView ivWeather;
     private TextView tvLoginOut;
     private TextView tvUserName;
+    private TextView evtitle;
     private long mExitTime = 0;
 
     @Override
@@ -113,7 +114,7 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 New news = aNews.get(position);
-                WebViewActivity.startWebView(MainActivity.this, news.conent, news.title);
+                WebViewActivity.startWebView(MainActivity.this, news.conent, news.title,news.pubdate);
             }
         });
     }

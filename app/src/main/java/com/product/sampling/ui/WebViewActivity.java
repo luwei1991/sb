@@ -2,8 +2,6 @@ package com.product.sampling.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.webkit.WebSettings;
@@ -16,12 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
 import com.product.sampling.R;
-import com.product.sampling.view.JWebView;
-
-//import org.sufficientlysecure.htmltextview.HtmlResImageGetter;
-//import org.sufficientlysecure.htmltextview.HtmlTextView;
-
-import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,6 +32,8 @@ public class WebViewActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.tool_bar)
     Toolbar toolBar;
+    @BindView(R.id.tv_time)
+    TextView tvtime;
 
 
     @Override
@@ -64,6 +58,10 @@ public class WebViewActivity extends BaseActivity {
         String title = intent.getStringExtra("extra_title");
         if (title != null && title.trim().length() > 0) {
             tvTitle.setText(title);
+        }
+        String pubdate=intent.getStringExtra("extra_pubdate");
+        if (pubdate != null && pubdate.trim().length() > 0) {
+            tvtime.setText(pubdate);
         }
         WebSettings webSettings = mJWebView.getSettings();
 
@@ -121,10 +119,11 @@ public class WebViewActivity extends BaseActivity {
         }
     }
 
-    public static void startWebView(Activity activity, String url, String name) {
+    public static void startWebView(Activity activity, String url, String name,String pubdate) {
         Intent intent = new Intent(activity, WebViewActivity.class);
         intent.putExtra("extra_url", url);
         intent.putExtra("extra_title", name);
+        intent.putExtra("extra_pubdate","发布时间："+pubdate);
         activity.startActivity(intent);
     }
 
