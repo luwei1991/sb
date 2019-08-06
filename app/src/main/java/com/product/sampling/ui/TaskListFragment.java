@@ -325,6 +325,14 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
             } else {
                 holder.mTextViewName.setVisibility(View.GONE);
             }
+            if(!TextUtils.isEmpty(task.taskstatus)){
+                if(task.taskstatus.equals("2")){
+
+                    holder.mTextViewException.setText("查看异常情况");
+                    holder.mTextViewFill.setText("查看信息");
+                }
+
+            }
 
             holder.mTextViewAddress.setVisibility(View.VISIBLE);
             if (!TextUtils.isEmpty(task.companyaddress)) {
