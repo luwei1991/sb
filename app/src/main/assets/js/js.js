@@ -206,6 +206,7 @@ $(function(){
      $('.year').val(dateParse.year)
      $('.month').val(dateParse.month)
      $('.day').val(dateParse.day)
+     $('.taskcode').val( setCode.setBmCode());
 
 
 

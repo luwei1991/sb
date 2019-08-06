@@ -8,8 +8,9 @@ import java.io.File;
 
 public class Constants {
 
-    public static String BASE_URL = "http://lw123.longwi.com:9080/exa/";
-//    public static String BASE_URL = "http://172.16.88.26/";
+    /*public static String BASE_URL = "http://lw123.longwi.com:9080/exa/";*/
+  /*  public static String BASE_URL = "http://172.16.88.26/";*/
+   public static String BASE_URL = "http://172.16.82.33:9080/exa/";
 
 
     public static String IMAGE_BASE_URL = BASE_URL + "base/tBaFile/showImage?id=";

@@ -63,6 +63,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                         }).setNegativeButton("取消", null).show();
 
             } else if (R.id.btn_edit_check_sheet == view.getId()) {//检查单编辑
+
                 showDialog(view.getContext(), 1, (int) view.getTag());
 
             } else if (R.id.btn_edit_risk_sheet == view.getId()) {//处置单编辑
@@ -257,11 +258,13 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             public void onClick(DialogInterface dialog, int which) {
                 if (buttonid == 1) {
                     Intent intent = new Intent(context, H5WebViewActivity.class);
+                    String code=mData.get(postion).getId();//编号根据id得来
                     Bundle b = new Bundle();
                     b.putInt(Intent_Order, 1);
                     b.putInt("task", postion);
                     b.putSerializable("map", mData.get(postion).samplingInfoMap);
                     b.putBoolean(Intent_Edit, isUploadTask);
+                    b.putString("code",code);
                     intent.putExtras(b);
                     fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
                 } else if (buttonid == 2) {

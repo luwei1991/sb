@@ -65,7 +65,20 @@ public class H5WebViewActivity extends AppCompatActivity {
         webView = this.findViewById(R.id.webView);
         Bundle bundle = this.getIntent().getExtras(); //读取intent的数据给bundle对象
         int pos = bundle.getInt(Intent_Order);
+        String code=bundle.getString("code");
         isUploadTask = bundle.getBoolean(Intent_Edit);
+        webView.addJavascriptInterface(new JSInterface(code), "setCode");
+
+        //支持缩放
+//        webView.getSettings().setSupportZoom(true);
+        //设置出现缩放工具
+//        webView.getSettings().setBuiltInZoomControls(true);
+        //扩大比例的缩放
+//        webView.getSettings().setUseWideViewPort(true);
+        //js交互
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        webView.getSettings().setLoadWithOverviewMode(true);
         if (1 == pos) {
             webView.loadUrl("file:///android_asset/1产品质量监督抽查-复查抽样单.html");
         } else if (2 == pos) {
@@ -103,18 +116,7 @@ public class H5WebViewActivity extends AppCompatActivity {
             }
         }
 
-        webView.addJavascriptInterface(new JSInterface(), "register_js");
 
-        //支持缩放
-//        webView.getSettings().setSupportZoom(true);
-        //设置出现缩放工具
-//        webView.getSettings().setBuiltInZoomControls(true);
-        //扩大比例的缩放
-//        webView.getSettings().setUseWideViewPort(true);
-        //js交互
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        webView.getSettings().setLoadWithOverviewMode(true);
         Button button = findViewById(R.id.btn);
         if (isUploadTask) {
             button.setVisibility(View.GONE);
@@ -348,11 +350,21 @@ public class H5WebViewActivity extends AppCompatActivity {
     }
 
     private final class JSInterface {
+        private String code;
+
+        public JSInterface(String code) {
+            this.code = code;
+        }
         @SuppressLint("JavascriptInterface")
         @JavascriptInterface
         public void send(String dataInfo) {
             Toast.makeText(H5WebViewActivity.this, dataInfo, Toast.LENGTH_LONG).show();
         }
+        @JavascriptInterface
+        public String setBmCode( ) {
+                return code;
+        }
+
     }
 
     @Override
