@@ -123,15 +123,15 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
                 .uploadaddress(userid, longitude + "", latitude + "")
                 .compose(RxSchedulersHelper.io_main())
 //                .compose(RxSchedulersHelper.ObsHandHttpResult())
-                .subscribe(new ZBaseObserver<BaseHttpResult>(false) {
-                    @Override
-                    public void onError(Throwable t) {
-                        super.onError(t);
-                    }
+                .subscribe(new ZBaseObserver<BaseHttpResult>() {
 
                     @Override
                     public void onSuccess(BaseHttpResult result) {
+                    }
 
+                    @Override
+                    public void onFailure(int code, String message) {
+                        super.onFailure(code, message);
                     }
                 });
     }
@@ -147,10 +147,10 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
                 .getAppVersion(userid, AppUtils.getVersionCode(context))
                 .compose(RxSchedulersHelper.io_main())
                 .compose(RxSchedulersHelper.ObsHandHttpResult())
-                .subscribe(new ZBaseObserver<UpdateEntity>(false) {
+                .subscribe(new ZBaseObserver<UpdateEntity>() {
                     @Override
-                    public void onError(Throwable t) {
-                        super.onError(t);
+                    public void onFailure(int code, String message) {
+                        super.onFailure(code, message);
                     }
 
                     @Override
