@@ -124,14 +124,14 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
                 .compose(RxSchedulersHelper.io_main())
 //                .compose(RxSchedulersHelper.ObsHandHttpResult())
                 .subscribe(new ZBaseObserver<BaseHttpResult>() {
-
                     @Override
-                    public void onSuccess(BaseHttpResult result) {
+                    public void onError(Throwable t) {
+                        super.onError(t);
                     }
 
                     @Override
-                    public void onFailure(int code, String message) {
-                        super.onFailure(code, message);
+                    public void onSuccess(BaseHttpResult result) {
+
                     }
                 });
     }
@@ -144,18 +144,18 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
         }
 
         RetrofitService.createApiService(Request.class)
-                .getAppVersion(userid, AppUtils.getVersionCode(context))
+                .getAppVersion(userid, AppUtils.getVersionName(context))
                 .compose(RxSchedulersHelper.io_main())
                 .compose(RxSchedulersHelper.ObsHandHttpResult())
                 .subscribe(new ZBaseObserver<UpdateEntity>() {
                     @Override
-                    public void onFailure(int code, String message) {
-                        super.onFailure(code, message);
+                    public void onError(Throwable t) {
+                        super.onError(t);
                     }
 
                     @Override
                     public void onSuccess(UpdateEntity result) {
-                        if (null != result && "0".equals(result.getIsnew())) {
+                        if (null != result && "1".equals(result.getIsnew())) {
                             UpdateDialogFragment.newInstance(result).show(fragmentManager, "update");
                         }
                     }

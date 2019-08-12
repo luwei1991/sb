@@ -110,7 +110,7 @@ public interface Request {
 
 
     @POST("app/common/newversion")
-    Observable<BaseHttpResult<UpdateEntity>> getAppVersion(@Query("userid") String userid, @Query("versioncode") int versioncode);
+    Observable<BaseHttpResult<UpdateEntity>> getAppVersion(@Query("userid") String userid, @Query("versioncode") String versioncode);
 
     @GET("app/task/uploadaddress")
     Observable<BaseHttpResult> updateCompanyAddress(@Query("userid") String userid, @Query("companyaddress") String companyaddress, @Query("taskid") String taskid, @Query("remark") String remark);

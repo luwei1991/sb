@@ -94,9 +94,10 @@ public class MainTaskListActivity extends BaseActivity implements AMapLocationLi
         if (EasyPermissions.hasPermissions(getApplicationContext(), Manifest.permission_group.LOCATION)) {
             locationSetting();
         } else {
+            
             EasyPermissions.requestPermissions(this, "请允许app使用定位功能", 1001, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
         }
-        taskDetailViewModel.checkVersion(this, getSupportFragmentManager());
+       /* taskDetailViewModel.checkVersion(this, getSupportFragmentManager());*/
     }
 
     @Override

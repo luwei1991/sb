@@ -1,9 +1,11 @@
 package com.product.sampling.ui;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
@@ -13,6 +15,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,13 +34,21 @@ import com.product.sampling.adapter.BannerViewPagerAdapter;
 import com.product.sampling.adapter.NewsListAdapter;
 import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
 import com.product.sampling.bean.New;
+import com.product.sampling.bean.UpdateEntity;
+import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.maputil.ToastUtil;
 import com.product.sampling.net.Exception.ApiException;
 import com.product.sampling.net.NetWorkManager;
+import com.product.sampling.net.ZBaseObserver;
+import com.product.sampling.net.request.Request;
 import com.product.sampling.net.response.ResponseTransformer;
 import com.product.sampling.net.schedulers.SchedulerProvider;
+import com.product.sampling.ui.update.UpdateDialogFragment;
+import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
+import com.product.sampling.utils.AppUtils;
 import com.product.sampling.utils.GdLocationUtil;
+import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.view.CardTransformer;
 import com.product.sampling.view.MyViewPager;
 
@@ -61,11 +73,13 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
     private TextView tvUserName;
     private TextView evtitle;
     private long mExitTime = 0;
+    TaskDetailViewModel taskDetailViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+        checkVersion(this, getSupportFragmentManager());
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
@@ -83,11 +97,10 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
 
             }
         });
-        tvTemperature = findViewById(R.id.tv_temperature);
-        ivWeather = findViewById(R.id.iv_weather);
         getData();
         //获取权限（如果没有开启权限，会弹出对话框，询问是否开启权限）
         requestLocation(this);
+
     }
 
     private void initView(List<New> aNews) {
@@ -107,13 +120,15 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.color.blue_color_30));
         mRecyclerView.addItemDecoration(dividerItemDecoration);
 
+        tvTemperature = findViewById(R.id.tv_temperature);
+        ivWeather = findViewById(R.id.iv_weather);
         NewsListAdapter adapter = new NewsListAdapter(R.layout.item_news, aNews);
         mRecyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 New news = aNews.get(position);
-                WebViewActivity.startWebView(MainActivity.this, news.conent, news.title, news.pubdate);
+                WebViewActivity.startWebView(MainActivity.this, news.conent, news.title,news.pubdate);
             }
         });
     }
@@ -131,7 +146,31 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
                     Log.e("throwable", "" + ((ApiException) throwable).getDisplayMessage());
                 });
     }
+    public void checkVersion(Context context, FragmentManager fragmentManager) {
 
+        String userid = AccountManager.getInstance().getUserId();
+        if (TextUtils.isEmpty(userid)) {
+            return;
+        }
+           //versionCode和versionName这里是反过来的
+        RetrofitService.createApiService(Request.class)
+                .getAppVersion(userid, AppUtils.getVersionName(context))
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<UpdateEntity>() {
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+                    }
+
+                    @Override
+                    public void onSuccess(UpdateEntity result) {
+                        if (null != result && "1".equals(result.getIsnew())) {
+                            UpdateDialogFragment.newInstance(result).show(fragmentManager, "update");
+                        }
+                    }
+                });
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();
