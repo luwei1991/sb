@@ -123,7 +123,7 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
                 .uploadaddress(userid, longitude + "", latitude + "")
                 .compose(RxSchedulersHelper.io_main())
 //                .compose(RxSchedulersHelper.ObsHandHttpResult())
-                .subscribe(new ZBaseObserver<BaseHttpResult>() {
+                .subscribe(new ZBaseObserver<BaseHttpResult>(false) {
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
@@ -147,7 +147,7 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
                 .getAppVersion(userid, AppUtils.getVersionCode(context))
                 .compose(RxSchedulersHelper.io_main())
                 .compose(RxSchedulersHelper.ObsHandHttpResult())
-                .subscribe(new ZBaseObserver<UpdateEntity>() {
+                .subscribe(new ZBaseObserver<UpdateEntity>(false) {
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);

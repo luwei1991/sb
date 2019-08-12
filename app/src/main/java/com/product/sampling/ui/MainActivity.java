@@ -83,10 +83,11 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
 
             }
         });
+        tvTemperature = findViewById(R.id.tv_temperature);
+        ivWeather = findViewById(R.id.iv_weather);
         getData();
         //获取权限（如果没有开启权限，会弹出对话框，询问是否开启权限）
         requestLocation(this);
-
     }
 
     private void initView(List<New> aNews) {
@@ -106,15 +107,13 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.color.blue_color_30));
         mRecyclerView.addItemDecoration(dividerItemDecoration);
 
-        tvTemperature = findViewById(R.id.tv_temperature);
-        ivWeather = findViewById(R.id.iv_weather);
         NewsListAdapter adapter = new NewsListAdapter(R.layout.item_news, aNews);
         mRecyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 New news = aNews.get(position);
-                WebViewActivity.startWebView(MainActivity.this, news.conent, news.title,news.pubdate);
+                WebViewActivity.startWebView(MainActivity.this, news.conent, news.title, news.pubdate);
             }
         });
     }
