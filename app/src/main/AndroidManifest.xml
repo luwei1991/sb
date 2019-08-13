@@ -130,6 +130,12 @@
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" /> <!-- or android:screenOrientation="landscape"-->
 
+        <activity
+            android:name=".ui.PhotoViewActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" /> <!-- or android:screenOrientation="landscape"-->
+
 
         <activity
             android:name=".ui.LoginActivity"

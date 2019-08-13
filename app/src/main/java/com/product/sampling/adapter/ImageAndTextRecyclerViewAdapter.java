@@ -1,5 +1,6 @@
 package com.product.sampling.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,6 +33,7 @@ import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.ui.TaskDetailActivity;
 import com.product.sampling.ui.TaskListFragment;
 import com.product.sampling.ui.TaskSceneFragment;
+import com.product.sampling.utils.ActivityUtils;
 
 import org.devio.takephoto.model.TImage;
 
@@ -42,7 +44,6 @@ import java.util.List;
 public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageAndTextRecyclerViewAdapter.ViewHolder> {
 
     private final List<Pics> mValues;
-    private boolean isLocalData;
     BasePhotoFragment fragment;
     private int taskPostion = -1;//当前图片列表所属样品id
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -57,7 +58,7 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
     };
 
     private void showListDialog(Context context, int taskPostion) {
-        final String[] items = {"编辑说明", "删除",};
+        final String[] items = {"编辑说明", "删除", "查看详情"};
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(context);
         listDialog.setTitle("");
@@ -86,6 +87,9 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
                         mValues.remove(taskPostion);
                         notifyDataSetChanged();
                         break;
+                    case 2:
+                        ActivityUtils.goPhotoViewActivity(context,mValues,taskPostion);
+                        break;
                 }
             }
         });
@@ -97,7 +101,6 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
                                            boolean isLocalData) {
         fragment = parent;
         mValues = items;
-        this.isLocalData = isLocalData;
     }
 
     @Override

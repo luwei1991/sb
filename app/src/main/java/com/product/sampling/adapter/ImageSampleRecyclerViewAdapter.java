@@ -23,6 +23,7 @@ import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.ui.TaskDetailActivity;
+import com.product.sampling.utils.ActivityUtils;
 
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class ImageSampleRecyclerViewAdapter extends RecyclerView.Adapter<ImageSa
     };
 
     private void showListDialog(Context context, int postion) {
-        final String[] items = {"编辑说明", "删除",};
+        final String[] items = {"编辑说明", "删除", "查看详情"};
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(context);
         listDialog.setTitle("");
@@ -77,6 +78,9 @@ public class ImageSampleRecyclerViewAdapter extends RecyclerView.Adapter<ImageSa
                         mValues.remove(postion);
                         fragment.onRemoveSampleImage(taskPostion, postion);
                         notifyDataSetChanged();
+                        break;
+                    case 2:
+                        ActivityUtils.goPhotoViewActivity(context, mValues, taskPostion);
                         break;
                 }
             }

@@ -24,6 +24,20 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+
+            //release版本输出包名自动追加版本号和版本名称
+            applicationVariants.all {
+                variant ->
+                    variant.outputs.all {
+                        //只处理生产版本
+                        if (buildType.name == 'release') {
+                            def createTime = new Date().format("YYYY-MM-dd", TimeZone.getTimeZone("GMT+08:00"))
+                            // app包名称
+                            outputFileName = "app_v" + defaultConfig.versionName + "_" + createTime + "_" + buildType.name + ".apk"
+                        }
+                    }
+            }
         }
     }
     compileOptions {
@@ -134,5 +148,5 @@ dependencies {
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-andx-14'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-
+    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
 }

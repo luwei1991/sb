@@ -30,6 +30,7 @@ import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.ui.TaskDetailActivity;
 import com.product.sampling.ui.TaskSampleFragment;
+import com.product.sampling.utils.ActivityUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +56,7 @@ public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageSe
     };
 
     private void showListDialog(Context context, int taskPostion) {
-        final String[] items = {"编辑说明", "删除",};
+        final String[] items = {"编辑说明", "删除", "查看详情"};
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(context);
         listDialog.setTitle("");
@@ -81,6 +82,9 @@ public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageSe
                     case 1:
                         mValues.remove(taskPostion);
                         notifyDataSetChanged();
+                        break;
+                    case 2:
+                        ActivityUtils.goPhotoViewActivity(context, mValues, taskPostion);
                         break;
                 }
             }

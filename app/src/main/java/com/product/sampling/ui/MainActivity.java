@@ -128,7 +128,7 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 New news = aNews.get(position);
-                WebViewActivity.startWebView(MainActivity.this, news.conent, news.title,news.pubdate);
+                WebViewActivity.startWebView(MainActivity.this, news.conent, news.title, news.pubdate);
             }
         });
     }
@@ -146,13 +146,14 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
                     Log.e("throwable", "" + ((ApiException) throwable).getDisplayMessage());
                 });
     }
+
     public void checkVersion(Context context, FragmentManager fragmentManager) {
 
         String userid = AccountManager.getInstance().getUserId();
         if (TextUtils.isEmpty(userid)) {
             return;
         }
-           //versionCode和versionName这里是反过来的
+        //versionCode和versionName这里是反过来的
         RetrofitService.createApiService(Request.class)
                 .getAppVersion(userid, AppUtils.getVersionName(context))
                 .compose(RxSchedulersHelper.io_main())
@@ -165,12 +166,17 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
 
                     @Override
                     public void onSuccess(UpdateEntity result) {
-                        if (null != result && "1".equals(result.getIsnew())) {
-                            UpdateDialogFragment.newInstance(result).show(fragmentManager, "update");
+                        if (null != result && "1".equals(result.getIsnew()) && !isFinishing() && !isDestroyed()) {
+                            try {
+                                UpdateDialogFragment.newInstance(result).show(fragmentManager, "update");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 });
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -246,6 +252,10 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
     }
 
     private void setWeatherIcon(String weather) {
+        if (TextUtils.isEmpty(weather)) {
+            ivWeather.setImageResource(0);
+            return;
+        }
         if (weather.contains("晴")) {
             ivWeather.setImageResource(R.mipmap.index_weather1);
         } else if (weather.contains("多云")) {
