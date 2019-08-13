@@ -1,6 +1,4 @@
-/**
- *
- */
+
 package com.product.sampling.maputil;
 
 import android.content.Context;
@@ -10,6 +8,12 @@ import android.util.Log;
 import android.view.Gravity;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.product.sampling.R;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
+
+
 
 import com.amap.api.services.core.AMapException;
 
@@ -46,7 +50,8 @@ public class ToastUtil {
     }
 
     public static void show(Context context, String info) {
-        Toast.makeText(context, info, Toast.LENGTH_LONG).show();
+     /*   Toast.makeText(context, info,  Toast.LENGTH_LONG).show();*/
+        showToast(context,info, Toast.LENGTH_LONG, 10*30000);
     }
 
     public static void show(Context context, int info) {
@@ -215,5 +220,28 @@ public class ToastUtil {
 
     private static void print(String s) {
         Log.i(TAG, s);
+    }
+    private static void showToast(Context appContext, String msg, int duration, int delayMillis) {
+        LayoutInflater inflater = (LayoutInflater) appContext
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.toast, new LinearLayout(appContext),
+                false);
+        TextView tv = (TextView) view.findViewById(R.id.toast_tv);
+        tv.setText(msg);
+        // 删除指定的Runnable对象，使线程对象停止运行。
+        mHandler.removeCallbacks(r);
+        // 只有mToast==null时才重新创建，否则只需更改提示文字
+        if (mToast == null) {
+            mToast = new Toast(appContext);
+            mToast.setDuration(duration);
+            int density = (int) appContext.getResources().getDisplayMetrics().density;
+            mToast.setGravity(Gravity.BOTTOM, 0, 80 * density);
+            mToast.setView(view);
+        } else {
+           mToast.setView(view);
+        }
+        // 延迟1.5秒隐藏toast
+       mHandler.postDelayed(r, delayMillis);
+        mToast.show();
     }
 }

@@ -96,4 +96,6 @@
     <color name="text_color">#333333</color>
 
     <color name="table_divider_color">#9EA7B4</color>
+    <color name="alpha_70_black">#B3000000</color>
+    <color name="red">#FF0000</color>
 </resources>
