@@ -97,10 +97,11 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
 
             }
         });
+        tvTemperature = findViewById(R.id.tv_temperature);
+        ivWeather = findViewById(R.id.iv_weather);
         getData();
         //获取权限（如果没有开启权限，会弹出对话框，询问是否开启权限）
         requestLocation(this);
-
     }
 
     private void initView(List<New> aNews) {

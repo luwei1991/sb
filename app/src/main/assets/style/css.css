@@ -108,9 +108,9 @@ table.tftable td.signtd{
 }
 .seal{
     width: 130px;
-    height: 90px;
+    height: 130px;
     position: absolute;
-    top: -20px;
+    top: 0px;
     right: 10px;
     opacity: 0.8;
 }

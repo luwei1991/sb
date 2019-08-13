@@ -12,7 +12,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 27
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
@@ -25,6 +25,19 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    //release版本输出包名自动追加版本号和版本名称
+    applicationVariants.all {
+        variant ->
+            variant.outputs.all {
+                //只处理生产版本
+                if (buildType.name == 'release') {
+                    def createTime = new Date().format("YYYY-MM-dd", TimeZone.getTimeZone("GMT+08:00"))
+                    // app包名称
+                    outputFileName = "app_v" + defaultConfig.versionName + "_" + createTime + "_" + buildType.name + ".apk"
+                }
+            }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
