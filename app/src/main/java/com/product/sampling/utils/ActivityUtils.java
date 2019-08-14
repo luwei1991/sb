@@ -36,8 +36,11 @@ public class ActivityUtils {
         for (Pics pic : paths) {
             if (!TextUtils.isEmpty(pic.getId())) {
                 list.add(pic.getId());
+                imgIntent.putExtra("remote", "1");
+
             } else if (!TextUtils.isEmpty(pic.getOriginalPath())) {
                 list.add(pic.getOriginalPath());
+                imgIntent.putExtra("remote", "0");
             }
         }
         if (list.isEmpty()) {

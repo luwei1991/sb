@@ -43,6 +43,8 @@ public class ImageSampleRecyclerViewAdapter extends RecyclerView.Adapter<ImageSa
             } else {
                 if (!isUploadTask) {
                     showListDialog(view.getContext(), (int) view.getTag());
+                }else{
+                    showListArleadyDialog(view.getContext(), (int) view.getTag());
                 }
             }
         }
@@ -50,6 +52,45 @@ public class ImageSampleRecyclerViewAdapter extends RecyclerView.Adapter<ImageSa
 
     private void showListDialog(Context context, int postion) {
         final String[] items = {"编辑说明", "删除", "查看详情"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(context);
+        listDialog.setTitle("");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        EditText et = new EditText(context);
+                        et.setText(mValues.get(postion).getRemarks() + "");
+                        new AlertDialog.Builder(context).setTitle("请输入图片描述")
+                                .setView(et)
+                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        //按下确定键后的事件
+                                        String text = et.getText().toString();
+                                        mValues.get(postion).setRemarks(text + "");
+                                        fragment.onRefreshSampleImageTitle(taskPostion, postion, text);
+                                        notifyDataSetChanged();
+                                    }
+                                }).setNegativeButton("取消", null).show();
+
+                        break;
+                    case 1:
+                        mValues.remove(postion);
+                        fragment.onRemoveSampleImage(taskPostion, postion);
+                        notifyDataSetChanged();
+                        break;
+                    case 2:
+                        ActivityUtils.goPhotoViewActivity(context, mValues, taskPostion);
+                        break;
+                }
+            }
+        });
+        listDialog.show();
+    }
+    private void showListArleadyDialog(Context context, int postion) {
+        final String[] items = {"查看详情"};
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(context);
         listDialog.setTitle("");

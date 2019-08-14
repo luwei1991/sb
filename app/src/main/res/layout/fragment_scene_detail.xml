@@ -228,7 +228,7 @@
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
                 android:textColor="@color/red"
-                android:text="(备注：视频包括 生产过程  取样过程 签写文书过程 抽样目的讲解)" />
+                android:text="(备注：视频包括 生产过程  取样过程 签写文书过程 抽样目的讲解,视频勿上传过大)" />
 
         </LinearLayout>
 

@@ -50,6 +50,8 @@ public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageSe
             } else {
                 if (!isUploadTask) {
                     showListDialog(view.getContext(), (int) view.getTag());
+                }else{
+                    showListArleadyDialog(view.getContext(), (int) view.getTag());
                 }
             }
         }
@@ -91,6 +93,25 @@ public class ImageServerRecyclerViewAdapter extends RecyclerView.Adapter<ImageSe
         });
         listDialog.show();
     }
+    private void showListArleadyDialog(Context context, int taskPostion) {
+        final String[] items = {"查看详情"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(context);
+        listDialog.setTitle("");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+
+                    case 0:
+                        ActivityUtils.goPhotoViewActivity(context, mValues, taskPostion);
+                        break;
+                }
+            }
+        });
+        listDialog.show();
+    }
+
 
     public ImageServerRecyclerViewAdapter(Context parent,
                                           List<Pics> items,

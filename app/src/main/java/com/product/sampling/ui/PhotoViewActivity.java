@@ -22,6 +22,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.product.sampling.Constants.IMAGE_BASE_URL;
+
 public class PhotoViewActivity extends Activity {
     @BindView(R.id.photoView_pager)
     PhotoViewPager viewPager;
@@ -68,9 +70,14 @@ public class PhotoViewActivity extends Activity {
                 icon.setBackgroundColor(getResources().getColor(R.color.black));
 
                 String task = paths.get(position);
-                Glide.with(PhotoViewActivity.this).load(task).into(icon);
-
-                //使图片具有放缩功能
+                Intent intent = getIntent();
+                String remote=intent.getStringExtra("remote");
+                if("1".equals(remote)){
+                    Glide.with(PhotoViewActivity.this).load(IMAGE_BASE_URL +task).into(icon);
+                }else{
+                    Glide.with(PhotoViewActivity.this).load(task).into(icon);
+                }
+                   //使图片具有放缩功能
                 PhotoViewAttacher mAttacher = new PhotoViewAttacher(icon);
                 mAttacher.update();
 

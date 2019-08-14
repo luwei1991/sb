@@ -213,7 +213,7 @@ public class TaskSceneFragment extends BasePhotoFragment {
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
-
+  //查看图片代码
     private void setupRecyclerViewFromServer(@NonNull RecyclerView recyclerView, List task) {
         ImageServerRecyclerViewAdapter adapter = new ImageServerRecyclerViewAdapter(getActivity(), task, taskDetailViewModel.taskEntity.isUploadedTask());
         recyclerView.setAdapter(adapter);

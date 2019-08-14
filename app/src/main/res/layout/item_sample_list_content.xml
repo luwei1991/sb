@@ -34,7 +34,26 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#F1F2F3" />
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="样品图片" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textColor="@color/red"
+        android:text="(备注：请拍摄样品正面一张，反面一张)" />
+    </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -42,30 +61,8 @@
         android:layout_marginRight="20dp"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="样品图片" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="@color/red"
-            android:text="(备注：请拍摄样品正面一张，反面一张)" />
 
-        <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/item_image_list"
-            android:name="com.product.sampling.TaskListFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="150dp"
-            app:layoutManager="LinearLayoutManager"
-            tools:context="com.product.sampling.ui.MainTaskListActivity"
-            tools:listitem="@layout/item_scene_list_content" />
+
 
 
         <ImageView
@@ -85,7 +82,18 @@
             android:layout_marginRight="80dp"
             android:layout_toLeftOf="@+id/iv_reduce"
             android:src="@mipmap/form_add" />
-    </RelativeLayout>
+        <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/item_image_list"
+            android:name="com.product.sampling.TaskListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="150dp"
+            app:layoutManager="LinearLayoutManager"
+            tools:context="com.product.sampling.ui.MainTaskListActivity"
+            tools:listitem="@layout/item_scene_list_content" />
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -131,6 +139,8 @@
             android:layout_marginRight="80dp"
             android:layout_toLeftOf="@+id/iv_reduce_video"
             android:src="@mipmap/form_add" />
+    </RelativeLayout>
+
     </RelativeLayout>
 
     <LinearLayout
