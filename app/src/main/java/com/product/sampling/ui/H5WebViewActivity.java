@@ -3,6 +3,7 @@ package com.product.sampling.ui;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,7 +26,14 @@ import androidx.core.content.ContextCompat;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.github.lzyzsd.jsbridge.CallBackFunction;
 import com.product.sampling.R;
+import com.product.sampling.bean.UpdateEntity;
+import com.product.sampling.httpmoudle.RetrofitService;
+import com.product.sampling.manager.AccountManager;
 import com.product.sampling.maputil.ToastUtil;
+import com.product.sampling.net.ZBaseObserver;
+import com.product.sampling.net.request.Request;
+import com.product.sampling.ui.update.UpdateDialogFragment;
+import com.product.sampling.utils.AppUtils;
 import com.product.sampling.utils.KeyboardUtils;
 import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.ScreenUtils;
@@ -58,6 +66,7 @@ public class H5WebViewActivity extends AppCompatActivity {
     public static String para;
     public boolean isUploadTask;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +76,7 @@ public class H5WebViewActivity extends AppCompatActivity {
         int pos = bundle.getInt(Intent_Order);
         String code=bundle.getString("code");
         isUploadTask = bundle.getBoolean(Intent_Edit);
+
         webView.addJavascriptInterface(new JSInterface(code), "setCode");
 
         //支持缩放
@@ -352,6 +362,7 @@ public class H5WebViewActivity extends AppCompatActivity {
     private final class JSInterface {
         private String code;
 
+
         public JSInterface(String code) {
             this.code = code;
         }
@@ -362,6 +373,7 @@ public class H5WebViewActivity extends AppCompatActivity {
         }
         @JavascriptInterface
         public String setBmCode( ) {
+
                 return code;
         }
 
