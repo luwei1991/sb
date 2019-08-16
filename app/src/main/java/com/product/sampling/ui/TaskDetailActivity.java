@@ -1,5 +1,7 @@
 package com.product.sampling.ui;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -101,5 +103,10 @@ public class TaskDetailActivity extends BaseActivity {
             currentFragment = taskSampleFragment;
         }
         radioButton.setChecked(true);
+    }
+    public static void GoTaskDetailActivity(Context context, TaskEntity taskEntity) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("task", taskEntity);
+        context.startActivity(new Intent(context, TaskDetailActivity.class).putExtras(bundle));
     }
 }

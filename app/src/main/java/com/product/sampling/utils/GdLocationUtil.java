@@ -5,6 +5,7 @@ import android.content.Context;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.product.sampling.manager.AccountManager;
 import com.product.sampling.ui.MainApplication;
 
 /**
@@ -59,8 +60,8 @@ public class GdLocationUtil {
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         mLocationOption.setHttpTimeOut(20000);
         mLocationClient.setLocationOption(mLocationOption);
-        //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(60 * 2000);
+        //设置定位间隔,单位毫秒,默认为60000ms
+        mLocationOption.setInterval(AccountManager.getInstance().getInterval() * 1000);
     }
 
 

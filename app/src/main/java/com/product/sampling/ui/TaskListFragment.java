@@ -1,6 +1,7 @@
 package com.product.sampling.ui;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
@@ -33,6 +35,7 @@ import com.product.sampling.R;
 import com.product.sampling.adapter.AdapterPaging;
 import com.product.sampling.adapter.MyDataSource;
 import com.product.sampling.adapter.SpinnerSimpleAdapter;
+import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
 import com.product.sampling.bean.Task;
 import com.product.sampling.bean.TaskBean;
 import com.product.sampling.bean.TaskCity;
@@ -56,6 +59,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +67,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import io.reactivex.disposables.Disposable;
+
+import static com.product.sampling.ui.H5WebViewActivity.Intent_Edit;
+import static com.product.sampling.ui.H5WebViewActivity.Intent_Order;
 
 /**
  * 任务列表
@@ -266,7 +273,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
-    public static class SimpleItemRecyclerViewAdapter
+    public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<TaskEntity> mValues;
@@ -285,14 +292,18 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                     }
                 } else if (view.getId() == R.id.tv_fill_info) {
                     TaskEntity taskEntity = (TaskEntity) view.getTag();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("task", taskEntity);
-                    view.getContext().startActivity(new Intent(view.getContext(), TaskDetailActivity.class).putExtras(bundle));
+                    if (taskEntity.isNeedConfirm()) {
+                        showDialog(view.getContext(), taskEntity, 1);
+                    } else {
+                        TaskDetailActivity.GoTaskDetailActivity(view.getContext(), taskEntity);
+                    }
                 } else if (view.getId() == R.id.tv_exception) {
                     TaskEntity taskEntity = (TaskEntity) view.getTag();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("task", taskEntity);
-                    view.getContext().startActivity(new Intent(view.getContext(), TaskExceptionActivity.class).putExtras(bundle));
+                    if (taskEntity.isNeedConfirm()) {
+                        showDialog(view.getContext(), taskEntity, 2);
+                    } else {
+                        TaskExceptionActivity.GoExceptionActivity(view.getContext(), taskEntity);
+                    }
                 }
             }
         };
@@ -325,8 +336,8 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
             } else {
                 holder.mTextViewName.setVisibility(View.GONE);
             }
-            if(!TextUtils.isEmpty(task.taskstatus)){
-                if(task.taskstatus.equals("2")){
+            if (!TextUtils.isEmpty(task.taskstatus)) {
+                if (task.taskstatus.equals("2")) {
 
                     holder.mTextViewException.setText("查看异常情况");
                     holder.mTextViewFill.setText("查看信息");
@@ -483,5 +494,31 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         ordertype = "";
         taskDetailViewModel.getDataByPage(getActivity(), mPage, status, ordertype, city.id);
     }
-}
 
+    private void showDialog(Context context, TaskEntity taskEntity, int index) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("提示");
+        builder.setMessage("是否确认执行此任务?");
+        builder.setCancelable(true);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                taskDetailViewModel.uploadtaskinfo(taskEntity.id);
+                if (index == 1) {
+                    TaskDetailActivity.GoTaskDetailActivity(context, taskEntity);
+                } else if (index == 2) {
+                    TaskExceptionActivity.GoExceptionActivity(context, taskEntity);
+                }
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (index == 1) {
+                    TaskDetailActivity.GoTaskDetailActivity(context, taskEntity);
+                } else if (index == 2) {
+                    TaskExceptionActivity.GoExceptionActivity(context, taskEntity);
+                }
+            }
+        }).show();
+    }
+}

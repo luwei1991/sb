@@ -57,6 +57,14 @@ public class AccountManager {
         return userId;
     }
 
+    public int getInterval() {
+        userInfoBean = getUserInfoBean();
+        if (userInfoBean != null) {
+            return userInfoBean.getRemindtime();
+        }
+        return 60;
+    }
+
 
     private static final AccountManager ourInstance = new AccountManager();
 

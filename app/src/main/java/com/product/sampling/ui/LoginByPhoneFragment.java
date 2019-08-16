@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.product.sampling.R;
 import com.product.sampling.bean.UserInfoBean;
@@ -108,7 +109,7 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
                     public void onFailure(int code, String message) {
                         super.onFailure(code, message);
                         showProgress(false);
-                        ToastUtil.show(getActivity(), message);
+                        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -138,7 +139,7 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
                     public void onFailure(int code, String message) {
                         super.onFailure(code, message);
                         showProgress(false);
-                        ToastUtil.show(getActivity(), message);
+                        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
                         if (myCountDownTimer != null) {
                             myCountDownTimer.cancel();
                         }

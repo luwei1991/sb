@@ -94,10 +94,10 @@ public class MainTaskListActivity extends BaseActivity implements AMapLocationLi
         if (EasyPermissions.hasPermissions(getApplicationContext(), Manifest.permission_group.LOCATION)) {
             locationSetting();
         } else {
-            
+
             EasyPermissions.requestPermissions(this, "请允许app使用定位功能", 1001, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
         }
-       /* taskDetailViewModel.checkVersion(this, getSupportFragmentManager());*/
+        /* taskDetailViewModel.checkVersion(this, getSupportFragmentManager());*/
     }
 
     @Override
@@ -128,6 +128,7 @@ public class MainTaskListActivity extends BaseActivity implements AMapLocationLi
     }
 
     private void locationSetting() {
+
         mlocationClient = new AMapLocationClient(this);
 //初始化定位参数
         mLocationOption = new AMapLocationClientOption();
@@ -136,7 +137,8 @@ public class MainTaskListActivity extends BaseActivity implements AMapLocationLi
 //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
 //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(30 * 2000);
+
+        mLocationOption.setInterval(AccountManager.getInstance().getInterval() * 1000);
 //设置定位参数
         mlocationClient.setLocationOption(mLocationOption);
 // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，

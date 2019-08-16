@@ -28,7 +28,7 @@ public class UpdateEntity implements Serializable {
     private String appfileid;
     private String isforce;
     private String remark;
-    private String isnew;
+    private String isnew;//是否为最新版本0否1是
     private String createtime;
 
     public String getId() {

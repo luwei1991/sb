@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.product.sampling.R;
 import com.product.sampling.bean.UserInfoBean;
@@ -215,7 +216,7 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
                         super.onFailure(code, message);
                         showProgress(false);
                         if (!ExecptionEngin.isNetWorkError(code)) {
-                            ToastUtil.showShortToast(getActivity(), message);
+                            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
                         }
                     }
 

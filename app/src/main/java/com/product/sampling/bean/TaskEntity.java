@@ -2,12 +2,9 @@ package com.product.sampling.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.TextUtils;
-import android.util.SparseArray;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,6 +45,7 @@ public class TaskEntity implements Parcelable, Serializable {
     public double latitude;//任务提交时的维度
     public int leftday;//任务剩余天数
 
+
     public List<Pics> pics = new ArrayList<Pics>();
     public List<Videos> voides = new ArrayList<Videos>();
     public boolean isNewRecord;
@@ -83,6 +81,7 @@ public class TaskEntity implements Parcelable, Serializable {
 
     public double companylongitude;
     public double companylatitude;
+    public String suretime;//开始执行时间:判断是否需要跳出是否确认开始执行任务 null需要不为空不需要
 
     public TaskEntity() {
 
@@ -127,7 +126,7 @@ public class TaskEntity implements Parcelable, Serializable {
         //        in.readTypedList(pics, Pics.CREATOR);
         in.readTypedList(voides, Videos.CREATOR);
         plantype = in.readString();
-
+        suretime = in.readString();
     }
 
     public static final Creator<TaskEntity> CREATOR = new Creator<TaskEntity>() {
@@ -183,6 +182,7 @@ public class TaskEntity implements Parcelable, Serializable {
         dest.writeTypedList(pics);
         dest.writeTypedList(voides);
         dest.writeString(plantype);
+        dest.writeString(suretime);
 
 //        if (pics != null)
 //            dest.writeParcelableArray(
@@ -196,5 +196,10 @@ public class TaskEntity implements Parcelable, Serializable {
     public boolean isCirculationDomain() {
         return "2".equals(plantype);//是否是流通领域
     }
+
+    public boolean isNeedConfirm() {
+        return null == suretime;//判断是否需要跳出是否确认开始执行任务 null需要不为空不需要
+    }
+
 }
 

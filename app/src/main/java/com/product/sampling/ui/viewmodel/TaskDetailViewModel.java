@@ -237,4 +237,27 @@ public class TaskDetailViewModel extends AutoDisposViewModel {
                 });
 
     }
+
+    public void uploadtaskinfo(String id) {
+
+        String userid = AccountManager.getInstance().getUserId();
+        if (TextUtils.isEmpty(userid)) {
+            return;
+        }
+        RetrofitService.createApiService(Request.class)
+                .uploadtaskinfo(userid, id)
+                .compose(RxSchedulersHelper.io_main())
+//                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<BaseHttpResult>() {
+                    @Override
+                    public void onFailure(int code, String message) {
+//                        super.onFailure(code, message);
+                    }
+
+                    @Override
+                    public void onSuccess(BaseHttpResult result) {
+
+                    }
+                });
+    }
 }

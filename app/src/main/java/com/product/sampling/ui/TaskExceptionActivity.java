@@ -1,5 +1,7 @@
 package com.product.sampling.ui;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -118,7 +120,9 @@ public class TaskExceptionActivity extends BaseActivity {
         }
         return new ImageItem(text, res);
     }
+
     List<TaskEntity> listTask;
+
     void findTaskInLocalFile() {
         Gson gson = new Gson();
         String taskListStr = (String) SPUtil.get(this, "tasklist", "");
@@ -138,4 +142,9 @@ public class TaskExceptionActivity extends BaseActivity {
 
     }
 
+    public static void GoExceptionActivity(Context context, TaskEntity taskEntity) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("task", taskEntity);
+        context.startActivity(new Intent(context, TaskExceptionActivity.class).putExtras(bundle));
+    }
 }

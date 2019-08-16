@@ -61,7 +61,7 @@ public interface Request {
     Observable<BaseHttpResult> changepassword(@Query("userid") String userid, @Query("password") String password, @Query("newPassword") String newPassword);
 
     @GET("app/task/tasklist")
-    Observable<BaseHttpResult<TaskBean>> taskList(@Query("userid") String userid, @Query("taskstatus") String taskstatus, @Query("ordertype") String ordertype, @Query("areashi") String areashi,@Query("pageNo") int pageNo);
+    Observable<BaseHttpResult<TaskBean>> taskList(@Query("userid") String userid, @Query("taskstatus") String taskstatus, @Query("ordertype") String ordertype, @Query("areashi") String areashi, @Query("pageNo") int pageNo);
 
     @GET("app/task/getdict")
     Observable<Response<TaskProvince>> taskMenu(@Query("type") String type, @Query("value") String value);
@@ -117,13 +117,16 @@ public interface Request {
 
     @FormUrlEncoded
     @POST("app/task/samplefastmail")
-    Observable<BaseHttpResult> updateFastMail(@FieldMap Map<String,String> params);
+    Observable<BaseHttpResult> updateFastMail(@FieldMap Map<String, String> params);
 
     @GET("app/task/getsamplefastmail")
     Observable<BaseHttpResult<FastMail>> getFastMail(@Query("userid") String userid, @Query("sampleid") String sampleid, @Query("taskid") String taskid);
 
     @GET("app/common/rememberReportCount")
-    Observable<BaseHttpResult> sendReportRecord(@Query("userid") String userid, @Query("sampleid") String sampleid, @Query("taskid") String taskid,@Query("reporttype") String reporttype);
+    Observable<BaseHttpResult> sendReportRecord(@Query("userid") String userid, @Query("sampleid") String sampleid, @Query("taskid") String taskid, @Query("reporttype") String reporttype);
 
+    //确认执行任务
+    @GET("app/task/uploadtaskinfo")
+    Observable<BaseHttpResult> uploadtaskinfo(@Query("userid") String userid, @Query("id") String id);
 
 }

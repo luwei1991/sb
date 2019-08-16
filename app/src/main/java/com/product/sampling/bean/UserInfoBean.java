@@ -14,6 +14,7 @@ public class UserInfoBean {
     private String photo;
 
     private String account;
+    private int sendtime = 60;//坐标间隔
 
     public String getUserid() {
         return userid;
@@ -69,5 +70,13 @@ public class UserInfoBean {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public int getRemindtime() {
+        return sendtime;
+    }
+
+    public void setRemindtime(int remindtime) {
+        this.sendtime = remindtime;
     }
 }
