@@ -43,8 +43,10 @@ import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskMessage;
 import com.product.sampling.bean.TaskProvince;
 import com.product.sampling.bean.TaskResultBean;
+import com.product.sampling.httpmoudle.BaseHttpResult;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
+import com.product.sampling.maputil.ToastUtil;
 import com.product.sampling.net.LoadDataModel;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
@@ -503,22 +505,48 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                taskDetailViewModel.uploadtaskinfo(taskEntity.id);
-                if (index == 1) {
-                    TaskDetailActivity.GoTaskDetailActivity(context, taskEntity);
-                } else if (index == 2) {
-                    TaskExceptionActivity.GoExceptionActivity(context, taskEntity);
-                }
+                uploadtaskinfo(context, taskEntity, index);
             }
         }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (index == 1) {
-                    TaskDetailActivity.GoTaskDetailActivity(context, taskEntity);
-                } else if (index == 2) {
-                    TaskExceptionActivity.GoExceptionActivity(context, taskEntity);
-                }
+
             }
         }).show();
+    }
+
+    public void uploadtaskinfo(Context context, TaskEntity taskEntity, int index) {
+
+        String userid = AccountManager.getInstance().getUserId();
+        if (TextUtils.isEmpty(userid)) {
+            return;
+        }
+        RetrofitService.createApiService(Request.class)
+                .uploadtaskinfo(userid, taskEntity.id)
+                .compose(RxSchedulersHelper.io_main())
+//                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<BaseHttpResult>() {
+                    @Override
+                    public void onFailure(int code, String message) {
+                        super.onFailure(code, message);
+                    }
+
+                    @Override
+                    public void onSuccess(BaseHttpResult result) {
+                        if (result.code == 200) {
+                            //刷新列表的suredotime
+                            mPage = 1;
+                            getDataListByPage();
+                            if (index == 1) {
+                                TaskDetailActivity.GoTaskDetailActivity(context, taskEntity);
+                            } else if (index == 2) {
+                                TaskExceptionActivity.GoExceptionActivity(context, taskEntity);
+                            }
+                        } else {
+                            ToastUtil.showShortToast(context, result.message);
+                        }
+
+                    }
+                });
     }
 }

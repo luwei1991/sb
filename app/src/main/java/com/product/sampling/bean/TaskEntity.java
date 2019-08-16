@@ -81,7 +81,7 @@ public class TaskEntity implements Parcelable, Serializable {
 
     public double companylongitude;
     public double companylatitude;
-    public String suretime;//开始执行时间:判断是否需要跳出是否确认开始执行任务 null需要不为空不需要
+    public String suredotime;//开始执行时间:判断是否需要跳出是否确认开始执行任务 null需要不为空不需要
 
     public TaskEntity() {
 
@@ -126,7 +126,7 @@ public class TaskEntity implements Parcelable, Serializable {
         //        in.readTypedList(pics, Pics.CREATOR);
         in.readTypedList(voides, Videos.CREATOR);
         plantype = in.readString();
-        suretime = in.readString();
+        suredotime = in.readString();
     }
 
     public static final Creator<TaskEntity> CREATOR = new Creator<TaskEntity>() {
@@ -182,7 +182,7 @@ public class TaskEntity implements Parcelable, Serializable {
         dest.writeTypedList(pics);
         dest.writeTypedList(voides);
         dest.writeString(plantype);
-        dest.writeString(suretime);
+        dest.writeString(suredotime);
 
 //        if (pics != null)
 //            dest.writeParcelableArray(
@@ -198,7 +198,7 @@ public class TaskEntity implements Parcelable, Serializable {
     }
 
     public boolean isNeedConfirm() {
-        return null == suretime;//判断是否需要跳出是否确认开始执行任务 null需要不为空不需要
+        return null == suredotime;//判断是否需要跳出是否确认开始执行任务 null需要不为空不需要
     }
 
 }

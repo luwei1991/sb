@@ -126,7 +126,7 @@ public interface Request {
     Observable<BaseHttpResult> sendReportRecord(@Query("userid") String userid, @Query("sampleid") String sampleid, @Query("taskid") String taskid, @Query("reporttype") String reporttype);
 
     //确认执行任务
-    @GET("app/task/uploadtaskinfo")
+    @GET("app/common/startdotask")
     Observable<BaseHttpResult> uploadtaskinfo(@Query("userid") String userid, @Query("id") String id);
 
 }

@@ -90,7 +90,7 @@ public class UpdateDialogFragment extends DialogFragment {
         //强制升级
         if ("1".equals(mUpdateEntity.getIsforce())) {
             dialogBtnCancel.setVisibility(View.GONE);
-//            setCancelable(false);
+            setCancelable(false);
             line.setVisibility(View.GONE);
         } else {
             dialogBtnCancel.setVisibility(View.VISIBLE);
