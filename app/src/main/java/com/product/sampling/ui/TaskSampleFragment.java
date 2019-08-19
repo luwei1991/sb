@@ -163,8 +163,8 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
         return rootView;
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List list, boolean isLocalData) {
-        adapter = new TaskSampleRecyclerViewAdapter(R.layout.item_sample_list_content, list, this, isLocalData, taskDetailViewModel.taskEntity.isUploadedTask());
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView, List list, boolean isLocalData,TaskDetailViewModel taskDetailViewModel) {
+        adapter = new TaskSampleRecyclerViewAdapter(R.layout.item_sample_list_content, list, this, isLocalData, taskDetailViewModel.taskEntity.isUploadedTask(),taskDetailViewModel);
         adapter.addHeaderView(getHeaderView(), 0);
         adapter.addHeaderView(getAddView(), 1);
         adapter.addFooterView(getFootView());
@@ -335,7 +335,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
             sample.samplingInfoMap.put("sampling.inspectedname", TextUtils.isEmpty(taskDetailViewModel.taskEntity.companyname) ? "" : taskDetailViewModel.taskEntity.companyname);
             sample.samplingInfoMap.put("sampling.inspectedaddress", TextUtils.isEmpty(taskDetailViewModel.taskEntity.companyaddress) ? "" : taskDetailViewModel.taskEntity.companyaddress);
             taskDetailViewModel.taskEntity.taskSamples.add(sample);
-            setupRecyclerView(mRecyclerView, taskDetailViewModel.taskEntity.taskSamples, true);
+            setupRecyclerView(mRecyclerView, taskDetailViewModel.taskEntity.taskSamples, true,taskDetailViewModel);
         }
     }
 
@@ -346,7 +346,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
 
         if (taskDetailViewModel.taskEntity.isLoadLocalData) {
             findTaskInLocalFile();
-            setupRecyclerView(mRecyclerView, taskDetailViewModel.taskEntity.taskSamples, true);
+            setupRecyclerView(mRecyclerView, taskDetailViewModel.taskEntity.taskSamples, true, taskDetailViewModel);
         } else {
             taskDetailViewModel.requestTasksamples(AccountManager.getInstance().getUserId(), taskDetailViewModel.taskEntity.id);
         }
@@ -370,7 +370,7 @@ public class TaskSampleFragment extends BasePhotoFragment implements View.OnClic
                         taskSample.samplingInfoMap.put("sampling.inspectedname", TextUtils.isEmpty(taskDetailViewModel.taskEntity.companyname) ? "" : taskDetailViewModel.taskEntity.companyname);
                         taskSample.samplingInfoMap.put("sampling.inspectedaddress", TextUtils.isEmpty(taskDetailViewModel.taskEntity.companyaddress) ? "" : taskDetailViewModel.taskEntity.companyaddress);
                     }
-                    setupRecyclerView(mRecyclerView, taskDetailViewModel.taskEntity.taskSamples, false);
+                    setupRecyclerView(mRecyclerView, taskDetailViewModel.taskEntity.taskSamples, false,taskDetailViewModel);
                     for (TaskSample taskSample : taskDetailViewModel.taskEntity.taskSamples) {
                         {
                             Sampling sampling = taskSample.sampling;

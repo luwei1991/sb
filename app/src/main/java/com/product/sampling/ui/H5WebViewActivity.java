@@ -27,9 +27,11 @@ import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.github.lzyzsd.jsbridge.CallBackFunction;
 import com.product.sampling.R;
 import com.product.sampling.bean.UpdateEntity;
+import com.product.sampling.httpmoudle.BaseHttpResult;
 import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.maputil.ToastUtil;
+import com.product.sampling.net.LoadDataModel;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
 import com.product.sampling.ui.update.UpdateDialogFragment;
@@ -55,6 +57,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import static com.product.sampling.Constants.BASE_URL;
 
 public class H5WebViewActivity extends AppCompatActivity {
     public static final String Intent_Order = "order_pdf";
@@ -65,6 +68,7 @@ public class H5WebViewActivity extends AppCompatActivity {
     BridgeWebView webView;
     public static String para;
     public boolean isUploadTask;
+    private String biaoCode;
 
 
     @Override
@@ -75,10 +79,13 @@ public class H5WebViewActivity extends AppCompatActivity {
         Bundle bundle = this.getIntent().getExtras(); //读取intent的数据给bundle对象
         int pos = bundle.getInt(Intent_Order);
         String code=bundle.getString("code");
+        String taskId=bundle.getString("taskId");
+    /*    getBianHaoCode(taskId,code,"sampling");*/
+
         isUploadTask = bundle.getBoolean(Intent_Edit);
-
-        webView.addJavascriptInterface(new JSInterface(code), "setCode");
-
+         String url=BASE_URL;
+        String userid = AccountManager.getInstance().getUserId();
+        webView.addJavascriptInterface(new JSInterface(code,url,taskId,userid), "setCode");
         //支持缩放
 //        webView.getSettings().setSupportZoom(true);
         //设置出现缩放工具
@@ -361,11 +368,19 @@ public class H5WebViewActivity extends AppCompatActivity {
 
     private final class JSInterface {
         private String code;
+        private String url;
+        private String taskId;
+        private String userId;
 
 
-        public JSInterface(String code) {
+        public JSInterface(String code,String url,String taskId,String userId) {
+
             this.code = code;
+            this.url = url;
+            this.taskId=taskId;
+            this.userId=userId;
         }
+
         @SuppressLint("JavascriptInterface")
         @JavascriptInterface
         public void send(String dataInfo) {
@@ -376,7 +391,30 @@ public class H5WebViewActivity extends AppCompatActivity {
 
                 return code;
         }
+        @JavascriptInterface
+        public String url( ) {
 
+            return url;
+        }
+        @JavascriptInterface
+        public String taskId( ) {
+
+            return taskId;
+        }
+        @JavascriptInterface
+        public String userId( ) {
+
+            return userId;
+        }
+
+    }
+
+    public String getBiaoCode() {
+        return biaoCode;
+    }
+
+    public void setBiaoCode(String biaoCode) {
+        this.biaoCode = biaoCode;
     }
 
     @Override
@@ -393,5 +431,26 @@ public class H5WebViewActivity extends AppCompatActivity {
                 }
             });
         }
+
     }
+/*    public void getBianHaoCode(String taskId, String sampleId, String reporttype) {
+         String userid = AccountManager.getInstance().getUserId();
+        RetrofitService.createApiService(Request.class)
+                .reportcode(userid, sampleId, taskId, reporttype)
+                .compose(RxSchedulersHelper.io_main())
+//                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<BaseHttpResult>() {
+                    @Override
+                    public void onFailure(int code, String message) {
+                       super.onFailure(code, message);
+                    }
+
+                    @Override
+                    public void onSuccess(BaseHttpResult   result) {
+                      biaoCode=result.data.toString();
+
+
+                    }
+                });
+    }*/
 }

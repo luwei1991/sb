@@ -229,10 +229,10 @@ table.tftable td.signtd{
 }
 #modal{
     position:absolute;
-    width:200px;
-    height:300px;
+    width:400px;
+    height:400px;
     top:200px;
-    left:200px;
+    left:110px;
     background-color:#fff;
     display:none;
     cursor:pointer;
@@ -249,12 +249,12 @@ table.tftable td.signtd{
     border: 1px solid #cad9ea;
     color: #666;
     height: 40px;
-    width: 180px;
+    width: 300px;
 }
 
 .tableTask  thead th {
     background-color: #CCE8EB;
-    width: 100px;
+    width: 300px;
 }
 
 .tableTask  tr:nth-child(odd) {
@@ -309,4 +309,26 @@ table.tftable td.signtd{
 .regular-radio+label:active,.regular-radio:checked+label:active {
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px 1px 3px
 		rgba(0, 0, 0, 0.1);
+}
+.leftContent {
+	width:16%;
+	height: 400px;
+	border: 1px solid #ccc;
+	border-top: none;
+	border-right: none;
+	float: left;
+	-ms-box-sizing: border-box;
+	-ms-mos-sizing: border-box;
+	-ms-webkit-sizing: border-box;
+	overflow-x: hidden;
+	overflow-y: auto;
+	overflow: auto;
+	overflow-y: auto;
+	scrollbar-width: none;
+	-ms-overflow-style:none;
+
+}
+
+.leftContent::-webkit-scrollbar {
+	display: none;
 }

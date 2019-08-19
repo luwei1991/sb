@@ -54,7 +54,7 @@ connectWebViewJavascriptBridge(function(bridge) {
 
     bridge.registerHandler("dataBackfill", function(data, responseCallback) {
         responseCallback(data);
-        dataFill(data)
+        dataFill(data);
     });
 })
 
@@ -72,29 +72,8 @@ function dataFillByType(els, data){
     }else{
         $(els[0]).val(decodeURIComponent(data))
     }
-            var taskId=$("#taskId").val();
-                          setCode.send(taskId);
-                  if(taskId){
-                      var type="0"
-                      $.ajax({
-                          			     type : "POST", //提交方式
-                          			     url : "http://172.16.88.26/app/common/getjointtype",
-                          			     data : {
-                          			      "type" : type,
-                          			      'value':taskId
-                          			     },//数据，这里使用的是Json格式进行传输
-                          			     success : function(data) {//返回数据根据结果进行相应的处理
-                                          $(".tableTask").empty();
-                                                    if(data.code=="200"){
-                                                    var name=data.data;
-                                                   $(".nameItem").text(name)
 
-                                                    }else if(data.code=="201"){
-                                                     setCode.send(data.message);
-                                                    }
-                          			     }
-                          			   });
-                  }
+
 }
 
 // 数据回填
@@ -129,6 +108,82 @@ function dataFill(data){
             }
         }
     });
+var taskId=$("#taskId").val();
+            var url= setCode.url();
+                  if(taskId){
+                      var type="0"
+                      $.ajax({
+                          			     type : "POST", //提交方式
+                          			     url : url+"app/common/getjointtype",
+                          			     data : {
+                          			      "type" : type,
+                          			      'value':taskId
+                          			     },//数据，这里使用的是Json格式进行传输
+                          			     success : function(data) {//返回数据根据结果进行相应的处理
+                                          $(".tableTask").empty();
+                                                    if(data.code=="200"){
+                                                    var name=data.data;
+                                                   $(".nameItem").text(name)
+
+                                                    }else if(data.code=="201"){
+                                                     setCode.send(data.message);
+                                                    }
+                          			     }
+                          			   });
+                  };
+                var taskType=$(".taskTypeValue").val();
+                                    if(taskType){
+                                        var type="1"
+                                        $.ajax({
+                                            			     type : "POST", //提交方式
+                                            			     url : url+"app/common/getjointtype",
+                                            			     data : {
+                                            			      "type" : type,
+                                            			      'value':taskType
+                                            			     },//数据，这里使用的是Json格式进行传输
+                                            			     success : function(data) {//返回数据根据结果进行相应的处理
+                                                            $(".tableTask").empty();
+                                                                      if(data.code=="200"){
+                                                                      var name=data.data;
+                                                                     $(".nameItemType").text(name)
+
+                                                                      }else if(data.code=="201"){
+                                                                       setCode.send(data.message);
+                                                                      }
+                                            			     }
+                                            			   });
+                                    };
+
+                    var taskCode=$(".taskCode").val();
+                       if(!taskCode){
+                           var userid= setCode.userId();
+                           var sampleid=setCode.setBmCode();
+                           var taskId=setCode.taskId();
+                                    var type="1"
+                                       $.ajax({
+                                          type : "POST", //提交方式
+                                          url : url+"app/common/reportcode",
+                                          data : {
+                                        "userid" : userid,
+                                       "sampleid":sampleid,
+                                       "taskid":taskId,
+                                       "reporttype":"sampling"
+
+                                                 },//数据，这里使用的是Json格式进行传输
+                                          success : function(data) {//返回数据根据结果进行相应的处理
+
+                                                         if(data.code=="200"){
+                                                                      var code=data.data;
+                                                                     $(".taskcode").val(code);
+
+                                                                      }else if(data.code=="201"){
+                                                                       setCode.send(data.message);
+                                                                      }
+
+                                                        			     }
+                                                        			   });
+                                                };
+
 
      if($("#adviceCode").val().length>1){
              var index=0;
@@ -156,7 +211,6 @@ function dataFill(data){
                   index++;
              });
           }
-
 
 
 
@@ -197,7 +251,7 @@ $(function(){
         sign_box.show()
         sign_bg.show()
         sign_init()
-    })
+    });
 
     $('.qsign').click(function(){
         $(signShow).css('background-image','url('+signaturePad.toDataURL()+')')
@@ -216,16 +270,15 @@ $(function(){
 
     $('.taskName').click(function(){
             $(".taskList").css("display","block");
-
             $("#modal").css("display","block");
             $("#cover").css("display","block");
             $(".title").text("任务来源");
-
             var type="0"
             var id="";
+              var url= setCode.url();
              $.ajax({
             			     type : "POST", //提交方式
-            			     url : "http://172.16.88.26/app/common/getjointtype",
+            			     url : url+"app/common/getjointtype",
             			     data : {
             			      "type" : type,
             			      'value':id
@@ -237,6 +290,7 @@ $(function(){
                                             $th = "";
                                          for(var i=0;i<list.length;i++){
                                          $th =($th + "<tr><td>" + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio'  onclick='getVal(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label></td></tr>"
+
                                             );
                                          }
                                         $(".tableTask").append($th);
@@ -245,7 +299,40 @@ $(function(){
                                       }
             			     }
             			   });
-                      })
+                      });
+                       $('.taskType').click(function(){
+                                  $(".taskList").css("display","block");
+
+                                  $("#modal").css("display","block");
+                                  $("#cover").css("display","block");
+                                  $(".title").text("任务来源");
+
+                                  var type="1"
+                                  var id="";
+                                    var url= setCode.url();
+                                   $.ajax({
+                                  			     type : "POST", //提交方式
+                                  			     url : url+"app/common/getjointtype",
+                                  			     data : {
+                                  			      "type" : type,
+                                  			      'value':id
+                                  			     },//数据，这里使用的是Json格式进行传输
+                                  			     success : function(data) {//返回数据根据结果进行相应的处理
+                                                  $(".tableTask").empty();
+                                                            if(data.code=="200"){
+                                                               var list=data.data;
+                                                                  $th = "";
+                                                               for(var i=0;i<list.length;i++){
+                                                               $th =($th + "<tr><td>" + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label></td></tr>"
+                                                                  );
+                                                               }
+                                                              $(".tableTask").append($th);
+                                                            }else if(data.code=="201"){
+                                                             setCode.send(data.message);
+                                                            }
+                                  			     }
+                                  			   });
+                                            })
     $('#cover').click(function(){
 
                                   $("#modal").css("display","none");
@@ -273,7 +360,7 @@ $(function(){
      $('.year').val(dateParse.year)
      $('.month').val(dateParse.month)
      $('.day').val(dateParse.day)
-     $('.taskcode').val( setCode.setBmCode());
+ /*    $('.taskcode').val( setCode.setBmCode());*/
 
 
 
@@ -364,6 +451,14 @@ function getVal(object){
   var name=$(object).prev().val();
 
 $(".nameItem").text(name)
+
+}
+function getValType(object){
+   var value=$(object).val();
+   $(".taskTypeValue").val(value);
+  var name=$(object).prev().val();
+
+$(".nameItemType").text(name)
 
 }
 

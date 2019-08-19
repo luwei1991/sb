@@ -163,7 +163,7 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:gravity="center"
-            android:text="附件1监督抽查单" />
+            android:text="<!--附件1-->监督抽查单" />
 
         <TextView
             android:id="@+id/tv_check_sheet"
@@ -224,7 +224,7 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:gravity="center"
-            android:text="附件5产品质量安全风险监测采样单" />
+            android:text="<!--附件5-->产品质量安全风险监测采样单" />
 
         <TextView
             android:id="@+id/tv_risk_sheet"
@@ -285,7 +285,7 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:gravity="center"
-            android:text="附件6流通领域商品质量抽查检验工作单" />
+            android:text="<!--附件6-->流通领域商品质量抽查检验工作单" />
 
         <TextView
             android:id="@+id/tv_work_sheet"

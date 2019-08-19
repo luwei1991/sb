@@ -14,7 +14,7 @@
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"
             android:gravity="center"
-            android:text="附件2抽样封存处置单" />
+            android:text="<!--附件2-->抽样封存处置单" />
 
         <TextView
             android:id="@+id/tv_disposal"
@@ -60,7 +60,7 @@
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"
             android:gravity="center"
-            android:text="附件7企业对抽样人员工作反馈意见单" />
+            android:text="<!--附件7-->企业对抽样人员工作反馈意见单" />
 
         <TextView
             android:id="@+id/tv_feed_sheet"

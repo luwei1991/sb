@@ -19,6 +19,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.luck.picture.lib.config.PictureConfig;
 import com.product.sampling.R;
+import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskSample;
 import com.product.sampling.photo.MediaHelper;
 import com.product.sampling.ui.TaskSampleFragment;
@@ -26,6 +27,7 @@ import com.product.sampling.ui.H5WebViewActivity;
 import com.product.sampling.ui.update.FastMailDialogFragment;
 import com.product.sampling.ui.update.QRCDialogFragment;
 import com.product.sampling.ui.update.UpdateDialogFragment;
+import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 
 import java.util.List;
 
@@ -42,6 +44,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
     private TaskSampleFragment fragment;
     boolean isLocalData;
     boolean isUploadTask;
+    private TaskDetailViewModel taskDetailViewModel;
 
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -196,11 +199,12 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
 
     }
 
-    public TaskSampleRecyclerViewAdapter(int layoutResId, @Nullable List<TaskSample> data, TaskSampleFragment fragment, boolean isLocalData, boolean isUploadTask) {
+    public TaskSampleRecyclerViewAdapter(int layoutResId, @Nullable List<TaskSample> data, TaskSampleFragment fragment, boolean isLocalData, boolean isUploadTask,TaskDetailViewModel taskDetailViewModel) {
         super(layoutResId, data);
         this.fragment = fragment;
         this.isLocalData = isLocalData;
         this.isUploadTask = isUploadTask;
+        this.taskDetailViewModel=taskDetailViewModel;
     }
 
     class ViewHolder extends BaseViewHolder {
@@ -258,6 +262,7 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
             public void onClick(DialogInterface dialog, int which) {
                 if (buttonid == 1) {
                     Intent intent = new Intent(context, H5WebViewActivity.class);
+                     mData.get(postion);
                     String code=mData.get(postion).getId();//编号根据id得来
                     Bundle b = new Bundle();
                     b.putInt(Intent_Order, 1);
@@ -265,6 +270,9 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                     b.putSerializable("map", mData.get(postion).samplingInfoMap);
                     b.putBoolean(Intent_Edit, isUploadTask);
                     b.putString("code",code);
+               TaskEntity taskEntity=taskDetailViewModel.taskEntity;
+               String taskId=taskEntity.id;
+                    b.putString("taskId",taskId);
                     intent.putExtras(b);
                     fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
                 } else if (buttonid == 2) {
