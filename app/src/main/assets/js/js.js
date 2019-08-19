@@ -153,8 +153,32 @@ var taskId=$("#taskId").val();
                                             			     }
                                             			   });
                                     };
+                                   var orgName=$("#orgName").val();
+                                    if(orgName){
+                                        var type="2"
+                                        $.ajax({
+                                            			     type : "POST", //提交方式
+                                            			     url : url+"app/common/getjointtype",
+                                            			     data : {
+                                            			      "type" : type,
+                                            			      'value':orgName
+                                            			     },//数据，这里使用的是Json格式进行传输
+                                            			     success : function(data) {//返回数据根据结果进行相应的处理
+                                                            $(".tableTask").empty();
+                                                                      if(data.code=="200"){
+                                                                      var name=data.data;
+                                                                     $(".nameItemOrg").text(name)
 
-                    var taskCode=$(".taskCode").val();
+                                                                      }else if(data.code=="201"){
+                                                                       setCode.send(data.message);
+                                                                      }
+                                            			     }
+                                            			   });
+                                    }else{
+                                       $(".nameItemOrg").text("湖南省产商品质量监督检验研究院")
+                                       $("#orgName").val("1001");
+                                    }
+                    var taskCode=$("#taskCode").val();
                        if(!taskCode){
                            var userid= setCode.userId();
                            var sampleid=setCode.setBmCode();
@@ -273,8 +297,9 @@ $(function(){
             $("#modal").css("display","block");
             $("#cover").css("display","block");
             $(".title").text("任务来源");
-            var type="0"
-            var id="";
+            var taskId=$("#taskId").val();
+              var type="0"
+              var id="";
               var url= setCode.url();
              $.ajax({
             			     type : "POST", //提交方式
@@ -289,15 +314,29 @@ $(function(){
                                          var list=data.data;
                                             $th = "";
                                          for(var i=0;i<list.length;i++){
-                                         $th =($th + "<tr><td>" + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio'  onclick='getVal(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label></td></tr>"
+                                           if(taskId){
+                                            if(taskId==list[i].value){
+                                           $th =($th + "<tr><td>" + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio' checked onclick='getVal(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label></td></tr>");
 
-                                            );
-                                         }
+                                            }else{
+                                           $th =($th + "<tr><td>" + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio'  onclick='getVal(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label></td></tr>");
+
+                                            }
+
+                                           }else{
+                                          $th =($th + "<tr><td>" + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio'  onclick='getVal(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label></td></tr>");
+                                           }
+
+
+                                           }
+
+
                                         $(".tableTask").append($th);
                                       }else if(data.code=="201"){
                                        setCode.send(data.message);
                                       }
-            			     }
+                                    }
+
             			   });
                       });
                        $('.taskType').click(function(){
@@ -306,7 +345,7 @@ $(function(){
                                   $("#modal").css("display","block");
                                   $("#cover").css("display","block");
                                   $(".title").text("任务来源");
-
+                                     var taskTypeValue=$(".taskTypeValue").val();
                                   var type="1"
                                   var id="";
                                     var url= setCode.url();
@@ -322,9 +361,42 @@ $(function(){
                                                             if(data.code=="200"){
                                                                var list=data.data;
                                                                   $th = "";
+                                                                  var index=2;
                                                                for(var i=0;i<list.length;i++){
-                                                               $th =($th + "<tr><td>" + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label></td></tr>"
-                                                                  );
+                                                               if(taskTypeValue){
+                                                                    if(taskTypeValue==list[i].value){
+                                                                       $th =($th + "<tr><td><div style='width:220px;float:left;text-align:left;padding-left:30px'><font style='color:red'>(一级 )</font>" + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio' checked  onclick='getValType(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label></div></td></tr>");
+                                                                    }else{
+                                                                       $th =($th + "<tr><td><div style='width:220px;float:left;text-align:left;padding-left:30px'><font style='color:red'>(一级 )</font>" + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label></div></td></tr>");
+
+                                                                    }
+
+
+                                                                      if(list[i].child){
+                                                                                   for(var j=0;j<list[i].child.length;j++){
+                                                                                   if(taskTypeValue==list[i].child[j].value){
+                                                                                   $th =($th + "<tr'><td><div style='width:200px;float:right;padding-right:30px'><font style='color:red'>(二级 )</font>" + list[i].child[j].item +"<input type='hidden'  class='name' value="+list[i].child[j].item+"><input type='radio' checked  onclick='getValType(this)' class='regular-radio productType' id='radio-"+index+"-" + j+ "' name='code' value=" + list[i].child[j].value+ "> <label for='radio-"+index+"-" + j + "'></label></div></td></tr>");
+                                                                                   }else{
+                                                                                  $th =($th + "<tr'><td><div style='width:200px;float:right;padding-right:30px'><font style='color:red'>(二级 )</font>" + list[i].child[j].item +"<input type='hidden' class='name' value="+list[i].child[j].item+"><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-"+index+"-" + j+ "' name='code' value=" + list[i].child[j].value+ "> <label for='radio-"+index+"-" + j + "'></label></div></td></tr>");
+                                                                                   }
+
+                                                                                                                           }
+
+                                                                                     }
+                                                                                    index++;
+
+                                                               }else{
+                                                                  $th =($th + "<tr><td><div style='width:220px;float:left;text-align:left;padding-left:30px'><font style='color:red'>(一级 )</font>" + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label></div></td></tr>");
+                                                                 if(list[i].child){
+                                                                               for(var j=0;j<list[i].child.length;j++){
+                                                                               $th =($th + "<tr'><td><div style='width:200px;float:right;padding-right:30px'><font style='color:red'>(二级 )</font>" + list[i].child[j].item +"<input type='hidden' class='name' value="+list[i].child[j].item+"><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-"+index+"-" + j+ "' name='code' value=" + list[i].child[j].value+ "> <label for='radio-"+index+"-" + j + "'></label></div></td></tr>");
+                                                                                        }
+                                                                                  }
+                                                                       index++;
+
+                                                               }
+
+
                                                                }
                                                               $(".tableTask").append($th);
                                                             }else if(data.code=="201"){
@@ -332,7 +404,53 @@ $(function(){
                                                             }
                                   			     }
                                   			   });
-                                            })
+                                            });
+                      $('.orgName').click(function(){
+                                                  $(".taskList").css("display","block");
+
+                                                  $("#modal").css("display","block");
+                                                  $("#cover").css("display","block");
+                                                  $(".title").text("任务来源");
+                                            var orgName=$("#orgName").val();
+                                                  var type="2"
+                                                  var id="";
+                                                    var url= setCode.url();
+                                                   $.ajax({
+                                                  			     type : "POST", //提交方式
+                                                  			     url : url+"app/common/getjointtype",
+                                                  			     data : {
+                                                  			      "type" : type,
+                                                  			      'value':id
+                                                  			     },//数据，这里使用的是Json格式进行传输
+                                                  			     success : function(data) {//返回数据根据结果进行相应的处理
+                                                                  $(".tableTask").empty();
+                                                                            if(data.code=="200"){
+                                                                               var list=data.data;
+                                                                                  $th = "";
+
+                                                                               for(var i=0;i<list.length;i++){
+
+                                                                                    if(orgName){
+                                                                                           if(orgName==list[i].value){
+                                                                                  $th =($th + "<tr><td> " + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio' checked  onclick='getOrgName(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label> </td></tr>");
+                                                                                           }else{
+                                                                                  $th =($th + "<tr><td> " + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio'  onclick='getOrgName(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label> </td></tr>");
+                                                                                           }
+
+                                                                                    }else{
+                                                                                    $th =($th + "<tr><td> " + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio'  onclick='getOrgName(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label> </td></tr>");
+
+                                                                                    }
+
+
+                                                                               }
+                                                                              $(".tableTask").append($th);
+                                                                            }else if(data.code=="201"){
+                                                                             setCode.send(data.message);
+                                                                            }
+                                                  			     }
+                                                  			   });
+                                                            });
     $('#cover').click(function(){
 
                                   $("#modal").css("display","none");
@@ -459,6 +577,14 @@ function getValType(object){
   var name=$(object).prev().val();
 
 $(".nameItemType").text(name)
+
+}
+function getOrgName(object){
+   var value=$(object).val();
+   $("#orgName").val(value);
+  var name=$(object).prev().val();
+
+$(".nameItemOrg").text(name)
 
 }
 

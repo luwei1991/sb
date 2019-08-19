@@ -23,7 +23,7 @@
   <form action="">
     <p class="title" style="padding-top: 25px">产品质量监督抽查/复查抽样单</p>
     <div class="ov bh">
-        <div class="right">编号：<input name="sampling.taskcode" class="taskcode"  style="width:200px;font-family: '宋体';color: red" type="text" value=""></div>
+        <div class="right">编号：<input name="sampling.taskcode" class="taskcode" id="taskCode" style="width:200px;font-family: '宋体';color: red" type="text" value=""></div>
         <!--<div class="right">报告编号：<input name="sampling.reportcode" style="width:200px" type="text" placeholder=""></div>-->
     </div>
 
@@ -184,7 +184,10 @@
       <tr>
         <td colspan="1" rowspan="3" align="center">抽<br />样<br />单<br />位</td>
         <td colspan="1">单位名称</td>
-        <td colspan="2"><input type="text" name="sampling.samplingname" placeholder="" value="湖南省产商品质量监督检验研究院"></td>
+        <td colspan="2" class="orgName">
+          <p class="nameItemOrg"></p>
+          <input type="hidden" name="sampling.samplingname" placeholder="" id="orgName" value="">
+        </td>
         <td colspan="2">联系人</td>
         <td colspan="1"><input type="text" name="sampling.samplingman" placeholder="" value="康峰"></td>
       </tr>
