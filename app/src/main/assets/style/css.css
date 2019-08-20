@@ -216,12 +216,13 @@ table.tftable td.signtd{
   top: 4px;
 }
 #cover{
-    position:absolute;
-    left:0px;
-    top:0px;
+   position: fixed;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
     background:rgba(0, 0, 0, 0.4);
-    width:600px;
-    height:940px;
+     width:100%;
     filter:alpha(opacity=60);
     opacity:0.6;
     display:none;

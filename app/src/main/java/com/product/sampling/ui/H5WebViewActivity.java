@@ -134,6 +134,7 @@ public class H5WebViewActivity extends AppCompatActivity {
         }
 
 
+
         Button button = findViewById(R.id.btn);
         if (isUploadTask) {
             button.setVisibility(View.GONE);

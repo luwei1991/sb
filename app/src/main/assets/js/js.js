@@ -53,8 +53,10 @@ connectWebViewJavascriptBridge(function(bridge) {
     });
 
     bridge.registerHandler("dataBackfill", function(data, responseCallback) {
-        responseCallback(data);
-        dataFill(data);
+             setCode.send(112443);
+             dataFill(data);
+             responseCallback(data);
+
     });
 })
 
@@ -78,6 +80,7 @@ function dataFillByType(els, data){
 
 // 数据回填
 function dataFill(data){
+
     data.split('&').forEach(item => {
         var d = item.match(/(.+)=(.+)/)
         
@@ -108,6 +111,7 @@ function dataFill(data){
             }
         }
     });
+
 var taskId=$("#taskId").val();
             var url= setCode.url();
                   if(taskId){
@@ -178,8 +182,8 @@ var taskId=$("#taskId").val();
                                        $(".nameItemOrg").text("湖南省产商品质量监督检验研究院")
                                        $("#orgName").val("1001");
                                     }
-                    var taskCode=$("#taskCode").val();
-                       if(!taskCode){
+                   var taskCode=$("#taskCode").val();
+                     if(!taskCode){
                            var userid= setCode.userId();
                            var sampleid=setCode.setBmCode();
                            var taskId=setCode.taskId();
@@ -245,8 +249,7 @@ var taskId=$("#taskId").val();
 
 
 $(function(){
-
-    var signShow,signaturePad,sign_canvas;
+     var signShow,signaturePad,sign_canvas;
     var sign_box = $('#sign_ban'),sign_bg = $('#sign_bg')
     if(!sign_box.length){
         $('body').append('<div id="sign_bg"></div><div id="sign_ban"><div class="title">签名板</div><canvas style="width:100%;height:300px" id="sign_canvas"></canvas><div class="sign_btn"><div class="qsign" style="margin-left:15px;">确定</div><div class="csign">清空</div></div></div>')
@@ -297,7 +300,7 @@ $(function(){
             $("#modal").css("display","block");
             $("#cover").css("display","block");
             $(".title").text("任务来源");
-            var taskId=$("#taskId").val();
+             var taskId=$("#taskId").val();
               var type="0"
               var id="";
               var url= setCode.url();

@@ -500,7 +500,8 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
     private void showDialog(Context context, TaskEntity taskEntity, int index) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("提示");
-        builder.setMessage("是否确认执行此任务?");
+    /*    builder.setMessage("是否确认执行此任务?");*/
+        builder.setMessage("任务确认执行后24小时内必须提交，否则任务将失效，是否确认执行?");
         builder.setCancelable(true);
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
