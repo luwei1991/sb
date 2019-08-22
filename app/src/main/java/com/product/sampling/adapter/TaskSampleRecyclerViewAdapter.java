@@ -270,8 +270,8 @@ public class TaskSampleRecyclerViewAdapter extends BaseQuickAdapter<TaskSample, 
                     b.putSerializable("map", mData.get(postion).samplingInfoMap);
                     b.putBoolean(Intent_Edit, isUploadTask);
                     b.putString("code",code);
-               TaskEntity taskEntity=taskDetailViewModel.taskEntity;
-               String taskId=taskEntity.id;
+                    TaskEntity taskEntity=taskDetailViewModel.taskEntity;
+                    String taskId=taskEntity.id;
                     b.putString("taskId",taskId);
                     intent.putExtras(b);
                     fragment.startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);

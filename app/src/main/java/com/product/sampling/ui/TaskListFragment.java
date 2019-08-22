@@ -359,6 +359,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
             holder.mTextViewEndTime.setText("结束时间：" + task.endtime);
             if (task.leftday >= 0) {
                 holder.mTextViewCountDown.setText("剩余" + task.leftday + "天");
+
             } else {
                 holder.mTextViewCountDown.setText("超时" + Math.abs(task.leftday) + "天");
             }

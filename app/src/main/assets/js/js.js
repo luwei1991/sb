@@ -53,7 +53,7 @@ connectWebViewJavascriptBridge(function(bridge) {
     });
 
     bridge.registerHandler("dataBackfill", function(data, responseCallback) {
-             setCode.send(112443);
+
              dataFill(data);
              responseCallback(data);
 
@@ -83,7 +83,7 @@ function dataFill(data){
 
     data.split('&').forEach(item => {
         var d = item.match(/(.+)=(.+)/)
-        
+
         if(d && d[1] && d[2]){
 
             if(d[1].split('.')[1] && d[1].split('.')[1]=="fillInDate"){ // 日期回填
@@ -99,7 +99,7 @@ function dataFill(data){
                     $(this).val(v[2])
                 })
             }
-            
+
             if(d[1].indexOf('ssiiggnn_')>-1){ // 签名回填
                 if(!$("[name="+d[1]+"]").length){
                     $('form').append('<input type="hidden" name='+ d[1] +'>')
@@ -112,133 +112,139 @@ function dataFill(data){
         }
     });
 
-var taskId=$("#taskId").val();
-            var url= setCode.url();
-                  if(taskId){
-                      var type="0"
-                      $.ajax({
-                          			     type : "POST", //提交方式
-                          			     url : url+"app/common/getjointtype",
-                          			     data : {
-                          			      "type" : type,
-                          			      'value':taskId
-                          			     },//数据，这里使用的是Json格式进行传输
-                          			     success : function(data) {//返回数据根据结果进行相应的处理
-                                          $(".tableTask").empty();
-                                                    if(data.code=="200"){
-                                                    var name=data.data;
-                                                   $(".nameItem").text(name)
+    var taskId = $("#taskId").val();
+    var url = setCode.url();
+    if (taskId) {
+        var type = "0"
+        $.ajax({
+            type: "POST", //提交方式
+            url: url + "app/common/getjointtype",
+            data: {
+                "type": type,
+                'value': taskId
+            },//数据，这里使用的是Json格式进行传输
+            success: function (data) {//返回数据根据结果进行相应的处理
+                $(".tableTask").empty();
+                if (data.code == "200") {
+                    var name = data.data;
+                    $(".nameItem").text(name)
 
-                                                    }else if(data.code=="201"){
-                                                     setCode.send(data.message);
-                                                    }
-                          			     }
-                          			   });
-                  };
-                var taskType=$(".taskTypeValue").val();
-                                    if(taskType){
-                                        var type="1"
-                                        $.ajax({
-                                            			     type : "POST", //提交方式
-                                            			     url : url+"app/common/getjointtype",
-                                            			     data : {
-                                            			      "type" : type,
-                                            			      'value':taskType
-                                            			     },//数据，这里使用的是Json格式进行传输
-                                            			     success : function(data) {//返回数据根据结果进行相应的处理
-                                                            $(".tableTask").empty();
-                                                                      if(data.code=="200"){
-                                                                      var name=data.data;
-                                                                     $(".nameItemType").text(name)
+                } else if (data.code == "201") {
+                    setCode.send(data.message);
+                }
+            }
+        });
+    }
+    ;
+    var taskType = $(".taskTypeValue").val();
 
-                                                                      }else if(data.code=="201"){
-                                                                       setCode.send(data.message);
-                                                                      }
-                                            			     }
-                                            			   });
-                                    };
-                                   var orgName=$("#orgName").val();
-                                    if(orgName){
-                                        var type="2"
-                                        $.ajax({
-                                            			     type : "POST", //提交方式
-                                            			     url : url+"app/common/getjointtype",
-                                            			     data : {
-                                            			      "type" : type,
-                                            			      'value':orgName
-                                            			     },//数据，这里使用的是Json格式进行传输
-                                            			     success : function(data) {//返回数据根据结果进行相应的处理
-                                                            $(".tableTask").empty();
-                                                                      if(data.code=="200"){
-                                                                      var name=data.data;
-                                                                     $(".nameItemOrg").text(name)
+    if (taskType) {
+        var type = "1"
+        $.ajax({
+            type: "POST", //提交方式
+            url: url + "app/common/getjointtype",
+            data: {
+                "type": type,
+                'value': taskType
+            },//数据，这里使用的是Json格式进行传输
+            success: function (data) {//返回数据根据结果进行相应的处理
+                $(".tableTask").empty();
+                if (data.code == "200") {
+                    var name = data.data;
+                    $(".nameItemType").text(name)
 
-                                                                      }else if(data.code=="201"){
-                                                                       setCode.send(data.message);
-                                                                      }
-                                            			     }
-                                            			   });
-                                    }else{
-                                       $(".nameItemOrg").text("湖南省产商品质量监督检验研究院")
-                                       $("#orgName").val("1001");
-                                    }
-                   var taskCode=$("#taskCode").val();
-                     if(!taskCode){
-                           var userid= setCode.userId();
-                           var sampleid=setCode.setBmCode();
-                           var taskId=setCode.taskId();
-                                    var type="1"
-                                       $.ajax({
-                                          type : "POST", //提交方式
-                                          url : url+"app/common/reportcode",
-                                          data : {
-                                        "userid" : userid,
-                                       "sampleid":sampleid,
-                                       "taskid":taskId,
-                                       "reporttype":"sampling"
+                } else if (data.code == "201") {
+                    setCode.send(data.message);
+                            setCode.send(1);
+                }
+            }
+        });
+    }
+    ;
+    var orgName = $("#orgName").val();
+    if (orgName) {
+        var type = "2"
+        $.ajax({
+            type: "POST", //提交方式
+            url: url + "app/common/getjointtype",
+            data: {
+                "type": type,
+                'value': orgName
+            },//数据，这里使用的是Json格式进行传输
+            success: function (data) {//返回数据根据结果进行相应的处理
+                $(".tableTask").empty();
+                if (data.code == "200") {
+                    var name = data.data;
+                    $(".nameItemOrg").text(name)
 
-                                                 },//数据，这里使用的是Json格式进行传输
-                                          success : function(data) {//返回数据根据结果进行相应的处理
+                } else if (data.code == "201") {
+                    setCode.send(data.message);
+                     setCode.send(2);
+                }
+            }
+        });
+    } else {
+        $(".nameItemOrg").text("湖南省产商品质量监督检验研究院")
+        $("#orgName").val("1001");
+    }
+     var taskCode = $("#taskCode").val();
+    if (!taskCode) {
+        var userid = setCode.userId();
+        var sampleid = setCode.setBmCode();
+        var taskId = setCode.taskId();
+        var type = "1"
+        $.ajax({
+            type: "POST", //提交方式
+            url: url + "app/common/reportcode",
+            data: {
+                "userid": userid,
+                "sampleid": sampleid,
+                "taskid": taskId,
+                "reporttype": "sampling"
 
-                                                         if(data.code=="200"){
-                                                                      var code=data.data;
-                                                                     $(".taskcode").val(code);
+            },//数据，这里使用的是Json格式进行传输
+            success: function (data) {//返回数据根据结果进行相应的处理
 
-                                                                      }else if(data.code=="201"){
-                                                                       setCode.send(data.message);
-                                                                      }
+                if (data.code == "200") {
+                    var code = data.data;
+                    $(".taskcode").val(code);
 
-                                                        			     }
-                                                        			   });
-                                                };
+                } else if (data.code == "201") {
+                    setCode.send(data.message);
+                     setCode.send(3);
+                }
+
+            }
+        });
+    }; 
 
 
-     if($("#adviceCode").val().length>1){
-             var index=0;
-             var adviceCodes=$("#adviceCode").val().split(",");
-             $(".adviceCode").each(function(){
-                   $(this).val(adviceCodes[index]);
-                   index++;
-              });
-         }
+    if ($("#adviceCode").val().length > 1) {
+        var index = 0;
+        var adviceCodes = $("#adviceCode").val().split(",");
+        $(".adviceCode").each(function () {
+            $(this).val(adviceCodes[index]);
+            index++;
+        });
+    }
 
-         if($("#adviceProname").val().length>1){
-              var index=0;
-              var advicePronames=$("#adviceProname").val().split(",");
-              $(".adviceProname").each(function(){
-                    $(this).val(advicePronames[index]);
-                    index++;
-               });
-         }
+    if ($("#adviceProname").val().length > 1) {
+        var index = 0;
+        var advicePronames = $("#adviceProname").val().split(",");
+        $(".adviceProname").each(function () {
+            $(this).val(advicePronames[index]);
+            index++;
+        });
+    }
 
-          if($("#adviceSpecifications").val().length>1){
-            var index=0;
-            var adviceSpecifications=$("#adviceSpecifications").val().split(",");
-            $(".adviceSpecifications").each(function(){
-                  $(this).val(adviceSpecifications[index]);
-                  index++;
-             });
-          }
+    if ($("#adviceSpecifications").val().length > 1) {
+        var index = 0;
+        var adviceSpecifications = $("#adviceSpecifications").val().split(",");
+        $(".adviceSpecifications").each(function () {
+            $(this).val(adviceSpecifications[index]);
+            index++;
+        });
+    }
 
 
 
@@ -295,299 +301,264 @@ $(function(){
         signaturePad.clear()
     })
 
-    $('.taskName').click(function(){
-            $(".taskList").css("display","block");
-            $("#modal").css("display","block");
-            $("#cover").css("display","block");
-            $(".title").text("任务来源");
-             var taskId=$("#taskId").val();
-              var type="0"
-              var id="";
-              var url= setCode.url();
-             $.ajax({
-            			     type : "POST", //提交方式
-            			     url : url+"app/common/getjointtype",
-            			     data : {
-            			      "type" : type,
-            			      'value':id
-            			     },//数据，这里使用的是Json格式进行传输
-            			     success : function(data) {//返回数据根据结果进行相应的处理
-                            $(".tableTask").empty();
-                                      if(data.code=="200"){
-                                         var list=data.data;
-                                            $th = "";
-                                         for(var i=0;i<list.length;i++){
-                                           if(taskId){
-                                            if(taskId==list[i].value){
-                                           $th =($th + "<tr><td>" + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio' checked onclick='getVal(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label></td></tr>");
+    $('.taskName').click(function () {
+        $(".taskList").css("display", "block");
+        $("#modal").css("display", "block");
+        $("#cover").css("display", "block");
+        $(".title").text("任务来源");
+        var taskId = $("#taskId").val();
+        var type = "0"
+        var id = "";
+        var url = setCode.url();
+        $.ajax({
+            type: "POST", //提交方式
+            url: url + "app/common/getjointtype",
+            data: {
+                "type": type,
+                'value': id
+            },//数据，这里使用的是Json格式进行传输
+            success: function (data) {//返回数据根据结果进行相应的处理
+                $(".tableTask").empty();
+                if (data.code == "200") {
+                    var list = data.data;
+                    $th = "";
+                    for (var i = 0; i < list.length; i++) {
+                        if (taskId) {
+                            if (taskId == list[i].value) {
+                                $th = ($th + "<tr><td>" + list[i].item + "<input type='hidden' class='name' value=" + list[i].item + "><input type='radio' checked onclick='getVal(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value + "> <label for='radio-1-" + i + "'></label></td></tr>");
 
-                                            }else{
-                                           $th =($th + "<tr><td>" + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio'  onclick='getVal(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label></td></tr>");
+                            } else {
+                                $th = ($th + "<tr><td>" + list[i].item + "<input type='hidden' class='name' value=" + list[i].item + "><input type='radio'  onclick='getVal(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value + "> <label for='radio-1-" + i + "'></label></td></tr>");
 
-                                            }
+                            }
 
-                                           }else{
-                                          $th =($th + "<tr><td>" + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio'  onclick='getVal(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label></td></tr>");
-                                           }
-
-
-                                           }
+                        } else {
+                            $th = ($th + "<tr><td>" + list[i].item + "<input type='hidden' class='name' value=" + list[i].item + "><input type='radio'  onclick='getVal(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value + "> <label for='radio-1-" + i + "'></label></td></tr>");
+                        }
 
 
-                                        $(".tableTask").append($th);
-                                      }else if(data.code=="201"){
-                                       setCode.send(data.message);
-                                      }
+                    }
+
+
+                    $(".tableTask").append($th);
+                } else if (data.code == "201") {
+                    setCode.send(data.message);
+                }
+            }
+
+        });
+    });
+    $('.taskType').click(function () {
+        $(".taskList").css("display", "block");
+
+        $("#modal").css("display", "block");
+        $("#cover").css("display", "block");
+        $(".title").text("任务来源");
+        var taskTypeValue = $(".taskTypeValue").val();
+        var type = "1"
+        var id = "";
+        var url = setCode.url();
+        $.ajax({
+            type: "POST", //提交方式
+            url: url + "app/common/getjointtype",
+            data: {
+                "type": type,
+                'value': id
+            },//数据，这里使用的是Json格式进行传输
+            success: function (data) {//返回数据根据结果进行相应的处理
+                $(".tableTask").empty();
+                if (data.code == "200") {
+                    var list = data.data;
+                    $th = "";
+                    var index = 2;
+                    for (var i = 0; i < list.length; i++) {
+                        if (taskTypeValue) {
+                            if (taskTypeValue == list[i].value) {
+                                $th = ($th + "<tr><td><div style='width:220px;float:left;text-align:left;padding-left:30px'><font style='color:red'>(一级 )</font>" + list[i].item + "<input type='hidden' class='name' value=" + list[i].item + "><input type='radio' checked  onclick='getValType(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value + "> <label for='radio-1-" + i + "'></label></div></td></tr>");
+                            } else {
+                                $th = ($th + "<tr><td><div style='width:220px;float:left;text-align:left;padding-left:30px'><font style='color:red'>(一级 )</font>" + list[i].item + "<input type='hidden' class='name' value=" + list[i].item + "><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value + "> <label for='radio-1-" + i + "'></label></div></td></tr>");
+
+                            }
+
+
+                            if (list[i].child) {
+                                for (var j = 0; j < list[i].child.length; j++) {
+                                    if (taskTypeValue == list[i].child[j].value) {
+                                        $th = ($th + "<tr'><td><div style='width:200px;float:right;padding-right:30px'><font style='color:red'>(二级 )</font>" + list[i].child[j].item + "<input type='hidden'  class='name' value=" + list[i].child[j].item + "><input type='radio' checked  onclick='getValType(this)' class='regular-radio productType' id='radio-" + index + "-" + j + "' name='code' value=" + list[i].child[j].value + "> <label for='radio-" + index + "-" + j + "'></label></div></td></tr>");
+                                    } else {
+                                        $th = ($th + "<tr'><td><div style='width:200px;float:right;padding-right:30px'><font style='color:red'>(二级 )</font>" + list[i].child[j].item + "<input type='hidden' class='name' value=" + list[i].child[j].item + "><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-" + index + "-" + j + "' name='code' value=" + list[i].child[j].value + "> <label for='radio-" + index + "-" + j + "'></label></div></td></tr>");
                                     }
 
-            			   });
-                      });
-                       $('.taskType').click(function(){
-                                  $(".taskList").css("display","block");
+                                }
 
-                                  $("#modal").css("display","block");
-                                  $("#cover").css("display","block");
-                                  $(".title").text("任务来源");
-                                     var taskTypeValue=$(".taskTypeValue").val();
-                                  var type="1"
-                                  var id="";
-                                    var url= setCode.url();
-                                   $.ajax({
-                                  			     type : "POST", //提交方式
-                                  			     url : url+"app/common/getjointtype",
-                                  			     data : {
-                                  			      "type" : type,
-                                  			      'value':id
-                                  			     },//数据，这里使用的是Json格式进行传输
-                                  			     success : function(data) {//返回数据根据结果进行相应的处理
-                                                  $(".tableTask").empty();
-                                                            if(data.code=="200"){
-                                                               var list=data.data;
-                                                                  $th = "";
-                                                                  var index=2;
-                                                               for(var i=0;i<list.length;i++){
-                                                               if(taskTypeValue){
-                                                                    if(taskTypeValue==list[i].value){
-                                                                       $th =($th + "<tr><td><div style='width:220px;float:left;text-align:left;padding-left:30px'><font style='color:red'>(一级 )</font>" + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio' checked  onclick='getValType(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label></div></td></tr>");
-                                                                    }else{
-                                                                       $th =($th + "<tr><td><div style='width:220px;float:left;text-align:left;padding-left:30px'><font style='color:red'>(一级 )</font>" + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label></div></td></tr>");
+                            }
+                            index++;
 
-                                                                    }
+                        } else {
+                            $th = ($th + "<tr><td><div style='width:220px;float:left;text-align:left;padding-left:30px'><font style='color:red'>(一级 )</font>" + list[i].item + "<input type='hidden' class='name' value=" + list[i].item + "><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value + "> <label for='radio-1-" + i + "'></label></div></td></tr>");
+                            if (list[i].child) {
+                                for (var j = 0; j < list[i].child.length; j++) {
+                                    $th = ($th + "<tr'><td><div style='width:200px;float:right;padding-right:30px'><font style='color:red'>(二级 )</font>" + list[i].child[j].item + "<input type='hidden' class='name' value=" + list[i].child[j].item + "><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-" + index + "-" + j + "' name='code' value=" + list[i].child[j].value + "> <label for='radio-" + index + "-" + j + "'></label></div></td></tr>");
+                                }
+                            }
+                            index++;
+
+                        }
 
 
-                                                                      if(list[i].child){
-                                                                                   for(var j=0;j<list[i].child.length;j++){
-                                                                                   if(taskTypeValue==list[i].child[j].value){
-                                                                                   $th =($th + "<tr'><td><div style='width:200px;float:right;padding-right:30px'><font style='color:red'>(二级 )</font>" + list[i].child[j].item +"<input type='hidden'  class='name' value="+list[i].child[j].item+"><input type='radio' checked  onclick='getValType(this)' class='regular-radio productType' id='radio-"+index+"-" + j+ "' name='code' value=" + list[i].child[j].value+ "> <label for='radio-"+index+"-" + j + "'></label></div></td></tr>");
-                                                                                   }else{
-                                                                                  $th =($th + "<tr'><td><div style='width:200px;float:right;padding-right:30px'><font style='color:red'>(二级 )</font>" + list[i].child[j].item +"<input type='hidden' class='name' value="+list[i].child[j].item+"><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-"+index+"-" + j+ "' name='code' value=" + list[i].child[j].value+ "> <label for='radio-"+index+"-" + j + "'></label></div></td></tr>");
-                                                                                   }
+                    }
+                    $(".tableTask").append($th);
+                } else if (data.code == "201") {
+                    setCode.send(data.message);
+                }
+            }
+        });
+    });
+    $('.orgName').click(function () {
+        $(".taskList").css("display", "block");
 
-                                                                                                                           }
+        $("#modal").css("display", "block");
+        $("#cover").css("display", "block");
+        $(".title").text("任务来源");
+        var orgName = $("#orgName").val();
+        var type = "2"
+        var id = "";
+        var url = setCode.url();
+        $.ajax({
+            type: "POST", //提交方式
+            url: url + "app/common/getjointtype",
+            data: {
+                "type": type,
+                'value': id
+            },//数据，这里使用的是Json格式进行传输
+            success: function (data) {//返回数据根据结果进行相应的处理
+                $(".tableTask").empty();
+                if (data.code == "200") {
+                    var list = data.data;
+                    $th = "";
 
-                                                                                     }
-                                                                                    index++;
+                    for (var i = 0; i < list.length; i++) {
 
-                                                               }else{
-                                                                  $th =($th + "<tr><td><div style='width:220px;float:left;text-align:left;padding-left:30px'><font style='color:red'>(一级 )</font>" + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label></div></td></tr>");
-                                                                 if(list[i].child){
-                                                                               for(var j=0;j<list[i].child.length;j++){
-                                                                               $th =($th + "<tr'><td><div style='width:200px;float:right;padding-right:30px'><font style='color:red'>(二级 )</font>" + list[i].child[j].item +"<input type='hidden' class='name' value="+list[i].child[j].item+"><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-"+index+"-" + j+ "' name='code' value=" + list[i].child[j].value+ "> <label for='radio-"+index+"-" + j + "'></label></div></td></tr>");
-                                                                                        }
-                                                                                  }
-                                                                       index++;
+                        if (orgName) {
+                            if (orgName == list[i].value) {
+                                $th = ($th + "<tr><td> " + list[i].item + "<input type='hidden' class='name' value=" + list[i].item + "><input type='radio' checked  onclick='getOrgName(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value + "> <label for='radio-1-" + i + "'></label> </td></tr>");
+                            } else {
+                                $th = ($th + "<tr><td> " + list[i].item + "<input type='hidden' class='name' value=" + list[i].item + "><input type='radio'  onclick='getOrgName(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value + "> <label for='radio-1-" + i + "'></label> </td></tr>");
+                            }
 
-                                                               }
+                        } else {
+                            $th = ($th + "<tr><td> " + list[i].item + "<input type='hidden' class='name' value=" + list[i].item + "><input type='radio'  onclick='getOrgName(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value + "> <label for='radio-1-" + i + "'></label> </td></tr>");
 
-
-                                                               }
-                                                              $(".tableTask").append($th);
-                                                            }else if(data.code=="201"){
-                                                             setCode.send(data.message);
-                                                            }
-                                  			     }
-                                  			   });
-                                            });
-                      $('.orgName').click(function(){
-                                                  $(".taskList").css("display","block");
-
-                                                  $("#modal").css("display","block");
-                                                  $("#cover").css("display","block");
-                                                  $(".title").text("任务来源");
-                                            var orgName=$("#orgName").val();
-                                                  var type="2"
-                                                  var id="";
-                                                    var url= setCode.url();
-                                                   $.ajax({
-                                                  			     type : "POST", //提交方式
-                                                  			     url : url+"app/common/getjointtype",
-                                                  			     data : {
-                                                  			      "type" : type,
-                                                  			      'value':id
-                                                  			     },//数据，这里使用的是Json格式进行传输
-                                                  			     success : function(data) {//返回数据根据结果进行相应的处理
-                                                                  $(".tableTask").empty();
-                                                                            if(data.code=="200"){
-                                                                               var list=data.data;
-                                                                                  $th = "";
-
-                                                                               for(var i=0;i<list.length;i++){
-
-                                                                                    if(orgName){
-                                                                                           if(orgName==list[i].value){
-                                                                                  $th =($th + "<tr><td> " + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio' checked  onclick='getOrgName(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label> </td></tr>");
-                                                                                           }else{
-                                                                                  $th =($th + "<tr><td> " + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio'  onclick='getOrgName(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label> </td></tr>");
-                                                                                           }
-
-                                                                                    }else{
-                                                                                    $th =($th + "<tr><td> " + list[i].item +"<input type='hidden' class='name' value="+list[i].item+"><input type='radio'  onclick='getOrgName(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value+ "> <label for='radio-1-" + i + "'></label> </td></tr>");
-
-                                                                                    }
+                        }
 
 
-                                                                               }
-                                                                              $(".tableTask").append($th);
-                                                                            }else if(data.code=="201"){
-                                                                             setCode.send(data.message);
-                                                                            }
-                                                  			     }
-                                                  			   });
-                                                            });
-    $('#cover').click(function(){
+                    }
+                    $(".tableTask").append($th);
+                } else if (data.code == "201") {
+                    setCode.send(data.message);
+                }
+            }
+        });
+    });
+    $('#cover').click(function () {
 
-                                  $("#modal").css("display","none");
-                                  $("#cover").css("display","none");
+        $("#modal").css("display", "none");
+        $("#cover").css("display", "none");
 
 
-                                 })
+    })
 
-    $(".maintextarea").keyup(function(){
-    var L=$(this).val().length;
-    if(L>32){//100为设定的字数
-    $(this).val($(this).val().substring(0,32));
-    }
+    $(".maintextarea").keyup(function () {
+        var L = $(this).val().length;
+        if (L > 32) {//100为设定的字数
+            $(this).val($(this).val().substring(0, 32));
+        }
     });
 
- 
 
-     //显示当前时间
-     var date = new Date();
-     var dateParse = {
-         year: date.getFullYear(),
-         month: date.getMonth()+1,
-         day: date.getDate()
-     }
-     $('.year').val(dateParse.year)
-     $('.month').val(dateParse.month)
-     $('.day').val(dateParse.day)
- /*    $('.taskcode').val( setCode.setBmCode());*/
-
+    //显示当前时间
+    var date = new Date();
+    var dateParse = {
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        day: date.getDate()
+    }
+    $('.year').val(dateParse.year)
+    $('.month').val(dateParse.month)
+    $('.day').val(dateParse.day)
+    /*    $('.taskcode').val( setCode.setBmCode());*/
 
 
-
-
-
-     $(".adviceCode").keyup(function(){
-        var adviceCode="";
-        $(".adviceCode").each(function(){
-            adviceCode+=$(this).val()+",";
+    $(".adviceCode").keyup(function () {
+        var adviceCode = "";
+        $(".adviceCode").each(function () {
+            adviceCode += $(this).val() + ",";
         });
 
-        adviceCode=adviceCode.substring(0,adviceCode.length-1);
+        adviceCode = adviceCode.substring(0, adviceCode.length - 1);
         console.log(adviceCode)
         $("#adviceCode").val(adviceCode);
-     })
+    })
 
 
-     $(".adviceProname").keyup(function(){
-         var adviceProname="";
-         $(".adviceProname").each(function(){
-             adviceProname+=$(this).val()+",";
-         });
+    $(".adviceProname").keyup(function () {
+        var adviceProname = "";
+        $(".adviceProname").each(function () {
+            adviceProname += $(this).val() + ",";
+        });
 
-         adviceProname=adviceProname.substring(0,adviceProname.length-1);
-         console.log(adviceProname)
-         $("#adviceProname").val(adviceProname);
-     })
+        adviceProname = adviceProname.substring(0, adviceProname.length - 1);
+        console.log(adviceProname)
+        $("#adviceProname").val(adviceProname);
+    })
 
-      $(".adviceSpecifications").keyup(function(){
-              var adviceSpecifications="";
-              $(".adviceSpecifications").each(function(){
-                  adviceSpecifications+=$(this).val()+",";
-              });
+    $(".adviceSpecifications").keyup(function () {
+        var adviceSpecifications = "";
+        $(".adviceSpecifications").each(function () {
+            adviceSpecifications += $(this).val() + ",";
+        });
 
-              adviceSpecifications=adviceSpecifications.substring(0,adviceSpecifications.length-1);
-              console.log(adviceSpecifications)
-              $("#adviceSpecifications").val(adviceSpecifications);
-          })
+        adviceSpecifications = adviceSpecifications.substring(0, adviceSpecifications.length - 1);
+        console.log(adviceSpecifications)
+        $("#adviceSpecifications").val(adviceSpecifications);
+    })
 
 
 })
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // 测试用例
-function d(data){
-    setTimeout(function(){
+function d(data) {
+    setTimeout(function () {
         dataFill(data)
         console.log('数据回填完成')
     }, 200)
 }
-function getVal(object){
-   var value=$(object).val();
-   $(".taskId").val(value);
-  var name=$(object).prev().val();
 
-$(".nameItem").text(name)
+function getVal(object) {
+    var value = $(object).val();
+    $(".taskId").val(value);
+    var name = $(object).prev().val();
 
-}
-function getValType(object){
-   var value=$(object).val();
-   $(".taskTypeValue").val(value);
-  var name=$(object).prev().val();
-
-$(".nameItemType").text(name)
+    $(".nameItem").text(name)
 
 }
-function getOrgName(object){
-   var value=$(object).val();
-   $("#orgName").val(value);
-  var name=$(object).prev().val();
 
-$(".nameItemOrg").text(name)
+function getValType(object) {
+    var value = $(object).val();
+    $(".taskTypeValue").val(value);
+    var name = $(object).prev().val();
+
+    $(".nameItemType").text(name)
+
+}
+
+function getOrgName(object) {
+    var value = $(object).val();
+    $("#orgName").val(value);
+    var name = $(object).prev().val();
+
+    $(".nameItemOrg").text(name)
 
 }
 
@@ -633,10 +604,10 @@ function c(){
 //$(function(){
     //html转图片
     // function htmlCanvas(cb){
-    //     var targetDom = $(".page");  
-    //     var copyDom = targetDom.clone();  
-    //     copyDom.width(targetDom.width() + "px");  
-    //     copyDom.height(targetDom.height() + "px");  
+    //     var targetDom = $(".page");
+    //     var copyDom = targetDom.clone();
+    //     copyDom.width(targetDom.width() + "px");
+    //     copyDom.height(targetDom.height() + "px");
     //     $('body').append(copyDom);
     //     html2canvas(copyDom, {
     //         onrendered: function(canvas){
@@ -651,7 +622,7 @@ function c(){
     // $("#submit").click(function(e){
     //     // 序列化表单
     //     var fromData = $("form").serialize();
-        
+
     //     //发送给安卓
     //     // register_js.send(JSON.stringify({
 	//     //     type: postType,

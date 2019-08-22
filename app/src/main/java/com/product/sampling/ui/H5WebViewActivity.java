@@ -95,7 +95,7 @@ public class H5WebViewActivity extends AppCompatActivity {
         //js交互
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        webView.getSettings().setLoadWithOverviewMode(true);
+         webView.getSettings().setLoadWithOverviewMode(true);
         if (1 == pos) {
             webView.loadUrl("file:///android_asset/1产品质量监督抽查-复查抽样单.html");
         } else if (2 == pos) {
@@ -434,24 +434,5 @@ public class H5WebViewActivity extends AppCompatActivity {
         }
 
     }
-/*    public void getBianHaoCode(String taskId, String sampleId, String reporttype) {
-         String userid = AccountManager.getInstance().getUserId();
-        RetrofitService.createApiService(Request.class)
-                .reportcode(userid, sampleId, taskId, reporttype)
-                .compose(RxSchedulersHelper.io_main())
-//                .compose(RxSchedulersHelper.ObsHandHttpResult())
-                .subscribe(new ZBaseObserver<BaseHttpResult>() {
-                    @Override
-                    public void onFailure(int code, String message) {
-                       super.onFailure(code, message);
-                    }
 
-                    @Override
-                    public void onSuccess(BaseHttpResult   result) {
-                      biaoCode=result.data.toString();
-
-
-                    }
-                });
-    }*/
 }
