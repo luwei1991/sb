@@ -353,7 +353,7 @@ $(function(){
 
         $("#modal").css("display", "block");
         $("#cover").css("display", "block");
-        $(".title").text("任务来源");
+        $(".title").text("任务类别");
         var taskTypeValue = $(".taskTypeValue").val();
         var type = "1"
         var id = "";
@@ -419,7 +419,7 @@ $(function(){
 
         $("#modal").css("display", "block");
         $("#cover").css("display", "block");
-        $(".title").text("任务来源");
+        $(".title").text("单位名称");
         var orgName = $("#orgName").val();
         var type = "2"
         var id = "";
