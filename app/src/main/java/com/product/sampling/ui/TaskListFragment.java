@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -359,6 +360,12 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
             holder.mTextViewEndTime.setText("结束时间：" + task.endtime);
             if (task.leftday >= 0) {
                 holder.mTextViewCountDown.setText("剩余" + task.leftday + "天");
+                if(task.leftday <= 7){
+                    holder.mTextViewCountDown.setBackgroundColor(Color.rgb(255, 0, 0));
+                }else if(task.leftday >7&&task.leftday <=15){
+                    holder.mTextViewCountDown.setBackgroundColor(Color.rgb(255, 255, 0));
+                }
+
 
             } else {
                 holder.mTextViewCountDown.setText("超时" + Math.abs(task.leftday) + "天");
