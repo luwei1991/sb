@@ -368,6 +368,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
 
 
             } else {
+                holder.mTextViewCountDown.setBackgroundColor(Color.rgb(204, 204, 204));
                 holder.mTextViewCountDown.setText("超时" + Math.abs(task.leftday) + "天");
             }
 
