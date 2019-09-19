@@ -23,6 +23,7 @@
 
 #PictureSelector 2.0
 -keep class com.luck.picture.lib.** { *; }
+-keep class io.agora.**{*;}
 
 -dontwarn com.yalantis.ucrop**
 -keep class com.yalantis.ucrop** { *; }

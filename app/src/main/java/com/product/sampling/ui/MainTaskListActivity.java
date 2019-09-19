@@ -138,7 +138,8 @@ public class MainTaskListActivity extends BaseActivity implements AMapLocationLi
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
 //设置定位间隔,单位毫秒,默认为2000ms
 
-        mLocationOption.setInterval(AccountManager.getInstance().getInterval() * 1000);
+       mLocationOption.setInterval(AccountManager.getInstance().getInterval() * 1000);
+/*        mLocationOption.setInterval(2 * 1000);*/
 //设置定位参数
         mlocationClient.setLocationOption(mLocationOption);
 // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，

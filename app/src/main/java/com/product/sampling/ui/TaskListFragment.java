@@ -181,6 +181,7 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         View rootView = inflater.inflate(R.layout.item_task_list, container, false);
         Toolbar toolbar = rootView.findViewById(R.id.toolbar);
         if (toolbar != null) {
+
             toolbar.setTitle(getArguments().getString(ARG_TITLE));
         }
         recyclerView = rootView.findViewById(R.id.item_image_list);
@@ -328,12 +329,12 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             TaskEntity task = mValues.get(position);
-            holder.mTextViewNum.setText(task.taskCode);
-            holder.mTextViewAddress.setText(task.companyaddress);
+            holder.mTextViewNum.setText("编号："+task.taskCode);
+            holder.mTextViewAddress.setText("公司地址:"+task.companyaddress);
 
             holder.mTextViewName.setVisibility(View.VISIBLE);
             if (!TextUtils.isEmpty(task.companyname)) {
-                holder.mTextViewName.setText(task.companyname);
+                holder.mTextViewName.setText("公司名称："+task.companyname);
             } else if (task.plantype.equals("2")) {
                 holder.mTextViewName.setText("流通领域任务");
             } else {
@@ -350,12 +351,12 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
 
             holder.mTextViewAddress.setVisibility(View.VISIBLE);
             if (!TextUtils.isEmpty(task.companyaddress)) {
-                holder.mTextViewAddress.setText(task.companyaddress);
+                holder.mTextViewAddress.setText("公司地址："+task.companyaddress);
             } else {
                 holder.mTextViewAddress.setVisibility(View.GONE);
             }
 
-            holder.mTextViewType.setText("产品名:" + task.tasktypecount);
+            holder.mTextViewType.setText("产品名：" + task.tasktypecount);
             holder.mTextViewStartTime.setText("开始时间：" + task.starttime);
             holder.mTextViewEndTime.setText("结束时间：" + task.endtime);
             if (task.leftday >= 0) {

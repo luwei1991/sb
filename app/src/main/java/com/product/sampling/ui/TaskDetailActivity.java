@@ -49,7 +49,7 @@ public class TaskDetailActivity extends BaseActivity {
         rb.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (group.getCheckedRadioButtonId() == R.id.rb1) {
+               if (group.getCheckedRadioButtonId() == R.id.rb1) {
                     switchContent(currentFragment, taskDetailFragment);
                     currentFragment = taskDetailFragment;
                 } else if (group.getCheckedRadioButtonId() == R.id.rb2) {
@@ -60,10 +60,15 @@ public class TaskDetailActivity extends BaseActivity {
                     switchContent(currentFragment, taskSampleFragment);
                     currentFragment = taskSampleFragment;
                 }
+
             }
         });
-        RadioButton radioButton = rb.findViewById(R.id.rb1);
+        RadioButton radioButton = rb.findViewById(R.id.rb2);
         radioButton.setChecked(true);
+
+            switchContent(currentFragment, taskSceneFragment);
+            currentFragment = taskSceneFragment;
+
         taskDetailViewModel.requestCityList(false);
     }
 

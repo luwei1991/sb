@@ -6,7 +6,10 @@
     android:layout_height="match_parent"
     android:baselineAligned="false"
     android:divider="#f1f2f3"
-
+    android:layout_marginLeft="5dp"
+    android:layout_marginTop="5dp"
+    android:paddingLeft="0dp"
+    android:background="@drawable/border"
     android:orientation="vertical"
     android:showDividers="end"
     tools:context=".ui.MainTaskListActivity">
@@ -17,6 +20,7 @@
         android:layout_height="50dp"
         android:background="#8BD4F5"
         app:title="我的信息"
+        app:titleTextAppearance="@style/Toolbar.TitleText"
         app:titleTextColor="#1D77AE" />
 
     <RelativeLayout

@@ -56,10 +56,16 @@ body{
     text-align: center
 }
 .title{
-    line-height: 1.4;
-    font-size: 14px;
+    line-height: 1.2;
+    font-size: 20px;
     text-align: center;
-    padding: 0px 20px 10px;
+    padding: 0px;
+}
+.tasktitle{
+    line-height: 1.2;
+    font-size: 20px;
+    text-align: center;
+    padding: 0px;
 }
 .text{
     text-indent: 2em;
@@ -74,13 +80,21 @@ body{
 table.tftable {color:#333333;width:100%;border-width: 1px;border-color: #333;border-collapse: collapse;}
 table.tftable th {background-color:#fff;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;text-align:left;}
 table.tftable tr {background-color:#fff;}
-table.tftable td {border-width: 1px;padding:0 2px;border-style: solid;border-color: #333;}
+table.tftable td {border-width: 1px;padding:0 2px;border-style: solid;border-color: #333;text-align:center}
 #jiouhcnw89293{
   line-height: 1.4;
   resize: none;
   border: none;
   font-size: 14px;
 }
+.jiouhcnw89293{
+  line-height: 1.4;
+  resize: none;
+  border: none;
+  font-size: 10px;
+  width:100%
+}
+
 table.tftable td.signtd{
   padding: 0;
 }
@@ -239,6 +253,16 @@ table.tftable td.signtd{
     cursor:pointer;
     z-Index:9999;
 }
+.dictContent{
+    width:350px;
+    margin:0 auto;
+
+
+}
+.select{
+  width:200px;
+
+}
 .tableTask {
     border-collapse: collapse;
     margin: 0 auto;
@@ -332,4 +356,27 @@ table.tftable td.signtd{
 
 .leftContent::-webkit-scrollbar {
 	display: none;
+}
+.form-control {
+/*display: block;*/
+
+height: 34px;
+padding: 6px 12px;
+font-size: 14px;
+line-height: 1.428571429;
+color: #555555;
+vertical-align: middle;
+background-color: #ffffff;
+border: 1px solid #cccccc;
+border-radius: 4px;
+-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+-webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+.form-control:focus {
+border-color: #66afe9;
+outline: 0;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }

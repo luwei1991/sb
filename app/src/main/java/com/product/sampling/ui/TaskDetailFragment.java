@@ -77,6 +77,7 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
         tvCompanyname.setText(taskEntity.companyname);
         tv_goodscount.setText(taskEntity.goodscount);
      /*   tv_att.setText("附件");*/
+
     }
 
     private void initView(View view) {

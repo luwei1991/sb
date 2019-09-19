@@ -4,11 +4,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.SurfaceView;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,9 +37,14 @@ import com.product.sampling.R;
 import com.product.sampling.adapter.BannerViewPagerAdapter;
 import com.product.sampling.adapter.NewsListAdapter;
 import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
+import com.product.sampling.agore.VideoChatActivity;
+
+import com.product.sampling.agore.VideoMainActivity;
 import com.product.sampling.bean.New;
 import com.product.sampling.bean.UpdateEntity;
 import com.product.sampling.httpmoudle.RetrofitService;
+import com.product.sampling.listener.OnRequireRefreshListener;
+import com.product.sampling.listener.RequireHandle;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.maputil.ToastUtil;
 import com.product.sampling.net.Exception.ApiException;
@@ -58,10 +67,23 @@ import java.util.Date;
 import java.util.List;
 
 import io.reactivex.disposables.Disposable;
-
+import io.agora.rtc.RtcEngine;
+import io.agora.rtc.Constants;
 import static com.product.sampling.ui.H5WebViewActivity.Intent_Order;
+import io.agora.rtc.video.VideoCanvas;
 
-public class MainActivity extends BaseActivity implements AMapLocationListener, WeatherSearch.OnWeatherSearchListener {
+
+import io.agora.rtm.ErrorInfo;
+import io.agora.rtm.ResultCallback;
+import io.agora.rtm.RtmChannel;
+import io.agora.rtm.RtmChannelListener;
+import io.agora.rtm.RtmChannelMember;
+import io.agora.rtm.RtmClient;
+
+import io.agora.rtm.RtmMessage;
+import io.agora.rtm.RtmClientListener;
+
+public class MainActivity extends BaseActivity implements  AMapLocationListener, WeatherSearch.OnWeatherSearchListener {
 
     MyViewPager viewPager;
     Disposable disposable;
@@ -74,6 +96,9 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
     private TextView evtitle;
     private long mExitTime = 0;
     TaskDetailViewModel taskDetailViewModel;
+    RequireHandle requireHandle;
+    RtmClient mRtmClient;
+    Vibrator vibrator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,14 +112,17 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
         findViewById(R.id.rl_task).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 startActivity(new Intent(MainActivity.this, MainTaskListActivity.class));
             }
         });
         findViewById(R.id.rl_plan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+             /*   Bundle bundle = new Bundle();
+                bundle.putString("channel","1");
+                bundle.putString("contactname","1");
+                bundle.putString("token","1");
+                startActivity(new Intent( MainActivity.this,VideoMainActivity.class).putExtras(bundle));*/
             }
         });
         tvTemperature = findViewById(R.id.tv_temperature);
@@ -102,7 +130,8 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
         getData();
         //获取权限（如果没有开启权限，会弹出对话框，询问是否开启权限）
         requestLocation(this);
-    }
+
+        }
 
     private void initView(List<New> aNews) {
         viewPager = findViewById(R.id.viewPager);
@@ -113,14 +142,12 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
         viewPager.setClipChildren(false);
         viewPager.setPageTransformer(true, new CardTransformer());
         mRecyclerView = findViewById(R.id.recycler_view);
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.color.blue_color_30));
         mRecyclerView.addItemDecoration(dividerItemDecoration);
-
         tvTemperature = findViewById(R.id.tv_temperature);
         ivWeather = findViewById(R.id.iv_weather);
         NewsListAdapter adapter = new NewsListAdapter(R.layout.item_news, aNews);
@@ -296,8 +323,10 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
             showToast("再按一次退出程序");
             mExitTime = System.currentTimeMillis();
         } else {
+
             System.exit(0);
             finish();
+
         }
     }
 
@@ -311,4 +340,13 @@ public class MainActivity extends BaseActivity implements AMapLocationListener, 
         super.onStop();
         GdLocationUtil.getInstance().stopLoaction();
     }
+
+
+    private void loginRtm( String userId){
+
+
+
+
+    }
+
 }

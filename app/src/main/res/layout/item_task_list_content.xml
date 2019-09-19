@@ -8,8 +8,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:orientation="horizontal">
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+          >
 
         <TextView
             android:id="@+id/tv_map"
@@ -18,7 +19,7 @@
             android:layout_gravity="center_vertical"
             android:background="?selectableItemBackground"
             android:clickable="true"
-            android:drawableTop="@mipmap/task_navigation"
+            android:drawableTop="@drawable/img"
             android:drawablePadding="10dp"
             android:gravity="center"
             android:paddingLeft="15dp"
@@ -27,7 +28,7 @@
             android:text="导航" />
 
         <LinearLayout
-            android:layout_width="240dp"
+            android:layout_width="300dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:gravity="center_vertical"
@@ -39,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/text_margin"
                 android:text="编号"
+                android:textSize="@dimen/sp_12"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
             <TextView
@@ -47,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/text_margin"
                 android:text="公司名称"
+                android:textSize="@dimen/sp_12"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
             <TextView
@@ -56,6 +59,7 @@
                 android:layout_marginLeft="@dimen/text_margin"
                 android:maxLines="2"
                 android:text="地址"
+                android:textSize="@dimen/sp_12"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
             <TextView
@@ -64,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/text_margin"
                 android:text="类型"
+                android:textSize="@dimen/sp_12"
                 android:textAppearance="?attr/textAppearanceListItem" />
         </LinearLayout>
 
@@ -77,37 +82,40 @@
 
             <TextView
                 android:id="@+id/tv_start_time"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="@dimen/text_margin"
+                android:textSize="@dimen/sp_12"
                 android:text="开始时间:"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
             <TextView
                 android:id="@+id/tv_end_time"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="@dimen/text_margin"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:text="结束时间:"
+                android:textSize="@dimen/sp_12"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
             <TextView
                 android:id="@+id/tv_countdown"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="@dimen/text_margin"
                 android:background="#E8F2DE"
-                android:paddingLeft="20dp"
+                android:paddingLeft="35dp"
                 android:paddingTop="5dp"
                 android:paddingRight="20dp"
                 android:paddingBottom="5dp"
                 android:text="还有10天结束"
-                android:textAppearance="?attr/textAppearanceListItem" />
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="@dimen/sp_12" />
         </LinearLayout>
 
 
@@ -125,12 +133,13 @@
         android:layout_weight="1"
         android:background="?selectableItemBackground"
         android:clickable="true"
-        android:drawableTop="@mipmap/task_abnormal"
+        android:drawableTop="@drawable/exception"
         android:drawablePadding="10dp"
         android:gravity="center"
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
         android:paddingRight="10dp"
+        android:textSize="@dimen/sp_12"
         android:text="异常情况" />
 
     <TextView
@@ -143,11 +152,12 @@
         android:layout_weight="1"
         android:background="?selectableItemBackground"
         android:clickable="true"
-        android:drawableTop="@mipmap/task_write"
+        android:drawableTop="@drawable/infor"
         android:drawablePadding="10dp"
         android:gravity="center"
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
         android:paddingRight="10dp"
+        android:textSize="@dimen/sp_12"
         android:text="填写信息" />
 </RelativeLayout>

@@ -54,16 +54,13 @@
         android:textColor="@color/red"
         android:text="(备注：请拍摄样品正面一张，反面一张)" />
     </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:orientation="horizontal">
-
-
-
-
 
         <ImageView
             android:id="@+id/iv_reduce"
@@ -82,12 +79,14 @@
             android:layout_marginRight="80dp"
             android:layout_toLeftOf="@+id/iv_reduce"
             android:src="@mipmap/form_add" />
+
         <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/item_image_list"
             android:name="com.product.sampling.TaskListFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="150dp"
             app:layoutManager="LinearLayoutManager"
@@ -95,51 +94,51 @@
             tools:listitem="@layout/item_scene_list_content" />
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="样品视频" />
-
-        <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/item_video_list"
-            android:name="com.product.sampling.TaskListFragment"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="150dp"
-            app:layoutManager="LinearLayoutManager"
-            tools:context="com.product.sampling.ui.MainTaskListActivity"
-            tools:listitem="@layout/item_scene_list_content" />
+            android:layout_height="200dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="样品视频" />
+
+            <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/item_video_list"
+                android:name="com.product.sampling.TaskListFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="150dp"
+                app:layoutManager="LinearLayoutManager"
+                tools:context="com.product.sampling.ui.MainTaskListActivity"
+                tools:listitem="@layout/item_scene_list_content" />
 
 
-        <ImageView
-            android:id="@+id/iv_reduce_video"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/form_reduce" />
+            <ImageView
+                android:id="@+id/iv_reduce_video"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/form_reduce" />
 
-        <ImageView
-            android:id="@+id/iv_add_video"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="80dp"
-            android:layout_toLeftOf="@+id/iv_reduce_video"
-            android:src="@mipmap/form_add" />
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/iv_add_video"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="80dp"
+                android:layout_toLeftOf="@+id/iv_reduce_video"
+                android:src="@mipmap/form_add" />
+        </RelativeLayout>
 
     </RelativeLayout>
 
@@ -172,7 +171,6 @@
             android:layout_marginLeft="10dp"
             android:gravity="center"
             android:text=""
-
             />
 
         <LinearLayout
@@ -184,7 +182,8 @@
                 android:id="@+id/btn_edit_check_sheet"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
-                android:layout_marginRight="10dp"
+
+                android:layout_marginLeft="10dp"
                 android:background="@color/colorPrimary"
                 android:gravity="center"
                 android:text="编辑并打印"
@@ -233,7 +232,6 @@
             android:layout_marginLeft="10dp"
             android:gravity="center"
             android:text=""
-
             />
 
         <LinearLayout
@@ -245,7 +243,8 @@
                 android:id="@+id/btn_edit_risk_sheet"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
-                android:layout_marginRight="10dp"
+
+                android:layout_marginLeft="10dp"
                 android:background="@color/colorPrimary"
                 android:gravity="center"
                 android:text="编辑并打印"
@@ -306,7 +305,7 @@
                 android:id="@+id/btn_edit_work_sheet"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 android:background="@color/colorPrimary"
                 android:gravity="center"
                 android:text="编辑并打印"
@@ -321,7 +320,6 @@
                 android:gravity="center"
                 android:text="(签字)拍照"
                 android:textColor="@color/white" />
-
         </LinearLayout>
 
     </LinearLayout>
@@ -348,19 +346,16 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="二维码" />
-
-
         <Button
             android:id="@+id/btn_qrc"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_gravity="right"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:background="@color/colorPrimary"
             android:gravity="center"
             android:text="查看并打印"
             android:textColor="@color/white" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -392,11 +387,11 @@
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_gravity="right"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:background="@color/colorPrimary"
             android:gravity="center"
             android:text="填写"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"/>
 
     </LinearLayout>
 </LinearLayout>

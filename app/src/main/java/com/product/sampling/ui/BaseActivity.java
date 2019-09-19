@@ -6,7 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,14 +23,21 @@ import androidx.appcompat.widget.Toolbar;
 import com.amap.api.location.AMapLocationListener;
 import com.jaeger.library.StatusBarUtil;
 import com.product.sampling.R;
+import com.product.sampling.agore.VideoMainActivity;
 import com.product.sampling.bean.UserInfoBean;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.utils.GdLocationUtil;
 import com.product.sampling.utils.SPUtil;
 import com.umeng.analytics.MobclickAgent;
 
+import java.io.Serializable;
 import java.util.List;
 
+import io.agora.rtm.ErrorInfo;
+import io.agora.rtm.ResultCallback;
+import io.agora.rtm.RtmClient;
+import io.agora.rtm.RtmClientListener;
+import io.agora.rtm.RtmMessage;
 import pub.devrel.easypermissions.EasyPermissions;
 
 /**
@@ -38,12 +47,31 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class BaseActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
     AMapLocationListener aMapLocationListener;
     private int LOACTION_REQUEST_CODE = 1001;
+    RtmClient mRtmClient;
+    Vibrator vibrator;
+    private TextView textView;
 
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         setStatusBar();
         findToolBar();
+        initRtm();
+        String rtcid=AccountManager.getInstance().getRtcid();
+
+        mRtmClient.login(null, rtcid, new ResultCallback<Void>() {
+            Boolean loginStatus=false;
+            @Override
+            public void onSuccess(Void responseInfo) {
+                loginStatus = true;
+                Log.d("loginStatus", "login success!");
+            }
+            @Override
+            public void onFailure(ErrorInfo errorInfo) {
+                loginStatus = false;
+                Log.d("loginStatus", "login failure!");
+            }
+        });
     }
 
     protected void setStatusBar() {
@@ -208,6 +236,7 @@ public class BaseActivity extends AppCompatActivity implements EasyPermissions.P
                     showSimpleDialog("确定退出登录吗,退出将会清除本地未上传数据!!", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            mRtmClient.logout(null);
                             AccountManager.getInstance().clearUserInfo();
                             startActivity(new Intent(BaseActivity.this, LoginActivity.class));
                             popAllActivity();
@@ -218,4 +247,58 @@ public class BaseActivity extends AppCompatActivity implements EasyPermissions.P
             });
         }
     }
+    public void initRtm() {
+        try {
+            mRtmClient = RtmClient.createInstance(this, getString(R.string.agora_app_id),
+                    new RtmClientListener() {
+                        @Override
+                        public void onConnectionStateChanged(int state, int reason) {
+                            Log.d("videoReason", "Connection state changes to "
+                                    + state + " reason: " + reason);
+                        }
+
+                        @Override
+                        public void onMessageReceived(RtmMessage rtmMessage, String peerId) {
+                            String msg = rtmMessage.getText();
+                            Log.d("videoReason", "Message received " + " from " + peerId + msg);
+                            String[]data=msg.split(",");
+                            String type=data[0];
+                     /*       vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
+
+                            long[] patter = {1000, 1000, 1000, 1000, 1000};
+                            vibrator.vibrate(patter, 0);*/
+                            Bundle bundle = new Bundle();
+                            if("0".equals(type)) {
+
+                                String channel=data[1];
+                                String token=data[2];
+                                String contactname=data[3];
+
+                                bundle.putString("channel",channel);
+                                bundle.putString("contactname",contactname);
+                                bundle.putString("token",token);
+
+                                startActivity(new Intent(BaseActivity.this, VideoMainActivity.class).putExtras(bundle));
+                            }else{
+
+                            }
+                            if("1".equals(type)){
+                                textView= findViewById(R.id.conname);
+                                textView.setText("对方已挂断请退出");
+                                bundle.putString("type","1");
+                                startActivity(new Intent(BaseActivity.this, VideoMainActivity.class).putExtras(bundle));
+                            }
+
+                        }
+                        @Override
+                        public  void onTokenExpired(){
+
+                        }
+                    });
+        } catch (Exception e) {
+            Log.d("videoReason", "RTM SDK init fatal error!");
+            throw new RuntimeException("You need to check the RTM init process.");
+        }
+    }
+
 }

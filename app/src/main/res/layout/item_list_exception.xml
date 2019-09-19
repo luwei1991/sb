@@ -8,6 +8,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
+
     tools:context=".ui.MainTaskListActivity">
 
     <RadioGroup

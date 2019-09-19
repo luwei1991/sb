@@ -22,7 +22,7 @@ public class AccountManager {
     private String userPhone;
     private String userPhoto;
     private String userId;
-
+    private String rtcid;
     public String getUserPhone() {
         userInfoBean = getUserInfoBean();
         if (userInfoBean != null) {
@@ -55,6 +55,21 @@ public class AccountManager {
             return String.valueOf(userInfoBean.getUserid());
         }
         return userId;
+    }
+    public String getRtcid() {
+        userInfoBean = getUserInfoBean();
+        if (userInfoBean != null) {
+            return String.valueOf(userInfoBean.getRtcid());
+        }
+        return userId;
+    }
+    public void setRtcid(String rtcid) {
+        userInfoBean = getUserInfoBean();
+        if (!TextUtils.isEmpty(rtcid) && userInfoBean != null) {
+            userInfoBean.setRtcid(rtcid);
+            AccountManager.getInstance().setUserInfoBean(userInfoBean);
+        }
+        this.rtcid= rtcid;
     }
 
     public int getInterval() {

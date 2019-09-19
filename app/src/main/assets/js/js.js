@@ -305,7 +305,8 @@ $(function(){
         $(".taskList").css("display", "block");
         $("#modal").css("display", "block");
         $("#cover").css("display", "block");
-        $(".title").text("任务来源");
+        $(".tasktitle").text("任务来源");
+        $(".dictContent").css("display", "none");
         var taskId = $("#taskId").val();
         var type = "0"
         var id = "";
@@ -353,7 +354,8 @@ $(function(){
 
         $("#modal").css("display", "block");
         $("#cover").css("display", "block");
-        $(".title").text("任务类别");
+        $(".tasktitle").text("任务类别");
+        $(".dictContent").css("display", "none");
         var taskTypeValue = $(".taskTypeValue").val();
         var type = "1"
         var id = "";
@@ -374,9 +376,9 @@ $(function(){
                     for (var i = 0; i < list.length; i++) {
                         if (taskTypeValue) {
                             if (taskTypeValue == list[i].value) {
-                                $th = ($th + "<tr><td><div style='width:220px;float:left;text-align:left;padding-left:30px'><font style='color:red'>(一级 )</font>" + list[i].item + "<input type='hidden' class='name' value=" + list[i].item + "><input type='radio' checked  onclick='getValType(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value + "> <label for='radio-1-" + i + "'></label></div></td></tr>");
+                                $th = ($th + "<tr><td><div style='width:350px;float:left;text-align:left;padding-left:30px'><font style='color:red'>(一级 )</font>" + list[i].item + "<input type='hidden' class='name' value=" + list[i].item + "><input type='radio' checked  onclick='getValType(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value + "> <label for='radio-1-" + i + "'></label></div></td></tr>");
                             } else {
-                                $th = ($th + "<tr><td><div style='width:220px;float:left;text-align:left;padding-left:30px'><font style='color:red'>(一级 )</font>" + list[i].item + "<input type='hidden' class='name' value=" + list[i].item + "><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value + "> <label for='radio-1-" + i + "'></label></div></td></tr>");
+                                $th = ($th + "<tr><td><div style='width:350px;float:left;text-align:left;padding-left:30px'><font style='color:red'>(一级 )</font>" + list[i].item + "<input type='hidden' class='name' value=" + list[i].item + "><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value + "> <label for='radio-1-" + i + "'></label></div></td></tr>");
 
                             }
 
@@ -384,9 +386,9 @@ $(function(){
                             if (list[i].child) {
                                 for (var j = 0; j < list[i].child.length; j++) {
                                     if (taskTypeValue == list[i].child[j].value) {
-                                        $th = ($th + "<tr'><td><div style='width:200px;float:right;padding-right:30px'><font style='color:red'>(二级 )</font>" + list[i].child[j].item + "<input type='hidden'  class='name' value=" + list[i].child[j].item + "><input type='radio' checked  onclick='getValType(this)' class='regular-radio productType' id='radio-" + index + "-" + j + "' name='code' value=" + list[i].child[j].value + "> <label for='radio-" + index + "-" + j + "'></label></div></td></tr>");
+                                        $th = ($th + "<tr'><td><div style='width:300px;float:right;padding-left:30px;text-align:left;'><font style='color:red'>(二级 )</font>" + list[i].child[j].item + "<input type='hidden'  class='name' value=" + list[i].child[j].item + "><input type='radio' checked  onclick='getValType(this)' class='regular-radio productType' id='radio-" + index + "-" + j + "' name='code' value=" + list[i].child[j].value + "> <label for='radio-" + index + "-" + j + "'></label></div></td></tr>");
                                     } else {
-                                        $th = ($th + "<tr'><td><div style='width:200px;float:right;padding-right:30px'><font style='color:red'>(二级 )</font>" + list[i].child[j].item + "<input type='hidden' class='name' value=" + list[i].child[j].item + "><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-" + index + "-" + j + "' name='code' value=" + list[i].child[j].value + "> <label for='radio-" + index + "-" + j + "'></label></div></td></tr>");
+                                        $th = ($th + "<tr'><td><div style='width:300px;float:right;padding-left:30px;text-align:left;'><font style='color:red'>(二级 )</font>" + list[i].child[j].item + "<input type='hidden' class='name' value=" + list[i].child[j].item + "><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-" + index + "-" + j + "' name='code' value=" + list[i].child[j].value + "> <label for='radio-" + index + "-" + j + "'></label></div></td></tr>");
                                     }
 
                                 }
@@ -395,10 +397,10 @@ $(function(){
                             index++;
 
                         } else {
-                            $th = ($th + "<tr><td><div style='width:220px;float:left;text-align:left;padding-left:30px'><font style='color:red'>(一级 )</font>" + list[i].item + "<input type='hidden' class='name' value=" + list[i].item + "><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value + "> <label for='radio-1-" + i + "'></label></div></td></tr>");
+                            $th = ($th + "<tr><td><div style='width:350px;float:left;text-align:left;padding-left:30px'><font style='color:red'>(一级 )</font>" + list[i].item + "<input type='hidden' class='name' value=" + list[i].item + "><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-1-" + i + "' name='code' value=" + list[i].value + "> <label for='radio-1-" + i + "'></label></div></td></tr>");
                             if (list[i].child) {
                                 for (var j = 0; j < list[i].child.length; j++) {
-                                    $th = ($th + "<tr'><td><div style='width:200px;float:right;padding-right:30px'><font style='color:red'>(二级 )</font>" + list[i].child[j].item + "<input type='hidden' class='name' value=" + list[i].child[j].item + "><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-" + index + "-" + j + "' name='code' value=" + list[i].child[j].value + "> <label for='radio-" + index + "-" + j + "'></label></div></td></tr>");
+                                    $th = ($th + "<tr'><td><div style='width:300px;float:right;padding-left:30px;text-align:left;'><font style='color:red'>(二级 )</font>" + list[i].child[j].item + "<input type='hidden' class='name' value=" + list[i].child[j].item + "><input type='radio'  onclick='getValType(this)' class='regular-radio productType' id='radio-" + index + "-" + j + "' name='code' value=" + list[i].child[j].value + "> <label for='radio-" + index + "-" + j + "'></label></div></td></tr>");
                                 }
                             }
                             index++;

@@ -208,7 +208,7 @@ public abstract class BasePhotoFragment extends TakePhotoFragment {
         Message message = new Message();
         message.what = 0;
         message.obj = msg;
-        mHandler.sendMessageDelayed(message, 100);
+        mHandler.sendMessageDelayed(message, 2*1000);
     }
 
     public void dismissLoadingDialog() {

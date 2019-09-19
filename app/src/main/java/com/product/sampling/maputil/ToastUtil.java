@@ -45,7 +45,7 @@ public class ToastUtil {
             mToast.setView(text);
         }
 
-        mHandler.postDelayed(r, 1000);// 延迟1秒隐藏toast
+        mHandler.postDelayed(r, 5*1000);// 延迟1秒隐藏toast
         mToast.show();
     }
 

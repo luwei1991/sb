@@ -12,9 +12,19 @@ public class UserInfoBean {
     private String name;
     private String persontel;
     private String photo;
+    private String rtcid;
 
     private String account;
+
     private int remindtime = 60;//坐标间隔
+
+    public String getRtcid() {
+        return rtcid;
+    }
+
+    public void setRtcid(String rtcid) {
+        this.rtcid = rtcid;
+    }
 
     public String getUserid() {
         return userid;

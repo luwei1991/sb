@@ -231,6 +231,7 @@ public class LoginByPasswordFragment extends BaseFragment implements View.OnClic
                             AccountManager.getInstance().setUserPassword("");
                             AccountManager.getInstance().setUserSaveAccount(false);
                         }
+
                         AccountManager.getInstance().setUserInfoBean(userbean);
                         ActivityUtils.goMainTaskActivity(getActivity());
                         getActivity().finish();

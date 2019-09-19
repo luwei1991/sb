@@ -16,7 +16,9 @@
             android:layout_height="50dp"
             android:background="#8BD4F5"
             app:title="任务信息"
-            app:titleTextColor="#1D77AE" />
+            app:titleTextColor="#1D77AE"
+            app:titleTextAppearance="@style/Toolbar.TitleText"
+            />
 
         <include layout="@layout/layout_task_step" />
 
@@ -26,6 +28,7 @@
             android:layout_margin="20dp"
             android:divider="@color/color_9EA7B4"
             android:showDividers="end|middle|beginning"
+
             android:stretchColumns="1">
 
             <TableRow

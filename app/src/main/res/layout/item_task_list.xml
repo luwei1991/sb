@@ -8,15 +8,21 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="vertical"
     android:showDividers="middle"
+    android:layout_marginLeft="5dp"
+    android:layout_marginTop="5dp"
+    android:paddingLeft="0dp"
+    android:background="@drawable/border"
     tools:context=".ui.MainTaskListActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="35dp"
         android:background="#8BD4F5"
         app:title="待办任务"
-        app:titleTextColor="#1D77AE" />
+        app:titleTextColor="#1D77AE"
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        />
 
     <RelativeLayout
         android:id="@+id/rl_menu"

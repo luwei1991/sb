@@ -17,6 +17,7 @@
             android:layout_height="50dp"
             android:background="#8BD4F5"
             app:title="现场信息"
+            app:titleTextAppearance="@style/Toolbar.TitleText"
             app:titleTextColor="#1D77AE" />
 
         <include layout="@layout/layout_task_step" />

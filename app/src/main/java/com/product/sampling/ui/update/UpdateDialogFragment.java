@@ -111,7 +111,7 @@ public class UpdateDialogFragment extends DialogFragment {
         intent.putExtra(ApkDownLoadService.DO_WHAT, ApkDownLoadService.ACTION_DOWNLOAD);
         ApkDownloadTaskInfo apkDownloadTaskInfo = new ApkDownloadTaskInfo();
 
-        apkDownloadTaskInfo.apkUrl = Constants.IMAGE_BASE_URL + mUpdateEntity.getAppfileid();
+        apkDownloadTaskInfo.apkUrl = Constants.IMAGE_DOWNBASE_URL + mUpdateEntity.getAppfileid();
         apkDownloadTaskInfo.apkVer = mUpdateEntity.getId();
 
         File file = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), apkDownloadTaskInfo.getApkFileName());
