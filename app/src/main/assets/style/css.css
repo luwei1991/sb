@@ -9,6 +9,7 @@ input{
     border: none;
     font-size: 12px;
     line-height: 1.4;
+
 }
 textarea.maintextarea{
  border: none;
@@ -16,8 +17,9 @@ textarea.maintextarea{
     line-height: 1.4;
     resize: none;
     overflow:hidden;
-    width:100%
-}
+    width:100%;
+ }
+
 label {
   vertical-align: middle;
 }
@@ -80,12 +82,13 @@ body{
 table.tftable {color:#333333;width:100%;border-width: 1px;border-color: #333;border-collapse: collapse;}
 table.tftable th {background-color:#fff;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;text-align:left;}
 table.tftable tr {background-color:#fff;}
-table.tftable td {border-width: 1px;padding:0 2px;border-style: solid;border-color: #333;text-align:center}
+table.tftable td {border-width: 1px;padding:0 2px;border-style: solid;border-color: #333;text-align:center;  line-height: 1.4;font-size: 12px;  font-family:Arial;}
 #jiouhcnw89293{
   line-height: 1.4;
   resize: none;
   border: none;
-  font-size: 14px;
+  font-size: 12px;
+   font-family:Arial;
 }
 .jiouhcnw89293{
   line-height: 1.4;
@@ -93,6 +96,7 @@ table.tftable td {border-width: 1px;padding:0 2px;border-style: solid;border-col
   border: none;
   font-size: 10px;
   width:100%
+   font-family:Arial;
 }
 
 table.tftable td.signtd{

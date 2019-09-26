@@ -162,7 +162,7 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:gravity="center"
-            android:text="监督抽查单" />
+            android:text="1、监督抽查单" />
 
         <TextView
             android:id="@+id/tv_check_sheet"
@@ -223,7 +223,7 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:gravity="center"
-            android:text="产品质量安全风险监测采样单" />
+            android:text="2、产品质量安全风险监测采样单" />
 
         <TextView
             android:id="@+id/tv_risk_sheet"
@@ -284,7 +284,7 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:gravity="center"
-            android:text="流通领域商品质量抽查检验工作单" />
+            android:text="3、流通领域商品质量抽查检验工作单" />
 
         <TextView
             android:id="@+id/tv_work_sheet"
@@ -345,7 +345,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="二维码" />
+            android:text="4、二维码" />
         <Button
             android:id="@+id/btn_qrc"
             android:layout_width="100dp"
@@ -379,7 +379,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="快递单号" />
+            android:text="5、快递单号" />
 
 
         <Button

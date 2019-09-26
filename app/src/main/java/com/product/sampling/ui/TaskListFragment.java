@@ -365,6 +365,8 @@ public class TaskListFragment extends BaseFragment implements View.OnClickListen
                     holder.mTextViewCountDown.setBackgroundColor(Color.rgb(255, 0, 0));
                 }else if(task.leftday >7&&task.leftday <=15){
                     holder.mTextViewCountDown.setBackgroundColor(Color.rgb(255, 255, 0));
+                }else{
+                    holder.mTextViewCountDown.setBackgroundColor(Color.rgb(199, 237, 204));
                 }
 
 

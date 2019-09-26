@@ -195,7 +195,7 @@
                     android:text="计划XXX" />
 
             </TableRow>
-           <!-- <TableRow
+       <TableRow
                 android:layout_height="50dp"
                 android:background="@color/cut_off_line"
                 android:divider="@color/color_9EA7B4"
@@ -207,14 +207,16 @@
                     android:gravity="center"
                     android:text="附件名称" />
 
-                <TextView
-                    android:id="@+id/tv_att"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:text="计划XXX" />
+           <LinearLayout
+               android:id="@+id/linearLayout1"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:gravity="center"
+               android:orientation="horizontal" >
+           </LinearLayout>
 
-            </TableRow>-->
+
+            </TableRow>
 
             <View
                 android:layout_width="match_parent"

@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TaskEntity implements Parcelable, Serializable {
     public String id;//任务唯一id
@@ -60,6 +61,7 @@ public class TaskEntity implements Parcelable, Serializable {
     public String unfindpicfile = "";//未检测到样品单 照片
 
     public HashMap<String, String> refuseInfoMap;//企业拒检单 填写内容
+    public List<Map<String,Object>> annexfiles = new ArrayList<>();
     public String refusefile = "";//企业拒检单 pdf
     public String refusepicfile = "";//企业拒检单 照片
 

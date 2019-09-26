@@ -6,7 +6,11 @@
     android:orientation="vertical"
     android:showDividers="end"
     >
-
+    <View  android:layout_height="3px"
+        android:layout_width="match_parent"
+        android:background="#66CCFF"
+        android:layout_marginTop="10dp"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +26,7 @@
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"
             android:gravity="center"
-            android:text="抽样封存处置单" />
+            android:text="一、抽样封存处置单" />
 
         <TextView
             android:id="@+id/tv_disposal"
@@ -72,7 +76,7 @@
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"
             android:gravity="center"
-            android:text="企业对抽样人员工作反馈意见单" />
+            android:text="二、企业对抽样人员工作反馈意见单" />
 
         <TextView
             android:id="@+id/tv_feed_sheet"

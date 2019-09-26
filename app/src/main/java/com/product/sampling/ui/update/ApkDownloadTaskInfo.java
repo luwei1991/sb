@@ -14,6 +14,7 @@ public class ApkDownloadTaskInfo implements Serializable {
     public String apkUrl;
     public String apkVer;
     public String apkLocalPath;
+    public String fileType;
 
     //h5的下载路径
     public String getApkFileName(){

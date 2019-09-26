@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -75,7 +76,12 @@ public class ApkDownLoadService extends Service {
             //执行下载任务
             if (taskInfo == null || downloadId == 0) {
                 taskInfo = (ApkDownloadTaskInfo) intent.getSerializableExtra("taskInfo");
-                downloadApk(taskInfo);
+
+                if(taskInfo.apkVer==null){
+                    downloadFile(taskInfo);
+                }else{
+                    downloadApk(taskInfo);
+                }
                 initNotification();
             } else {
                 //多次启动到下载service
@@ -116,6 +122,45 @@ public class ApkDownLoadService extends Service {
         request.setDestinationUri(Uri.fromFile(file));
         downloadId = downloadManager.enqueue(request);
         sendApkUpdate();
+    }
+
+    public void downloadFile(ApkDownloadTaskInfo taskInfo) {
+        downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(taskInfo.apkUrl));
+        request.setTitle("下载");
+//        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
+        request.setAllowedOverRoaming(false);
+        request.allowScanningByMediaScanner();
+/*         request.setMimeType("application/vnd.android.package-archive");*/
+         if("doc".equals(taskInfo.fileType)){
+             request.setMimeType("application/msword");
+         }else if("docx".equals(taskInfo.fileType)){
+             request.setMimeType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+         }else if("pdf".equals(taskInfo.fileType)){
+             request.setMimeType("application/pdf");
+         }else if("rar".equals(taskInfo.fileType)){
+             request.setMimeType("application/octet-stream");
+         }else if("zip".equals(taskInfo.fileType)){
+             request.setMimeType("application/x-zip-compressed");
+         }else if("xls".equals(taskInfo.fileType)){
+             request.setMimeType("application/vnd.ms-excel application/x-excel");
+
+         }else if("xlsx".equals(taskInfo.fileType)){
+             request.setMimeType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+         }
+        //下载完成之后显示系统的点击安装
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION);
+        //创建目录
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).mkdir();
+        File file = new File(taskInfo.apkLocalPath);
+        if (file.exists()) {
+            file.delete();
+        }
+        request.setDestinationUri(Uri.fromFile(file));
+        downloadId = downloadManager.enqueue(request);
+        Toast.makeText(this, "下载成功，请去实用工具文件夹下的下载处查看", Toast.LENGTH_SHORT).show();
+
     }
 
 
