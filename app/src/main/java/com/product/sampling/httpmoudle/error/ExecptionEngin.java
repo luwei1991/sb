@@ -1,11 +1,10 @@
 package com.product.sampling.httpmoudle.error;
 
 import android.net.ParseException;
-import android.util.Log;
 
 import com.google.gson.JsonParseException;
+import com.product.sampling.MainApplication;
 import com.product.sampling.R;
-import com.product.sampling.ui.MainApplication;
 
 import org.json.JSONException;
 
@@ -64,9 +63,6 @@ public class ExecptionEngin {
 
 
     public static ApiException handleException(Throwable e) {
-        if (e != null) {
-            Log.e("error:", e.toString());
-        }
         ApiException ex;
         if (e instanceof HttpException) {             //HTTP错误
             HttpException httpException = (HttpException) e;
@@ -95,7 +91,12 @@ public class ExecptionEngin {
             /***服务器返回的业务类型的错误**/
             ServerException resultException = (ServerException) e;
             ex = new ApiException(resultException, resultException.getCode());
-            ex.setDisplayMessage(resultException.getMsg());
+            if(resultException.getCode() == 207){
+                ex.setDisplayMessage(resultException.getInfo());
+            }else{
+                ex.setDisplayMessage(resultException.getMsg());
+            }
+
             return ex;
         } else if (e instanceof JsonParseException
                 || e instanceof JSONException

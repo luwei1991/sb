@@ -1,1 +1,3 @@
-include ':app', ':takephoto_library', ':zxinglibrary'
+include ':thread-library'
+include ':thread-library'
+include ':app', ':takephoto_library',':zxinglibrary'

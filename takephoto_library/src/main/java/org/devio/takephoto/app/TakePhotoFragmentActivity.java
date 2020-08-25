@@ -6,11 +6,11 @@ import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
 
-import org.devio.takephoto.permission.PermissionManager;
 import org.devio.takephoto.model.InvokeParam;
 import org.devio.takephoto.model.TContextWrap;
 import org.devio.takephoto.model.TResult;
 import org.devio.takephoto.permission.InvokeListener;
+import org.devio.takephoto.permission.PermissionManager;
 import org.devio.takephoto.permission.TakePhotoInvocationHandler;
 
 /**

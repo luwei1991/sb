@@ -2,27 +2,23 @@ package com.product.sampling.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.viewpager.widget.PagerAdapter;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.product.sampling.Constants;
+import com.product.sampling.MainApplication;
 import com.product.sampling.R;
 import com.product.sampling.bean.New;
-import com.product.sampling.ui.MainActivity;
 import com.product.sampling.ui.WebViewActivity;
-import com.product.sampling.utils.DensityUtil;
 
 import java.util.List;
-
-import androidx.viewpager.widget.PagerAdapter;
-
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
  * 创建时间：2018/5/28
@@ -61,11 +57,13 @@ public class BannerViewPagerAdapter extends PagerAdapter {
                 WebViewActivity.startWebView((Activity) context, news.conent, news.title,news.pubdate);
             }
         });
+        Glide.with(MainApplication.INSTANCE.getApplicationContext()).load(Constants.IMAGE_BASE_URL + images.get(position).imgurl).apply(RequestOptions.centerCropTransform()).into(imageView);
 
-        Glide.with(context)
-                .load(Constants.IMAGE_BASE_URL + images.get(position).imgurl)
-                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(DensityUtil.dip2px(context, 5), 0, RoundedCornersTransformation.CornerType.ALL)).error(R.mipmap.ic_launcher))
-                .into(imageView);
+//        GlideManager.getInstance().ImageLoad(context,,imageView,true);
+//        Glide.with(context)
+//                .load(Constants.IMAGE_BASE_URL + images.get(position).imgurl)
+//                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(DensityUtil.dip2px(context, 5), 0, RoundedCornersTransformation.CornerType.ALL)).error(R.mipmap.ic_launcher))
+//                .into(imageView);
         container.addView(view);
         return view;
     }

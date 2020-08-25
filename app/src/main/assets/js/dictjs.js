@@ -1,4 +1,5 @@
 $(document).ready(function(){
+   setCode.send(111");
 $(".contactAddress").click(function(){
         $(".taskList").css("display", "block");
         $("#modal").css("display", "block");

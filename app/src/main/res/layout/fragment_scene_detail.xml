@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -184,13 +185,14 @@
             android:layout_height="200dp"
             android:orientation="horizontal">
 
-            <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            <androidx.recyclerview.widget.RecyclerView
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/item_image_list"
                 android:name="com.product.sampling.TaskListFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginRight="100dp"
+                android:layout_marginRight="10dp"
                 app:layoutManager="LinearLayoutManager"
                 tools:context="com.product.sampling.ui.MainTaskListActivity"
                 tools:listitem="@layout/item_scene_list_content" />
@@ -202,6 +204,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
+                android:visibility="gone"
                 android:src="@mipmap/form_add" />
         </RelativeLayout>
 
@@ -269,7 +272,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="20dp"
             android:background="@color/colorPrimary"
-            android:text="下一步"
+            android:text="保存现场信息"
             android:textColor="@color/white" />
     </LinearLayout>
 </ScrollView>

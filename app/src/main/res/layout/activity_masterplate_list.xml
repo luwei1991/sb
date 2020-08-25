@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_layout" />
+    <com.qmuiteam.qmui.widget.QMUIEmptyView
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        />
+
+
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/toolbar"
+        android:background="#EEEEEE"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_sx"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="@mipmap/shuxian" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/iv_sx"
+            android:gravity="center_vertical"
+            android:text="监督抽查/复查抽样单模版"
+            android:textColor="#474747"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@mipmap/add"
+            android:padding="3dp"
+            android:text="添加"
+            android:gravity="center"
+            android:textColor="#474747"
+            android:textSize="10sp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
+
+            />
+
+    </RelativeLayout>
+
+    <com.qmuiteam.qmui.widget.QMUIAnimationListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/rl_title"
+        android:background="@color/white"
+        android:divider="#CDCDCD"
+        android:dividerHeight="5dp"/>
+
+</RelativeLayout>

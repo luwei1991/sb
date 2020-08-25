@@ -1,7 +1,8 @@
 package com.product.sampling.net.interceptor;
 
 import android.util.Log;
-import com.product.sampling.ui.MainApplication;
+
+import com.product.sampling.MainApplication;
 import com.product.sampling.utils.AppUtils;
 import com.product.sampling.utils.DeviceUtils;
 import com.product.sampling.utils.NetWorkUtils;

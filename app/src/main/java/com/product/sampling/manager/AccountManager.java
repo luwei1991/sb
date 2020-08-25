@@ -4,12 +4,9 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.product.sampling.MainApplication;
 import com.product.sampling.bean.UserInfoBean;
-import com.product.sampling.ui.MainApplication;
 import com.product.sampling.utils.SPUtil;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 
@@ -18,11 +15,17 @@ import java.lang.reflect.Type;
  * 描述：用户账号管理类
  */
 public class AccountManager {
+    /**是否需要电子签章 0:需要 1：不需要*/
+    public static final String OPEN_CODE_YES = "0";
+    /**是否需要电子签章 0:需要 1：不需要*/
+    public static final String OPEN_CODE_NO = "1";
     private UserInfoBean userInfoBean;
     private String userPhone;
     private String userPhoto;
     private String userId;
     private String rtcid;
+    /**是否需要电子签章 0:需要 1：不需要*/
+    private String isOpenCode;
     public String getUserPhone() {
         userInfoBean = getUserInfoBean();
         if (userInfoBean != null) {
@@ -47,6 +50,23 @@ public class AccountManager {
             AccountManager.getInstance().setUserInfoBean(userInfoBean);
         }
         this.userPhoto = photo;
+    }
+
+    public String getIsOpenCode() {
+        userInfoBean = getUserInfoBean();
+        if (userInfoBean != null) {
+            return String.valueOf(userInfoBean.getIsOpenCode());
+        }
+        return isOpenCode;
+    }
+
+    public void setIsOpenCode(String isOpenCode) {
+        userInfoBean = getUserInfoBean();
+        if (!TextUtils.isEmpty(isOpenCode) && userInfoBean != null) {
+            userInfoBean.setIsOpenCode(isOpenCode);
+            AccountManager.getInstance().setUserInfoBean(userInfoBean);
+        }
+        this.isOpenCode = isOpenCode;
     }
 
     public String getUserId() {
@@ -77,7 +97,7 @@ public class AccountManager {
         if (userInfoBean != null) {
             return userInfoBean.getRemindtime();
         }
-        return 60;
+        return 25;
     }
 
 

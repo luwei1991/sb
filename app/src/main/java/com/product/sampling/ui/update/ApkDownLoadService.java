@@ -15,7 +15,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -107,12 +106,11 @@ public class ApkDownLoadService extends Service {
         downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(taskInfo.apkUrl));
         request.setTitle("下载");
-//        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
         request.setAllowedOverRoaming(false);
         request.allowScanningByMediaScanner();
         request.setMimeType("application/vnd.android.package-archive");
         //下载完成之后显示系统的点击安装
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION);
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         //创建目录
         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).mkdir();
         File file = new File(taskInfo.apkLocalPath);
@@ -165,7 +163,7 @@ public class ApkDownLoadService extends Service {
 
 
     /**
-     * 每个人一秒钟去查询下载状态
+     * 每一秒钟去查询下载状态
      */
     public void sendApkUpdate() {
         Observable.interval(1, TimeUnit.SECONDS)
@@ -202,9 +200,7 @@ public class ApkDownLoadService extends Service {
     private void updateNowStatus(int[] ints) {
         if (ints == null || ints.length != 3) return;
         if (ints[0] == 0 || ints[1] == 0) return;
-
-        Log.e("download", ints[2] + "_now" + ints[0] + "_max" + ints[1]);
-
+        //下载状态
         int status = ints[2];
 
 
@@ -272,6 +268,9 @@ public class ApkDownLoadService extends Service {
     }
 
 
+
+
+
     public int[] getBytesAndStatus(long downloadId) {
 
         int[] bytesAndStatus = new int[]{-1, -1, 0};
@@ -281,19 +280,20 @@ public class ApkDownLoadService extends Service {
         try {
             c = downloadManager.query(query);
             if (c != null && c.moveToFirst()) {
-                //当前已经下载字节
-                bytesAndStatus[0] = c.getInt(c.getColumnIndexOrThrow(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)) / 1000;
-                // 总字节
-                bytesAndStatus[1] = c.getInt(c.getColumnIndexOrThrow(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)) / 1000;
+                    //当前已经下载字节
+                    bytesAndStatus[0] = c.getInt(c.getColumnIndexOrThrow(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)) / 1000;
+                    // 总字节
+                    bytesAndStatus[1] = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))/1000;
+                    //下载状态
+                    bytesAndStatus[2] = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
+                }
 
-                bytesAndStatus[2] = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
-            }
         } finally {
             if (c != null) {
                 c.close();
             }
         }
-
+//        Log.e("lwlw","当前：" + bytesAndStatus[0] +"  文件大小：" + bytesAndStatus[1]);
         return bytesAndStatus;
     }
 

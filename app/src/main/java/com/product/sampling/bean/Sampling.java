@@ -73,6 +73,8 @@ public class Sampling implements Serializable {
     private String updateDate;
     private String taskfrom;
     private String tasktype;
+    private String taskfrommean;
+    private String tasktypemean;
     private String inspectedname;
     private String inspectedaddress;
     private String inspectedman;
@@ -107,7 +109,47 @@ public class Sampling implements Serializable {
     private String sendaddress;
     private String export;
     private String endtime;
+    private String sealUp;//封存地点
+    private String samplecost;
+    private String acceptProType;//基数和批量类型
+    private String samplingbaseandbatch;//新基数批量
+
+
+
+    public String getAcceptProType() {
+        return acceptProType;
+    }
+
+    public void setAcceptProType(String acceptProType) {
+        this.acceptProType = acceptProType;
+    }
+
+    public String getSealUp() {
+        return sealUp;
+    }
+
+    public String getSamplecost() {
+        return samplecost;
+    }
+
+    public void setSamplecost(String samplecost) {
+        this.samplecost = samplecost;
+    }
+
+    public void setSealUp(String sealUp) {
+        this.sealUp = sealUp;
+    }
+
+    public String getSamplingnamemean() {
+        return samplingnamemean;
+    }
+
+    public void setSamplingnamemean(String samplingnamemean) {
+        this.samplingnamemean = samplingnamemean;
+    }
+
     private String sammanname;
+    private String samplingnamemean;
     private String samplingman;
     private String samplingaddress;
     private String samplingtel;
@@ -125,6 +167,25 @@ public class Sampling implements Serializable {
     private String deleteFlag;
     private String producesamlltype;
     private String fillInDate;
+
+    public Sampling() {
+    }
+
+    public String getTaskfrommean() {
+        return taskfrommean;
+    }
+
+    public void setTaskfrommean(String taskfrommean) {
+        this.taskfrommean = taskfrommean;
+    }
+
+    public String getTasktypemean() {
+        return tasktypemean;
+    }
+
+    public void setTasktypemean(String tasktypemean) {
+        this.tasktypemean = tasktypemean;
+    }
 
     public String getId() {
         return id;
@@ -596,5 +657,13 @@ public class Sampling implements Serializable {
 
     public void setFillInDate(String fillInDate) {
         this.fillInDate = fillInDate;
+    }
+
+    public String getSamplingbaseandbatch() {
+        return samplingbaseandbatch;
+    }
+
+    public void setSamplingbaseandbatch(String samplingbaseandbatch) {
+        this.samplingbaseandbatch = samplingbaseandbatch;
     }
 }

@@ -1,9 +1,9 @@
 package com.product.sampling.ui;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,51 +28,59 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.product.sampling.Constants;
+import com.product.sampling.MainApplication;
 import com.product.sampling.R;
+import com.product.sampling.adapter.ExceptionServerRecyclerViewAdapter;
 import com.product.sampling.adapter.ImageAndTextRecyclerViewAdapter;
-import com.product.sampling.adapter.ImageServerRecyclerViewAdapter;
-import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
 import com.product.sampling.adapter.VideoAndTextRecyclerViewAdapter;
 import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskMessage;
 import com.product.sampling.bean.Videos;
-import com.product.sampling.httpmoudle.RetrofitService;
+import com.product.sampling.db.DBManagerFactory;
+import com.product.sampling.db.DbController;
+import com.product.sampling.db.tables.NotCheckForm;
+import com.product.sampling.db.tables.NotCheckFormDao;
+import com.product.sampling.httpmoudle.manager.RetrofitServiceManager;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.LoadDataModel;
+import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.photo.MediaHelper;
+import com.product.sampling.ui.form.NotCheckFormActivity;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 import com.product.sampling.utils.FileDownloader;
-import com.product.sampling.utils.FileUtils;
-import com.product.sampling.utils.HttpURLConnectionUtil;
 import com.product.sampling.utils.LogUtils;
-import com.product.sampling.utils.SPUtil;
+import com.product.sampling.utils.RxSchedulersHelper;
+import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+
+import io.reactivex.disposables.Disposable;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
 import static com.product.sampling.adapter.TaskSampleRecyclerViewAdapter.RequestCodePdf;
-import static com.product.sampling.ui.H5WebViewActivity.Intent_Edit;
 import static com.product.sampling.ui.H5WebViewActivity.Intent_Order;
+import static com.product.sampling.ui.TaskDetailActivity.TASK_NOT_UPLOAD;
 
 /**
  * 未抽到样品
@@ -105,7 +113,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
 
     public static TaskUnfindSampleFragment newInstance(TaskEntity task) {
         Bundle args = new Bundle();
-        args.putParcelable("task", task);
+        args.putSerializable("task", task);
         if (fragment == null) {
             fragment = new TaskUnfindSampleFragment();
         }
@@ -179,7 +187,11 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveTaskInLocalFile(false);
+                taskUnFindEntity.taskisok = "2";
+                taskUnFindEntity.taskstatus = TASK_NOT_UPLOAD;
+                LocalTaskListManager.getInstance().update(taskUnFindEntity);
+                EventBus.getDefault().postSticky(TaskMessage.getInstance(taskUnFindEntity.id,false));
+//                saveTaskInLocalFile(false);
             }
         });
         btnSubmit.setVisibility(View.GONE);
@@ -212,7 +224,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
         taskUnFindEntity = (TaskEntity) getArguments().get("task");
 
         taskDetailViewModel = ViewModelProviders.of(this).get(TaskDetailViewModel.class);
-        taskDetailViewModel.orderDetailLiveData.observe(this, new Observer<LoadDataModel<TaskEntity>>() {
+        taskDetailViewModel.orderDetailLiveData.observe(getViewLifecycleOwner(), new Observer<LoadDataModel<TaskEntity>>() {
             @Override
             public void onChanged(LoadDataModel<TaskEntity> taskRefusedEntityLoadDataModel) {
                 if (taskRefusedEntityLoadDataModel.isSuccess()) {
@@ -221,19 +233,33 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                 }
             }
         });
-        if (!taskUnFindEntity.isLoadLocalData) {
-            taskDetailViewModel.requestDetailList(AccountManager.getInstance().getUserId(), taskUnFindEntity.id);
-        } else {
+        TaskEntity localEntity = LocalTaskListManager.getInstance().query(taskUnFindEntity);
+        if(localEntity != null){
+            taskUnFindEntity = localEntity;
             initData();
+        }else{
+            taskDetailViewModel.requestDetailList(AccountManager.getInstance().getUserId(), taskUnFindEntity.id);
         }
+
+//        if (!taskUnFindEntity.isLoadLocalData) {
+//            taskDetailViewModel.requestDetailList(AccountManager.getInstance().getUserId(), taskUnFindEntity.id);
+//        } else {
+//            findTaskInLocalFile();
+//            initData();
+//        }
     }
 
     private void initData() {
         mTextViewCompanyname.setText(taskUnFindEntity.companyname);
         etTips.setText(taskUnFindEntity.remark);
         if (!taskUnFindEntity.taskisok.equals("2")) {
-            taskUnFindEntity.pics.clear();
-            taskUnFindEntity.voides.clear();
+            if( taskUnFindEntity.pics != null){
+                taskUnFindEntity.pics.clear();
+            }
+            if( taskUnFindEntity.voides != null){
+                taskUnFindEntity.voides.clear();
+            }
+
         }
         setupRecyclerViewFromServer(mRecyclerViewImageList, taskUnFindEntity.pics);
         setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskUnFindEntity.voides);
@@ -305,7 +331,6 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                         mediaInfo.setPosition(media.getPosition());
                         mediaInfo.setNum(media.getNum());
                         mediaInfo.setMimeType(media.getMimeType());
-                        mediaInfo.setPictureType(media.getPictureType());
                         mediaInfo.setCompressed(media.isCompressed());
                         mediaInfo.setWidth(media.getWidth());
                         mediaInfo.setHeight(media.getHeight());
@@ -318,6 +343,9 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
 //                            taskDetailViewModel.taskEntity.voides.remove(i);
 //                        }
 //                    }
+                    if(taskUnFindEntity.voides == null){
+                        taskUnFindEntity.voides = new ArrayList<>();
+                    }
                     taskUnFindEntity.isLoadLocalData = true;
                     taskUnFindEntity.isEditedTaskScene = true;
                     taskUnFindEntity.voides.addAll(mediaInfos);
@@ -350,10 +378,16 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                             taskDetailViewModel.taskEntity.pics.remove(pics1);
                         }
                     }*/
+
+
+                    if(taskUnFindEntity.pics == null){
+                        taskUnFindEntity.pics = new ArrayList<>();
+                    }
                     taskUnFindEntity.pics.addAll(mediaInfos);
                     taskUnFindEntity.isLoadLocalData = true;
                     taskUnFindEntity.isEditedTaskScene = true;
                     setupRecyclerView(mRecyclerViewImageList, taskUnFindEntity.pics);
+
                 }
                 break;
                 case RequestCodePdf:
@@ -423,17 +457,8 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
      * @param videoList
      */
     private void setupRecyclerViewVideo(RecyclerView mRecyclerViewVideoList, List<Videos> videoList) {
-        mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, true));
+        mRecyclerViewVideoList.setAdapter(new VideoAndTextRecyclerViewAdapter(getActivity(), videoList, this, false));
 
-    }
-
-    /**
-     * getPath
-     *
-     * @return
-     */
-    private String getPath() {
-        return "/storage/emulated/0/zip";
     }
 
 
@@ -442,7 +467,10 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
      * @param task
      */
     private void setupRecyclerViewFromServer(@NonNull RecyclerView recyclerView, List task) {
-        ImageServerRecyclerViewAdapter adapter = new ImageServerRecyclerViewAdapter(getActivity(), task, taskUnFindEntity.isUploadedTask());
+        if(task == null){
+            task = new ArrayList();
+        }
+        ExceptionServerRecyclerViewAdapter adapter = new ExceptionServerRecyclerViewAdapter(getActivity(), task, taskUnFindEntity.isUploadedTask(),fragment);
         recyclerView.setAdapter(adapter);
     }
 
@@ -457,7 +485,7 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
     private void downLoadVideo() {
         for (Videos videos : taskUnFindEntity.voides) {
             if (TextUtils.isEmpty(videos.getId())) continue;
-            FileDownloader.downloadFile(RetrofitService.createApiService(Request.class).downloadVideo(videos.getId()), Constants.getPath(), videos.getFileName(), new DownloadProgressHandler() {
+            FileDownloader.downloadFile(RetrofitServiceManager.getInstance().createApiService(Request.class).downloadVideo(videos.getId()), Constants.getPath(), videos.getFileName(), new DownloadProgressHandler() {
 
                 @Override
                 public void onProgress(int progress, long total, long speed) {
@@ -476,11 +504,34 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                 public void onError(Throwable e) {
                     LogUtils.e("下载文件异常", e.getMessage());
                 }
+
+
             });
         }
 
 
     }
+
+    /**
+     * 从本地找数据
+     */
+//    private void findTaskInLocalFile() {
+//        Gson gson = new Gson();
+//        String taskListStr = (String) SPUtil.get(getActivity(), "tasklist", "");
+//        if (!TextUtils.isEmpty(taskListStr)) {
+//            Type listType = new TypeToken<List<TaskEntity>>() {
+//            }.getType();
+//            ArrayList<TaskEntity> listTask = gson.fromJson(taskListStr, listType);
+//            if (null != listTask && !listTask.isEmpty()) {
+//                for (int i = 0; i < listTask.size(); i++) {
+//                    if (listTask.get(i).id.equals(taskUnFindEntity.id)) {
+//                        taskUnFindEntity = listTask.get(i);
+//                    }
+//                }
+//            }
+//
+//        }
+//    }
 
     private void rxPermissionTest() {
 
@@ -498,15 +549,46 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
 
 
     }
+ public void showUpLoadFail(String failMessage){
+        Dialog failDialog = new QMUITipDialog.Builder(getActivity())
+                .setIconType(QMUITipDialog.Builder.ICON_TYPE_FAIL)
+                .setTipWord(failMessage)
+                .create();
+        failDialog.show();
 
+
+     btnSubmit.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(failDialog != null && failDialog.isShowing()){
+                    failDialog.dismiss();
+                }
+            }
+        },1500);
+
+    }
+
+    /**上传dialog*/
+    QMUITipDialog upDialog;
     private void postUnfindData() {
+        NotCheckForm notCheckForm =  DbController.getInstance(getContext()).getDaoSession().getNotCheckFormDao().queryBuilder().where(NotCheckFormDao.Properties.Id.eq(taskUnFindEntity.id)).build().unique();
+        if(notCheckForm == null || TextUtils.isEmpty(notCheckForm.getPdfPath())|| TextUtils.isEmpty(notCheckForm.getTaskLYID())){
+            showUpLoadFail("请检查表单有没有生成PDF文件或者表单中任务来源字段有没有填写。");
+            return;
+        }
+        upDialog = new QMUITipDialog.Builder(getActivity())
+                .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
+                .setTipWord("异常信息提交中...")
+                .create(false);
+        upDialog.show();
         Map<String, String> requestText = new HashMap<String, String>();
         Map<String, String> requestFile = new HashMap<String, String>();
-
         requestText.put("userid", AccountManager.getInstance().getUserId());
         requestText.put("id", taskUnFindEntity.id);
         requestText.put("taskisok", "2");//任务异常状态0正常1拒检2未抽样到单位
         requestText.put("remark", etTips.getText().toString());
+        requestText.put("unfind.taskfrom ", notCheckForm.getTaskLYID());
+        requestText.put("unfind.checkman ",  taskUnFindEntity.id);
         if (null != taskUnFindEntity.taskSamples && !taskUnFindEntity.taskSamples.isEmpty()) {
             requestText.put("samplecount", taskUnFindEntity.taskSamples.size() + "");
         } else {
@@ -559,13 +641,16 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
             }
         }
 
-
+        //未找到样品单上传
         {
-            File unfindfile = new File(taskUnFindEntity.unfindfile);
-            if (unfindfile.exists()) {
-                Log.e("file", unfindfile.getAbsolutePath());
-                requestFile.put("unfindfile", taskUnFindEntity.unfindfile);//未找到样品单file
+            String pdfPath = notCheckForm.getPdfPath();
+            if(!TextUtils.isEmpty(pdfPath)){
+                File unfindfile = new File(pdfPath);
+                if(unfindfile.exists()){
+                    requestFile.put("unfindfile", pdfPath);//未找到样品单file
+                }
             }
+
         }
 
         {
@@ -592,121 +677,121 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
 //            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "请先选择图片或者视频");
 //            return;
 //        }
-
-        HttpURLConnectionUtil httpReuqest = new HttpURLConnectionUtil();
-
-        new AsyncTask() {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                showLoadingDialog();
-                showLoadingDialog("异常信息提交中");
+        MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder();
+        multipartBodyBuilder.setType(MultipartBody.FORM);
+        // text
+        Iterator<Map.Entry<String, String>> iter = requestText.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<String, String> entry = iter.next();
+            String inputName = (String) entry.getKey();
+            String inputValue = (String) entry.getValue();
+            if (TextUtils.isEmpty(inputValue)) {
+                continue;
             }
+          multipartBodyBuilder.addFormDataPart(inputName,inputValue);
+        }
 
-            @Override
-            protected Object doInBackground(Object[] objects) {
-                String response = null;
-                try {
-                    response = httpReuqest.formUpload(requestText, requestFile, new HttpURLConnectionUtil.PostCallback() {
-                        @Override
-                        public void progressUpdate(int total, int prgress) {
-                            NumberFormat numberFormat = NumberFormat.getInstance();
-                            // 设置精确到小数点位
-                            numberFormat.setMaximumFractionDigits(0);
-                            String result = numberFormat.format((float) prgress / (float) total * 100);
-                            showLoadingDialog("当前进度 " + result + "%");
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return response;
+        // file
+        Iterator<Map.Entry<String, String>> iterFile = requestFile.entrySet().iterator();
+        while (iterFile.hasNext()) {
+            Map.Entry<String, String> entry = iterFile.next();
+            String inputName = (String) entry.getKey();
+            String inputValue = (String) entry.getValue();
+            if (TextUtils.isEmpty(inputValue)) {
+                continue;
             }
+            File file = new File(inputValue);
+            if(file.exists()){
+                RequestBody requestFileBody = RequestBody.create(MultipartBody.FORM, file);//把文件与类型放入请求体
+                multipartBodyBuilder.addFormDataPart(inputName, file.getName(), requestFileBody);
+            }
+        }
 
-            @Override
-            protected void onPostExecute(Object o) {
-                super.onPostExecute(o);
-                if (!TextUtils.isEmpty(o.toString())) {
-                    try {
-                        JSONObject object = new JSONObject(o.toString());
-                        if (object.has("message") && !TextUtils.isEmpty(object.optString("message"))) {
-                            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), object.optString("message"));
-                        }
-                        dismissLoadingDialog();
-                        if (object.has("code") && object.optInt("code") == 200) {
-                            dismissLoadingDialog();
-                            EventBus.getDefault().post(TaskMessage.getInstance(taskUnFindEntity.id));
-                            saveTaskInLocalFile(true);
-                            FileUtils.deletePdf(requestFile);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+        RetrofitServiceManager.getInstance().createApiService(Request.class)
+                .uploadtaskinfo(multipartBodyBuilder.build())
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        upDialog.dismiss();
+                        showUpLoadSuccess();
                     }
-                }
 
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        super.onSubscribe(d);
+                    }
 
-            }
-        }.execute();
-//        RetrofitService.createApiService(Request.class)
-//                .uploadtaskinfo(multipartBodyBuilder.build())
-//                .compose(RxSchedulersHelper.io_main())
-//                .compose(RxSchedulersHelper.ObsHandHttpResult())
-//                .subscribe(new ZBaseObserver<String>() {
-//                    @Override
-//                    public void onSuccess(String s) {
-//                        dismissLoadingDialog();
-//                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加成功");
-//                        EventBus.getDefault().post(TaskMessage.getInstance(taskUnFindEntity.id));
-//                        saveTaskInLocalFile(true);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(int code, String message) {
-//                        super.onFailure(code, message);
-//                        dismissLoadingDialog();
-//                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), message);
-//                    }
-//
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//                        super.onSubscribe(d);
-//                    }
-//                });
-
+                    @Override
+                    public void onFailure(int code, String message) {
+                        super.onFailure(code, message);
+                        upDialog.dismiss();
+                        showUpLoadFail(message);
+                    }
+                });
 
     }
 
-    private void saveTaskInLocalFile(boolean isRemove) {
-        try {
-            Gson gson = new Gson();
-            ArrayList<TaskEntity> listTask = new ArrayList<>();
-            String taskListStr = (String) SPUtil.get(getActivity(), "tasklist", "");
-            if (!TextUtils.isEmpty(taskListStr)) {
-                Type listType = new TypeToken<List<TaskEntity>>() {
-                }.getType();
-                listTask = gson.fromJson(taskListStr, listType);
-                if (null != listTask && !listTask.isEmpty()) {
-                    for (int i = 0; i < listTask.size(); i++) {
-                        if (listTask.get(i).id.equals(taskUnFindEntity.id)) {
-                            listTask.remove(i);
-                        }
-                    }
+
+    public void showUpLoadSuccess(){
+        Dialog sucDialog = new QMUITipDialog.Builder(getActivity())
+                .setIconType(QMUITipDialog.Builder.ICON_TYPE_SUCCESS)
+                .setTipWord("信息上传成功！")
+                .create();
+        sucDialog.show();
+
+
+        btnSubmit.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(sucDialog != null && sucDialog.isShowing()){
+                    sucDialog.dismiss();
                 }
+                //上传成功，删除
+                EventBus.getDefault().postSticky(TaskMessage.getInstance(taskUnFindEntity.id,true));
+                taskUnFindEntity.taskisok = "2";
+                LocalTaskListManager.getInstance().remove(taskUnFindEntity);
+//                saveTaskInLocalFile(true);
+                ActivityManager.getInstance().currentActivity().finish();
+
             }
-            if (!isRemove) {
-                taskUnFindEntity.taskisok = 2 + "";
-                listTask.add(taskUnFindEntity);
-            }
-            SPUtil.put(getActivity(), "tasklist", gson.toJson(listTask));
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-        }
-        if (isRemove) {
-            getActivity().finish();
-        } else {
-            com.product.sampling.maputil.ToastUtil.show(getActivity(), "保存成功");
-        }
+        },1500);
+
     }
+
+//    private void saveTaskInLocalFile(boolean isRemove) {
+//        try {
+//            Gson gson = new Gson();
+//            ArrayList<TaskEntity> listTask = new ArrayList<>();
+//            String taskListStr = (String) SPUtil.get(getActivity(), "tasklist", "");
+//            if (!TextUtils.isEmpty(taskListStr)) {
+//                Type listType = new TypeToken<List<TaskEntity>>() {
+//                }.getType();
+//                listTask = gson.fromJson(taskListStr, listType);
+//                if (null != listTask && !listTask.isEmpty()) {
+//                    for (int i = 0; i < listTask.size(); i++) {
+//                        if (listTask.get(i).id.equals(taskUnFindEntity.id)) {
+//                            listTask.remove(i);
+//                        }
+//                    }
+//                }
+//            }
+//            if (!isRemove) {
+//                taskUnFindEntity.taskisok = 2 + "";
+//                listTask.add(taskUnFindEntity);
+//            }
+//            SPUtil.put(getActivity(), "tasklist", gson.toJson(listTask));
+//        } catch (JsonSyntaxException e) {
+//            e.printStackTrace();
+//        }
+//        if (isRemove) {
+//            getActivity().finish();
+//        } else {
+//            com.product.sampling.maputil.ToastUtil.show(getActivity(), "保存成功,请到“未上传”中去查看保存内容！");
+//        }
+//    }
+
 
     private void showDialog(String msg, int index) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -719,14 +804,55 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
                 if (index == 1) {
                     postUnfindData();
                 } else if (index == 2) {
-                    Intent intent = new Intent(getActivity(), H5WebViewActivity.class);
+                    Intent intent = new Intent(getActivity(), NotCheckFormActivity.class);
                     Bundle b = new Bundle();
-                    b.putInt(Intent_Order, 4);
-                    b.putSerializable("task", (Serializable) taskUnFindEntity);
-                    b.putSerializable("map", (Serializable) taskUnFindEntity.unfindSampleInfoMap);
-                    b.putBoolean(Intent_Edit, taskUnFindEntity.isUploadedTask());
+                    //跳转到处置单
+                    String taskId = taskUnFindEntity.id;//任务id
+                    String tasktypecount = taskUnFindEntity.tasktypecount;//产品名称
+                    String companyname = taskUnFindEntity.companyname;//企业名称
+                    b.putString("taskId",taskId);
+                    b.putString("tasktypecount",tasktypecount);
+                    b.putString("companyname",companyname);
                     intent.putExtras(b);
-                    startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+                    NotCheckForm notCheckForm =  DbController.getInstance(getActivity()).getDaoSession().getNotCheckFormDao().queryBuilder().where(NotCheckFormDao.Properties.Id.eq(taskId)).build().unique();
+                    if(notCheckForm != null){
+                        //设置当前默认日期
+                        Date nowData = new Date();
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+                        String nowDateString = format.format(nowData);
+                        String date[] = nowDateString.split("-");
+                        notCheckForm.setCyDwRQ(date[0] + " 年" + date[1] + " 月" + date[2] + " 日");
+                        NotCheckFormActivity.CYR_YEAR = date[0];
+                        NotCheckFormActivity.CYR_MONTH = date[1];
+                        NotCheckFormActivity.CYR_DAY = date[2];
+                        DBManagerFactory.getInstance().getNotCheckFormManager().update(notCheckForm);
+                    }else {
+                        //创建数据库
+                        NotCheckForm notCheckFormNew = new NotCheckForm();
+                        notCheckFormNew.setId(taskId);
+                        notCheckFormNew.setQymc(companyname);
+                        Date nowData = new Date();
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+                        String nowDateString = format.format(nowData);
+                        String date[] = nowDateString.split("-");
+                        notCheckFormNew.setCyDwRQ(date[0] + " 年" + date[1] + " 月" + date[2] + " 日");
+                        NotCheckFormActivity.CYR_YEAR = date[0];
+                        NotCheckFormActivity.CYR_MONTH = date[1];
+                        NotCheckFormActivity.CYR_DAY = date[2];
+                        DbController.getInstance(getActivity()).getDaoSession().getNotCheckFormDao().insert(notCheckFormNew);
+
+                    }
+
+                    startActivity(intent);
+//
+//                    Intent intent = new Intent(getActivity(), H5WebViewActivity.class);
+//                    Bundle b = new Bundle();
+//                    b.putInt(Intent_Order, 4);
+//                    b.putSerializable("task", (Serializable) taskUnFindEntity);
+//                    b.putSerializable("map", (Serializable) taskUnFindEntity.unfindSampleInfoMap);
+//                    b.putBoolean(Intent_Edit, taskUnFindEntity.isUploadedTask());
+//                    intent.putExtras(b);
+//                    startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
                 }
             }
         });
@@ -739,4 +865,8 @@ public class TaskUnfindSampleFragment extends BasePhotoFragment {
         builder.show();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 }

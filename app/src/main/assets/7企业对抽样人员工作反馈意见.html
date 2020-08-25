@@ -10,6 +10,8 @@
   <script src="./js/html2canvas.min.js"></script>
   <style>
   table.tftable td {padding:5px;}
+      body{width:600px;height:900px;margin:0 auto;}
+
   </style>
 </head>
 
@@ -18,75 +20,75 @@
   <input   class="taskcode" id="taskCode"   type="hidden" value="11">
   <form action="">
     <p class="title" style="padding-top: 20px">企业对抽样人员工作反馈意见</p>
-    <p style="padding-bottom: 2px">企业名称：<input name="feed.companyname" style="width:300px;font-size:14px;" type="text" placeholder=""></p>
-    <p style="padding-bottom: 10px">抽样组人员：<input name="feed.checkman" style=" width:300px;font-size:14px;" type="text" placeholder=""></p>
-    <table width="100%s" border="1" class="tftable">
+    <p style="padding-top: 20px;padding-bottom:10px;font-size:14px">企业名称：<input name="feed.companyname" style="width:300px;font-size:14px;" type="text" placeholder=""></p>
+    <p style="padding-bottom: 10px;font-size:14px">抽样组人员：<input name="feed.checkman" style=" width:300px;font-size:14px;" type="text" placeholder=""></p>
+    <table width="500px" border="1" class="tftable" style="table-layout:fixed;">
       <tr>
-        <td width="50%">1.抽样人员是否两人或两人以上</td>
-        <td width="50%" class="tc">
+        <td width="60%" ><p style="text-align:left ">1.抽样人员是否两人或两人以上</p></td>
+        <td width="40%">
           <input id="a1" type="radio" value="1" name="feed.twoman"><label for="a1">是</label>&nbsp;&nbsp;
           <input id="a2" type="radio" value="2" name="feed.twoman"><label for="a2">否</label>
         </td>
       </tr>
       <tr>
-        <td>2.抽样人员是否出示工作证、抽样介绍信、产品质量监督抽查相关文件、企业名单附件等。</td>
-        <td class="tc">
+        <td width="300"><p style="text-align:left">2.抽样人员是否出示工作证、抽样介绍信、产品质量监督抽查相关文件、企业名单附件等。</p></td>
+        <td width="150">
           <input id="b1" type="radio" value="1" name="feed.showcertificates"><label for="b1">是</label>&nbsp;&nbsp;
           <input id="b2" type="radio" value="2" name="feed.showcertificates"><label for="b2">否</label>
         </td>
       </tr>
       <tr>
-        <td>3.抽样人员是否按抽样产品抽查实施规范及时高效地开展抽样工作。</td>
+        <td><p style="text-align:left">3.抽样人员是否按抽样产品抽查实施规范及时高效地开展抽样工作。</p></td>
         <td class="tc">
           <input id="c1" type="radio" value="1" name="feed.standardwork"><label for="c1">是</label>&nbsp;&nbsp;
           <input id="c2" type="radio" value="2" name="feed.standardwork"><label for="c2">否</label>
         </td>
       </tr>
       <tr>
-        <td>4.抽样工作中能否坚持原则，作风正派，秉公办事。</td>
+        <td><p style="text-align:left">4.抽样工作中能否坚持原则，作风正派，秉公办事。</p></td>
         <td class="tc">
           <input id="d1" type="radio" value="1" name="feed.principlework"><label for="d1">能</label>&nbsp;&nbsp;
           <input id="d2" type="radio" value="2" name="feed.principlework"><label for="d2">否</label>
         </td>
       </tr>
       <tr>
-        <td>5.是否存在刁难企业行为。</td>
+        <td><p style="text-align:left">5.是否存在刁难企业行为。</p></td>
         <td class="tc">
           <input id="e1" type="radio" value="1" name="feed.makedifficulties"><label for="e1">是</label>&nbsp;&nbsp;
           <input id="e2" type="radio" value="2" name="feed.makedifficulties"><label for="e2">否</label>
         </td>
       </tr>
       <tr>
-        <td>6.抽样人员是否签订委托检验协议或收取检验等费用。</td>
+        <td><p style="text-align:left">6.抽样人员是否签订委托检验协议或收取检验等费用。</p></td>
         <td class="tc">
           <input id="f1" type="radio" value="1" name="feed.collectfees"><label for="f1">是</label>&nbsp;&nbsp;
           <input id="f2" type="radio" value="2" name="feed.collectfees"><label for="f2">否</label>
         </td>
       </tr>
       <tr>
-        <td>7.抽样人员是否借机游山玩水，要求企业支付相关费用等行为。</td>
+        <td><p style="text-align:left">7.抽样人员是否借机游山玩水，要求企业支付相关费用等行为。</p></td>
         <td class="tc">
           <input id="g1" type="radio" value="1" name="feed.playfees"><label for="g1">有</label>&nbsp;&nbsp;
           <input id="g2" type="radio" value="2" name="feed.playfees"><label for="g2">无</label>
         </td>
       </tr>
       <tr>
-        <td>8.抽样人员有无报销住宿费、餐费，或收受有价证券、现金等行为。</td>
+        <td><p style="text-align:left">8.抽样人员有无报销住宿费、餐费，或收受有价证券、现金等行为。</p></td>
         <td class="tc">
           <input id="h1" type="radio" value="1" name="feed.reimbursement"><label for="h1">有</label>&nbsp;&nbsp;
           <input id="h2" type="radio" value="2" name="feed.reimbursement"><label for="h2">无</label>
         </td>
       </tr>
       <tr>
-        <td>9.抽样人员有无利用职权向被抽样企业索取产品、礼物或低价购买样品。</td>
+        <td><p style="text-align:left">9.抽样人员有无利用职权向被抽样企业索取产品、礼物或低价购买样品。</p></td>
         <td class="tc">
           <input id="i1" type="radio" value="1" name="feed.abuse"><label for="i1">有</label>&nbsp;&nbsp;
           <input id="i2" type="radio" value="2" name="feed.abuse"><label for="i2">无</label>
         </td>
       </tr>
       <tr>
-        <td><p>10.此次抽样工作进行客观、公正的评价</p>
-        <p>（非常满意、满意、不满意）。</p></td>
+        <td><p style="text-align:left">10.此次抽样工作进行客观、公正的评价</p>
+          <p style="text-align:left">（非常满意、满意、不满意）。</p></td>
         <td class="tc">
           <input id="j1" type="radio" value="1" name="feed.evaluate"><label for="j1">非常满意</label>&nbsp;&nbsp;
           <input id="j2" type="radio" value="2" name="feed.evaluate"><label for="j2">满意</label>&nbsp;&nbsp;
@@ -94,17 +96,18 @@
         </td>
       </tr>
       <tr>
-        <td>11.抽样人员有无其他违纪、违规行为，有其他需要说明的，湖南省质检院举报电话：0731-89775245。</td>
-        <td><input name="feed.explain" style="width:300px;font-size:14px;" type="text" placeholder="">&nbsp;</td>
+        <td><p style="text-align:left">11.抽样人员有无其他违纪、违规行为，有其他需要说明的，湖南省质检院举报电话：0731-89775245。</p></td>
+        <td><input name="feed.explain" style="width:180px;font-size:14px;text-align:center" type="text" placeholder="">&nbsp;</td>
       </tr>
     </table>
 
-    <div class="ov" style="padding: 30px 40px 30px 20px;font-size:16px">
+    <div class="ov" style="padding: 20px 40px 0px 20px;font-size:16px">
       <div class="left" style="width:350px">
         企业负责人签名：<div class="sign_show" style="border:none;vertical-align: middle;" signname="ssiiggnn_fuzeren"></div>
       </div>
       <div class="right" style="text-align: right;" >
-        企业盖章<br><div class="right" style="text-align: right;font-size: 12px;" >
+        <p style="padding-right:40px">企业盖章</p>
+        <br><div class="right" style="text-align: right;font-size: 12px;" >
         <p>
             <div class="sign_show" style="border:none;vertical-align: middle;" signname="ssiiggnn_qiyegaizhang"></div>
             <input class="tc year" name="Year" style="width:40px" type="text" placeholder="">年

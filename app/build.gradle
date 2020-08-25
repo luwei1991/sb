@@ -1,31 +1,53 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'android-aspectjx'
+apply plugin: 'bugly'
+//apply plugin: 'com.didi.dokit'
+bugly {
+    appId = '16977520a6' // 注册时分配的App ID
+    appKey = 'd9606e93-be2a-4f5a-b5bd-0d27ae7e66cb' // 注册时分配的App Key
+}
 android {
     compileSdkVersion 28
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
         }
-    }
 
+    }
+    packagingOptions {
+        exclude 'assets/location_map_gps_locked.png'
+        exclude 'assets/location_map_gps_3d.png'
+        exclude 'com/itextpdf/text/pdf/fonts/cmap_info.txt'
+
+    }
+    dataBinding {
+        enabled = true
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
     defaultConfig {
         applicationId "com.product.sampling"
         minSdkVersion 24
         targetSdkVersion 27
-        versionCode 2
-        versionName "1.0.0.2"
+        versionCode 53
+        versionName "1.0.5.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
             //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
-             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
-       /*     abiFilters "armeabi-v7a","x86"*/
+//             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+           abiFilters "armeabi-v7a","x86"
         }
 
     }
+
     buildTypes {
         release {
             minifyEnabled false
+//            shrinkResources true//将未使用的资源不打入包中
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
 
@@ -37,7 +59,7 @@ android {
                         if (buildType.name == 'release') {
                          /*   def createTime = new Date().format("YYYY-MM-dd", TimeZone.getTimeZone("GMT+08:00"))*/
                             // app包名称
-                            outputFileName = "app_v" + defaultConfig.versionName + "_" + createTime + "_" + buildType.name + ".apk"
+                            outputFileName = "hnmccs" + defaultConfig.versionName + "_" + createTime + "_" + buildType.name + ".apk"
                         }
                     }
             }
@@ -52,7 +74,7 @@ android {
                 if (buildType.name == 'release') {
                     def createTime = new Date().format("YYYY-MM-dd", TimeZone.getTimeZone("GMT+08:00"))
                     // app包名称
-                   outputFileName = "app_v" + defaultConfig.versionName + "_" + createTime + "_" + buildType.name + ".apk"
+                   outputFileName = "hnmccs" + defaultConfig.versionName + "_" + createTime + "_" + buildType.name + ".apk"
                   /*  outputFileName = "app_new.apk"*/
                 }
             }
@@ -61,10 +83,13 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    signingConfigs {
+
+
+
+        signingConfigs {
         //发布版的keystore
         release {
-            keyAlias 'key-product'
+            keyAlias '12-product'
             keyPassword '123456'
             storeFile file('sb')
             storePassword '123456'
@@ -74,69 +99,111 @@ android {
         pickFirst 'META-INF/*'
     }
 
-
+    greendao {
+        schemaVersion 8 //当前数据库版本
+    }
 
 }
+//dokitExt {
+//    //dokit 插件开关
+//    dokitPluginSwitch true
+//    //通用设置
+//    comm {
+//        //地图经纬度开关
+//        gpsSwitch true
+//        //网络开关
+//        networkSwitch true
+//        //大图开关
+//        bigImgSwitch true
+//    }
+
+//    slowMethod {
+//        //0:默认模式 打印函数调用栈 需添加指定入口  默认为application onCreate 和attachBaseContext
+//        //1:普通模式 运行时打印某个函数的耗时 全局业务代码函数插入 已弃用
+//        strategy 1
+//        //函数功能开关 已弃用
+//        methodSwitch true
+//
+//        //调用栈模式配置
+//        stackMethod {
+//            //默认值为 5ms 小于该值的函数在调用栈中不显示
+//            thresholdTime 5
+//            //调用栈函数入口
+//            enterMethods = ["com.didichuxing.doraemondemo.MainDebugActivity.test1"]
+//        }
+//        //普通模式配置
+//        normalMethod {
+//            //默认值为 500ms 小于该值的函数在运行时不会在控制台中被打印
+//            thresholdTime 100BU
+//            //需要针对函数插装的包名
+//            packageNames = ["com.didichuxing.doraemondemo"]
+//            //不需要针对函数插装的包名&类名
+//            methodBlacklist = ["com.didichuxing.doraemondemo.dokit"]
+//        }
+//    }
+//}
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    def fragment_version = "1.2.1"
+
+    // Java language implementation
+    implementation "androidx.fragment:fragment:$fragment_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
     implementation 'androidx.recyclerview:recyclerview:1.0.0-beta01'
     implementation 'com.google.android.material:material:1.0.0-beta01'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-beta01'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.22'
-    implementation 'com.github.bumptech.glide:glide:4.7.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     api('com.jaeger.statusbarutil:library:1.5.1') {
         exclude group: 'com.android.support'
     }
-    implementation 'org.greenrobot:greendao:3.2.2'
-    implementation 'com.hyman:flowlayout-lib:1.1.2'
-    implementation 'com.ruffian.library:RTextView:1.0.9'
-    implementation 'com.amap.api:location:4.1.0'
-    implementation 'com.borjabravo:readmoretextview:2.1.0'
-    implementation 'com.github.zcweng:switch-button:0.0.3@aar'
+    //jetpack
+    implementation   "androidx.lifecycle:lifecycle-runtime:2.2.0"// Lifecycles only (without ViewModel or LiveData)
+    implementation   "androidx.lifecycle:lifecycle-viewmodel:2.2.0"//// ViewModel
+    implementation   "androidx.lifecycle:lifecycle-livedata:2.2.0" // LiveData
+    implementation   "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0"// Saved state module for ViewModel
+    annotationProcessor   "androidx.lifecycle:lifecycle-compiler:2.2.0"        // Annotation processor
+    implementation   "androidx.lifecycle:lifecycle-common-java8:2.2.0"  // alternately - if using Java8, use the following instead of lifecycle-compiler
+    implementation   "androidx.lifecycle:lifecycle-reactivestreams:2.2.0"// optional - ReactiveStreams support for LiveData
+
+    //greendao
+    implementation 'org.greenrobot:greendao:3.3.0' // add library
     implementation 'pub.devrel:easypermissions:1.2.0'
     implementation 'jp.wasabeef:glide-transformations:3.3.0'
-    implementation 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
-    implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.nineoldandroids:library:2.4.0'
-    //    implementation 'com.github.yalantis:ucrop:2.2.2'
-    implementation 'com.umeng.sdk:common:1.5.3'
-    implementation 'com.umeng.sdk:analytics:7.5.3'
-    implementation 'q.rorbin:badgeview:1.1.3'
-    implementation 'com.contrarywind:Android-PickerView:4.1.4'
-    //    implementation files('libs/umeng-share-core-6.9.2.jar')
-    //    implementation files('libs/umeng-share-sina-simplify-6.9.2.jar')
-    //    implementation files('libs/umeng-sharetool-6.9.2.jar')
-    //    implementation files('libs/umeng-share-QQ-simplify-6.9.2.jar')
     implementation 'io.reactivex.rxjava2:rxjava:2.1.0'
+
     // 必要rxjava2依赖
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
     // 必要rxandrroid依赖，切线程时需要用到
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+
     // 必要retrofit依赖
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+
     // 必要依赖，和Rxjava结合必须用到，下面会提到
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+
     // 必要依赖，解析json字符所用
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
-    //非必要依赖， log依赖，如果需要打印OkHttpLog需要添加
-    //    implementation files('libs/jcore-android-1.2.1.jar')
-    //    implementation files('libs/jpush-android-3.1.3.jar')
-    implementation 'com.amap.api:map2d:latest.integration'
-    implementation 'com.amap.api:navi-3dmap:latest.integration'
-    //定位功能
+
+    //高德地图
     implementation 'com.amap.api:location:latest.integration'
-    //搜索功能
+
+    //定位
     implementation 'com.amap.api:search:latest.integration'
+
+    //搜索
+    implementation 'com.amap.api:navi-3dmap:latest.integration'
+
+    //导航
+
+    //搜索功能
     implementation project(path: ':takephoto_library')
-    implementation 'com.android.support:gridlayout-v7:28.+'
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
     implementation 'com.github.lzyzsd:jsbridge:1.0.4'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.22'
@@ -145,15 +212,24 @@ dependencies {
     implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.4'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.danikula:videocache:2.7.0'
-    implementation 'com.github.bumptech.glide:glide:4.7.1'
     implementation 'com.google.android.exoplayer:exoplayer:2.9.1'
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
+    //图片加载框架
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+
+//    implementation 'com.github.bumptech.glide:glide:4.11.0'
+//    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     //butterknife
     implementation 'com.jakewharton:butterknife:10.1.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
-    implementation 'com.google.zxing:android-core:3.3.0'
-    implementation 'com.google.zxing:core:3.3.2'
+
+    //    implementation 'com.google.zxing:android-core:3.3.0'
+
+    /*implementation 'com.google.zxing:core:3.3.2'*/
+
+    //    implementation 'com.google.zxing:core:3.3.3'
     implementation 'android.arch.paging:runtime:1.0.0'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-andx-14'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-andx-14'
@@ -165,5 +241,31 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation files('libs/agora-rtc-sdk.jar')
     implementation files('libs/agora-rtm-sdk.jar')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.yanzhenjie:permission:2.0.0-rc4'
+//    implementation project(':zxinglibrary')
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
+    //qmui
+    implementation 'com.qmuiteam:qmui:2.0.0-alpha10'
+    implementation 'com.qmuiteam:arch:2.0.0-alpha10'
+//    kapt "com.qmuiteam:arch-compiler:$qmui_arch_version" // use annotationProcessor if java
+//    def qmui_arch_verision = '0.6.1'
+//    implementation "com.qmuiteam:arch:$qmui_arch_verision"
+
+    //pickerView
+    implementation 'com.contrarywind:Android-PickerView:4.1.9'
+
+    //手写签名
+    implementation 'com.github.gcacace:signature-pad:1.2.1'
+
+    //切面
+    api 'org.aspectj:aspectjrt:1.8.9'
+
+    //腾讯bugly
+    implementation 'com.tencent.bugly:crashreport:latest.release'
+    //mmkv
+    implementation  'com.tencent:mmkv:1.1.0'
+//    debugImplementation "com.didichuxing.doraemonkit:doraemonkit:3.1.8"
+//    releaseImplementation "com.didichuxing.doraemonkit:doraemonkit-no-op:3.1.8"
 }

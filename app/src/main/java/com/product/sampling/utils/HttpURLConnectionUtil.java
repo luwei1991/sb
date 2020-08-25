@@ -1,21 +1,14 @@
 package com.product.sampling.utils;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.product.sampling.Constants;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -28,13 +21,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import okhttp3.Callback;
-import okhttp3.MultipartBody;
-
 public class HttpURLConnectionUtil {
     private final static String requestURL = Constants.BASE_URL + "app/task/uploadtaskinfo";
 
-    private static Logger log = LoggerFactory.getLogger(HttpURLConnectionUtil.class);
     private final static String BOUNDARY = UUID.randomUUID().toString()
             .toLowerCase().replaceAll("-", "");// 边界标识
     private final static String PREFIX = "--";// 必须存在
@@ -43,7 +32,6 @@ public class HttpURLConnectionUtil {
     /**
      * POST Multipart Request
      *
-     * @param requestUrl  请求url
      * @param requestText 请求参数(字符串键值对map)
      * @param requestFile 请求上传的文件(File)
      * @return
@@ -105,7 +93,6 @@ public class HttpURLConnectionUtil {
             System.out.println("返回报文:" + buffer.toString());
 
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
             throw new Exception(e);
         } finally {
             try {
@@ -124,7 +111,6 @@ public class HttpURLConnectionUtil {
                     br = null;
                 }
             } catch (IOException ex) {
-                log.error(ex.getMessage(), ex);
                 throw new Exception(ex);
             }
         }
@@ -165,7 +151,6 @@ public class HttpURLConnectionUtil {
                 msg += requestParams.toString();
             }
         } catch (Exception e) {
-            log.error("writeParams failed", e);
             throw new Exception(e);
         }
     }
@@ -219,7 +204,6 @@ public class HttpURLConnectionUtil {
             }
             LogUtils.e(msg);
         } catch (Exception e) {
-            log.error("writeFile failed", e);
             throw new Exception(e);
         } finally {
             try {
@@ -227,7 +211,6 @@ public class HttpURLConnectionUtil {
                     is.close();
                 }
             } catch (Exception e) {
-                log.error("writeFile FileInputStream close failed", e);
                 throw new Exception(e);
             }
         }

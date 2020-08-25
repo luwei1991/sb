@@ -1,29 +1,21 @@
 package com.product.sampling.agore;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import androidx.appcompat.app.AppCompatActivity;
-import io.agora.rtm.ErrorInfo;
-import io.agora.rtm.ResultCallback;
-import io.agora.rtm.RtmClient;
-import io.agora.rtm.RtmClientListener;
-import io.agora.rtm.RtmMessage;
-
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.product.sampling.R;
-import com.product.sampling.manager.AccountManager;
-import com.product.sampling.ui.BaseActivity;
-import com.product.sampling.ui.MainActivity;
+import com.product.sampling.ui.base.BaseActivity;
 import com.product.sampling.utils.VibratorHelper;
-import com.product.sampling.utils.VibratorUtil;
+
+import io.agora.rtm.RtmClient;
+import io.agora.rtm.RtmClientListener;
+import io.agora.rtm.RtmMessage;
 
 public class VideoMainActivity extends BaseActivity {
 
@@ -32,6 +24,12 @@ public class VideoMainActivity extends BaseActivity {
     Vibrator vibrator;
     RtmClient mRtmClient;
     private  Context mContext;
+
+    @Override
+    public void setUIController(Object sc) {
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +60,8 @@ public class VideoMainActivity extends BaseActivity {
             vibrator.vibrate(patter, 0);
             textView.setText(name+"正在呼叫您");
         }
-   /*      init();
-        String rtcid=AccountManager.getInstance().getRtcid();
+   /*    init();
+         String rtcid=AccountManager.getInstance().getRtcid();
          mRtmClient.login(null, rtcid, new ResultCallback<Void>() {
             Boolean loginStatus=false;
             @Override
@@ -126,15 +124,15 @@ public class VideoMainActivity extends BaseActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-
-
-        vibrator.cancel();
-        super.onBackPressed();
-
-
-            }
+//    @Override
+//    public void onBackPressed() {
+//
+//
+//        vibrator.cancel();
+//        super.onBackPressed();
+//
+//
+//            }
 
 }
 

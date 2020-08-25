@@ -1,26 +1,17 @@
 package com.product.sampling.ui;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Vibrator;
-import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.SurfaceView;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.webkit.WebView;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,58 +23,38 @@ import com.amap.api.services.weather.LocalWeatherLive;
 import com.amap.api.services.weather.LocalWeatherLiveResult;
 import com.amap.api.services.weather.WeatherSearch;
 import com.amap.api.services.weather.WeatherSearchQuery;
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.product.sampling.MainApplication;
 import com.product.sampling.R;
 import com.product.sampling.adapter.BannerViewPagerAdapter;
 import com.product.sampling.adapter.NewsListAdapter;
-import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
-import com.product.sampling.agore.VideoChatActivity;
-
-import com.product.sampling.agore.VideoMainActivity;
 import com.product.sampling.bean.New;
-import com.product.sampling.bean.UpdateEntity;
-import com.product.sampling.httpmoudle.RetrofitService;
-import com.product.sampling.listener.OnRequireRefreshListener;
-import com.product.sampling.listener.RequireHandle;
+import com.product.sampling.bean.UserInfoBean;
+import com.product.sampling.httpmoudle.manager.RetrofitServiceManager;
 import com.product.sampling.manager.AccountManager;
-import com.product.sampling.maputil.ToastUtil;
-import com.product.sampling.net.Exception.ApiException;
-import com.product.sampling.net.NetWorkManager;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
-import com.product.sampling.net.response.ResponseTransformer;
-import com.product.sampling.net.schedulers.SchedulerProvider;
-import com.product.sampling.ui.update.UpdateDialogFragment;
-import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
-import com.product.sampling.utils.AppUtils;
-import com.product.sampling.utils.GdLocationUtil;
+import com.product.sampling.thread.CallBack;
+import com.product.sampling.thread.LWThread;
+import com.product.sampling.ui.base.BaseActivity;
+import com.product.sampling.ui.masterplate.MasterplterMainActivity;
 import com.product.sampling.utils.RxSchedulersHelper;
+import com.product.sampling.utils.SPUtil;
 import com.product.sampling.view.CardTransformer;
 import com.product.sampling.view.MyViewPager;
+import com.qmuiteam.qmui.util.QMUIPackageHelper;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
+import com.tencent.bugly.crashreport.CrashReport;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import io.reactivex.disposables.Disposable;
-import io.agora.rtc.RtcEngine;
-import io.agora.rtc.Constants;
-import static com.product.sampling.ui.H5WebViewActivity.Intent_Order;
-import io.agora.rtc.video.VideoCanvas;
-
-
-import io.agora.rtm.ErrorInfo;
-import io.agora.rtm.ResultCallback;
-import io.agora.rtm.RtmChannel;
-import io.agora.rtm.RtmChannelListener;
-import io.agora.rtm.RtmChannelMember;
+import butterknife.ButterKnife;
 import io.agora.rtm.RtmClient;
+import io.reactivex.disposables.Disposable;
 
-import io.agora.rtm.RtmMessage;
-import io.agora.rtm.RtmClientListener;
-
-public class MainActivity extends BaseActivity implements  AMapLocationListener, WeatherSearch.OnWeatherSearchListener {
+public class MainActivity extends BaseActivity implements WeatherSearch.OnWeatherSearchListener,AMapLocationListener{
 
     MyViewPager viewPager;
     Disposable disposable;
@@ -91,47 +62,148 @@ public class MainActivity extends BaseActivity implements  AMapLocationListener,
     RecyclerView mRecyclerView;
     private TextView tvTemperature;
     private ImageView ivWeather;
-    private TextView tvLoginOut;
-    private TextView tvUserName;
-    private TextView evtitle;
-    private long mExitTime = 0;
-    TaskDetailViewModel taskDetailViewModel;
-    RequireHandle requireHandle;
-    RtmClient mRtmClient;
-    Vibrator vibrator;
+    private long mLastClickTime = 0;
+    public static final long TIME_INTERVAL = 1000L;
+    Toolbar toolbar;
+    LinearLayout llBack;
+    TextView tvUserName;
+    TextView tvLoginOut;
+    TextView tvVersion;
+    NewsListAdapter newSAdapter;
+
+
+    @Override
+    public void setUIController(Object sc) {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
-        checkVersion(this, getSupportFragmentManager());
-
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        toolbar.setTitle(getTitle());
+        if (!isTaskRoot()) {
+            finish();
+            return;
+        }
+        View root = LayoutInflater.from(this).inflate(R.layout.main_activity, null);
+        setContentView(root);
+        findToolBarMain();
         findViewById(R.id.rl_task).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MainTaskListActivity.class));
+                long nowTime = System.currentTimeMillis();
+                if (nowTime - mLastClickTime > TIME_INTERVAL) {
+                    // do something
+                    startActivity(new Intent(MainActivity.this, MainTaskListActivity.class));
+                    mLastClickTime = nowTime;
+                }
+
+
             }
         });
         findViewById(R.id.rl_plan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             /*   Bundle bundle = new Bundle();
-                bundle.putString("channel","1");
-                bundle.putString("contactname","1");
-                bundle.putString("token","1");
-                startActivity(new Intent( MainActivity.this,VideoMainActivity.class).putExtras(bundle));*/
+
+               /* startActivity(new Intent( MainActivity.this,ScanMainActivity.class));*/
             }
         });
+        findViewById(R.id.rl_masterplate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long nowTime = System.currentTimeMillis();
+                if (nowTime - mLastClickTime > TIME_INTERVAL) {
+                    // do something
+                    startActivity(new Intent( MainActivity.this, MasterplterMainActivity.class));
+                    mLastClickTime = nowTime;
+                }
+
+            }
+        });
+
+
         tvTemperature = findViewById(R.id.tv_temperature);
         ivWeather = findViewById(R.id.iv_weather);
+        mRecyclerView = findViewById(R.id.recycler_view);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.color.blue_color_30));
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
+        newSAdapter = new NewsListAdapter(R.layout.item_news, null);
+        mRecyclerView.setAdapter(newSAdapter);
         getData();
-        //获取权限（如果没有开启权限，会弹出对话框，询问是否开启权限）
-        requestLocation(this);
+        //设置日志报告user
+        CrashReport.setUserId(AccountManager.getInstance().getUserInfoBean().getName());
+    }
 
+
+
+
+    public void findToolBarMain() {
+        toolbar = findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            tvLoginOut = findViewById(R.id.tv_login_out);
+            tvUserName = findViewById(R.id.tv_user_name);
+            tvVersion = findViewById(R.id.tv_version);
+            tvVersion.setText("v:"+ QMUIPackageHelper.getAppVersion(this));
+            UserInfoBean userInfoBean = AccountManager.getInstance().getUserInfoBean();
+            if (null != userInfoBean) {
+                String name = userInfoBean.getName();
+                if (null != name && !TextUtils.isEmpty(name)) {
+                    tvUserName.setText(name);
+                }
+            }
+
+            tvLoginOut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showLoginOutDialog();
+                }
+            });
         }
+    }
+
+    private void showLoginOutDialog() {
+        new QMUIDialog.MessageDialogBuilder(this)
+                .setTitle("退出登录")
+                .setMessage("确定要退出登录吗？退出后将会清除本地未上传数据！")
+                .addAction("取消", new QMUIDialogAction.ActionListener() {
+                    @Override
+                    public void onClick(QMUIDialog dialog, int index) {
+                        dialog.dismiss();
+                    }
+                })
+                .addAction(0, "确定", QMUIDialogAction.ACTION_PROP_NEGATIVE, new QMUIDialogAction.ActionListener() {
+                    @Override
+                    public void onClick(QMUIDialog dialog, int index) {
+                        AccountManager.getInstance().clearUserInfo();
+                        mRtmClient.logout(null);
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        popAllActivity();
+                        LocalTaskListManager.getInstance().clear();
+                        SPUtil.clear(tvLoginOut.getContext());
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(MainApplication.getMyLocation() != null){
+            tvTemperature.setText(MainApplication.getMyLocation().getCity() + MainApplication.getMyLocation().getDistrict());
+            getWeather(MainApplication.getMyLocation().getDistrict(), 0);
+        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Glide.with(getApplicationContext()).pauseRequests();
+    }
 
     private void initView(List<New> aNews) {
         viewPager = findViewById(R.id.viewPager);
@@ -141,18 +213,11 @@ public class MainActivity extends BaseActivity implements  AMapLocationListener,
         viewPager.setPageMargin(30);//设置viewpage之间的间距
         viewPager.setClipChildren(false);
         viewPager.setPageTransformer(true, new CardTransformer());
-        mRecyclerView = findViewById(R.id.recycler_view);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.color.blue_color_30));
-        mRecyclerView.addItemDecoration(dividerItemDecoration);
         tvTemperature = findViewById(R.id.tv_temperature);
         ivWeather = findViewById(R.id.iv_weather);
-        NewsListAdapter adapter = new NewsListAdapter(R.layout.item_news, aNews);
-        mRecyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        newSAdapter.setNewData(aNews);
+//        mRecyclerView.setAdapter(newSAdapter);
+        newSAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 New news = aNews.get(position);
@@ -162,85 +227,19 @@ public class MainActivity extends BaseActivity implements  AMapLocationListener,
     }
 
     private void getData() {
-        disposable = NetWorkManager.getRequest().getNewsList(AccountManager.getInstance().getUserId())
-                .compose(ResponseTransformer.handleResult())
-                .compose(SchedulerProvider.getInstance().applySchedulers())
-                .subscribe(news -> {
-                    Log.e("news", "" + news.toString());
-                    initView(news);
 
-                }, throwable -> {
-                    ToastUtil.showShortToast(this, ((ApiException) throwable).getDisplayMessage());
-                    Log.e("throwable", "" + ((ApiException) throwable).getDisplayMessage());
-                });
-    }
-
-    public void checkVersion(Context context, FragmentManager fragmentManager) {
-
-        String userid = AccountManager.getInstance().getUserId();
-        if (TextUtils.isEmpty(userid)) {
-            return;
-        }
-        //versionCode和versionName这里是反过来的
-        RetrofitService.createApiService(Request.class)
-                .getAppVersion(userid, AppUtils.getVersionName(context))
+        RetrofitServiceManager.getInstance().createApiService(Request.class)
+                .getNewsList(AccountManager.getInstance().getUserId())
                 .compose(RxSchedulersHelper.io_main())
                 .compose(RxSchedulersHelper.ObsHandHttpResult())
-                .subscribe(new ZBaseObserver<UpdateEntity>() {
+                .subscribe(new ZBaseObserver<List<New>>() {
                     @Override
-                    public void onError(Throwable t) {
-                        super.onError(t);
-                    }
-
-                    @Override
-                    public void onSuccess(UpdateEntity result) {
-                        if (null != result && "1".equals(result.getIsnew()) && !isFinishing() && !isDestroyed()) {
-                            try {
-                                UpdateDialogFragment.newInstance(result).show(fragmentManager, "update");
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
+                    public void onSuccess(List<New> news) {
+                        initView(news);
                     }
                 });
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (disposable != null && !disposable.isDisposed()) {
-            disposable.dispose();
-            disposable = null;
-        }
-    }
-
-    @Override
-    public void onLocationChanged(AMapLocation amapLocation) {
-        if (amapLocation != null) {
-            if (amapLocation.getErrorCode() == 0) {
-                //定位成功回调信息，设置相关消息
-                amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
-                amapLocation.getLatitude();//获取纬度
-                amapLocation.getLongitude();//获取经度
-                amapLocation.getAccuracy();//获取精度信息
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date date = new Date(amapLocation.getTime());
-                df.format(date);//定位时间
-                tvTemperature.setText(amapLocation.getCity() + amapLocation.getDistrict());
-                Log.e("amapLocation", amapLocation.toString());
-                MainApplication.INSTANCE.setMyLocation(amapLocation);
-                getWeather(amapLocation.getDistrict(), 0);
-            } else {
-                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
-                Log.e("AmapError", "location Error, ErrCode:"
-                        + amapLocation.getErrorCode() + ", errInfo:"
-                        + amapLocation.getErrorInfo());
-                if (amapLocation.getErrorCode() == 12) {
-                    Toast.makeText(MainActivity.this, "缺少定位权限,请到设置->安全和隐私->定位服务,打开允许访问我的位置信息", Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-    }
 
     /**
      * 检索参数为城市和天气类型，实况天气为WEATHER_TYPE_LIVE、天气预报为WEATHER_TYPE_FORECAST
@@ -304,49 +303,10 @@ public class MainActivity extends BaseActivity implements  AMapLocationListener,
 
     }
 
-//    @Override
-//    public void onClick(View v) {
-//        if (v.getId() == R.id.tv_login_out) {
-//            showSimpleDialog("确定退出登录吗", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-//                    finish();
-//                }
-//            });
-//
-//        }
-//    }
-
-    private void exitApp() {
-        if (System.currentTimeMillis() - mExitTime > 2000) {
-            showToast("再按一次退出程序");
-            mExitTime = System.currentTimeMillis();
-        } else {
-
-            System.exit(0);
-            finish();
-
-        }
-    }
 
     @Override
-    public void onBackPressed() {
-        exitApp();
+    public void onLocationChanged(AMapLocation aMapLocation) {
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        GdLocationUtil.getInstance().stopLoaction();
-    }
-
-
-    private void loginRtm( String userId){
-
-
-
-
-    }
-
 }
+
+

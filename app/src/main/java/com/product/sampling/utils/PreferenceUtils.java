@@ -2,7 +2,7 @@ package com.product.sampling.utils;
 
 import android.content.Context;
 
-import com.product.sampling.ui.MainApplication;
+import com.product.sampling.MainApplication;
 
 /**
 

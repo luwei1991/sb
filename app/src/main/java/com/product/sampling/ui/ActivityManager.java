@@ -110,6 +110,10 @@ public class ActivityManager {
         }
     }
 
+
+
+
+
     public void popActivity(String className) {
         if (mActivityStack != null) {
             Iterator iterator = mActivityStack.iterator();

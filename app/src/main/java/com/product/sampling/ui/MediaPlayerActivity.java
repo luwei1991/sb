@@ -1,7 +1,6 @@
 package com.product.sampling.ui;
 
 import android.graphics.Bitmap;
-import android.hardware.SensorManager;
 import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.os.Build;
@@ -10,16 +9,12 @@ import android.provider.MediaStore;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 
-import com.bumptech.glide.Glide;
 import com.product.sampling.R;
 import com.product.sampling.view.MyJzvdStd;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
-import cn.jzvd.JZDataSource;
 import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdStd;
 

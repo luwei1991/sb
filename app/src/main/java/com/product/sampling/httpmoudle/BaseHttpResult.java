@@ -7,6 +7,7 @@ public class BaseHttpResult<T> implements Serializable {
     public int code;
     public String message;
     public T data;
+    public String info;
 
     public int getCode() {
         return code;
@@ -34,9 +35,14 @@ public class BaseHttpResult<T> implements Serializable {
 
 
     public boolean isSuccess(){
-        return code==200;
+        return code == 200;
     }
 
+    public String getInfo() {
+        return info;
+    }
 
-
+    public void setInfo(String info) {
+        this.info = info;
+    }
 }

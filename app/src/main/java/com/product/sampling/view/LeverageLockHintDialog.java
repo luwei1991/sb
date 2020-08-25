@@ -7,11 +7,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 
-import com.product.sampling.R;
-
-import java.util.Locale;
-
 import androidx.annotation.NonNull;
+
+import com.product.sampling.R;
 
 public class LeverageLockHintDialog extends Dialog implements View.OnClickListener {
 

@@ -18,7 +18,9 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
         android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:paddingRight="20dp"
+        android:visibility="gone"
+        >
 
 
         <TextView
@@ -76,7 +78,7 @@
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"
             android:gravity="center"
-            android:text="二、企业对抽样人员工作反馈意见单" />
+            android:text="一、企业对抽样人员工作反馈意见单" />
 
         <TextView
             android:id="@+id/tv_feed_sheet"

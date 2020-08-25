@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.product.sampling">
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -62,93 +63,101 @@
     <!--如果设置了target >= 28 如果需要启动后台定位则必须声明这个权限-->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
-
+    <!--如果设置了target >= 28 如果需要启动后台定位则必须声明这个权限-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <!--如果您的应用需要后台定位权限，且有可能运行在Android Q设备上,并且设置了target>28，必须增加这个权限声明-->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_LOGS"
+        tools:ignore="ProtectedPermissions" />
     <dist:module dist:instant="true" />
 
     <application
-        android:name=".ui.MainApplication"
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:screenOrientation="landscape"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:networkSecurityConfig="@xml/network_security_config"
+        >
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="db2eb820dcae3815450a31eb0aef2d70"></meta-data>
+            android:value="d104520ab7377bd2e0abccaa65faaa4f"></meta-data>
         <service android:name="com.amap.api.location.APSService"></service>
+<!--        <service android:name="com.product.sampling.service.AMapService"></service>-->
 
         <activity
             android:name=".ui.MainTaskListActivity"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+
+            />
         <activity
             android:name=".ui.MainActivity"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" />
+            />
+            //android:theme="@style/AppTheme.NoActionBar"
+
         <activity
             android:name=".ui.TaskDetailActivity"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ui.BasicMapActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" />
+             />
+
         <activity
             android:name=".ui.H5WebViewActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            />
         <activity
             android:name=".ui.ChangePasswordActivity"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" />
+            />
 
         <activity
             android:name=".photo.SimpleFragmentActivity"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" />
+            />
         <activity
             android:name=".photo.SimpleActivity"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" />
+            />
         <activity
             android:name=".photo.ResultActivity"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" />
+            />
         <activity
             android:name=".ui.MediaPlayerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" /> <!-- or android:screenOrientation="landscape"-->
+          /> <!-- or android:screenOrientation="landscape"-->
 
         <activity
             android:name=".ui.TaskExceptionActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" /> <!-- or android:screenOrientation="landscape"-->
+          /> <!-- or android:screenOrientation="landscape"-->
 
 
         <activity
             android:name=".ui.WebViewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" /> <!-- or android:screenOrientation="landscape"-->
+            /> <!-- or android:screenOrientation="landscape"-->
 
         <activity
             android:name=".ui.PhotoViewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" /> <!-- or android:screenOrientation="landscape"-->
+             /> <!-- or android:screenOrientation="landscape"-->
 
 
         <activity
             android:name=".ui.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar">
+           >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -161,6 +170,79 @@
         <activity android:name=".agore.VideoMainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
+<!--        <activity android:name=".scan.FragmentActivity"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>-->
+        <activity android:name=".scan.ScanMainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
+
+        <activity android:name=".ui.form.CheckOrRecheckFormActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|stateUnchanged">
+        </activity>
+
+        <activity android:name=".ui.form.HandleFormActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="stateHidden|stateUnchanged">
+
+        </activity>
+        <activity android:name=".ui.form.NotCheckFormActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|stateUnchanged">
+
+        </activity>
+
+        <activity android:name=".ui.masterplate.MasterplterMainActivity"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateHidden|stateUnchanged">
+        </activity>
+
+        <activity android:name=".ui.masterplate.MasterplterListActivity"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateHidden|stateUnchanged">
+
+        </activity>
+        <activity android:name=".ui.masterplate.MasterplterEditActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|stateUnchanged">
+
+        </activity>
+        <activity android:name=".ui.sign.SignActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SignDialogStyle"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|stateUnchanged">
+        </activity>
+        <activity android:name=".ui.form.RefuseFormActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|stateUnchanged">
+
+        </activity>
+
+        <activity android:name=".ui.form.FeedBackFormActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|stateUnchanged">
+<!--                                    <intent-filter>-->
+<!--                                        <action android:name="android.intent.action.MAIN" />-->
+
+<!--                                        <category android:name="android.intent.category.LAUNCHER" />-->
+<!--                                    </intent-filter>-->
+        </activity>
+
+
+        <activity android:name=".ui.form.HandleLandFormActivity"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateHidden|stateUnchanged|adjustPan"
+            tools:ignore="LockedOrientationActivity">
+
+        </activity>
 
 
         <service android:name="com.product.sampling.ui.update.ApkDownLoadService"></service>

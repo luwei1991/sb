@@ -5,10 +5,12 @@ public class ServerException extends RuntimeException {
 
     private int code;
     private String msg;
+    public String info;
 
-    public ServerException(int code, String msg) {
+    public ServerException(int code, String msg,String info) {
         this.code = code;
         this.msg = msg;
+        this.info = info;
     }
 
     public int getCode() {
@@ -19,4 +21,11 @@ public class ServerException extends RuntimeException {
         return msg;
     }
 
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
 }

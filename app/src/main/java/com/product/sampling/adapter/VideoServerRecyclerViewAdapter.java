@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,8 +17,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.luck.picture.lib.PictureSelector;
 import com.product.sampling.R;
-import com.product.sampling.bean.LocalMediaInfo;
-import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.Videos;
 
 import java.util.List;

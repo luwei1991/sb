@@ -1,181 +1,185 @@
 package com.product.sampling.ui;
 
-import android.Manifest;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
 import com.product.sampling.R;
-import com.product.sampling.manager.AccountManager;
+import com.product.sampling.ui.base.BaseActivity;
+import com.product.sampling.ui.eventmessage.CurFragmentMessage;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
+import com.product.sampling.view.SingleClick;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import pub.devrel.easypermissions.EasyPermissions;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * 任务列表
  */
-public class MainTaskListActivity extends BaseActivity implements AMapLocationListener {
-    private int LOACTION_REQUEST_CODE = 1001;
+public class MainTaskListActivity extends BaseActivity {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    static Fragment taskToDoFragment = TaskListFragment.newInstance("待办任务", "0");//0待办 1退回 2已上传
-    static Fragment taskBackFragment = TaskListFragment.newInstance("信息复核", "1");
-    static Fragment taskHasUpLoadedFragment = TaskListFragment.newInstance("已上传", "2");
-    static Fragment taskLocalFragment = TaskListFragment.newInstance("未上传", "-1");
+    Fragment taskToDoFragment = TaskListFragment.getInstance();//0待办 1退回 2已上传
+    Fragment taskBackFragment = TaskListFragment.getInstance();
+    Fragment taskHasUpLoadedFragment = TaskListFragment.getInstance();
+    Fragment taskLocalFragment = TaskListFragment.getInstance();
 
-    static Fragment myinfoFragment = MyInfoFragment.newInstance();
+    Fragment myinfoFragment = MyInfoFragment.newInstance();
     TaskDetailViewModel taskDetailViewModel;
+    Toolbar toolbar;
+    LinearLayout llBack;
+    /**
+     * 常量代办
+     */
+    public static final String TASK_TO_DO = "taskToDoFragment";
+    /**
+     * 常量信息符合
+     */
+    private static final String TASK_BACK = "taskBackFragment";
+    /**
+     * 常量已上传
+     */
+    private static final String TASK_HAS_UPLOAD = "taskHasUpLoadedFragment";
+    /**
+     * 常量未上传
+     */
+    private static final String TASK_LOCAL = "taskLocalFragment";
+    /**
+     * 常量我的
+     */
+    private static final String MY_INFO = "myinfoFragment";
 
-    //声明mlocationClient对象
-    public AMapLocationClient mlocationClient;
-    //声明mLocationOption对象
-    public AMapLocationClientOption mLocationOption = null;
+    private FragmentManager mFragmentManager;
+
+
+    @Override
+    public void setUIController(Object sc) {
+
+    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //解决重叠问题
+        mFragmentManager = this.getSupportFragmentManager();
+        if (savedInstanceState != null) {
+            savedInstanceState.remove("android:support:fragments");
+            savedInstanceState.remove("android:fragments");
+        }
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_task_list);
-        taskDetailViewModel = ViewModelProviders.of(MainTaskListActivity.this).get(TaskDetailViewModel.class);
-        taskDetailViewModel.requestCityList(true);
+        View root = LayoutInflater.from(this).inflate(R.layout.activity_task_list, null);
+        setContentView(root);
+//        setContentView(R.layout.activity_task_list);
+        findToolBar();
+        taskDetailViewModel = ViewModelProviders.of(this).get(TaskDetailViewModel.class);
         RadioGroup rb = findViewById(R.id.rg1);
         rb.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @SingleClick(500)
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-
                 if (group.getCheckedRadioButtonId() == R.id.rb1) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.item_detail_container, taskToDoFragment)
-                            .commit();
+                    EventBus.getDefault().postSticky(new CurFragmentMessage(TASK_TO_DO));
+                    switchFragment(taskToDoFragment == null ? TaskListFragment.getInstance():taskToDoFragment).commit();//TaskListFragment.newInstance("待办任务", "0"):taskToDoFragment).commit();
+                    taskDetailViewModel.taskListTag.setValue("0");
                 } else if (group.getCheckedRadioButtonId() == R.id.rb2) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.item_detail_container, taskBackFragment)
-                            .commit();
+                    EventBus.getDefault().postSticky(new CurFragmentMessage(TASK_BACK));
+                    switchFragment(taskBackFragment == null?TaskListFragment.getInstance():taskBackFragment).commit();//TaskListFragment.newInstance("信息复核", "1"):taskBackFragment).commit();
+                    taskDetailViewModel.taskListTag.setValue("1");
                 } else if (group.getCheckedRadioButtonId() == R.id.rb3) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.item_detail_container, taskLocalFragment)
-                            .commit();
-
+                    EventBus.getDefault().postSticky(new CurFragmentMessage(TASK_LOCAL));
+                    switchFragment(taskLocalFragment == null? TaskListFragment.getInstance() :taskLocalFragment).commit();//TaskListFragment.newInstance("未上传", "-1") :taskLocalFragment).commit();
+                    taskDetailViewModel.taskListTag.setValue("-1");
                 } else if (group.getCheckedRadioButtonId() == R.id.rb4) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.item_detail_container, taskHasUpLoadedFragment)
-                            .commit();
+                    EventBus.getDefault().postSticky(new CurFragmentMessage(TASK_HAS_UPLOAD));
+                    switchFragment(taskHasUpLoadedFragment == null?TaskListFragment.getInstance():taskHasUpLoadedFragment).commit();//TaskListFragment.newInstance("已上传", "2"):taskHasUpLoadedFragment).commit();
+                    taskDetailViewModel.taskListTag.setValue("2");
                 } else if (group.getCheckedRadioButtonId() == R.id.rb5) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.item_detail_container, myinfoFragment)
-                            .commit();
+                    EventBus.getDefault().postSticky(new CurFragmentMessage(MY_INFO));
+                    switchFragment(myinfoFragment== null?MyInfoFragment.newInstance():myinfoFragment).commit();
                 }
             }
         });
-        RadioButton radioButton = (RadioButton) rb.findViewById(R.id.rb1);
-        radioButton.setChecked(true);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.item_detail_container, taskToDoFragment)
-                .commit();
-        //获取权限（如果没有开启权限，会弹出对话框，询问是否开启权限）
-
-        if (EasyPermissions.hasPermissions(getApplicationContext(), Manifest.permission_group.LOCATION)) {
-            locationSetting();
-        } else {
-
-            EasyPermissions.requestPermissions(this, "请允许app使用定位功能", 1001, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
+        if(savedInstanceState == null){
+            RadioButton radioButton = (RadioButton) rb.findViewById(R.id.rb1);
+            radioButton.setChecked(true);
         }
-        /* taskDetailViewModel.checkVersion(this, getSupportFragmentManager());*/
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // 将结果转发到EasyPermissions
-        if (requestCode == LOACTION_REQUEST_CODE) {
-            EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-        }
-
-    }
-
-    @Override
-    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
-        if (requestCode == LOACTION_REQUEST_CODE) {
-            locationSetting();
-        }
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-        showToast("权限被拒");
-        if (requestCode == LOACTION_REQUEST_CODE) {
-            aMapLocationListener.onLocationChanged(null);
-            aMapLocationListener = null;
-        }
-
-    }
-
-    private void locationSetting() {
-
-        mlocationClient = new AMapLocationClient(this);
-//初始化定位参数
-        mLocationOption = new AMapLocationClientOption();
-//设置定位监听
-        mlocationClient.setLocationListener(this);
-//设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
-        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-//设置定位间隔,单位毫秒,默认为2000ms
-
-       mLocationOption.setInterval(AccountManager.getInstance().getInterval() * 1000);
-/*        mLocationOption.setInterval(2 * 1000);*/
-//设置定位参数
-        mlocationClient.setLocationOption(mLocationOption);
-// 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
-// 注意设置合适的定位时间的间隔（最小间隔支持为1000ms），并且在合适时间调用stopLocation()方法来取消定位请求
-// 在定位结束后，在合适的生命周期调用onDestroy()方法
-// 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
-//启动定位
-        mlocationClient.startLocation();
-
-    }
-
-    @Override
-    public void onLocationChanged(AMapLocation amapLocation) {
-        if (amapLocation != null) {
-            if (amapLocation.getErrorCode() == 0) {
-                //定位成功回调信息，设置相关消息
-                amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
-                amapLocation.getLatitude();//获取纬度
-                amapLocation.getLongitude();//获取经度
-                amapLocation.getAccuracy();//获取精度信息
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date date = new Date(amapLocation.getTime());
-                df.format(date);//定位时间
-                Log.e("amapLocation", amapLocation.toString());
-                MainApplication.INSTANCE.setMyLocation(amapLocation);
-
-                taskDetailViewModel.uploadaddress(AccountManager.getInstance().getUserId(), amapLocation.getLatitude(), amapLocation.getLongitude());
-            } else {
-                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
-                Log.e("AmapError", "location Error, ErrCode:"
-                        + amapLocation.getErrorCode() + ", errInfo:"
-                        + amapLocation.getErrorInfo());
-                if (amapLocation.getErrorCode() == 12) {
-                    Toast.makeText(MainTaskListActivity.this, "缺少定位权限,请到设置->安全和隐私->定位服务,打开允许访问我的位置信息", Toast.LENGTH_LONG).show();
+        if(savedInstanceState != null){
+            String tag = savedInstanceState.getString("tag");
+            if(tag != null){
+                switch (tag){
+                    case "0":
+                        RadioButton radioButton = findViewById(R.id.rb1);
+                        radioButton.setChecked(true);
+                        break;
+                    case "1":
+                        RadioButton radioButton2 = findViewById(R.id.rb2);
+                        radioButton2.setChecked(true);
+                        break;
+                    case "2":
+                        RadioButton radioButton4 = findViewById(R.id.rb4);
+                        radioButton4.setChecked(true);
+                        break;
+                    case "-1":
+                        RadioButton radioButton3 = findViewById(R.id.rb3);
+                        radioButton3.setChecked(true);
+                        break;
                 }
             }
         }
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
+
+
+    public void findToolBar() {
+        toolbar = findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            llBack = findViewById(R.id.ll_back);
+            llBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
+    }
+    private FragmentTransaction switchFragment(Fragment targetFragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        Fragment currentFragment = fragmentManager.findFragmentById(R.id.item_detail_container);
+        if (!targetFragment.isAdded()) {
+            //第一次使用switchFragment()时currentFragment为null，所以要判断一下
+            if (currentFragment != null && currentFragment.isAdded()) {
+                transaction.hide(currentFragment);
+            }
+            transaction.add(R.id.item_detail_container, targetFragment, targetFragment.getClass().getName());
+
+        } else {
+
+            if(currentFragment.isAdded()){
+                transaction.hide(currentFragment).show(targetFragment);
+            }
+
+        }
+        return transaction;
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("tag",taskDetailViewModel.taskListTag.getValue());
+    }
+
 }

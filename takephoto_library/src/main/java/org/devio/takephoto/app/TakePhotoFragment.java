@@ -6,12 +6,12 @@ import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 
-import org.devio.takephoto.permission.PermissionManager;
-import org.devio.takephoto.permission.TakePhotoInvocationHandler;
 import org.devio.takephoto.model.InvokeParam;
 import org.devio.takephoto.model.TContextWrap;
 import org.devio.takephoto.model.TResult;
 import org.devio.takephoto.permission.InvokeListener;
+import org.devio.takephoto.permission.PermissionManager;
+import org.devio.takephoto.permission.TakePhotoInvocationHandler;
 
 /**
  * 继承这个类来让Fragment获取拍照的能力<br>

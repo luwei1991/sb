@@ -14,19 +14,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.product.sampling.R;
 import com.product.sampling.bean.UserInfoBean;
-import com.product.sampling.httpmoudle.RetrofitService;
+import com.product.sampling.httpmoudle.manager.RetrofitServiceManager;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.maputil.ToastUtil;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
+import com.product.sampling.ui.base.BaseFragment;
 import com.product.sampling.utils.ActivityUtils;
 import com.product.sampling.utils.KeyboardUtils;
 import com.product.sampling.utils.RxSchedulersHelper;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import io.reactivex.disposables.Disposable;
 
@@ -99,7 +100,7 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
 
     private void loginRequest() {
         showProgress(true);
-        RetrofitService.createApiService(Request.class)
+        RetrofitServiceManager.getInstance().createApiService(Request.class)
                 .loginByPhone(mEditTextPhone.getText().toString().trim(), mEditTextCode.getText().toString().trim())
                 .compose(RxSchedulersHelper.io_main())
                 .compose(RxSchedulersHelper.ObsHandHttpResult())
@@ -129,7 +130,7 @@ public class LoginByPhoneFragment extends BaseFragment implements View.OnClickLi
 
     private void getSmsCode() {
         showProgress(true);
-        RetrofitService.createApiService(Request.class)
+        RetrofitServiceManager.getInstance().createApiService(Request.class)
                 .sendCode(mEditTextPhone.getText().toString().trim())
                 .compose(RxSchedulersHelper.io_main())
                 .compose(RxSchedulersHelper.ObsHandHttpResult())

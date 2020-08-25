@@ -48,9 +48,9 @@ body{
 .ov{
     overflow: hidden;
 }
-.left{
+/*.left{
     float: left;
-}
+}*/
 .right{
     float: right;
 }
@@ -59,7 +59,7 @@ body{
 }
 .title{
     line-height: 1.2;
-    font-size: 20px;
+    font-size: 14px;
     text-align: center;
     padding: 0px;
 }
@@ -132,8 +132,8 @@ table.tftable td.signtd{
     opacity: 0.8;
 }
 .sealAdvice{
-    width: 130px;
-    height: 130px;
+    width: 140px;
+    height: 140px;
     position: absolute;
     top: -50px;
     right: 10px;
@@ -156,8 +156,8 @@ table.tftable td.signtd{
     opacity: 0.8;
 }
 .sealNo{
-    width: 130px;
-    height: 130px;
+    width: 140px;
+    height: 140px;
     position: absolute;
     top: 60px;
     right: 60px;
@@ -299,7 +299,6 @@ table.tftable td.signtd{
 }
 
 .regular-radio+label {
-	-webkit-appearance: none;
 	background-color: #fafafa;
 	border: 1px solid #cacece;
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px

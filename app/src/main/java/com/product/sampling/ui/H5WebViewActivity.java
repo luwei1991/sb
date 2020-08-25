@@ -3,17 +3,16 @@ package com.product.sampling.ui;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -27,16 +26,8 @@ import androidx.core.content.ContextCompat;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.github.lzyzsd.jsbridge.CallBackFunction;
 import com.product.sampling.R;
-import com.product.sampling.bean.UpdateEntity;
-import com.product.sampling.httpmoudle.BaseHttpResult;
-import com.product.sampling.httpmoudle.RetrofitService;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.maputil.ToastUtil;
-import com.product.sampling.net.LoadDataModel;
-import com.product.sampling.net.ZBaseObserver;
-import com.product.sampling.net.request.Request;
-import com.product.sampling.ui.update.UpdateDialogFragment;
-import com.product.sampling.utils.AppUtils;
 import com.product.sampling.utils.KeyboardUtils;
 import com.product.sampling.utils.RxSchedulersHelper;
 import com.product.sampling.utils.ScreenUtils;
@@ -49,6 +40,7 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
@@ -58,6 +50,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+
 import static com.product.sampling.Constants.BASE_URL;
 
 public class H5WebViewActivity extends AppCompatActivity {
@@ -70,6 +63,14 @@ public class H5WebViewActivity extends AppCompatActivity {
     public static String para;
     public boolean isUploadTask;
     private String biaoCode;
+    private Button scanBtn;
+    private String result;
+    private int REQUEST_CODE_SCAN = 111;
+    private String code;
+    private String taskId;
+    private String url;
+    private String userid;
+    private String resultData;
 
 
     @Override
@@ -79,14 +80,20 @@ public class H5WebViewActivity extends AppCompatActivity {
         webView = this.findViewById(R.id.webView);
         Bundle bundle = this.getIntent().getExtras(); //读取intent的数据给bundle对象
         int pos = bundle.getInt(Intent_Order);
-        String code=bundle.getString("code");
-        String taskId=bundle.getString("taskId");
+          code=bundle.getString("code");
+        taskId=bundle.getString("taskId");
     /*    getBianHaoCode(taskId,code,"sampling");*/
 
         isUploadTask = bundle.getBoolean(Intent_Edit);
-         String url=BASE_URL;
-        String userid = AccountManager.getInstance().getUserId();
-        webView.addJavascriptInterface(new JSInterface(code,url,taskId,userid), "setCode");
+         url=BASE_URL;
+         userid = AccountManager.getInstance().getUserId();
+        result=bundle.getString("resultData");
+         if(result==null||"".equals(result)){
+             webView.addJavascriptInterface(new JSInterface(code,url,taskId,userid), "setCode");
+         }else{
+             webView.addJavascriptInterface(new JSInterface(code,url,taskId,userid,result), "setCode");
+         }
+
         //支持缩放
 //        webView.getSettings().setSupportZoom(true);
         //设置出现缩放工具
@@ -94,6 +101,8 @@ public class H5WebViewActivity extends AppCompatActivity {
         //扩大比例的缩放
 //        webView.getSettings().setUseWideViewPort(true);
         //js交互
+        webView.setWebChromeClient(new WebChromeClient());
+
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
          webView.getSettings().setLoadWithOverviewMode(true);
@@ -124,11 +133,12 @@ public class H5WebViewActivity extends AppCompatActivity {
                 builder.deleteCharAt(builder.length() - 1);
             }
             String data = builder.toString();
+
             if (!TextUtils.isEmpty(data)) {
                 webView.callHandler("dataBackfill", data, new CallBackFunction() {
                     @Override
                     public void onCallBack(String s) { //js回传的数据
-
+                        Log.d("bbbb1", s);
                     }
                 });
             }
@@ -142,6 +152,55 @@ public class H5WebViewActivity extends AppCompatActivity {
         } else {
             button.setVisibility(View.VISIBLE);
         }
+        //扫描二维码
+/*       scanBtn = findViewById(R.id.scanBtn);
+        scanBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bitmap bitmap = null;
+                switch (v.getId()) {
+                    case R.id.scanBtn:
+                       AndPermission.with(H5WebViewActivity.this)
+                                .permission(Permission.CAMERA, Permission.READ_EXTERNAL_STORAGE)
+                                .onGranted(new Action() {
+                                    @Override
+                                    public void onAction(List<String> permissions) {
+                                        Intent intent = new Intent(  H5WebViewActivity.this, CaptureActivity.class);
+                                    *//*    ZxingConfig是配置类
+                                         *可以设置是否显示底部布局，闪光灯，相册，
+                                         * 是否播放提示音  震动
+                                         * 设置扫描框颜色等
+                                         * 也可以不传这个参数
+                                         * * *//*
+                                        ZxingConfig config = new ZxingConfig();
+                                        // config.setPlayBeep(false);//是否播放扫描声音 默认为true
+                                        //  config.setShake(false);//是否震动  默认为true
+                                        // config.setDecodeBarCode(false);//是否扫描条形码 默认为true
+//                                config.setReactColor(R.color.colorAccent);//设置扫描框四个角的颜色 默认为白色
+//                                config.setFrameLineColor(R.color.colorAccent);//设置扫描框边框颜色 默认无色
+//                                config.setScanLineColor(R.color.colorAccent);//设置扫描线的颜色 默认白色
+                                        config.setFullScreenScan(false);//是否全屏扫描  默认为true  设为false则只会在扫描框中扫描
+                                        intent.putExtra(Constant.INTENT_ZXING_CONFIG, config);
+                                        startActivityForResult(intent, REQUEST_CODE_SCAN);
+                                    }
+                                })
+                                .onDenied(new Action() {
+                                    @Override
+                                    public void onAction(List<String> permissions) {
+                                        Uri packageURI = Uri.parse("package:" + getPackageName());
+                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                        startActivity(intent);
+
+                                        Toast.makeText(H5WebViewActivity.this, "没有权限无法扫描呦", Toast.LENGTH_LONG).show();
+                                    }
+                                }).start();
+                        break;
+                    default:
+                }
+            }
+        });*/
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,8 +208,8 @@ public class H5WebViewActivity extends AppCompatActivity {
                 webView.send("requestform", new CallBackFunction() {
                     @Override
                     public void onCallBack(String data) { //js回传的数据
-                        para = data;
-
+                      String xx=data.replaceAll("\\+","");
+                        para =  xx;
                         KeyboardUtils.closeKeyboard(H5WebViewActivity.this);
                         verifyStoragePermissions(H5WebViewActivity.this);
                     }
@@ -190,7 +249,7 @@ public class H5WebViewActivity extends AppCompatActivity {
 //        document.finishPage(page);//4
         try {
             Date currentTime = new Date();
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
             String dateString = formatter.format(currentTime);
 
             String path = Environment.getExternalStorageDirectory() + File.separator + dateString + ".pdf";
@@ -259,7 +318,7 @@ public class H5WebViewActivity extends AppCompatActivity {
                 .observeOn(Schedulers.computation())
                 .map(new Function<String, PdfDocument>() {
                     @Override
-                    public PdfDocument apply(String s) throws Exception {
+                    public PdfDocument apply(String sss) throws Exception {
 //                        View pdfview = getLayoutInflater().inflate(R.layout.report_pdf, findViewById(R.id.container)); //1
 //
 //                        TextView textView = pdfview.findViewById(R.id.tv_test);
@@ -269,8 +328,8 @@ public class H5WebViewActivity extends AppCompatActivity {
 //                        pdfview.layout(0, 0, pdfview.getMeasuredWidth(), pdfview.getMeasuredHeight()); //3, 测量位置
 
                         PdfDocument document = new PdfDocument();//1, 建立PdfDocument
-                        BitmapFactory.Options options = new BitmapFactory.Options();
-                        options.inPreferredConfig = Bitmap.Config.RGB_565;
+//                        BitmapFactory.Options options = new BitmapFactory.Options();
+//                        options.inPreferredConfig = Bitmap.Config.RGB_565;
                         float scale = ScreenUtils.getScreenWidth(H5WebViewActivity.this) / pdfview.getMeasuredWidth();
 
                         int screenW = (int) (ScreenUtils.getScreenWidth(H5WebViewActivity.this));
@@ -373,10 +432,17 @@ public class H5WebViewActivity extends AppCompatActivity {
         private String url;
         private String taskId;
         private String userId;
+        private  String  result;
 
 
+        public JSInterface(String code,String url,String taskId,String userId,String result) {
+            this.code = code;
+            this.url = url;
+            this.taskId=taskId;
+            this.userId=userId;
+            this.result=result;
+        }
         public JSInterface(String code,String url,String taskId,String userId) {
-
             this.code = code;
             this.url = url;
             this.taskId=taskId;
@@ -408,7 +474,11 @@ public class H5WebViewActivity extends AppCompatActivity {
 
             return userId;
         }
+        @JavascriptInterface
+        public String result( ) {
 
+            return result;
+        }
 
 
     }
@@ -436,6 +506,28 @@ public class H5WebViewActivity extends AppCompatActivity {
             });
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // 扫描二维码/条码回传
+        if (requestCode == REQUEST_CODE_SCAN && resultCode == RESULT_OK) {
+            if (data != null) {
+                String content = data.getStringExtra("codedContent");
+                result=content;
+                Intent intent = getIntent();
+                overridePendingTransition(0, 0);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                Bundle resbud=new Bundle();
+                resbud.putString("resultData",result);
+                intent.putExtras(resbud);
+                finish();
+                overridePendingTransition(0, 0);
+                startActivity(intent);
+            }
+        }
     }
 
 }

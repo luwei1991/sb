@@ -29,7 +29,7 @@ public class LoadListDataModel<T> extends LoadDataModel<T> {
     }
 
     public LoadListDataModel(int code, String msg, boolean isPullRefresh, boolean isLoadMore) {
-        super(code, msg);
+        super(code, msg,false);
         this.isPullRefresh = isPullRefresh;
         this.isLoadMore = isLoadMore;
     }

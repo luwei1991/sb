@@ -12,10 +12,10 @@ import android.text.TextUtils;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.annotation.RequiresPermission;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import androidx.annotation.RequiresPermission;
 
 /**
  * @author wlj

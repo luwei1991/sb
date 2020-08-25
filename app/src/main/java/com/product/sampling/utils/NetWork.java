@@ -1,6 +1,6 @@
 package com.product.sampling.utils;
 
-import com.product.sampling.ui.MainApplication;
+import com.product.sampling.MainApplication;
 import com.product.sampling.maputil.ToastUtil;
 
 /**

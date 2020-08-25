@@ -14,11 +14,12 @@ import android.widget.ScrollView;
 
 import com.product.sampling.R;
 import com.product.sampling.httpmoudle.BaseHttpResult;
-import com.product.sampling.httpmoudle.RetrofitService;
+import com.product.sampling.httpmoudle.manager.RetrofitServiceManager;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.maputil.ToastUtil;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
+import com.product.sampling.ui.base.BaseActivity;
 import com.product.sampling.utils.RxSchedulersHelper;
 
 import io.reactivex.disposables.Disposable;
@@ -34,6 +35,11 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
     private EditText etPassword;
     private EditText etPasswordConfig;
     private Button btnSubmit;
+
+    @Override
+    public void setUIController(Object sc) {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +155,7 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
 
     private void changePwdRequest(String oldpwd, String pwd) {
         showProgress(true);
-        RetrofitService.createApiService(Request.class)
+        RetrofitServiceManager.getInstance().createApiService(Request.class)
                 .changepassword(AccountManager.getInstance().getUserId(), oldpwd, pwd)
                 .compose(RxSchedulersHelper.io_main())
 //                .compose(RxSchedulersHelper.ObsHandHttpResult())

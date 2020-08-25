@@ -1,41 +1,18 @@
 <resources>
     <string name="app_name">移动抽样系统</string>
-    <string name="title_item_detail">Item Detail</string>
-    <string name="title_activity_login">登录系统</string>
     <!-- Strings related to login -->
     <string name="prompt_account">帐号</string>
     <string name="prompt_password">密码</string>
     <string name="action_sign_in">登录</string>
     <string name="action_sign_in_short">登录</string>
-    <string name="error_invalid_email">帐号不可用</string>
     <string name="error_invalid_password">密码不可用</string>
-    <string name="error_incorrect_password">密码不正确</string>
     <string name="error_field_required">必填项</string>
-    <string name="permission_rationale">必须权限
-    </string>
 
-    <string name="app_try_again">暂无数据，点击重试</string>
-    <string name="app_common_next">下一步</string>
-    <string name="app_common_finish">完成</string>
-    <string name="app_common_search_country_hint">搜索国家</string>
-    <string name="app_common_http_loading">数据请求中，请稍后...</string>
-    <string name="app_common_select">选择</string>
-    <string name="app_commot_copy_success">复制成功</string>
-    <string name="app_exit_again">再按一次退出程序</string>
     <string name="app_net_error_msg">网络不给力</string>
     <string name="net_error_msg">网络异常</string>
-    <string name="reload_data">重新加载</string>
-    <string name="re_try">点击重试</string>
-    <string name="re_upload_data">重新上传</string>
-    <string name="app_kyc_wait_image_upload">请等待图片上传完成</string>
-    <string name="app_net_error_msg_check">请检查你的手机是否联网</string>
     <string name="app_server_error">服务器出现问题,请稍后重试</string>
 
-    <string name="app_no_data">暂无数据</string>
     <string name="app_cancel">取消</string>
-    <string name="app_confirm">确定</string>
-    <string name="app_update_app">版本升级</string>
-    <string name="app_no_record">暂无记录</string>
 
     <string name="srl_header_pulling">下拉可以刷新</string>
     <string name="srl_header_refreshing">正在刷新…</string>
@@ -52,12 +29,27 @@
     <string name="srl_footer_failed">加载失败</string>
 
     <string name="error_network_time_out">请求超时</string>
-    <string name="dialog_logout_message">确定退出登录吗？</string>
     <string name="error_network_later_try">网络异常，请稍后再试</string>
-
-    <string name="app_download_success">下载成功</string>
 
     <string name="auth_info_faild">当前登录信息过期,请重新登录</string>//Authentication failed
 
     <string name="agora_app_id">8e177fbe085d423dbe692aa9f0bc7543</string>
+
+    <!--字体-->
+    <string name="micro_light">micro_light</string>
+    //宋体
+<!--    <string name="simsun">simsun</string>-->
+    //系统默认字体
+    <string name="simsun">null</string>
+    //宋体
+
+
+    <!--抽样单-->
+    <string name="check_form_titile">产品质量监督抽查/复查抽样单</string>
+    <string name="check_form_descreable01">编号：</string>
+    <string name="check_form_id">2018006693</string>
+    <string name="check_form_descreable02">报告编号：</string>
+    <string name="check_form_descreable03">任务来源</string>
+    <string name="check_form_descreable_class">任务类别</string>
+
 </resources>

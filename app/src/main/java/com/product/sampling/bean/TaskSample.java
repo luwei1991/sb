@@ -11,6 +11,7 @@ public class TaskSample implements Serializable {
     public List<LocalMediaInfo> videoList = new ArrayList<>();
     public String samplingfile = "";
     public String samplingpicfile = "";//抽样单生成图片的文件流
+    public String handlepicfile = "";//处置单生成图片的文件流
 
     public String workfile = "";
     public String riskfile = "";

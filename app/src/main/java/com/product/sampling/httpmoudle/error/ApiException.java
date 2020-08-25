@@ -12,6 +12,7 @@ public class ApiException extends Exception {
 
     private int code;
     private String displayMessage;
+    private String info;
 
     public ApiException(Throwable throwable, int code) {
         super(throwable);
@@ -35,7 +36,7 @@ public class ApiException extends Exception {
     }
 
 
-
-
-
+    public String getInfo() {
+        return info;
+    }
 }

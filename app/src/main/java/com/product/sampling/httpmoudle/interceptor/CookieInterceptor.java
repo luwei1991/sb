@@ -31,7 +31,6 @@ import okhttp3.Response;
  * strict-transport-security: max-age=31536000; includeSubDomains
  * x-frame-operations: SAMEORIGIN
  *
- *
  */
 
 public class CookieInterceptor implements Interceptor {
@@ -45,7 +44,7 @@ public class CookieInterceptor implements Interceptor {
         if (cookies != null && cookies.size() > 0) {
             for (String header : cookies ){
                 if (header.contains("authtoken")) {
-                    cookieStr+=header;
+                    cookieStr += header;
                 }
             }
         }

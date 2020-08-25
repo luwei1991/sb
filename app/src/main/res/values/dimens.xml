@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="app_bar_height">200dp</dimen>
-    <dimen name="item_width">150dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="table_text_size">12dp</dimen>
 
-    <dimen name="height_table_row">30dp</dimen>
+    <!--抽样单-->
+    <dimen name="check_form_margin_left">@dimen/qb_px_12</dimen>
+    <dimen name="check_form_margin_right">@dimen/qb_px_6</dimen>
+    <dimen name="check_form_line_border">1px</dimen>
+    <dimen name="sp_12">12sp</dimen>
+    <dimen name="sp_16">16sp</dimen>
+    <!--处置单-->
+    <dimen name="handle_form_margin_left">@dimen/qb_px_12</dimen>
+    <dimen name="handle_form_margin_right">@dimen/qb_px_12</dimen>
+    <dimen name="handle_form_line_height">@dimen/qb_px_6</dimen>
 
+
+    <!--未抽到样-->
+    <dimen name="not_check_form_margin_left">@dimen/qb_px_15</dimen>
+    <dimen name="not_check_form_margin_right">@dimen/qb_px_10</dimen>
 </resources>

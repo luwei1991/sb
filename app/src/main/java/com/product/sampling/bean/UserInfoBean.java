@@ -13,6 +13,16 @@ public class UserInfoBean {
     private String persontel;
     private String photo;
     private String rtcid;
+    /**是否需要电子签章 0:需要 1：不需要*/
+    private String isOpenCode = "1";//默认不需要
+
+    public String getIsOpenCode() {
+        return isOpenCode;
+    }
+
+    public void setIsOpenCode(String isOpenCode) {
+        this.isOpenCode = isOpenCode;
+    }
 
     private String account;
 

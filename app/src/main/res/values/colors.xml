@@ -3,99 +3,44 @@
 
     <color name="colorPrimary">#8BD4F5</color>
     <color name="colorPrimaryDark">#1D77AE</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">@color/qmui_config_color_blue</color>
     <color name="colorWhite">#ffffff</color>
-    <color name="title_bar_textx_color">#333333</color>
     <color name="cut_off_line">#f1f1f1</color>
     <color name="common_color">#333333</color>
-    <color name="desc_color">#888888</color>
     <color name="title_bar_bg_color">#FF6100</color>
     <color name="black">#000000</color>
-    <color name="bg_color">#fafafa</color>
-    <color name="desc_color_888888">#888888</color>
-    <color name="orgeen_color">#fa800a</color>
-    <color name="actionbar_menu_item_selected_color">#00000000</color>
-    <color name="title_bar_background">#FFFFFF</color>
-    <color name="bg_color_2">#F1F1F1</color>
     <color name="transparent">#00000000</color>
-    <color name="province_line_border">#D0D0D0</color>
-    <color name="__picker_pager_bg">#CA000000</color>
-    <color name="__picker_crop_toolbar_bg">#38393E</color>
-    <color name="__picker_crop_status_bg">#2F3034</color>
 
     <color name="white">#FFFFFF</color>
-    <color name="app_bg">#FAFAFA</color>
     <color name="system_bg">#f6f6f6</color>
     <color name="line_color">#F0F0F2</color>
-    <color name="trans">#00000000</color>
     <color name="line_gray">#CBCCCD</color>
 
 
-    <color name="tab_title_normal">#3A476B</color>
-
-    <color name="color_31E9B2">#31E9B2</color>
-    <color name="color_02CF91">@color/theme_green</color>
-    <color name="color_172B4D">#172B4D</color>
-    <color name="color_FF6669">#FF6669</color>
-    <color name="color_0E6FD6">#007AFF</color>
-    <color name="color_828D99">#828D99</color>
-    <color name="color_214361">#214361</color>
-    <color name="color_3A476B">#3A476B</color>
     <color name="color_ADB2B8">#ADB2B8</color>
-    <color name="color_ADB6C1">#ADB6C1</color>
     <color name="color_9EA7B4">#9EA7B4</color>
-    <color name="color_F2F5FA">#F2F5FA</color>
-    <color name="color_F3F5FA">#F3F5FA</color>
-    <color name="color_FFA5A7">#FFA5A7</color>
-    <color name="color_00B07C">#00B07C</color>
-    <color name="color_F7B631">#F7B631</color>
     <color name="possible_result_points">#c0ffff00</color>
     <color name="result_view">#b0000000</color>
     <color name="viewfinder_mask">#60000000</color>
 
 
-    <color name="main_black_title_text">#172B4D</color>
-    <color name="main_green_text">@color/theme_green</color>
-    <color name="main_trans_green">#1902CF91</color>
-    <color name="main_trans_blue">#190e6fd6</color>
-    <color name="main_gray_text">#828D99</color>
-    <color name="main_text_light_gray">#ADB6C1</color>
-    <color name="main_black_text">#214361</color>
     <color name="main_text_red">#FF6669</color>
-    <color name="main_trans_red">#19FF6669</color>
-    <color name="main_text_blue">#0E6FD6</color>
-    <color name="main_text_yellow">#F7B631</color>
-    <color name="main_divider_line">#F0F0F2</color>
-    <color name="main_stroke_line">#E5E5E5</color>
-    <color name="color_333333">#333333</color>
 
 
-    <color name="theme_black_title">#172B4D</color>
-    <color name="theme_title">#3A476B</color>
-    <color name="theme_sub_title">#9EA7B4</color>
-
-    <color name="theme_color">#007AFF</color>
-    <color name="theme_green">#02CF91</color>
-    <color name="theme_orange">#F7B631</color>
-    <color name="theme_red">#FF6669</color>
-    <color name="theme_original">#9EA7B4</color>
-
-    <color name="depth_background">#101724</color>
-    <color name="depth_text_color">#587094</color>
-    <color name="depth_buy_line">#1ABB77</color>
-    <color name="depth_sell_line">#E75A35</color>
-    <color name="depth_buy_path">#0F3031</color>
-    <color name="depth_sell_path">#2E2227</color>
-    <color name="depth_selector">#DA30343C</color>
-
-    <color name="common_line_color">#F2F5FA</color>
-
-    <color name="blue_color">#5bcbf5</color>
     <color name="blue_color_30">#4C5BCBF5</color>
 
-    <color name="text_color">#333333</color>
-
-    <color name="table_divider_color">#9EA7B4</color>
     <color name="alpha_70_black">#B3000000</color>
     <color name="red">#FF0000</color>
+
+
+    <!--各种点缀颜色-->
+
+
+    <color name="ornament_01">#8FBE94</color>
+
+    <color name="ornament_03">#F9AC96</color>
+    <!--zxing-->
+    <color name="react">#ffffff</color>
+    <color name="scanLineColor">#ffffff</color>
+
 </resources>

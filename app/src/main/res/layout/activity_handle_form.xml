@@ -1,0 +1,751 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.product.sampling.ui.widget.LWTextView
+        android:id="@+id/lwtv_titile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/qb_px_25"
+        android:text="产品质量监督抽查样品封存和处置通知单"
+        android:textSize="22sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textStyle="bold"
+        />
+
+    <com.product.sampling.ui.widget.LWTextView
+        android:id="@+id/lwtv_cydbh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="抽样单编号："
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lwtv_titile"
+        android:layout_marginLeft="@dimen/qb_px_30"
+        android:layout_marginTop="@dimen/qb_px_20"
+        android:textStyle="bold"
+        />
+
+    <com.product.sampling.ui.widget.LWTextView
+        android:id="@+id/lwtv_cydbh_in"
+        android:layout_width="@dimen/qb_px_120"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toRightOf="@+id/lwtv_cydbh"
+        app:layout_constraintTop_toBottomOf="@+id/lwtv_titile"
+        android:layout_marginTop="@dimen/qb_px_20"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="8sp"
+        app:autoSizeMaxTextSize="18sp"
+
+        android:lines="1"
+        app:autoSizeStepGranularity="2sp"
+        />
+
+        <View
+            android:id="@+id/line_cydbh"
+            android:layout_width="@dimen/qb_px_120"
+            android:layout_height="1px"
+            android:background="@color/black"
+            app:layout_constraintLeft_toRightOf="@+id/lwtv_cydbh"
+            app:layout_constraintTop_toBottomOf="@+id/lwtv_cydbh_in"
+            android:layout_marginTop="@dimen/qb_px_1"
+            app:layout_constraintBaseline_toBaselineOf="@id/lwtv_cydbh"
+            />
+
+    <com.product.sampling.ui.widget.LWTextView
+        android:id="@+id/lwtv_gs_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lwtv_cydbh"
+        android:layout_marginTop="@dimen/qb_px_16"
+        android:layout_marginLeft="@dimen/check_form_margin_left"
+        />
+
+    <com.product.sampling.ui.widget.LWTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="："
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@id/lwtv_gs_in"
+        app:layout_constraintTop_toBottomOf="@+id/lwtv_cydbh"
+        android:layout_marginTop="@dimen/qb_px_16"
+        />
+    <LinearLayout
+        android:id="@+id/lwtv_desc01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/lwtv_gs_in"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/handle_form_line_height"
+        android:layout_marginRight="@dimen/handle_form_margin_right"
+        >
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="受"
+            android:textSize="16sp"
+            android:layout_marginLeft="@dimen/qb_px_42"
+            />
+        <LinearLayout
+            android:layout_width="@dimen/qb_px_118"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <com.product.sampling.ui.widget.LWTextView
+                android:id="@+id/lwtv_cydw_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:maxLines="1"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/black"
+                />
+        </LinearLayout>
+        <com.product.sampling.ui.widget.LWTextView
+            android:id="@+id/lwtv_desc02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="委托，我单位于"
+            android:textSize="16sp"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <com.product.sampling.ui.widget.LWTextView
+                android:id="@+id/lwtv_year_in"
+                android:layout_width="@dimen/qb_px_40"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:maxLines="1"
+                />
+
+            <View
+                android:layout_width="@dimen/qb_px_35"
+                android:layout_height="1px"
+                android:background="@color/black"
+                />
+
+        </LinearLayout>
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:id="@+id/lwtv_desc03"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="年"
+            android:textSize="16sp"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <com.product.sampling.ui.widget.LWTextView
+                android:id="@+id/lwtv_month_in"
+                android:layout_width="@dimen/qb_px_21"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:maxLines="1"
+                />
+
+            <View
+                android:layout_width="@dimen/qb_px_21"
+                android:layout_height="1px"
+                android:background="@color/black"
+                />
+
+        </LinearLayout>
+
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:id="@+id/lwtv_desc04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="月"
+            android:textSize="16sp"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <com.product.sampling.ui.widget.LWTextView
+                android:id="@+id/lwtv_day_in"
+                android:layout_width="@dimen/qb_px_21"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:gravity="center"
+                />
+
+            <View
+                android:layout_width="@dimen/qb_px_21"
+                android:layout_height="1px"
+                android:background="@color/black"
+                />
+
+        </LinearLayout>
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:id="@+id/lwtv_desc05"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="日对"
+            android:textSize="16sp"
+            />
+    </LinearLayout>
+
+
+
+
+
+
+    <LinearLayout
+        android:id="@+id/ll_desc06"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lwtv_desc01"
+        android:layout_marginTop="@dimen/handle_form_line_height"
+        android:layout_marginLeft="@dimen/handle_form_margin_left"
+        android:layout_marginRight="@dimen/handle_form_margin_right"
+
+        >
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="你单位（"
+            android:textSize="16sp"
+            />
+
+        <CheckBox
+            android:id="@+id/rb_produce"
+            android:layout_width="@dimen/qb_px_10"
+            android:layout_height="@dimen/qb_px_10"
+            android:gravity="center"
+            android:button="@drawable/radio_button_selector"
+            />
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="生产；"
+            android:textSize="16sp"
+            />
+        <CheckBox
+            android:id="@+id/rb_xiao_shou"
+            android:layout_width="@dimen/qb_px_10"
+            android:layout_height="@dimen/qb_px_10"
+            android:gravity="center"
+            android:button="@drawable/radio_button_selector"
+            />
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="销售）的"
+            android:textSize="16sp"
+            />
+        <LinearLayout
+            android:layout_width="@dimen/qb_px_90"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <com.product.sampling.ui.widget.LWTextView
+                android:id="@+id/lwtv_cpmc_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:gravity="center"
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:autoSizeMinTextSize="8sp"
+                app:autoSizeTextType="uniform"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/black"
+                />
+        </LinearLayout>
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="规格型号："
+
+            android:textSize="16sp"
+            />
+
+        <LinearLayout
+            android:layout_width="@dimen/qb_px_85"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <com.product.sampling.ui.widget.LWTextView
+                android:id="@+id/lwtv_ggxh_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:gravity="center"
+                android:textSize="16sp"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="8sp"
+                app:autoSizeMaxTextSize="16sp"
+                android:maxLines="1"
+                app:autoSizeStepGranularity="2sp"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/black"
+                />
+        </LinearLayout>
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="产"
+            android:textSize="16sp"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_desc07"
+         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_desc06"
+        android:layout_marginLeft="@dimen/handle_form_margin_left"
+        android:layout_marginRight="@dimen/handle_form_margin_right"
+        android:layout_marginTop="@dimen/handle_form_line_height"
+
+        android:orientation="horizontal"
+        >
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="品进行了质量监督抽查（产品信息详见相对应编号的抽样单）。  现将样品"
+            android:textSize="16sp"
+            />
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="（"
+            android:textSize="16sp"
+            />
+        <CheckBox
+            android:id="@+id/rb_byyp"
+            android:layout_width="@dimen/qb_px_10"
+            android:layout_height="@dimen/qb_px_10"
+            android:gravity="center"
+            android:button="@drawable/radio_button_selector"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_desc08"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_desc07"
+        android:layout_marginLeft="@dimen/handle_form_margin_left"
+        android:layout_marginRight="@dimen/handle_form_margin_right"
+        android:layout_marginTop="@dimen/handle_form_line_height"
+
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        >
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="备用样品；"
+            android:textSize="16sp"
+            />
+        <CheckBox
+            android:id="@+id/rb_jbyp"
+            android:layout_width="@dimen/qb_px_10"
+            android:layout_height="@dimen/qb_px_10"
+            android:gravity="center"
+            android:button="@drawable/radio_button_selector"
+            />
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="检毕样品)"
+            android:textSize="16sp"
+            />
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="封存于你单位，请妥善保管该样品（保持封样状态、防"
+            android:textSize="16sp"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_desc09"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_desc08"
+        android:layout_marginLeft="@dimen/handle_form_margin_left"
+        android:layout_marginRight="@dimen/handle_form_margin_right"
+        android:layout_marginTop="@dimen/handle_form_line_height"
+
+        android:orientation="horizontal"
+        >
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="潮、防火、防损），不得擅自更换、隐匿、处理已抽查封存的样品。"
+            android:textSize="16sp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_desc10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_desc09"
+        android:layout_marginLeft="@dimen/handle_form_margin_left"
+        android:layout_marginRight="@dimen/handle_form_margin_right"
+        android:orientation="horizontal"
+        >
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="16sp"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_desc11"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_desc10"
+        android:layout_marginLeft="@dimen/handle_form_margin_left"
+        android:layout_marginRight="@dimen/handle_form_margin_right"
+        android:layout_marginTop="@dimen/handle_form_line_height"
+        android:orientation="horizontal"
+        >
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="          按照《中华人民共和国产品质量法》、《产品质量监督抽查管理暂行办法》，若你单位收到检验结果为合格且对检验结果无异议的，可自行处置样品；若你单位收到检验结果为不合格的，应当保持封样状态至检验结果异议期满三个月，并按负责监督抽查后处理的市场监督管理部门意见处理样品。"
+            android:textSize="16sp"
+            android:lineSpacingExtra="@dimen/handle_form_line_height"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_desc12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_desc11"
+        android:layout_marginLeft="@dimen/handle_form_margin_left"
+        android:layout_marginRight="@dimen/handle_form_margin_right"
+        android:layout_marginTop="@dimen/handle_form_line_height"
+        android:orientation="horizontal"
+        >
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="          特此告知。"
+            android:textSize="16sp"
+            android:lineSpacingExtra="@dimen/handle_form_line_height"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_desc13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_desc12"
+        android:layout_marginLeft="@dimen/handle_form_margin_left"
+        android:layout_marginRight="@dimen/handle_form_margin_right"
+        android:layout_marginTop="@dimen/qb_px_35"
+        android:orientation="horizontal"
+        >
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我单位已知悉所通知内容，"
+            android:textSize="16sp"
+            android:lineSpacingExtra="@dimen/handle_form_line_height"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_desc14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_desc13"
+        android:layout_marginLeft="@dimen/handle_form_margin_left"
+        android:layout_marginRight="@dimen/handle_form_margin_right"
+        android:layout_marginTop="@dimen/handle_form_line_height"
+        android:orientation="horizontal"
+        >
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="并将按通知内容执行。"
+            android:textSize="16sp"
+            android:lineSpacingExtra="@dimen/handle_form_line_height"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_desc15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_desc14"
+        android:layout_marginLeft="@dimen/handle_form_margin_left"
+        android:layout_marginRight="@dimen/handle_form_margin_right"
+        android:layout_marginTop="@dimen/handle_form_line_height"
+        android:orientation="vertical"
+        >
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="受检单位（签名、盖章）："
+            android:textSize="16sp"
+            android:lineSpacingExtra="@dimen/handle_form_line_height"
+            />
+        <ImageView
+            android:id="@+id/iv_sjdw_qz"
+            android:layout_width="@dimen/qb_px_100"
+            android:layout_height="@dimen/qb_px_60"
+            android:layout_marginTop="@dimen/qb_px_5"
+            />
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/ll_desc16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_desc11"
+        android:layout_marginRight="@dimen/handle_form_margin_right"
+        android:layout_marginTop="@dimen/qb_px_15"
+        >
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="抽样单位（盖章）"
+            android:textSize="16sp"
+            android:lineSpacingExtra="@dimen/handle_form_line_height"
+            android:layout_centerInParent="true"
+            />
+        <ImageView
+            android:layout_width="@dimen/qb_px_85"
+            android:layout_height="@dimen/qb_px_85"
+            android:background="@mipmap/hncj"
+            android:layout_marginRight="@dimen/qb_px_10"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_desc17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_desc16"
+        android:layout_marginRight="@dimen/handle_form_margin_right"
+        android:layout_marginTop="@dimen/handle_form_line_height"
+        android:orientation="horizontal"
+        >
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="抽样人员："
+            android:textSize="16sp"
+            android:paddingLeft="@dimen/qb_px_3"
+            android:lineSpacingExtra="@dimen/handle_form_line_height"
+            />
+        <LinearLayout
+            android:id="@+id/ll_cyr_qz"
+            android:layout_width="@dimen/qb_px_100"
+            android:layout_height="@dimen/qb_px_60"
+            android:orientation="horizontal"
+            >
+            <ImageView
+                android:id="@+id/iv_cyr_qz_1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/qb_px_60"
+                android:layout_weight="1"
+                />
+            <ImageView
+                android:id="@+id/iv_cyr_qz_2"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/qb_px_60"
+                android:layout_weight="1"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_desc18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_desc17"
+        android:layout_marginLeft="@dimen/handle_form_margin_right"
+        android:layout_marginTop="@dimen/handle_form_line_height"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/qb_px_70"
+        >
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:id="@+id/lwtv_sjdw_rq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="年      月     日"
+            android:textSize="16sp"
+            android:lineSpacingExtra="@dimen/handle_form_line_height"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_desc19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_desc17"
+        android:layout_marginRight="@dimen/handle_form_margin_right"
+        android:layout_marginTop="@dimen/handle_form_line_height"
+        android:orientation="horizontal"
+        android:paddingRight="@dimen/qb_px_30"
+        >
+
+        <com.product.sampling.ui.widget.LWTextView
+            android:id="@+id/lwtv_cydw_rq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="年      月     日"
+            android:textSize="16sp"
+            android:lineSpacingExtra="@dimen/handle_form_line_height"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_desc20"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/ll_desc18"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="@dimen/qb_px_25"
+        android:layout_marginRight="@dimen/handle_form_margin_right"
+        android:layout_marginLeft="@dimen/handle_form_margin_left"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        >
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="（"
+            android:textSize="16sp"
+            android:lineSpacingExtra="@dimen/handle_form_line_height"
+            />
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="备注："
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="@dimen/handle_form_line_height"
+            />
+        <com.product.sampling.ui.widget.LWTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="此表单一式两份，受检单位和抽样单位各留存一份。）"
+            android:textSize="16sp"
+            android:lineSpacingExtra="@dimen/handle_form_line_height"
+            />
+
+    </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/ll_desc21"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/qb_px_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        android:layout_marginTop="@dimen/qb_px_5"
+        >
+
+        <LinearLayout
+            android:id="@+id/ll_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/check_form_margin_left"
+            android:orientation="horizontal"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/back"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="返回"
+                android:textColor="#1296db"
+                />
+
+        </LinearLayout>
+        <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+            android:id="@+id/btn_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="生成pdf"
+            android:layout_marginRight="@dimen/check_form_margin_left"
+            app:qmui_radius="3dp"
+            />
+    </RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,6 @@
 package com.product.sampling.agore;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -11,16 +10,16 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
-import com.product.sampling.R;
-import com.product.sampling.manager.AccountManager;
-import com.product.sampling.ui.MainActivity;
-import com.product.sampling.ui.MainTaskListActivity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.product.sampling.R;
+import com.product.sampling.manager.AccountManager;
+
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
@@ -176,7 +175,10 @@ public class VideoChatActivity extends AppCompatActivity {
 
     //离开频道
     private void leaveChannel() {
-        mRtcEngine.leaveChannel();
+        if(mRtcEngine != null){
+            mRtcEngine.leaveChannel();
+        }
+
     }
 
     private void onRemoteUserLeft() {

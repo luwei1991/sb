@@ -1,8 +1,9 @@
 package com.product.sampling.httpmoudle.interceptor;
 
 import com.product.sampling.Constants;
+import com.product.sampling.MainApplication;
 import com.product.sampling.httpmoudle.LocalManageUtil;
-import com.product.sampling.ui.MainApplication;
+import com.qmuiteam.qmui.util.QMUIPackageHelper;
 
 import java.io.IOException;
 
@@ -31,6 +32,7 @@ public class AuthInterceptor implements Interceptor {
 
         builder.addHeader("src", "android");
         builder.addHeader("flavor", Constants.FLAVOR);
+        builder.addHeader("versionCode", QMUIPackageHelper.getAppVersion(MainApplication.INSTANCE));
         {
             builder.addHeader("Cookie", "locale=" + LocalManageUtil.getSetLanguageLocale(MainApplication.INSTANCE).toString().replace("_", "-") + ";");
         }

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="@dimen/qb_px_188"
+        android:layout_height="@dimen/qb_px_188"
+        app:cardCornerRadius="@dimen/dp_10"
+        app:cardElevation="10dp">
+
+
+        <RelativeLayout
+            android:layout_width="@dimen/qb_px_188"
+            android:layout_height="@dimen/qb_px_188"
+            android:paddingLeft="@dimen/qb_px_8"
+            android:paddingRight="@dimen/qb_px_8"
+            android:background="@color/white">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/title">
+
+                <TextView
+                    android:id="@+id/remark"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="1231231231312311111111111111111111111111111111111111312313131"
+                    android:textColor="@color/qmui_config_color_gray_5"
+                    android:textSize="16sp" />
+
+
+            </ScrollView>
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/qb_px_30"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="发现新版本"
+                android:textColor="@color/qmui_config_color_blue"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <com.qmuiteam.qmui.widget.QMUIProgressBar
+                android:id="@+id/progress"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/qb_px_20"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginBottom="@dimen/qb_px_8"
+                app:qmui_background_color="@color/qmui_config_color_gray_8"
+                app:qmui_progress_color="@color/qmui_config_color_blue"
+                app:qmui_type="type_rect" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <data>
+
+    </data>
+</layout>

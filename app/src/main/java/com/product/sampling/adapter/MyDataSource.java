@@ -5,15 +5,13 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.paging.PageKeyedDataSource;
-import androidx.paging.PositionalDataSource;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.product.sampling.bean.TaskBean;
 import com.product.sampling.bean.TaskEntity;
-import com.product.sampling.bean.TaskResultBean;
-import com.product.sampling.httpmoudle.RetrofitService;
+import com.product.sampling.httpmoudle.manager.RetrofitServiceManager;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
@@ -76,8 +74,8 @@ public class MyDataSource extends PageKeyedDataSource<Integer, TaskEntity> {
 
     private void getData(Context context, String status, String ordertype, String cityid, int pageNo, LoadInitialCallback loadInitialCallback, LoadParams<Integer> params, LoadCallback loadCallback) {
 
-        RetrofitService.createApiService(Request.class)
-                .taskList(AccountManager.getInstance().getUserId(), status, ordertype, cityid, pageNo)
+        RetrofitServiceManager.getInstance().createApiService(Request.class)
+                .taskList(AccountManager.getInstance().getUserId(), status, ordertype, cityid, pageNo,"","","")
                 .compose(RxSchedulersHelper.io_main())
                 .compose(RxSchedulersHelper.ObsHandHttpResult())
                 .subscribe(new ZBaseObserver<TaskBean>() {

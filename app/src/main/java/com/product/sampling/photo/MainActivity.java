@@ -1,24 +1,13 @@
 package com.product.sampling.photo;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 
 import com.product.sampling.R;
 
 import org.devio.takephoto.app.TakePhoto;
 import org.devio.takephoto.app.TakePhotoActivity;
-import org.devio.takephoto.app.TakePhotoImpl;
-import org.devio.takephoto.compress.CompressConfig;
-import org.devio.takephoto.model.CropOptions;
-import org.devio.takephoto.model.LubanOptions;
-import org.devio.takephoto.model.TakePhotoOptions;
-import org.devio.takephoto.permission.TakePhotoInvocationHandler;
-
-import java.io.File;
 
 
 /**

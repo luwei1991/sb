@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import org.devio.takephoto.model.MultipleCrop;
-import org.devio.takephoto.model.TException;
-import org.devio.takephoto.permission.PermissionManager;
 import org.devio.takephoto.compress.CompressConfig;
 import org.devio.takephoto.model.CropOptions;
+import org.devio.takephoto.model.MultipleCrop;
+import org.devio.takephoto.model.TException;
 import org.devio.takephoto.model.TResult;
 import org.devio.takephoto.model.TakePhotoOptions;
+import org.devio.takephoto.permission.PermissionManager;
 
 
 /**

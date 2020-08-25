@@ -1,58 +1,34 @@
 package com.product.sampling.ui;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 
 import androidx.annotation.NonNull;
-
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
-import com.product.sampling.R;
-import com.product.sampling.bean.UserInfoBean;
-import com.product.sampling.manager.AccountManager;
-import com.product.sampling.utils.ActivityUtils;
-import com.product.sampling.view.LeverageLockHintDialog;
-
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.app.LoaderManager.LoaderCallbacks;
-
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
-
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.text.TextUtils;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import com.google.android.material.tabs.TabLayout;
+import com.product.sampling.R;
+import com.product.sampling.bean.UserInfoBean;
+import com.product.sampling.manager.AccountManager;
+import com.product.sampling.ui.base.BaseActivity;
+import com.product.sampling.utils.AMapHelper;
+import com.product.sampling.utils.ActivityUtils;
+import com.product.sampling.view.LeverageLockHintDialog;
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.Manifest.permission.READ_CONTACTS;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks{
 
 
     ViewPager mViewPager;
@@ -60,25 +36,31 @@ public class LoginActivity extends AppCompatActivity {
     LoginByPhoneFragment loginByPhoneFragment;
 
     @Override
+    public void setUIController(Object sc) {
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        View root = LayoutInflater.from(this).inflate(R.layout.activity_login, null);
+        setContentView(root);
+//        setContentView(R.layout.activity_login);
+//        requestLocation();
         UserInfoBean userInfoBean = AccountManager.getInstance().getUserInfoBean();
-        if (null == userInfoBean) {
-            initView();
-        } else {
+        if (null != userInfoBean) {
             ActivityUtils.goMainTaskActivity(LoginActivity.this);
             finish();
         }
+        initView();
+        requestLocation();
     }
 
     protected void initView() {
 
         mViewPager = findViewById(R.id.view_pager);
-
         loginByPasswordFragment = LoginByPasswordFragment.newInstance();
         loginByPhoneFragment = LoginByPhoneFragment.newInstance();
-
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(loginByPasswordFragment);
         fragmentList.add(loginByPhoneFragment);
@@ -102,6 +84,39 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
+     * 请求定位权限
+     */
+    public void requestLocation() {
+        if (EasyPermissions.hasPermissions(getApplicationContext(), needPermissions)) {
+            AMapHelper.getInstance(this.getApplicationContext());
+        } else {
+            EasyPermissions.requestPermissions(this, "请允许app使用定位功能", LOCATION_REQUEST_CODE, needPermissions);
+        }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+        if (requestCode == LOCATION_REQUEST_CODE) {
+            AMapHelper.getInstance(this.getApplicationContext());
+        }
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // 将结果转发到EasyPermissions
+        if (requestCode == LOCATION_REQUEST_CODE) {
+            EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+        }
+
+    }
+
+    /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
@@ -122,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
             return list.get(position);
         }
 
-        @Override
+            @Override
         public int getCount() {
             return list.size();
         }

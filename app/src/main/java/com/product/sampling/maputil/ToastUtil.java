@@ -6,16 +6,14 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
-import android.widget.TextView;
-import android.widget.Toast;
-import com.product.sampling.R;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-
-
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.services.core.AMapException;
+import com.product.sampling.R;
 
 public class ToastUtil {
 

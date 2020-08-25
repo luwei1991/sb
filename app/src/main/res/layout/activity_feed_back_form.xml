@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@mipmap/index_top"
+        >
+
+        <LinearLayout
+            android:id="@+id/ll_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/back_white"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="返回"
+                android:textColor="@color/white"
+                />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_toRightOf="@+id/ll_back"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:scaleType="fitCenter"
+            android:layout_marginLeft="20dp"
+            android:src="@mipmap/logo2" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+
+                android:divider="@color/color_9EA7B4"
+                android:showDividers="middle|beginning"
+                android:background="@color/white"
+                android:stretchColumns="1">
+
+                <TableRow
+                    android:layout_height="50dp"
+                    android:background="@color/cut_off_line"
+                    android:divider="@color/color_9EA7B4"
+                    android:showDividers="middle|beginning">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:gravity="left|center_vertical"
+                        android:textStyle="bold"
+                        android:layout_weight="1"
+                        android:text="企业名称" />
+
+                    <EditText
+                        android:id="@+id/et_qymc_in"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:gravity="center"
+                        style="@style/FormRefuseText"
+                        android:background="@null"
+                        android:hint="在此填写企业名称"
+                        android:layout_toRightOf="@+id/tv_cpmc"
+                        />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_height="50dp"
+                    android:divider="@color/color_9EA7B4"
+                    android:showDividers="middle|beginning">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:gravity="left|center_vertical"
+                        android:textStyle="bold"
+                        android:text="抽样组人员" />
+
+                    <EditText
+                        android:id="@+id/et_cyzry_in"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        style="@style/FormRefuseText"
+                        android:background="@null"
+                        android:layout_weight="5"
+                        android:hint="在此填写抽样组人员"
+                        android:layout_toRightOf="@+id/tv_qymc"
+                        />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_height="50dp"
+                    android:background="@color/cut_off_line"
+                    android:divider="@color/color_9EA7B4"
+                    android:showDividers="middle|beginning">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="4"
+                        android:gravity="left|center_vertical"
+                        android:textStyle="bold"
+                        android:text="1.抽样人员是否两人或两人以上。" />
+
+                <RadioGroup
+                    android:id="@+id/rg_01"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    >
+                    <RadioButton
+                        android:id="@+id/rb_01_yes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="是"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/rb_01_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="否"
+                        />
+
+
+                </RadioGroup>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_height="50dp"
+                    android:divider="@color/color_9EA7B4"
+                    android:showDividers="middle|beginning">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="4"
+                        android:gravity="left|center_vertical"
+                        android:textStyle="bold"
+                        android:text="2.抽样人员是否出示工作证、抽样介绍
+信、产品质量监督抽查相关文件、企业名单附件等。" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_02"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        >
+                        <RadioButton
+                            android:id="@+id/rb_02_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="是"
+                            />
+
+                        <RadioButton
+                            android:id="@+id/rb_02_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="否"
+                            />
+
+
+                    </RadioGroup>
+                </TableRow>
+
+                <TableRow
+                    android:layout_height="50dp"
+                    android:background="@color/cut_off_line"
+                    android:divider="@color/color_9EA7B4"
+                    android:showDividers="middle|beginning">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="4"
+                        android:gravity="left|center_vertical"
+                        android:textStyle="bold"
+                        android:text="3. 抽样人员是否按抽样产品抽查实施规
+范及时高效地开展抽样工作" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_03"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        >
+                        <RadioButton
+                            android:id="@+id/rb_03_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="是"
+                            />
+
+                        <RadioButton
+                            android:id="@+id/rb_03_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="否"
+                            />
+
+
+                    </RadioGroup>
+
+                </TableRow>
+                <TableRow
+                    android:layout_height="50dp"
+                    android:divider="@color/color_9EA7B4"
+                    android:showDividers="middle|beginning">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="4"
+                        android:gravity="left|center_vertical"
+                        android:textStyle="bold"
+                        android:text="4.抽样工作中能否坚持原则，作风正派， 秉公办事。" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_04"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        >
+                        <RadioButton
+                            android:id="@+id/rb_04_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="是"
+                            />
+
+                        <RadioButton
+                            android:id="@+id/rb_04_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="否"
+                            />
+
+
+                    </RadioGroup>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_height="50dp"
+                    android:divider="@color/color_9EA7B4"
+                    android:background="@color/cut_off_line"
+
+                    android:showDividers="middle|beginning">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="4"
+                        android:gravity="left|center_vertical"
+                        android:textStyle="bold"
+                        android:text="5.是否存在刁难企业行为。" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_05"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        >
+                        <RadioButton
+                            android:id="@+id/rb_05_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="是"
+                            />
+
+                        <RadioButton
+                            android:id="@+id/rb_05_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="否"
+                            />
+
+
+                    </RadioGroup>
+                </TableRow>
+
+                <TableRow
+                    android:layout_height="50dp"
+                    android:divider="@color/color_9EA7B4"
+                    android:showDividers="middle|beginning">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="4"
+                        android:gravity="left|center_vertical"
+                        android:textStyle="bold"
+                        android:text="6.抽样人员是否签订委托检验协议或收取检验等费用。" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_06"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        >
+                        <RadioButton
+                            android:id="@+id/rb_06_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="是"
+                            />
+
+                        <RadioButton
+                            android:id="@+id/rb_06_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="否"
+                            />
+
+
+                    </RadioGroup>
+                </TableRow>
+                <TableRow
+                    android:layout_height="50dp"
+                    android:divider="@color/color_9EA7B4"
+                    android:background="@color/cut_off_line"
+
+                    android:showDividers="middle|beginning">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="4"
+                        android:gravity="left|center_vertical"
+                        android:textStyle="bold"
+                        android:text="7.抽样人员是否借机游山玩水，要求企业支付相关费用等行为。" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_07"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        >
+                        <RadioButton
+                            android:id="@+id/rb_07_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="是"
+                            />
+
+                        <RadioButton
+                            android:id="@+id/rb_07_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="否"
+                            />
+
+
+                    </RadioGroup>
+                </TableRow>
+                <TableRow
+                    android:layout_height="50dp"
+                    android:divider="@color/color_9EA7B4"
+                    android:showDividers="middle|beginning">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="4"
+                        android:gravity="left|center_vertical"
+                        android:textStyle="bold"
+                        android:text="8.抽样人员有无报销住宿费、餐费，或收受有价证劵、现金等行为。" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_08"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        >
+                        <RadioButton
+                            android:id="@+id/rb_08_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="是"
+                            />
+
+                        <RadioButton
+                            android:id="@+id/rb_08_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="否"
+                            />
+
+
+                    </RadioGroup>
+                </TableRow>
+
+                <TableRow
+                    android:layout_height="50dp"
+                    android:divider="@color/color_9EA7B4"
+                    android:background="@color/cut_off_line"
+
+                    android:showDividers="middle|beginning">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="4"
+                        android:gravity="left|center_vertical"
+                        android:textStyle="bold"
+                        android:text="9.抽样人员有无利用职权向被抽样企业索取产品、礼物或低价购买样品。" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_09"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        >
+                        <RadioButton
+                            android:id="@+id/rb_09_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="是"
+                            />
+
+                        <RadioButton
+                            android:id="@+id/rb_09_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="否"
+                            />
+
+
+                    </RadioGroup>
+                </TableRow>
+                <TableRow
+                    android:layout_height="50dp"
+                    android:divider="@color/color_9EA7B4"
+                    android:showDividers="middle|beginning">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:gravity="left|center_vertical"
+                        android:textStyle="bold"
+                        android:text="10.此次抽样工作进行客观、公正的评价（非常满意、满意、不满意)。" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_10"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        >
+                        <RadioButton
+                            android:id="@+id/rb_10_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="非常满意"
+                            />
+
+                        <RadioButton
+                            android:id="@+id/rb_10_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="满意"
+                            />
+                        <RadioButton
+                            android:id="@+id/rb_10_no_02"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="不满意"
+                            />
+
+
+                    </RadioGroup>
+                </TableRow>
+                <TableRow
+                    android:layout_height="100dp"
+                    android:divider="@color/color_9EA7B4"
+                    android:background="@color/cut_off_line"
+
+                    android:showDividers="middle|beginning">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="left|center_vertical"
+                        android:textStyle="bold"
+                        android:text="11.抽样人员有无其他违纪、违规行为， 有其他需要说明的，湖南省质检院举报电话 ： 0731-89775245 ， 传 真 号 码 ： 0731-89775242。" />
+
+                <EditText
+                    android:id="@+id/et_explain"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    style="@style/FormRefuseText"
+                    android:background="@null"
+                    android:hint="在此填写意见"
+                    />
+                </TableRow>
+
+                <TableRow
+                    android:layout_height="50dp"
+                    android:divider="@color/color_9EA7B4"
+                    android:showDividers="middle|beginning">
+
+                    <TextView
+                        android:layout_width="200dp"
+                        android:layout_height="50dp"
+                        android:gravity="left|center_vertical"
+                        android:textStyle="bold"
+                        android:text="日期" />
+
+                    <TextView
+                        android:id="@+id/tv_ssrd_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:hint="请单击此处选择日期"
+                        style="@style/FormRefuseText"
+                        android:layout_toRightOf="@+id/tv_ssrd"
+                        />
+
+                </TableRow>
+
+            </TableLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginTop="10dp"
+                >
+                <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+                    android:id="@+id/button"
+                    android:layout_width="180dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:text="生成pdf文件"
+                    app:qmui_radius="5dp"
+                    />
+
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

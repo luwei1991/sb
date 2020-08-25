@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
 import com.product.sampling.R;
+import com.product.sampling.ui.base.BaseActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +36,11 @@ public class WebViewActivity extends BaseActivity {
     @BindView(R.id.tv_time)
     TextView tvtime;
 
+
+    @Override
+    public void setUIController(Object sc) {
+        
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

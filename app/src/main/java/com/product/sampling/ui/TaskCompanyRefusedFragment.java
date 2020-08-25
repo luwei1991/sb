@@ -1,9 +1,9 @@
 package com.product.sampling.ui;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,51 +28,56 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.product.sampling.Constants;
+import com.product.sampling.MainApplication;
 import com.product.sampling.R;
+import com.product.sampling.adapter.ExceptionServerRecyclerViewAdapter;
 import com.product.sampling.adapter.ImageAndTextRecyclerViewAdapter;
-import com.product.sampling.adapter.ImageServerRecyclerViewAdapter;
-import com.product.sampling.adapter.TaskSampleRecyclerViewAdapter;
 import com.product.sampling.adapter.VideoAndTextRecyclerViewAdapter;
 import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.TaskEntity;
 import com.product.sampling.bean.TaskMessage;
 import com.product.sampling.bean.Videos;
-import com.product.sampling.httpmoudle.RetrofitService;
+import com.product.sampling.db.DBManagerFactory;
+import com.product.sampling.db.DbController;
+import com.product.sampling.db.tables.RefuseForm;
+import com.product.sampling.db.tables.RefuseFormDao;
+import com.product.sampling.httpmoudle.manager.RetrofitServiceManager;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.LoadDataModel;
+import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.photo.MediaHelper;
+import com.product.sampling.ui.form.RefuseFormActivity;
 import com.product.sampling.ui.viewmodel.TaskDetailViewModel;
 import com.product.sampling.utils.FileDownloader;
-import com.product.sampling.utils.FileUtils;
-import com.product.sampling.utils.HttpURLConnectionUtil;
 import com.product.sampling.utils.LogUtils;
-import com.product.sampling.utils.SPUtil;
+import com.product.sampling.utils.RxSchedulersHelper;
+import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.disposables.Disposable;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+
 import static android.app.Activity.RESULT_OK;
 import static com.product.sampling.adapter.TaskSampleRecyclerViewAdapter.RequestCodePdf;
-import static com.product.sampling.ui.H5WebViewActivity.Intent_Edit;
 import static com.product.sampling.ui.H5WebViewActivity.Intent_Order;
+import static com.product.sampling.ui.TaskDetailActivity.TASK_NOT_UPLOAD;
 
 /**
  * 未抽到样品
@@ -103,7 +108,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
 
     public static TaskCompanyRefusedFragment newInstance(TaskEntity task) {
         Bundle args = new Bundle();
-        args.putParcelable("task", task);
+        args.putSerializable("task", task);
         if (fragment == null) {
             fragment = new TaskCompanyRefusedFragment();
         }
@@ -120,11 +125,9 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
     }
 
     private void initView(View view) {
-
         // image
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-
         mRecyclerViewImageList = view.findViewById(R.id.item_image_list);
         mRecyclerViewImageList.setLayoutManager(linearLayoutManager);
 
@@ -170,7 +173,11 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveTaskInLocalFile(false);
+                taskRefusedEntity.taskisok = "2";
+                taskRefusedEntity.taskstatus = TASK_NOT_UPLOAD;
+                LocalTaskListManager.getInstance().update(taskRefusedEntity);
+                EventBus.getDefault().postSticky(TaskMessage.getInstance(taskRefusedEntity.id,false));
+//                saveTaskInLocalFile(false);
             }
         });
 
@@ -204,7 +211,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
         taskRefusedEntity = (TaskEntity) getArguments().get("task");
 
         taskDetailViewModel = ViewModelProviders.of(this).get(TaskDetailViewModel.class);
-        taskDetailViewModel.orderDetailLiveData.observe(this, new Observer<LoadDataModel<TaskEntity>>() {
+        taskDetailViewModel.orderDetailLiveData.observe(getActivity(), new Observer<LoadDataModel<TaskEntity>>() {
             @Override
             public void onChanged(LoadDataModel<TaskEntity> taskRefusedEntityLoadDataModel) {
                 if (taskRefusedEntityLoadDataModel.isSuccess()) {
@@ -214,19 +221,32 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
 
             }
         });
-        if (!taskRefusedEntity.isLoadLocalData) {
-            taskDetailViewModel.requestDetailList(AccountManager.getInstance().getUserId(), taskRefusedEntity.id);
-        } else {
+        TaskEntity localEntity = LocalTaskListManager.getInstance().query(taskRefusedEntity);
+        if(localEntity != null){
+            taskRefusedEntity = localEntity;
             initData();
+
+        }else{
+            taskDetailViewModel.requestDetailList(AccountManager.getInstance().getUserId(), taskRefusedEntity.id);
         }
+//        if (!taskRefusedEntity.isLoadLocalData) {
+//            taskDetailViewModel.requestDetailList(AccountManager.getInstance().getUserId(), taskRefusedEntity.id);
+//        } else {
+//            findTaskInLocalFile();
+//            initData();
+//        }
     }
 
     private void initData() {
         mTextViewCompanyname.setText(taskRefusedEntity.companyname);
         etTips.setText(taskRefusedEntity.remark);
         if (!taskRefusedEntity.taskisok.equals("1")) {
-            taskRefusedEntity.pics.clear();
-            taskRefusedEntity.voides.clear();
+            if(taskRefusedEntity.pics != null){
+                taskRefusedEntity.pics.clear();
+            }
+            if(taskRefusedEntity.voides != null){
+                taskRefusedEntity.voides.clear();
+            }
         }
         setupRecyclerViewFromServer(mRecyclerViewImageList, taskRefusedEntity.pics);
         setupRecyclerViewVideoFromServer(mRecyclerViewVideoList, taskRefusedEntity.voides);
@@ -267,6 +287,35 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
 
     }
 
+    /**
+     * 从本地找数据
+     */
+//    private void findTaskInLocalFile() {
+//        Gson gson = new Gson();
+//        String taskListStr = (String) SPUtil.get(getActivity(), "tasklist", "");
+//        if (!TextUtils.isEmpty(taskListStr)) {
+//            Type listType = new TypeToken<List<TaskEntity>>() {
+//            }.getType();
+//            ArrayList<TaskEntity> listTask = gson.fromJson(taskListStr, listType);
+//            if (null != listTask && !listTask.isEmpty()) {
+//                for (int i = 0; i < listTask.size(); i++) {
+//                    if (listTask.get(i).id.equals(taskRefusedEntity.id)) {
+//                        taskRefusedEntity = listTask.get(i);
+//                    }
+//                }
+////                if (null != taskDetailViewModel.taskEntity.taskSamples && !taskDetailViewModel.taskEntity.taskSamples.isEmpty()) {
+////                    for (int j = 0; j < taskDetailViewModel.taskEntity.taskSamples.size(); j++) {
+////                        TaskSample taskSample = taskDetailViewModel.taskEntity.taskSamples.get(j);
+////                        if (!taskSample.isLocalData) {
+////                            taskDetailViewModel.taskEntity.taskSamples.remove(taskSample);
+////                        }
+////                    }
+////                }
+//
+//            }
+//
+//        }
+//    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -295,7 +344,6 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                         mediaInfo.setPosition(media.getPosition());
                         mediaInfo.setNum(media.getNum());
                         mediaInfo.setMimeType(media.getMimeType());
-                        mediaInfo.setPictureType(media.getPictureType());
                         mediaInfo.setCompressed(media.isCompressed());
                         mediaInfo.setWidth(media.getWidth());
                         mediaInfo.setHeight(media.getHeight());
@@ -308,6 +356,10 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
 //                            taskRefusedEntity.voides.remove(i);
 //                        }
 //                    }
+
+                    if(taskRefusedEntity.voides == null){
+                        taskRefusedEntity.voides = new ArrayList<>();
+                    }
                     taskRefusedEntity.isLoadLocalData = true;
                     taskRefusedEntity.isEditedTaskScene = true;
                     taskRefusedEntity.voides.addAll(mediaInfos);
@@ -334,16 +386,15 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
                         mediaInfo.isLocal = true;
                         mediaInfos.add(mediaInfo);
                     }
-//                    for (int i = taskRefusedEntity.pics.size() - 1; i >= 0; i--) {
-//                        Pics pics1 = taskRefusedEntity.pics.get(i);
-//                        if (!pics1.isLocal) {
-//                            taskRefusedEntity.pics.remove(pics1);
-//                        }
-//                    }
+                    if(taskRefusedEntity.pics == null){
+                        taskRefusedEntity.pics = new ArrayList<>();
+                    }
                     taskRefusedEntity.pics.addAll(mediaInfos);
                     taskRefusedEntity.isLoadLocalData = true;
                     taskRefusedEntity.isEditedTaskScene = true;
                     setupRecyclerView(mRecyclerViewImageList, taskRefusedEntity.pics);
+
+
                 }
                 break;
                 case RequestCodePdf:
@@ -423,7 +474,10 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
      * @param task
      */
     private void setupRecyclerViewFromServer(@NonNull RecyclerView recyclerView, List task) {
-        ImageServerRecyclerViewAdapter adapter = new ImageServerRecyclerViewAdapter(getActivity(), task, taskRefusedEntity.isUploadedTask());
+        if(task == null){
+            task = new ArrayList();
+        }
+        ExceptionServerRecyclerViewAdapter adapter = new ExceptionServerRecyclerViewAdapter(getActivity(), task, taskRefusedEntity.isUploadedTask(),fragment);
         recyclerView.setAdapter(adapter);
     }
 
@@ -438,7 +492,7 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
     private void downLoadVideo() {
         for (Videos videos : taskRefusedEntity.voides) {
             if (TextUtils.isEmpty(videos.getId())) continue;
-            FileDownloader.downloadFile(RetrofitService.createApiService(Request.class).downloadVideo(videos.getId()), Constants.getPath(), videos.getFileName(), new DownloadProgressHandler() {
+            FileDownloader.downloadFile(RetrofitServiceManager.getInstance().createApiService(Request.class).downloadVideo(videos.getId()), Constants.getPath(), videos.getFileName(), new DownloadProgressHandler() {
 
 
                 @Override
@@ -480,15 +534,27 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
 
 
     }
-
-    private void postUnfindData() {
+    QMUITipDialog upDialog;
+    private void postRefuseData() {
+        RefuseForm refuseForm =  DbController.getInstance(getContext()).getDaoSession().getRefuseFormDao().queryBuilder().where(RefuseFormDao.Properties.Id.eq(taskRefusedEntity.id)).build().unique();
+        if(refuseForm == null || TextUtils.isEmpty(refuseForm.getRefusePdf())){
+            showUpLoadFail("请检表单有没有生成PDF文件。");
+            return;
+        }
+        upDialog = new QMUITipDialog.Builder(getActivity())
+                .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
+                .setTipWord("异常信息提交中...")
+                .create(false);
+        upDialog.show();
         Map<String, String> requestText = new HashMap<String, String>();
         Map<String, String> requestFile = new HashMap<String, String>();
-
         requestText.put("userid", AccountManager.getInstance().getUserId());
         requestText.put("id", taskRefusedEntity.id);
         requestText.put("taskisok", "1");//任务异常状态0正常1拒检2未抽样到单位
         requestText.put("remark", etTips.getText().toString());
+        requestText.put("refuse.producename",taskRefusedEntity.id);
+
+
         if (null != taskRefusedEntity.taskSamples && !taskRefusedEntity.taskSamples.isEmpty()) {
             requestText.put("samplecount", taskRefusedEntity.taskSamples.size() + "");
         } else {
@@ -543,10 +609,10 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
 
 
         {
-            File refusefile = new File(taskRefusedEntity.refusefile);
+            String path = refuseForm.getRefusePdf();
+            File refusefile = new File(path);
             if (refusefile.exists()) {
-                Log.e("file", refusefile.getAbsolutePath());
-                requestFile.put("refusefile", taskRefusedEntity.refusefile);//抽样单
+                requestFile.put("refusefile", path);//抽样单
             }
         }
 
@@ -574,121 +640,141 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
 //            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "请先选择图片或者视频");
 //            return;
 //        }
-        HttpURLConnectionUtil httpReuqest = new HttpURLConnectionUtil();
 
-        new AsyncTask() {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                showLoadingDialog();
-                showLoadingDialog("异常信息提交中");
+
+
+        MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder();
+        multipartBodyBuilder.setType(MultipartBody.FORM);
+        // text
+        Iterator<Map.Entry<String, String>> iter = requestText.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<String, String> entry = iter.next();
+            String inputName = (String) entry.getKey();
+            String inputValue = (String) entry.getValue();
+            if (TextUtils.isEmpty(inputValue)) {
+                continue;
             }
+            multipartBodyBuilder.addFormDataPart(inputName,inputValue);
+        }
 
-            @Override
-            protected Object doInBackground(Object[] objects) {
-                String response = null;
-                try {
-                    response = httpReuqest.formUpload(requestText, requestFile, new HttpURLConnectionUtil.PostCallback() {
-                        @Override
-                        public void progressUpdate(int total, int prgress) {
-                            NumberFormat numberFormat = NumberFormat.getInstance();
-                            // 设置精确到小数点位
-                            numberFormat.setMaximumFractionDigits(0);
-                            String result = numberFormat.format((float) prgress / (float) total * 100);
-                            showLoadingDialog("当前进度 " + result + "%");
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return response;
+        // file
+        Iterator<Map.Entry<String, String>> iterFile = requestFile.entrySet().iterator();
+        while (iterFile.hasNext()) {
+            Map.Entry<String, String> entry = iterFile.next();
+            String inputName = (String) entry.getKey();
+            String inputValue = (String) entry.getValue();
+            if (TextUtils.isEmpty(inputValue)) {
+                continue;
             }
+            File file = new File(inputValue);
+            if(file.exists()){
+                RequestBody requestFileBody = RequestBody.create(MultipartBody.FORM, file);//把文件与类型放入请求体
+                multipartBodyBuilder.addFormDataPart(inputName, file.getName(), requestFileBody);
+            }
+        }
 
-            @Override
-            protected void onPostExecute(Object o) {
-                super.onPostExecute(o);
-                if (!TextUtils.isEmpty(o.toString())) {
-                    try {
-                        JSONObject object = new JSONObject(o.toString());
-                        if (object.has("message") && !TextUtils.isEmpty(object.optString("message"))) {
-                            com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), object.optString("message"));
-                        }
-                        dismissLoadingDialog();
-                        if (object.has("code") && object.optInt("code") == 200) {
-                            dismissLoadingDialog();
-                            EventBus.getDefault().post(TaskMessage.getInstance(taskRefusedEntity.id));
-                            saveTaskInLocalFile(true);
-                            FileUtils.deletePdf(requestFile);
-                        } else {
-                            EventBus.getDefault().post(TaskMessage.getInstance(taskRefusedEntity.id));
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+        RetrofitServiceManager.getInstance().createApiService(Request.class)
+                .uploadtaskinfo(multipartBodyBuilder.build())
+                .compose(RxSchedulersHelper.io_main())
+                .compose(RxSchedulersHelper.ObsHandHttpResult())
+                .subscribe(new ZBaseObserver<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        upDialog.dismiss();
+
+                        showUpLoadSuccess();
                     }
-                }
-            }
-        }.execute();
 
-//        RetrofitService.createApiService(Request.class)
-//                .uploadtaskinfo(multipartBodyBuilder.build())
-//                .compose(RxSchedulersHelper.io_main())
-//                .compose(RxSchedulersHelper.ObsHandHttpResult())
-//                .subscribe(new ZBaseObserver<String>() {
-//                    @Override
-//                    public void onSuccess(String s) {
-//                        dismissLoadingDialog();
-//                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), "添加成功");
-//                        EventBus.getDefault().post(TaskMessage.getInstance(taskRefusedEntity.id));
-//                        saveTaskInLocalFile(true);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(int code, String message) {
-//                        super.onFailure(code, message);
-//                        dismissLoadingDialog();
-//                        com.product.sampling.maputil.ToastUtil.showShortToast(getActivity(), message);
-//                        EventBus.getDefault().post(TaskMessage.getInstance(taskRefusedEntity.id));
-//                    }
-//
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//                        super.onSubscribe(d);
-//                    }
-//                });
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        super.onSubscribe(d);
+                    }
+
+                    @Override
+                    public void onFailure(int code, String message) {
+                        super.onFailure(code, message);
+                        upDialog.dismiss();
+                        showUpLoadFail(message);
+                    }
+                });
+    }
+
+    public void showUpLoadFail(String failMessage){
+        Dialog failDialog = new QMUITipDialog.Builder(getActivity())
+                .setIconType(QMUITipDialog.Builder.ICON_TYPE_FAIL)
+                .setTipWord(failMessage)
+                .create();
+        failDialog.show();
+
+
+        btnSubmit.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(failDialog != null && failDialog.isShowing()){
+                    failDialog.dismiss();
+                }
+
+            }
+        },1500);
+
+    }
+
+    public void showUpLoadSuccess(){
+        Dialog sucDialog = new QMUITipDialog.Builder(getActivity())
+                .setIconType(QMUITipDialog.Builder.ICON_TYPE_SUCCESS)
+                .setTipWord("信息上传成功！")
+                .create();
+        sucDialog.show();
+
+
+        btnSubmit.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(sucDialog != null && sucDialog.isShowing()){
+                    sucDialog.dismiss();
+                }
+                EventBus.getDefault().postSticky(TaskMessage.getInstance(taskRefusedEntity.id,true));
+                LocalTaskListManager.getInstance().remove(taskRefusedEntity);
+//                saveTaskInLocalFile(true);
+                ActivityManager.getInstance().currentActivity().finish();
+
+            }
+        },1500);
+
     }
 
 
-    private void saveTaskInLocalFile(boolean isRemove) {
-        try {
-            Gson gson = new Gson();
-            ArrayList<TaskEntity> listTask = new ArrayList<>();
-            String taskListStr = (String) SPUtil.get(getActivity(), "tasklist", "");
-            if (!TextUtils.isEmpty(taskListStr)) {
-                Type listType = new TypeToken<List<TaskEntity>>() {
-                }.getType();
-                listTask = gson.fromJson(taskListStr, listType);
-                if (null != listTask && !listTask.isEmpty()) {
-                    for (int i = 0; i < listTask.size(); i++) {
-                        if (listTask.get(i).id.equals(taskRefusedEntity.id)) {
-                            listTask.remove(i);
-                        }
-                    }
-                }
-            }
-            if (!isRemove) {
-                taskRefusedEntity.taskisok = 1 + "";
-                listTask.add(taskRefusedEntity);
-            }
-            SPUtil.put(getActivity(), "tasklist", gson.toJson(listTask));
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-        }
-        if (isRemove) {
-            getActivity().finish();
-        } else {
-            com.product.sampling.maputil.ToastUtil.show(getActivity(), "保存成功");
-        }
-    }
+//    private void saveTaskInLocalFile(boolean isRemove) {
+//        try {
+//            Gson gson = new Gson();
+//            ArrayList<TaskEntity> listTask = new ArrayList<>();
+//            String taskListStr = (String) SPUtil.get(getActivity(), "tasklist", "");
+//            if (!TextUtils.isEmpty(taskListStr)) {
+//                Type listType = new TypeToken<List<TaskEntity>>() {
+//                }.getType();
+//                listTask = gson.fromJson(taskListStr, listType);
+//                if (null != listTask && !listTask.isEmpty()) {
+//                    for (int i = 0; i < listTask.size(); i++) {
+//                        if (listTask.get(i).id.equals(taskRefusedEntity.id)) {
+//                            listTask.remove(i);
+//                        }
+//                    }
+//                }
+//            }
+//            if (!isRemove) {
+//                taskRefusedEntity.taskisok = 1 + "";
+//                listTask.add(taskRefusedEntity);
+//            }
+//            SPUtil.put(getActivity(), "tasklist", gson.toJson(listTask));
+//        } catch (JsonSyntaxException e) {
+//            e.printStackTrace();
+//        }
+//        if (isRemove) {
+//            getActivity().finish();
+//        } else {
+//            com.product.sampling.maputil.ToastUtil.show(getActivity(), "保存成功");
+//        }
+//    }
 
     private void showDialog(String msg, int index) {
 
@@ -700,16 +786,27 @@ public class TaskCompanyRefusedFragment extends BasePhotoFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (index == 1) {
-                    postUnfindData();
+                    postRefuseData();
                 } else if (index == 2) {
-                    Intent intent = new Intent(getActivity(), H5WebViewActivity.class);
+                    Intent intent = new Intent(getActivity(), RefuseFormActivity.class);
                     Bundle b = new Bundle();
-                    b.putInt(Intent_Order, 3);
-                    b.putBoolean(Intent_Edit, taskRefusedEntity.isUploadedTask());
-                    b.putSerializable("task", (Serializable) taskRefusedEntity);
-                    b.putSerializable("map", (Serializable) taskRefusedEntity.refuseInfoMap);
+                    //跳转到处置单
+                    String taskId = taskRefusedEntity.id;//任务id
+                    String tasktypecount = taskRefusedEntity.tasktypecount;//产品名称
+                    String companyname = taskRefusedEntity.companyname;//企业名称
+                    b.putString("taskId",taskId);
+                    b.putString("tasktypecount",tasktypecount);
+                    b.putString("companyname",companyname);
                     intent.putExtras(b);
-                    startActivityForResult(intent, TaskSampleRecyclerViewAdapter.RequestCodePdf);
+                    RefuseForm refuseForm = DBManagerFactory.getInstance().getRefuseFormManager().queryBuilder().where(RefuseFormDao.Properties.Id.eq(taskId)).build().unique();
+                    if(refuseForm == null){
+                        //创建数据库
+                        RefuseForm refuseFormNew = new RefuseForm();
+                        refuseFormNew.setId(taskId);
+                        refuseFormNew.setRefuseQymc(companyname);
+                        DbController.getInstance(getActivity()).getDaoSession().getRefuseFormDao().insert(refuseFormNew);
+                    }
+                    startActivity(intent);
                 }
             }
         });

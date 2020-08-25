@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@mipmap/ic_launcher" />
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@mipmap/close"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:text="移动抽样系统-手写签名" />
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            >
+            <com.github.gcacace.signaturepad.views.SignaturePad
+                android:id="@+id/sp_sign_01"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:penColor="@android:color/black" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/qmui_config_color_blue"
+                    android:padding="10dp"
+                    android:text="签名一（当只需一个签名，签在一处）"
+                    />
+            
+                <TextView
+                    android:id="@+id/clear_01"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:gravity="center"
+                    android:text="清除"
+                    android:textSize="20sp"
+                    android:textColor="#ebc31c"
+                    android:drawableTop="@mipmap/sign_clear"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    />
+
+          
+        </RelativeLayout>
+        <View
+            android:id="@+id/view_border"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/qmui_config_color_gray_7"
+            android:visibility="gone"
+            />
+        <RelativeLayout
+            android:id="@+id/rl_sign_2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+            >
+            <com.github.gcacace.signaturepad.views.SignaturePad
+                android:id="@+id/sp_sign_02"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:penColor="@android:color/black" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/qmui_config_color_blue"
+                android:padding="10dp"
+                android:text="签名二"
+                />
+            <TextView
+                android:id="@+id/clear_02"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:gravity="center"
+                android:text="清除"
+                android:textSize="20sp"
+                android:textColor="#ebc31c"
+                android:drawableTop="@mipmap/sign_clear"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                />
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/sign_sure"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:gravity="center"
+            android:text="确定"
+            android:textSize="20sp"
+            android:textColor="#d4237a"
+            android:drawableTop="@mipmap/sign_sure"
+            />
+    </LinearLayout>
+
+</LinearLayout>

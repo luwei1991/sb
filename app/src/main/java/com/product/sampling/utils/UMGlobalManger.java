@@ -1,7 +1,5 @@
 package com.product.sampling.utils;
 
-import com.umeng.commonsdk.UMConfigure;
-
 /**
 
  * 创建时间：2018/7/2

@@ -27,7 +27,8 @@
     <RelativeLayout
         android:id="@+id/rl_menu"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/ll_range"
@@ -74,6 +75,7 @@
             android:layout_height="50dp"
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@+id/tv_date"
+            android:visibility="gone"
             android:spinnerMode="dialog" />
 
         <Spinner
@@ -81,7 +83,116 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_toRightOf="@+id/spinner_province"
+            android:visibility="gone"
             android:spinnerMode="dialog" />
+        <TextView
+            android:id="@+id/tvTaskCode"
+            android:layout_toRightOf="@+id/spinner_area"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+             android:clickable="true"
+            android:gravity="center"
+            android:text="任务编号:"
+            android:textColor="#333333"
+            android:textSize="10sp"
+           />
+
+        <EditText
+            android:id="@+id/taskCode"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp"
+            android:layout_toRightOf="@+id/tvTaskCode"
+            android:text=""
+            android:textSize="10sp"
+            />
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_toRightOf="@+id/taskCode"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="产品名:"
+            android:textColor="#333333"
+            android:textSize="10sp"
+            />
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp"
+            android:layout_toRightOf="@+id/tvName"
+            android:text=""
+            android:textSize="10sp"
+            />
+        <TextView
+            android:id="@+id/tvEntName"
+            android:layout_toRightOf="@+id/name"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="公司名称:"
+            android:textColor="#333333"
+            android:textSize="10sp"
+            />
+
+        <EditText
+            android:id="@+id/entName"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp"
+            android:layout_toRightOf="@+id/tvEntName"
+            android:text=""
+            android:textSize="10sp"
+            />
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/entName"
+            android:background="@color/colorPrimary"
+            android:text="搜索"
+
+            android:textColor="@color/white" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            >
+            <TextView
+                android:id="@+id/tv_task_status"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:background="#8BD4F5"
+                app:title=""
+                android:gravity="center"
+                app:titleTextColor="#1D77AE"
+                app:titleTextAppearance="@style/Toolbar.TitleText"/>
+
+            <TextView
+                android:id="@+id/tv_task_nums"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:background="#8BD4F5"
+                app:title=""
+                android:gravity="center"
+                app:titleTextColor="#1D77AE"
+                app:titleTextAppearance="@style/Toolbar.TitleText"/>
+        </LinearLayout>
+
     </RelativeLayout>
     <!--
     This layout is a two-pane layout for the Items
@@ -99,7 +210,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"
-            app:layoutManager="LinearLayoutManager"
             tools:context="com.product.sampling.ui.MainTaskListActivity"
             tools:listitem="@layout/item_task_list_content" />
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>

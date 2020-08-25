@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sb.iml" filepath="$PROJECT_DIR$/sb.iml" />
-      <module fileurl="file://$PROJECT_DIR$/takephoto_library/takephoto_library.iml" filepath="$PROJECT_DIR$/takephoto_library/takephoto_library.iml" />
-      <module fileurl="file://$PROJECT_DIR$/zxinglibrary/zxinglibrary.iml" filepath="$PROJECT_DIR$/zxinglibrary/zxinglibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="sb/app" />
+      <module fileurl="file://$PROJECT_DIR$/sb.iml" filepath="$PROJECT_DIR$/sb.iml" group="sb" />
+      <module fileurl="file://$PROJECT_DIR$/takephoto_library/takephoto_library.iml" filepath="$PROJECT_DIR$/takephoto_library/takephoto_library.iml" group="sb/takephoto_library" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/thread-library/thread-library.iml" filepath="$PROJECT_DIR$/.idea/modules/thread-library/thread-library.iml" group="sb/thread-library" />
+      <module fileurl="file://$PROJECT_DIR$/zxinglibrary/zxinglibrary.iml" filepath="$PROJECT_DIR$/zxinglibrary/zxinglibrary.iml" group="sb/zxinglibrary" />
     </modules>
   </component>
 </project>

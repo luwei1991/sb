@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.product.sampling.R;
-import com.product.sampling.httpmoudle.RetrofitService;
+import com.product.sampling.httpmoudle.manager.RetrofitServiceManager;
 import com.product.sampling.manager.AccountManager;
 import com.product.sampling.net.ZBaseObserver;
 import com.product.sampling.net.request.Request;
@@ -109,7 +109,7 @@ public class MyInfoFragment extends BasePhotoFragment implements View.OnClickLis
                 .addFormDataPart("userid", AccountManager.getInstance().getUserId())
                 .addFormDataPart("photo", file.getName(), requestFile).build();
 
-        RetrofitService.createApiService(Request.class)
+        RetrofitServiceManager.getInstance().createApiService(Request.class)
                 .setPhotoRequestBody(requestBody)
                 .compose(RxSchedulersHelper.io_main())
                 .compose(RxSchedulersHelper.ObsHandHttpResult())

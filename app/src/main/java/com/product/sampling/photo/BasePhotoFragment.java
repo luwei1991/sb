@@ -245,7 +245,7 @@ public abstract class BasePhotoFragment extends TakePhotoFragment {
 
     }
 
-    private Handler mHandler = new Handler() {
+    public Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             int what = msg.what;

@@ -1,15 +1,12 @@
 package com.product.sampling.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TaskEntity implements Parcelable, Serializable {
+public class TaskEntity implements Serializable {
     public String id;//任务唯一id
     public String planid;//所属计划id
     public String companyid;//抽样企业id
@@ -19,6 +16,7 @@ public class TaskEntity implements Parcelable, Serializable {
 
     public String taskstatus;//任务状态 0待办1本地保存2上传3退回修改4已确认5停用
     public String doman;//抽样人
+    public String samplingcodes;//抽样单编号
 
     public String tasktypecount;//抽样产品名
     public String taskCode;//任务编号
@@ -89,107 +87,7 @@ public class TaskEntity implements Parcelable, Serializable {
 
     }
 
-    protected TaskEntity(Parcel in) {
-        id = in.readString();
-        planid = in.readString();
-        companyid = in.readString();
-        remark = in.readString();
-        starttime = in.readString();
-        endtime = in.readString();
-        taskstatus = in.readString();
-        doman = in.readString();
-        tasktypecount = in.readString();
-        taskCode = in.readString();
-        planname = in.readString();
-        companyname = in.readString();
-        goodscount = in.readString();
-        companyaddress = in.readString();
-        taskisok = in.readString();
-        companyperson = in.readString();
-        companytel = in.readString();
-        businesslicence = in.readString();
-        planno = in.readString();
-        planfrom = in.readString();
-        groupPersonCount = in.readString();
-        areasheng = in.readString();
-        areashi = in.readString();
-        areaqu = in.readString();
-        taskAddress = in.readString();
-        taskTime = in.readString();
-        longitude = in.readDouble();
-        latitude = in.readDouble();
-        leftday = in.readInt();
 
-        isNewRecord = in.readByte() != 0;
-        isLoadLocalData = in.readByte() != 0;
-
-        in.readTypedList(pics, Pics.CREATOR);
-
-        //        in.readTypedList(pics, Pics.CREATOR);
-        in.readTypedList(voides, Videos.CREATOR);
-        plantype = in.readString();
-        suredotime = in.readString();
-    }
-
-    public static final Creator<TaskEntity> CREATOR = new Creator<TaskEntity>() {
-        @Override
-        public TaskEntity createFromParcel(Parcel in) {
-            return new TaskEntity(in);
-        }
-
-        @Override
-        public TaskEntity[] newArray(int size) {
-            return new TaskEntity[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
-        dest.writeString(planid);
-        dest.writeString(companyid);
-        dest.writeString(remark);
-        dest.writeString(starttime);
-        dest.writeString(endtime);
-        dest.writeString(taskstatus);
-        dest.writeString(doman);
-        dest.writeString(tasktypecount);
-        dest.writeString(taskCode);
-        dest.writeString(planname);
-        dest.writeString(companyname);
-        dest.writeString(goodscount);
-        dest.writeString(companyaddress);
-        dest.writeString(taskisok);
-        dest.writeString(companyperson);
-        dest.writeString(companytel);
-        dest.writeString(businesslicence);
-        dest.writeString(planno);
-        dest.writeString(planfrom);
-        dest.writeString(groupPersonCount);
-        dest.writeString(areasheng);
-        dest.writeString(areashi);
-        dest.writeString(areaqu);
-        dest.writeString(taskAddress);
-        dest.writeString(taskTime);
-        dest.writeDouble(longitude);
-        dest.writeDouble(latitude);
-        dest.writeInt(leftday);
-        dest.writeByte((byte) (isNewRecord ? 1 : 0));
-        dest.writeByte((byte) (isLoadLocalData ? 1 : 0));
-        dest.writeTypedList(pics);
-        dest.writeTypedList(voides);
-        dest.writeString(plantype);
-        dest.writeString(suredotime);
-
-//        if (pics != null)
-//            dest.writeParcelableArray(
-//                    pics.toArray(new Pics[pics.size()]), flags);
-    }
 
     public boolean isUploadedTask() {
         return "2".equals(taskstatus);//是否是已上传状态

@@ -22,6 +22,13 @@
 
 
 #PictureSelector 2.0
+#-ignorewarnings                     # 忽略警告，避免打包时某些警告出现
+#-optimizationpasses 5               # 指定代码的压缩级别
+#-dontusemixedcaseclassnames         # 是否使用大小写混合 混淆时不会产生形形色色的类名
+#-dontskipnonpubliclibraryclasses    # 是否混淆第三方jar
+#-dontpreverify                      # 混淆时是否做预校验
+#-verbose                            # 混淆时是否记录日志
+#-dontoptimize                       # 不优化输入的类文件
 -keep class com.luck.picture.lib.** { *; }
 -keep class io.agora.**{*;}
 
@@ -62,5 +69,15 @@
   **[] $VALUES;
   public *;
 }
+
+-keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
+public static java.lang.String TABLENAME;
+}
+-keep class **$Properties {*;}
+
+# If you do not use SQLCipher:
+-dontwarn net.sqlcipher.database.**
+# If you do not use RxJava:
+-dontwarn rx.**
 
 # for DexGuard only

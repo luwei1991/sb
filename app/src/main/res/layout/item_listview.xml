@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tv_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:textColor="#E73079"
+        android:textSize="14sp"
+        android:text="11111"
+        android:layout_marginLeft="5dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_sub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:padding="5dp"
+        android:text="22222"
+        android:layout_below="@+id/tv_main"
+        android:textColor="#474747"
+        android:layout_marginLeft="5dp"
+        />
+
+<!--    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton-->
+<!--        android:id="@+id/btn_change"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--       android:layout_centerVertical="true"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        android:text="修改"-->
+<!--        android:background="@color/red"-->
+<!--        android:layout_marginRight="20dp"-->
+<!--        android:layout_marginBottom="5dp"-->
+<!--        app:qmui_radius="3dp"-->
+<!--        />-->
+
+</RelativeLayout>

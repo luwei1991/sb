@@ -1,6 +1,5 @@
 package com.product.sampling.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,31 +13,18 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
-import com.luck.picture.lib.PictureExternalPreviewActivity;
-import com.luck.picture.lib.PictureSelector;
-import com.luck.picture.lib.config.PictureConfig;
-import com.luck.picture.lib.entity.LocalMedia;
 import com.product.sampling.Constants;
 import com.product.sampling.R;
 import com.product.sampling.bean.Pics;
 import com.product.sampling.bean.Task;
-import com.product.sampling.bean.TaskImageEntity;
 import com.product.sampling.photo.BasePhotoFragment;
 import com.product.sampling.ui.TaskDetailActivity;
-import com.product.sampling.ui.TaskListFragment;
-import com.product.sampling.ui.TaskSceneFragment;
 import com.product.sampling.utils.ActivityUtils;
 
-import org.devio.takephoto.model.TImage;
-
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageAndTextRecyclerViewAdapter.ViewHolder> {
@@ -78,7 +64,6 @@ public class ImageAndTextRecyclerViewAdapter extends RecyclerView.Adapter<ImageA
                                         String text = et.getText().toString();
                                         mValues.get(taskPostion).setRemarks(text);
                                         notifyDataSetChanged();
-//                                        fragment.onRefreshTitle(true, taskPostion, text + "");
                                     }
                                 }).setNegativeButton("取消", null).show();
 

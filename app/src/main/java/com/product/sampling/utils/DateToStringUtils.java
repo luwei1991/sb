@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * @author wlj
@@ -22,26 +23,26 @@ public class DateToStringUtils {
      * @throws ParseException 转换异常
      */
     public static String StringToDate(String dateStr, String dateFormatStr, String formatStr){
-        DateFormat sdf=new SimpleDateFormat(dateFormatStr);
+        DateFormat sdf=new SimpleDateFormat(dateFormatStr, Locale.CHINA);
         Date date=null;
         try {
             date = sdf.parse(dateStr);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        SimpleDateFormat s=new SimpleDateFormat(formatStr);
+        SimpleDateFormat s=new SimpleDateFormat(formatStr,Locale.CHINA);
 
         return s.format(date);
     }
     public static String StringToDate2(long dateStr, String dateFormatStr, String formatStr){
-        DateFormat sdf=new SimpleDateFormat(dateFormatStr);
+        DateFormat sdf=new SimpleDateFormat(dateFormatStr,Locale.CHINA);
         Date date=null;
         try {
             date = sdf.parse(String.valueOf(dateStr));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        SimpleDateFormat s=new SimpleDateFormat(formatStr);
+        SimpleDateFormat s=new SimpleDateFormat(formatStr,Locale.CHINA);
 
         return s.format(date);
     }

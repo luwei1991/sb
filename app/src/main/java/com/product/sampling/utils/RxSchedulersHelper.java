@@ -44,7 +44,8 @@ public class RxSchedulersHelper {
             if (result.isSuccess()) {
                 return Flowable.just(result.data);
             } else {
-                return Flowable.error(new ServerException(result.code, result.message));
+//                Log.e("lwlw","code = " +result.code +"message" + result.message);
+                return Flowable.error(new ServerException(result.code, result.message, (String) result.info));
             }
         });
     }
@@ -55,7 +56,8 @@ public class RxSchedulersHelper {
             if (result.isSuccess()) {
                 return Observable.just(result.data);
             } else {
-                return Observable.error(new ServerException(result.code, result.message));
+//                Log.e("lwlw","code = " +result.code +"message" + result.message);
+                return Observable.error(new ServerException(result.code, result.message, (String) result.info));
             }
         });
     }

@@ -2,15 +2,13 @@ package com.product.sampling.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.product.sampling.bean.Pics;
 import com.product.sampling.ui.MainActivity;
-import com.product.sampling.ui.MainTaskListActivity;
 import com.product.sampling.ui.PhotoViewActivity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +42,7 @@ public class ActivityUtils {
             }
         }
         if (list.isEmpty()) {
+            Toast.makeText(context,"您暂时还没有选择图片，无图片详情！",Toast.LENGTH_LONG).show();
             return;
         }
         imgIntent.putExtra("paths", list);

@@ -73,6 +73,7 @@ function dataFillByType(els, data){
         })
     }else{
         $(els[0]).val(decodeURIComponent(data))
+
     }
 
 
@@ -188,6 +189,7 @@ function dataFill(data){
         $("#orgName").val("1001");
     }
      var taskCode = $("#taskCode").val();
+
     if (!taskCode) {
         var userid = setCode.userId();
         var sampleid = setCode.setBmCode();
@@ -217,7 +219,10 @@ function dataFill(data){
             }
         });
     }; 
-
+          var result = setCode.result();
+          if(result){
+          setCode.send(result);
+          }
 
     if ($("#adviceCode").val().length > 1) {
         var index = 0;
@@ -648,3 +653,4 @@ function c(){
 	// 	})
     // })
 //})
+

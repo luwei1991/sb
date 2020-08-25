@@ -31,6 +31,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+
 /**
  * @author wlj
  * @date 2017/3/29
@@ -1364,5 +1365,43 @@ public class BitmapUtils {
         newBitmap.setPixels(pixels, 0, width, 0, 0, width, height);
         return newBitmap;
     }
+
+/** 
+ * 横向拼接 
+ * <功能详细描述> 
+ * @param first 
+ * @param second 
+ * @return 
+ */
+    public static Bitmap add2Bitmap(Bitmap first, Bitmap second) {
+        int width = first.getWidth() + second.getWidth();
+        int height = Math.max(first.getHeight(), second.getHeight());
+        Bitmap result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(result);
+        canvas.drawBitmap(first, 0, 0, null);
+        canvas.drawBitmap(second, first.getWidth(), 0, null);
+        return result;
+
+    }
+
+    /**
+     * 纵向拼接
+     * <功能详细描述>
+     * @param first
+     * @param second
+     * @return
+     */
+    public static Bitmap addBitmap(Bitmap first, Bitmap second) {
+        int width = Math.max(first.getWidth(),second.getWidth());
+        int height = first.getHeight() + second.getHeight();
+        Bitmap result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(result);
+        canvas.drawBitmap(first, 0, 0, null);
+        canvas.drawBitmap(second, 0, first.getHeight(),null);
+        return result;
+    }
+
+
+
 
 }

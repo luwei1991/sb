@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_layout" />
+
+<RelativeLayout
+    android:id="@+id/rl_title"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="horizontal"
+    android:layout_below="@id/toolbar"
+    android:background="#EEEEEE"
+    >
+    <ImageView
+        android:id="@+id/iv_sx"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:background="@mipmap/shuxian"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textColor="#474747"
+        android:layout_toRightOf="@+id/iv_sx"
+        android:textSize="14sp"
+        android:gravity="center_vertical"
+        android:text="监督抽查/复查抽样单、样品封存和处置通知单等模版"
+        android:layout_marginLeft="10dp"
+        />
+
+</RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_check_or_recheck"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:text="监督抽查/复查抽样单"
+        android:background="@drawable/cicle_green"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:layout_below="@+id/rl_title"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        />
+
+
+    <TextView
+        android:id="@+id/tv_not_check"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:text="未抽到样品企业情况说明表"
+        android:background="@drawable/bg_circle_blue"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:layout_toRightOf="@id/tv_check_or_recheck"
+        android:layout_below="@+id/rl_title"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        />
+    <TextView
+        android:id="@+id/tv_refuse"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:text="企业拒检认定表"
+        android:background="@drawable/cicle_green"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:layout_toRightOf="@id/tv_not_check"
+        android:layout_below="@+id/rl_title"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        />
+
+
+</RelativeLayout>

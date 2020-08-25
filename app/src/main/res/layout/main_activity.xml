@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar_layout" />
+        layout="@layout/toolbar_layout_main" />
 
     <LinearLayout
         android:id="@+id/rl_task"
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:text="TASK LiST"
+                android:text="TASK LIST"
                 android:textColor="@android:color/white" />
         </LinearLayout>
 
@@ -64,6 +64,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
         android:layout_toRightOf="@+id/rl_task"
+        android:visibility="gone"
         android:background="#68BEC9"
 
         android:clickable="true"
@@ -106,6 +107,56 @@
 
     </LinearLayout>
 
+
+    <LinearLayout
+        android:id="@+id/rl_masterplate"
+        android:layout_width="220dp"
+        android:layout_height="80dp"
+
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_toRightOf="@+id/rl_plan"
+        android:layout_below="@+id/toolbar"
+        android:background="#FF7F00"
+
+        android:clickable="true"
+        android:gravity="center"
+        android:padding="10dp">
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginRight="10dp"
+        android:src="@mipmap/index_icon2" />
+
+    <LinearLayout
+
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="模版表单功能"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:lines="1"
+            android:text="MASTERPLATE"
+            android:textColor="@android:color/white"
+            android:textSize="10sp" />
+    </LinearLayout>
+    </LinearLayout>
     <CalendarView
         android:id="@+id/calendarView"
         android:layout_width="450dp"

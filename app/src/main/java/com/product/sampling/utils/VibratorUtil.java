@@ -1,7 +1,6 @@
 package com.product.sampling.utils;
 
 import android.os.Vibrator;
-import android.content.Context;
 
 import androidx.appcompat.app.AppCompatActivity;
 

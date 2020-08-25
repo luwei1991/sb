@@ -5,7 +5,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.product.sampling.ui.MainApplication;
+import com.product.sampling.MainApplication;
 
 /**
 
